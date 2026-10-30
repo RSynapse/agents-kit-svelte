@@ -1,0 +1,228 @@
+<script lang="ts">
+	import { isImeComposing } from '../state/chat-helpers';
+	import type { SupportedAgentId, SupportedAgentOption } from '../types';
+
+	interface Props {
+		value?: string;
+		placeholder?: string;
+		busy?: boolean;
+		agents: SupportedAgentOption[];
+		selectedAgentId: SupportedAgentId;
+		activeSkill?: string;
+		onAgentChange?: (agentId: SupportedAgentId) => void;
+		onSubmit?: (prompt: string) => void;
+		onStop?: () => void;
+		onQuickContext?: (contextTag: string) => void;
+		class?: string;
+	}
+
+	let {
+		value = $bindable(''),
+		placeholder = 'Ask Claude Code or guide the current run…',
+		busy = false,
+		agents,
+		selectedAgentId,
+		activeSkill = 'Backend v2',
+		onAgentChange,
+		onSubmit,
+		onStop,
+		onQuickContext,
+		class: className = ''
+	}: Props = $props();
+
+	let menuOpen = $state(false);
+	let attachedChips = $state<string[]>(['worktree:trailside/1210-auth-redirect']);
+	let ready = $state(false);
+
+	$effect(() => {
+		ready = true;
+	});
+
+	/**
+	 * Submits the current prompt text when non-empty and resets the composer input.
+	 */
+	function submitPrompt(): void {
+		const trimmed = value.trim();
+		if (!trimmed || busy) return;
+		value = '';
+		onSubmit?.(trimmed);
+	}
+
+	/**
+	 * Handles Enter-to-submit while guarding against active IME composition (`isComposing` / `keyCode === 229`).
+	 *
+	 * @param event - KeyboardEvent from the prompt textarea.
+	 */
+	function handleKeyDown(event: KeyboardEvent): void {
+		if (event.key !== 'Enter' || event.shiftKey) {
+			return;
+		}
+		if (isImeComposing(event)) {
+			return;
+		}
+		event.preventDefault();
+		submitPrompt();
+	}
+
+	/**
+	 * Adds a context pill to the prompt composer from the `+` action menu.
+	 *
+	 * @param tag - Context identifier to attach.
+	 */
+	function addContextChip(tag: string): void {
+		if (!attachedChips.includes(tag)) {
+			attachedChips = [...attachedChips, tag];
+		}
+		menuOpen = false;
+		onQuickContext?.(tag);
+	}
+
+	/**
+	 * Removes an attached context pill from the composer.
+	 *
+	 * @param tag - Context identifier to remove.
+	 */
+	function removeContextChip(tag: string): void {
+		attachedChips = attachedChips.filter((item) => item !== tag);
+	}
+</script>
+
+<form
+	onsubmit={(e) => {
+		e.preventDefault();
+		submitPrompt();
+	}}
+	class="w-full rounded-xl border border-card-border bg-card-bg p-2.5 shadow-sm {className}"
+>
+	{#if attachedChips.length > 0}
+		<div class="mb-2 flex flex-wrap items-center gap-1.5">
+			{#each attachedChips as chip (chip)}
+				<span
+					class="inline-flex items-center gap-1.5 rounded-md border border-card-border bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-main"
+				>
+					<span>@{chip}</span>
+					<button
+						type="button"
+						aria-label="Remove {chip}"
+						onclick={() => removeContextChip(chip)}
+						class="text-fg-light hover:text-fg-main"
+					>
+						×
+					</button>
+				</span>
+			{/each}
+		</div>
+	{/if}
+
+	<label class="block">
+		<span class="sr-only">{placeholder}</span>
+		<textarea
+			rows={2}
+			bind:value
+			{placeholder}
+			disabled={!ready}
+			aria-label={placeholder}
+			onkeydown={handleKeyDown}
+			class="w-full resize-none bg-transparent px-1 py-1 text-sm leading-6 text-fg-main placeholder:text-fg-light focus:outline-none disabled:opacity-50"
+		></textarea>
+	</label>
+
+	<div class="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-canvas-border pt-2">
+		<div class="relative flex flex-wrap items-center gap-1.5">
+			<button
+				type="button"
+				aria-label="Add context or skill"
+				aria-expanded={menuOpen}
+				onclick={() => (menuOpen = !menuOpen)}
+				class="inline-flex size-7 items-center justify-center rounded-md border border-card-border bg-canvas-secondary font-mono text-sm text-fg-main transition-colors hover:bg-canvas-primary"
+			>
+				+
+			</button>
+
+			{#if menuOpen}
+				<div
+					role="menu"
+					aria-label="Context attachments"
+					class="absolute bottom-9 left-0 z-20 w-56 rounded-lg border border-card-border bg-card-bg p-1.5 shadow-lg"
+				>
+					<button
+						type="button"
+						role="menuitem"
+						onclick={() => addContextChip('file:apps/web/src/routes/auth/callback/+server.ts')}
+						class="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
+					>
+						<span>📄</span>
+						<span>Attach callback/+server.ts</span>
+					</button>
+					<button
+						type="button"
+						role="menuitem"
+						onclick={() => addContextChip(`skill:${activeSkill}`)}
+						class="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
+					>
+						<span>⚡</span>
+						<span>Pin skill: {activeSkill}</span>
+					</button>
+					<button
+						type="button"
+						role="menuitem"
+						onclick={() => addContextChip('gate:check-boundaries')}
+						class="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
+					>
+						<span>🛡️</span>
+						<span>Include boundary gate check</span>
+					</button>
+				</div>
+			{/if}
+
+			<label class="inline-flex items-center gap-1.5 text-xs text-fg-light">
+				<span class="sr-only">Supported Agent</span>
+				<select
+					aria-label="Supported Agent"
+					value={selectedAgentId}
+					onchange={(e) => {
+						const target = e.currentTarget as HTMLSelectElement;
+						onAgentChange?.(target.value as SupportedAgentId);
+					}}
+					class="rounded-md border border-card-border bg-canvas-secondary px-2 py-1 font-mono text-xs text-fg-main focus:border-accent-primary focus:outline-none"
+				>
+					{#each agents as agentOpt (agentOpt.id)}
+						<option value={agentOpt.id}>
+							{agentOpt.label} ({agentOpt.version})
+						</option>
+					{/each}
+				</select>
+			</label>
+
+			<span
+				class="hidden rounded-md border border-card-border bg-canvas-secondary px-2 py-1 font-mono text-[11px] text-fg-light sm:inline-block"
+			>
+				Skill: {activeSkill}
+			</span>
+		</div>
+
+		<div class="flex items-center gap-2">
+			<span class="hidden font-mono text-[11px] text-fg-light sm:inline">
+				Enter to send · Shift+Enter for newline
+			</span>
+			{#if busy}
+				<button
+					type="button"
+					onclick={onStop}
+					class="rounded-lg bg-status-danger px-3 py-1.5 text-xs font-semibold text-fg-inverse transition-opacity hover:opacity-90"
+				>
+					■ Stop run
+				</button>
+			{:else}
+				<button
+					type="submit"
+					disabled={!value.trim()}
+					aria-label="Send prompt"
+					class="rounded-lg bg-fg-main px-3 py-1.5 text-xs font-semibold text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-40"
+				>
+					Send ↑
+				</button>
+			{/if}
+		</div>
+	</div>
+</form>

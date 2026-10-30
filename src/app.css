@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+:root {
+	--color-canvas-primary-val: oklch(0.985 0.004 85);
+	--color-canvas-secondary-val: oklch(0.955 0.006 85);
+	--color-card-bg-val: oklch(0.996 0.002 85);
+	--color-fg-main-val: oklch(0.185 0.012 260);
+	--color-fg-light-val: oklch(0.46 0.014 260);
+	--color-fg-inverse-val: oklch(0.985 0.004 85);
+	--color-card-border-val: oklch(0.89 0.008 85);
+	--color-canvas-border-val: oklch(0.86 0.01 85);
+
+	--color-accent-primary-val: oklch(0.54 0.16 252);
+	--color-accent-subtle-val: oklch(0.94 0.03 252);
+	--color-status-success-val: oklch(0.52 0.15 152);
+	--color-status-success-subtle-val: oklch(0.94 0.04 152);
+	--color-status-warning-val: oklch(0.58 0.16 72);
+	--color-status-warning-subtle-val: oklch(0.95 0.04 72);
+	--color-status-danger-val: oklch(0.55 0.19 25);
+	--color-status-danger-subtle-val: oklch(0.95 0.04 25);
+	--color-status-info-val: oklch(0.54 0.16 252);
+	--color-status-info-subtle-val: oklch(0.94 0.03 252);
+
+	--color-diff-add-bg-val: oklch(0.94 0.045 152);
+	--color-diff-add-fg-val: oklch(0.36 0.12 152);
+	--color-diff-del-bg-val: oklch(0.94 0.045 25);
+	--color-diff-del-fg-val: oklch(0.4 0.15 25);
+
+	--color-terminal-bg-val: oklch(0.16 0.01 260);
+	--color-terminal-fg-val: oklch(0.92 0.01 260);
+	--color-terminal-muted-val: oklch(0.68 0.015 260);
+}
+
+.dark,
+[data-theme="dark"] {
+	--color-canvas-primary-val: oklch(0.145 0.008 260);
+	--color-canvas-secondary-val: oklch(0.185 0.01 260);
+	--color-card-bg-val: oklch(0.21 0.012 260);
+	--color-fg-main-val: oklch(0.94 0.006 85);
+	--color-fg-light-val: oklch(0.7 0.012 260);
+	--color-fg-inverse-val: oklch(0.145 0.008 260);
+	--color-card-border-val: oklch(0.285 0.012 260);
+	--color-canvas-border-val: oklch(0.25 0.012 260);
+
+	--color-accent-primary-val: oklch(0.68 0.15 252);
+	--color-accent-subtle-val: oklch(0.25 0.04 252);
+	--color-status-success-val: oklch(0.72 0.15 152);
+	--color-status-success-subtle-val: oklch(0.24 0.04 152);
+	--color-status-warning-val: oklch(0.76 0.15 72);
+	--color-status-warning-subtle-val: oklch(0.25 0.04 72);
+	--color-status-danger-val: oklch(0.7 0.18 25);
+	--color-status-danger-subtle-val: oklch(0.25 0.04 25);
+	--color-status-info-val: oklch(0.68 0.15 252);
+	--color-status-info-subtle-val: oklch(0.25 0.04 252);
+
+	--color-diff-add-bg-val: oklch(0.24 0.045 152);
+	--color-diff-add-fg-val: oklch(0.78 0.13 152);
+	--color-diff-del-bg-val: oklch(0.24 0.045 25);
+	--color-diff-del-fg-val: oklch(0.78 0.15 25);
+
+	--color-terminal-bg-val: oklch(0.12 0.008 260);
+	--color-terminal-fg-val: oklch(0.93 0.008 260);
+	--color-terminal-muted-val: oklch(0.68 0.012 260);
+}
+
+@theme inline {
+	--color-canvas-primary: var(--color-canvas-primary-val);
+	--color-canvas-secondary: var(--color-canvas-secondary-val);
+	--color-card-bg: var(--color-card-bg-val);
+	--color-fg-main: var(--color-fg-main-val);
+	--color-fg-light: var(--color-fg-light-val);
+	--color-fg-inverse: var(--color-fg-inverse-val);
+	--color-card-border: var(--color-card-border-val);
+	--color-canvas-border: var(--color-canvas-border-val);
+
+	--color-accent-primary: var(--color-accent-primary-val);
+	--color-accent-subtle: var(--color-accent-subtle-val);
+	--color-status-success: var(--color-status-success-val);
+	--color-status-success-subtle: var(--color-status-success-subtle-val);
+	--color-status-warning: var(--color-status-warning-val);
+	--color-status-warning-subtle: var(--color-status-warning-subtle-val);
+	--color-status-danger: var(--color-status-danger-val);
+	--color-status-danger-subtle: var(--color-status-danger-subtle-val);
+	--color-status-info: var(--color-status-info-val);
+	--color-status-info-subtle: var(--color-status-info-subtle-val);
+
+	--color-diff-add-bg: var(--color-diff-add-bg-val);
+	--color-diff-add-fg: var(--color-diff-add-fg-val);
+	--color-diff-del-bg: var(--color-diff-del-bg-val);
+	--color-diff-del-fg: var(--color-diff-del-fg-val);
+
+	--color-terminal-bg: var(--color-terminal-bg-val);
+	--color-terminal-fg: var(--color-terminal-fg-val);
+	--color-terminal-muted: var(--color-terminal-muted-val);
+}
+
+@keyframes ak-shimmer {
+	0% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.ak-shimmer-text {
+	background-image: linear-gradient(
+		90deg,
+		var(--color-fg-light-val) 0%,
+		var(--color-fg-main-val) 50%,
+		var(--color-fg-light-val) 100%
+	);
+	background-size: 220% 100%;
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	animation: ak-shimmer 1.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ak-shimmer-text {
+		animation: none;
+		color: var(--color-fg-light-val);
+		background: none;
+	}
+}
