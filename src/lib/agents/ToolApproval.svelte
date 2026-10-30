@@ -1,5 +1,8 @@
 <script lang="ts">
+	import { backOut, cubicOut } from 'svelte/easing';
+	import { fly, scale } from 'svelte/transition';
 	import AgentDisclosure from './AgentDisclosure.svelte';
+	import { motionDuration, pressScale } from '../state/motion.svelte';
 	import type { ToolApprovalParam, ToolApprovalStatus } from '../types';
 
 	interface Props {
@@ -105,21 +108,24 @@
 			}}
 			class="flex min-w-0 flex-1 items-center gap-2 text-left outline-none"
 		>
-			<span
-				aria-hidden="true"
-				class="inline-flex size-5 shrink-0 items-center justify-center rounded font-mono text-xs {activeStatus ===
-					'approved' || activeStatus === 'complete'
-					? 'bg-status-success-subtle text-status-success'
-					: activeStatus === 'denied' || activeStatus === 'error'
-						? 'bg-status-danger-subtle text-status-danger'
-						: 'bg-status-warning-subtle text-status-warning'}"
-			>
-				{activeStatus === 'approved' || activeStatus === 'complete'
-					? '✓'
-					: activeStatus === 'denied' || activeStatus === 'error'
-						? '✕'
-						: '⚡'}
-			</span>
+			{#key activeStatus}
+				<span
+					in:scale={{ start: 0.82, duration: motionDuration(180), easing: backOut }}
+					aria-hidden="true"
+					class="inline-flex size-5 shrink-0 items-center justify-center rounded font-mono text-xs {activeStatus ===
+						'approved' || activeStatus === 'complete'
+						? 'bg-status-success-subtle text-status-success'
+						: activeStatus === 'denied' || activeStatus === 'error'
+							? 'bg-status-danger-subtle text-status-danger'
+							: 'bg-status-warning-subtle text-status-warning'}"
+				>
+					{activeStatus === 'approved' || activeStatus === 'complete'
+						? '✓'
+						: activeStatus === 'denied' || activeStatus === 'error'
+							? '✕'
+							: '⚡'}
+				</span>
+			{/key}
 
 			<span class="font-mono text-xs font-semibold text-fg-main">{tool}</span>
 
@@ -133,9 +139,13 @@
 		</button>
 
 		{#if isWaiting}
-			<div class="flex flex-wrap items-center gap-1.5">
+			<div
+				in:fly={{ x: 8, duration: motionDuration(160), easing: cubicOut }}
+				class="flex flex-wrap items-center gap-1.5"
+			>
 				<button
 					type="button"
+					use:pressScale
 					disabled={!ready || activeStatus === 'approving'}
 					onclick={handleApprove}
 					class="rounded-md bg-fg-main px-2.5 py-1 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
@@ -144,6 +154,7 @@
 				</button>
 				<button
 					type="button"
+					use:pressScale
 					disabled={!ready || activeStatus === 'approving'}
 					onclick={handleAlwaysApprove}
 					class="rounded-md border border-card-border bg-canvas-secondary px-2.5 py-1 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-primary disabled:opacity-50"
@@ -152,6 +163,7 @@
 				</button>
 				<button
 					type="button"
+					use:pressScale
 					disabled={!ready || activeStatus === 'approving'}
 					onclick={handleDeny}
 					class="rounded-md px-2 py-1 text-xs font-medium text-status-danger transition-colors hover:bg-status-danger-subtle disabled:opacity-50"
@@ -161,6 +173,7 @@
 			</div>
 		{:else}
 			<span
+				in:scale={{ start: 0.9, duration: motionDuration(180), easing: backOut }}
 				role="status"
 				aria-live="polite"
 				class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium {activeStatus ===

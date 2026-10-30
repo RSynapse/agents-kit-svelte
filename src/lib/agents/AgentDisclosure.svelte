@@ -1,5 +1,8 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { cubicOut } from 'svelte/easing';
+	import { fade, slide } from 'svelte/transition';
+	import { motionDuration } from '../state/motion.svelte';
 
 	interface Props {
 		id?: string;
@@ -11,15 +14,16 @@
 	let { id, open, class: className = '', children }: Props = $props();
 </script>
 
-<div
-	{id}
-	aria-hidden={!open}
-	inert={!open}
-	class="grid transition-all duration-200 ease-out {open
-		? 'grid-rows-[1fr] opacity-100'
-		: 'pointer-events-none grid-rows-[0fr] opacity-0'} {className}"
->
-	<div class="min-h-0 overflow-hidden">
-		{@render children()}
+{#if open}
+	<div
+		{id}
+		transition:slide={{ duration: motionDuration(210), easing: cubicOut }}
+		class="overflow-hidden {className}"
+	>
+		<div in:fade={{ duration: motionDuration(160) }}>
+			{@render children()}
+		</div>
 	</div>
-</div>
+{:else}
+	<div {id} aria-hidden="true" inert class="hidden"></div>
+{/if}

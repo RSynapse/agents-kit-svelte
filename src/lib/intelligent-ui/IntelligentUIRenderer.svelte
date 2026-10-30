@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { flip } from 'svelte/animate';
+	import { cubicOut } from 'svelte/easing';
+	import { fade, fly } from 'svelte/transition';
 	import AgentActivity from '../agents/AgentActivity.svelte';
 	import ApprovalCard from '../agents/ApprovalCard.svelte';
 	import CodeBlock from '../agents/CodeBlock.svelte';
@@ -6,10 +9,19 @@
 	import TodoList from '../agents/TodoList.svelte';
 	import ToolApproval from '../agents/ToolApproval.svelte';
 	import ToolResult from '../agents/ToolResult.svelte';
+	import AgentEvaluator from '../agents-ui/AgentEvaluator.svelte';
+	import AgentOrchestrator from '../agents-ui/AgentOrchestrator.svelte';
+	import SchemaDisplay from '../ai-elements/SchemaDisplay.svelte';
+	import StackTrace from '../ai-elements/StackTrace.svelte';
+	import DiffTable from '../beautiful/DiffTable.svelte';
+	import Flowchart from '../beautiful/Flowchart.svelte';
+	import InsightCards from '../beautiful/InsightCards.svelte';
+	import RecommendationCard from '../beautiful/RecommendationCard.svelte';
 	import GitHubChecksPanel from '../github/GitHubChecksPanel.svelte';
 	import GitHubCommitCard from '../github/GitHubCommitCard.svelte';
 	import GitHubIssueCard from '../github/GitHubIssueCard.svelte';
 	import GitHubPullRequestCard from '../github/GitHubPullRequestCard.svelte';
+	import { motionDuration } from '../state/motion.svelte';
 	import AgentGenerativeSurface from './AgentGenerativeSurface.svelte';
 	import type {
 		ActivityItem,
@@ -31,7 +43,14 @@
 
 <div class="space-y-4 {className}">
 	{#each nodes as node (node.id)}
-		<div data-node-id={node.id} data-component={node.component} class="space-y-1.5">
+		<div
+			animate:flip={{ duration: motionDuration(240), easing: cubicOut }}
+			in:fly={{ y: 12, duration: motionDuration(210), easing: cubicOut }}
+			out:fade={{ duration: motionDuration(140) }}
+			data-node-id={node.id}
+			data-component={node.component}
+			class="space-y-1.5"
+		>
 			{#if node.title}
 				<div class="flex items-center justify-between text-xs">
 					<span class="font-semibold text-fg-main">{node.title}</span>
@@ -123,6 +142,22 @@
 					onFixWithAgent={(id) =>
 						onIntent?.({ nodeId: node.id, action: 'fix-check', detail: id })}
 				/>
+			{:else if node.component === 'recommendation-card'}
+				<RecommendationCard />
+			{:else if node.component === 'diff-table'}
+				<DiffTable />
+			{:else if node.component === 'insight-cards'}
+				<InsightCards />
+			{:else if node.component === 'flowchart'}
+				<Flowchart />
+			{:else if node.component === 'agent-orchestrator'}
+				<AgentOrchestrator />
+			{:else if node.component === 'agent-evaluator'}
+				<AgentEvaluator />
+			{:else if node.component === 'stack-trace'}
+				<StackTrace />
+			{:else if node.component === 'schema-display'}
+				<SchemaDisplay />
 			{:else}
 				<AgentGenerativeSurface
 					content={node.props.content as GeneratedSurfaceContent | undefined}

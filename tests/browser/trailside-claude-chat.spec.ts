@@ -43,6 +43,18 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		await page.getByRole('tab', { name: /Agents UI Orchestration/i }).click();
 		await expect(page.getByRole('heading', { name: 'AgentOrchestrator' })).toBeVisible();
 		await expect(page.getByRole('heading', { name: 'AgentEvaluator' })).toBeVisible();
+
+		// Filter to Voice & Effects and test Svelte5MotionLab (Spring, crossfade, SvelteSet/SvelteMap)
+		await page.getByRole('tab', { name: /Voice & Effects/i }).click();
+		await expect(page.getByRole('heading', { name: 'Svelte5MotionLab' })).toBeVisible();
+		const springBtn = page.getByRole('button', { name: 'Spring → 98%' });
+		await springBtn.click();
+		const crossfadeCard = page.getByRole('button', { name: /Card 2177 · Skills Scroll Cue/i });
+		await crossfadeCard.click();
+		await page.locator('#svelte5-motion-lab').screenshot({
+			path: `${ARTIFACT_DIR}/svelte5-motion-lab.png`,
+			animations: 'disabled'
+		});
 	});
 
 	test('2. Trailside Claude Code Workbench (/claude-code) supports tool approval, question submission, IME-safe composer, and Light/Dark themes', async ({

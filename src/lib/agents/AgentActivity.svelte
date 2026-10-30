@@ -1,7 +1,11 @@
 <script lang="ts">
+	import { flip } from 'svelte/animate';
+	import { cubicOut } from 'svelte/easing';
+	import { fly } from 'svelte/transition';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import ThinkingShimmer from './ThinkingShimmer.svelte';
 	import { summarizeActivity } from '../state/chat-helpers';
+	import { motionDuration } from '../state/motion.svelte';
 	import type { ActivityItem, ActivityStatus } from '../types';
 
 	interface Props {
@@ -88,7 +92,11 @@
 	<AgentDisclosure id={panelId} open={isOpen}>
 		<ol class="mt-2 space-y-1.5 border-l-2 border-canvas-border pl-3">
 			{#each items as item (item.id)}
-				<li class="flex items-start gap-2 text-xs leading-5">
+				<li
+					animate:flip={{ duration: motionDuration(200), easing: cubicOut }}
+					in:fly={{ y: 5, duration: motionDuration(170), easing: cubicOut }}
+					class="flex items-start gap-2 text-xs leading-5"
+				>
 					{#if item.type === 'text'}
 						<span aria-hidden="true" class="mt-0.5 font-mono text-fg-light">⋯</span>
 						<p class="text-fg-light">{item.label}</p>

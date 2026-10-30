@@ -75,13 +75,15 @@ export { default as FileTree } from './runtime/FileTree.svelte';
 export { default as Terminal } from './runtime/Terminal.svelte';
 export { default as TestResults } from './runtime/TestResults.svelte';
 
-// Effects
+// Effects & Svelte 5 Motion
 export { default as BorderBeam } from './effects/BorderBeam.svelte';
+export { default as Svelte5MotionLab } from './effects/Svelte5MotionLab.svelte';
 
 // Trailside Workbench
 export { default as TrailsideClaudeChat } from './trailside/TrailsideClaudeChat.svelte';
 
-// Types, State Helpers & Catalog Registry
+// Types, State Helpers, Svelte 5 Motion & Catalog Registry
 export * from './types';
 export * from './state/chat-helpers';
+export * from './state/motion.svelte';
 export * from './state/catalog-registry';

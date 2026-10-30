@@ -53,6 +53,7 @@
 		SearchList,
 		SelectionActions,
 		StackTrace,
+		Svelte5MotionLab,
 		Terminal,
 		TestResults,
 		ThinkingShimmer,
@@ -799,6 +800,8 @@ svelte-check found 0 errors and 0 warnings
 						<VoiceWaveVisualizer />
 					{:else if item.slug === 'border-beam'}
 						<BorderBeam />
+					{:else if item.slug === 'svelte5-motion-lab'}
+						<Svelte5MotionLab />
 					{/if}
 				</div>
 			</article>

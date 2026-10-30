@@ -516,5 +516,14 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		upstreamSource: 'components/effects/border-beam.tsx',
 		description: 'Animated active-work border beam treatment for running agent cards.',
 		usageSnippet: `<script lang="ts">\n  import { BorderBeam } from 'agents-kit-svelte';\n</script>\n<BorderBeam />`
+	},
+	{
+		slug: 'svelte5-motion-lab',
+		name: 'Svelte5MotionLab',
+		category: 'Voice & Effects',
+		sveltePath: 'src/lib/effects/Svelte5MotionLab.svelte',
+		upstreamSource: 'Svelte 5 Motion, Crossfade & Reactivity Suite',
+		description: 'Interactive Svelte 5 physics & microanimation playground showcasing Spring, Tween, crossfade (send/receive), animate:flip, SvelteSet, SvelteMap, and {#snippet}.',
+		usageSnippet: `<script lang="ts">\n  import { Svelte5MotionLab } from 'agents-kit-svelte';\n</script>\n<Svelte5MotionLab />`
 	}
 ];

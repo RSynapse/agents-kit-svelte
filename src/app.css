@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+	interpolate-size: allow-keywords;
 	--color-canvas-primary-val: oklch(0.985 0.004 85);
 	--color-canvas-secondary-val: oklch(0.955 0.006 85);
 	--color-card-bg-val: oklch(0.996 0.002 85);
@@ -122,5 +123,37 @@
 		animation: none;
 		color: var(--color-fg-light-val);
 		background: none;
+	}
+}
+
+.ak-micro-press {
+	transition:
+		scale 140ms cubic-bezier(0.22, 1, 0.36, 1),
+		translate 140ms cubic-bezier(0.22, 1, 0.36, 1),
+		opacity 140ms ease;
+	&:active:not(:disabled) {
+		scale: 0.97;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+		&:active:not(:disabled) {
+			scale: 1;
+		}
+	}
+}
+
+.ak-micro-lift {
+	transition:
+		translate 180ms cubic-bezier(0.22, 1, 0.36, 1),
+		scale 180ms cubic-bezier(0.22, 1, 0.36, 1),
+		border-color 180ms ease;
+	&:hover {
+		translate: 0 -1px;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+		&:hover {
+			translate: none;
+		}
 	}
 }

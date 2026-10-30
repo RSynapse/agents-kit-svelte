@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { flip } from 'svelte/animate';
+	import { cubicOut } from 'svelte/easing';
+	import { fade, fly } from 'svelte/transition';
+	import { createBoardCrossfade, motionDuration, pressScale } from '../state/motion.svelte';
 	import GitHubIssueCard from './GitHubIssueCard.svelte';
 	import type { GitHubIssueData, GitHubIssueState } from '../types';
 
@@ -64,6 +68,25 @@
 		},
 		{
 			number: 2148,
+			title: 'Repositories dialog: Connected and Eligible status pills fall below 4.5:1 contrast',
+			repo: 'RSynapse/trailside',
+			state: 'ready-for-human',
+			author: 'grok-bot',
+			createdAt: '2h ago',
+			labels: [
+				{ name: 'ready-for-human', tone: 'warning' },
+				{ name: 'area:app', tone: 'accent' }
+			],
+			riskTier: 'T1',
+			size: 'S',
+			assignedAgent: 'Claude Code · Attempt 1',
+			worktreeBranch: 'argon/2148-repo-dialog-status-contrast',
+			linkedPrNumber: 2150,
+			criteriaCompleted: 4,
+			criteriaTotal: 4
+		},
+		{
+			number: 2128,
 			title: 'Board: Ready for you disclosure chevron lacks aria-expanded state',
 			repo: 'RSynapse/trailside',
 			state: 'ready-for-human',
@@ -75,13 +98,12 @@
 			],
 			riskTier: 'T1',
 			size: 'S',
-			assignedAgent: 'Claude Code · PR 2150',
-			linkedPrNumber: 2150,
-			criteriaCompleted: 4,
-			criteriaTotal: 4
+			linkedPrNumber: 2136,
+			criteriaCompleted: 3,
+			criteriaTotal: 3
 		},
 		{
-			number: 2128,
+			number: 2066,
 			title: 'Project Planning: clarify read-only notice when no computer is connected',
 			repo: 'RSynapse/trailside',
 			state: 'closed',
@@ -93,7 +115,7 @@
 			],
 			riskTier: 'T1',
 			size: 'S',
-			linkedPrNumber: 2136,
+			linkedPrNumber: 2075,
 			criteriaCompleted: 3,
 			criteriaTotal: 3
 		}
@@ -111,6 +133,8 @@
 	];
 
 	let { issues = DEFAULT_BOARD_ISSUES, onSelectIssue, class: className = '' }: Props = $props();
+
+	const [send, receive] = createBoardCrossfade(260);
 
 	let dispatchedOverrides = $state<Record<number, Partial<GitHubIssueData>>>({});
 	let searchQuery = $state('');
@@ -137,7 +161,8 @@
 	);
 
 	/**
-	 * Moves an issue card to the `in-progress` column when dispatched.
+	 * Moves an issue card to the `in-progress` column when dispatched, triggering
+	 * Svelte 5 `crossfade` (`send`/`receive`) and `animate:flip` across columns.
 	 *
 	 * @param issueNumber - GitHub issue number.
 	 */
@@ -185,8 +210,9 @@
 			<div role="group" aria-label="Filter by area" class="flex rounded-lg border border-card-border bg-card-bg p-0.5 text-xs">
 				<button
 					type="button"
+					use:pressScale
 					onclick={() => (selectedArea = 'all')}
-					class="rounded-md px-2.5 py-1 font-medium {selectedArea === 'all'
+					class="rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'all'
 						? 'bg-canvas-secondary text-fg-main'
 						: 'text-fg-light hover:text-fg-main'}"
 				>
@@ -194,8 +220,9 @@
 				</button>
 				<button
 					type="button"
+					use:pressScale
 					onclick={() => (selectedArea = 'area:landing')}
-					class="rounded-md px-2.5 py-1 font-medium {selectedArea === 'area:landing'
+					class="rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:landing'
 						? 'bg-canvas-secondary text-fg-main'
 						: 'text-fg-light hover:text-fg-main'}"
 				>
@@ -203,8 +230,9 @@
 				</button>
 				<button
 					type="button"
+					use:pressScale
 					onclick={() => (selectedArea = 'area:app')}
-					class="rounded-md px-2.5 py-1 font-medium {selectedArea === 'area:app'
+					class="rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:app'
 						? 'bg-canvas-secondary text-fg-main'
 						: 'text-fg-light hover:text-fg-main'}"
 				>
@@ -214,7 +242,7 @@
 		</div>
 	</div>
 
-	<!-- 4-Column Kanban Grid -->
+	<!-- 4-Column Kanban Grid with Svelte 5 crossfade (send/receive) & animate:flip -->
 	<div class="grid gap-3.5 md:grid-cols-2 xl:grid-cols-4">
 		{#each COLUMNS as col (col.id)}
 			{@const colItems = filteredIssues.filter((item) => item.state === col.id)}
@@ -231,17 +259,26 @@
 
 				<div class="space-y-2.5">
 					{#each colItems as item (item.number)}
-						<GitHubIssueCard
-							issue={item}
-							compact={true}
-							onDispatchRun={handleDispatch}
-							onOpenChat={() => {
-								activeDrawerIssue = item;
-								onSelectIssue?.(item);
-							}}
-						/>
+						<div
+							in:receive={{ key: item.number }}
+							out:send={{ key: item.number }}
+							animate:flip={{ duration: motionDuration(250), easing: cubicOut }}
+						>
+							<GitHubIssueCard
+								issue={item}
+								compact={true}
+								onDispatchRun={handleDispatch}
+								onOpenChat={() => {
+									activeDrawerIssue = item;
+									onSelectIssue?.(item);
+								}}
+							/>
+						</div>
 					{:else}
-						<p class="rounded-lg border border-dashed border-card-border py-6 text-center text-xs text-fg-light">
+						<p
+							in:fade={{ duration: motionDuration(150) }}
+							class="rounded-lg border border-dashed border-card-border py-6 text-center text-xs text-fg-light"
+						>
 							No cards in {col.label}
 						</p>
 					{/each}
@@ -252,6 +289,7 @@
 
 	{#if activeDrawerIssue}
 		<div
+			transition:fly={{ y: 10, duration: motionDuration(200), easing: cubicOut }}
 			role="region"
 			aria-label="Selected card inspector"
 			class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-accent-primary bg-accent-subtle px-4 py-3 text-xs"
@@ -269,6 +307,7 @@
 			</div>
 			<button
 				type="button"
+				use:pressScale
 				onclick={() => (activeDrawerIssue = null)}
 				class="rounded-md bg-card-bg px-2.5 py-1 font-medium text-fg-main hover:bg-canvas-primary"
 			>

@@ -1,4 +1,9 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+	import { backOut, cubicOut } from 'svelte/easing';
+	import { Spring, prefersReducedMotion } from 'svelte/motion';
+	import { fly, scale } from 'svelte/transition';
+	import { magneticHover, motionDuration, pressScale } from '../state/motion.svelte';
 	import type { GitHubIssueData } from '../types';
 
 	interface Props {
@@ -7,6 +12,7 @@
 		onDispatchRun?: (issueNumber: number) => void;
 		onOpenChat?: (issueNumber: number) => void;
 		onClaimToggle?: (issueNumber: number, claimed: boolean) => void;
+		footerActions?: Snippet<[GitHubIssueData]>;
 		class?: string;
 	}
 
@@ -42,6 +48,7 @@
 		onDispatchRun,
 		onOpenChat,
 		onClaimToggle,
+		footerActions,
 		class: className = ''
 	}: Props = $props();
 
@@ -62,6 +69,12 @@
 			? Math.round(((issue.criteriaCompleted ?? 0) / issue.criteriaTotal) * 100)
 			: 0
 	);
+
+	const criteriaSpring = new Spring(0, { stiffness: 0.16, damping: 0.78 });
+
+	$effect(() => {
+		void criteriaSpring.set(criteriaPercent, { instant: prefersReducedMotion.current });
+	});
 
 	/**
 	 * Maps a GitHub label tone to semantic Tailwind badge classes.
@@ -102,29 +115,33 @@
 </script>
 
 <article
+	use:magneticHover={1.5}
 	aria-label="GitHub Issue {issue.number}: {issue.title}"
-	class="flex flex-col justify-between rounded-xl border border-card-border bg-card-bg p-4 text-sm shadow-xs transition-colors hover:border-canvas-border {className}"
+	class="ak-micro-lift flex flex-col justify-between rounded-xl border border-card-border bg-card-bg p-4 text-sm shadow-xs transition-colors hover:border-canvas-border {className}"
 >
 	<div>
 		<!-- Top Meta Row -->
 		<div class="flex flex-wrap items-center justify-between gap-2 text-xs">
 			<div class="flex items-center gap-2">
-				<span
-					class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[11px] font-semibold {issue.state ===
-					'closed'
-						? 'bg-canvas-secondary text-fg-light'
-						: issue.state === 'ready-for-human'
-							? 'bg-status-warning-subtle text-status-warning'
-							: 'bg-status-success-subtle text-status-success'}"
-				>
-					{issue.state === 'closed'
-						? '✓ Closed'
-						: issue.state === 'in-progress'
-							? '◎ In Progress'
+				{#key issue.state}
+					<span
+						in:scale={{ start: 0.85, duration: motionDuration(180), easing: backOut }}
+						class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[11px] font-semibold {issue.state ===
+						'closed'
+							? 'bg-canvas-secondary text-fg-light'
 							: issue.state === 'ready-for-human'
-								? '⚑ Ready for Human'
-								: '○ Open'}
-				</span>
+								? 'bg-status-warning-subtle text-status-warning'
+								: 'bg-status-success-subtle text-status-success'}"
+					>
+						{issue.state === 'closed'
+							? '✓ Closed'
+							: issue.state === 'in-progress'
+								? '◎ In Progress'
+								: issue.state === 'ready-for-human'
+									? '⚑ Ready for Human'
+									: '○ Open'}
+					</span>
+				{/key}
 				<span class="font-mono text-xs font-semibold text-fg-light">
 					{issue.repo} · Issue {issue.number}
 				</span>
@@ -171,6 +188,7 @@
 		<!-- Active Worktree & Agent Run Strip -->
 		{#if (issue.assignedAgent || issue.worktreeBranch) && !compact}
 			<div
+				in:fly={{ y: 6, duration: motionDuration(180), easing: cubicOut }}
 				class="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-card-border bg-canvas-secondary px-3 py-2 text-xs"
 			>
 				<div class="flex items-center gap-2">
@@ -185,19 +203,19 @@
 			</div>
 		{/if}
 
-		<!-- Acceptance Criteria Progress Bar -->
+		<!-- Acceptance Criteria Progress Bar (Svelte 5 Spring) -->
 		{#if issue.criteriaTotal && issue.criteriaTotal > 0}
 			<div class="mt-3 space-y-1">
 				<div class="flex items-center justify-between font-mono text-[11px] text-fg-light">
 					<span>Acceptance criteria</span>
 					<span class="tabular-nums text-fg-main">
-						{issue.criteriaCompleted ?? 0}/{issue.criteriaTotal} ({criteriaPercent}%)
+						{issue.criteriaCompleted ?? 0}/{issue.criteriaTotal} ({Math.round(criteriaSpring.current)}%)
 					</span>
 				</div>
 				<div class="h-1.5 w-full overflow-hidden rounded-full bg-canvas-secondary">
 					<div
-						class="h-full rounded-full bg-status-success transition-all"
-						style="width: {criteriaPercent}%;"
+						class="h-full rounded-full bg-status-success"
+						style="width: {Math.max(0, Math.min(100, criteriaSpring.current))}%;"
 					></div>
 				</div>
 			</div>
@@ -213,33 +231,40 @@
 			{/if}
 		</span>
 
-		<div class="flex items-center gap-1.5">
-			<button
-				type="button"
-				disabled={!ready}
-				onclick={handleClaim}
-				class="rounded-md border border-card-border bg-canvas-secondary px-2.5 py-1 font-medium text-fg-main transition-colors hover:bg-canvas-primary disabled:opacity-50"
-			>
-				{claimed ? '✓ Claimed' : 'Claim issue'}
-			</button>
-			<button
-				type="button"
-				disabled={!ready}
-				onclick={handleDispatch}
-				class="rounded-md bg-fg-main px-2.5 py-1 font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
-			>
-				{dispatched ? '↻ Run Dispatched' : '▶ Dispatch Agent'}
-			</button>
-			{#if onOpenChat}
+		{#if footerActions}
+			{@render footerActions(issue)}
+		{:else}
+			<div class="flex items-center gap-1.5">
 				<button
 					type="button"
+					use:pressScale
 					disabled={!ready}
-					onclick={() => onOpenChat(issue.number)}
-					class="rounded-md border border-card-border bg-card-bg px-2 py-1 font-mono text-[11px] text-accent-primary hover:bg-accent-subtle"
+					onclick={handleClaim}
+					class="rounded-md border border-card-border bg-canvas-secondary px-2.5 py-1 font-medium text-fg-main transition-colors hover:bg-canvas-primary disabled:opacity-50"
 				>
-					Chat →
+					{claimed ? '✓ Claimed' : 'Claim issue'}
 				</button>
-			{/if}
-		</div>
+				<button
+					type="button"
+					use:pressScale
+					disabled={!ready}
+					onclick={handleDispatch}
+					class="rounded-md bg-fg-main px-2.5 py-1 font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
+				>
+					{dispatched ? '↻ Run Dispatched' : '▶ Dispatch Agent'}
+				</button>
+				{#if onOpenChat}
+					<button
+						type="button"
+						use:pressScale
+						disabled={!ready}
+						onclick={() => onOpenChat(issue.number)}
+						class="rounded-md border border-card-border bg-card-bg px-2 py-1 font-mono text-[11px] text-accent-primary hover:bg-accent-subtle"
+					>
+						Chat →
+					</button>
+				{/if}
+			</div>
+		{/if}
 	</div>
 </article>
