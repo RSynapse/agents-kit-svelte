@@ -1,0 +1,173 @@
+<script lang="ts">
+	export interface SearchListItem {
+		id: string;
+		label: string;
+		description?: string;
+		category?: 'issue' | 'file' | 'run' | 'doc';
+	}
+
+	interface Props {
+		value?: string;
+		items?: SearchListItem[];
+		placeholder?: string;
+		onValueChange?: (value: string) => void;
+		onSelect?: (id: string) => void;
+		class?: string;
+	}
+
+	const DEFAULT_ITEMS: SearchListItem[] = [
+		{
+			id: 'sl-184',
+			label: 'Issue 184 · Isolated git worktree per dispatched Run',
+			description: 'Ready · T2 · Assigned to Claude Code',
+			category: 'issue'
+		},
+		{
+			id: 'sl-file-chat',
+			label: 'src/lib/trailside/TrailsideClaudeChat.svelte',
+			description: 'Interactive workbench shell with context meter and checkpoints',
+			category: 'file'
+		},
+		{
+			id: 'sl-run-92',
+			label: 'Run Attempt 2 · Card 184 verification pass',
+			description: 'Completed in 41s · 19/19 checks green',
+			category: 'run'
+		},
+		{
+			id: 'sl-doc-adr',
+			label: 'docs/engineering/adr/ENG-0009-showcase-scope.md',
+			description: 'Owner decision lifting local worktree execution limits',
+			category: 'doc'
+		}
+	];
+
+	let {
+		value = undefined,
+		items = DEFAULT_ITEMS,
+		placeholder = 'Search issues, files, runs, and ADRs…',
+		onValueChange,
+		onSelect,
+		class: className = ''
+	}: Props = $props();
+
+	let internalQuery = $state('');
+	let activeCategory = $state<'all' | 'issue' | 'file' | 'run' | 'doc'>('all');
+	let activeIndex = $state(0);
+
+	$effect(() => {
+		if (value !== undefined) {
+			internalQuery = value;
+		}
+	});
+
+	/**
+	 * Updates the search input string and notifies listeners.
+	 *
+	 * @param next - Updated search query string.
+	 */
+	function handleQueryInput(next: string): void {
+		internalQuery = next;
+		activeIndex = 0;
+		onValueChange?.(next);
+	}
+
+	/**
+	 * Handles keyboard navigation (`ArrowDown`, `ArrowUp`, `Enter`) inside the search input.
+	 *
+	 * @param event - Keyboard event from the search input.
+	 */
+	function handleKeyDown(event: KeyboardEvent): void {
+		if (event.key === 'ArrowDown') {
+			event.preventDefault();
+			activeIndex = Math.min(Math.max(0, visibleItems.length - 1), activeIndex + 1);
+		} else if (event.key === 'ArrowUp') {
+			event.preventDefault();
+			activeIndex = Math.max(0, activeIndex - 1);
+		} else if (event.key === 'Enter' && visibleItems[activeIndex]) {
+			event.preventDefault();
+			onSelect?.(visibleItems[activeIndex].id);
+		}
+	}
+
+	let visibleItems = $derived(
+		items.filter((item) => {
+			const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
+			const query = internalQuery.trim().toLowerCase();
+			const matchesText =
+				!query ||
+				`${item.label} ${item.description ?? ''}`.toLowerCase().includes(query);
+			return matchesCategory && matchesText;
+		})
+	);
+</script>
+
+<section
+	class="w-full max-w-xl rounded-xl border border-card-border bg-card-bg p-3 text-fg-main {className}"
+>
+	<div class="flex items-center gap-2 border-b border-canvas-border pb-2.5">
+		<span aria-hidden="true" class="pl-1.5 font-mono text-xs text-fg-light">⌕</span>
+		<input
+			type="search"
+			value={internalQuery}
+			{placeholder}
+			aria-label={placeholder}
+			oninput={(e) => handleQueryInput(e.currentTarget.value)}
+			onkeydown={handleKeyDown}
+			class="flex-1 bg-transparent text-xs text-fg-main placeholder:text-fg-light focus:outline-none"
+		/>
+		<span class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] text-fg-light">
+			{visibleItems.length}
+		</span>
+	</div>
+
+	<div class="mt-2 flex flex-wrap gap-1 border-b border-canvas-border pb-2">
+		{#each ['all', 'issue', 'file', 'run', 'doc'] as const as cat (cat)}
+			<button
+				type="button"
+				onclick={() => {
+					activeCategory = cat;
+					activeIndex = 0;
+				}}
+				class="rounded-md px-2 py-0.5 font-mono text-[10px] uppercase transition-colors {activeCategory ===
+				cat
+					? 'bg-accent-subtle font-semibold text-accent-primary'
+					: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+			>
+				{cat}
+			</button>
+		{/each}
+	</div>
+
+	<div class="mt-1 divide-y divide-canvas-border">
+		{#each visibleItems as item, index (item.id)}
+			<button
+				type="button"
+				onclick={() => {
+					activeIndex = index;
+					onSelect?.(item.id);
+				}}
+				class="flex min-h-10 w-full items-start justify-between gap-3 rounded-lg px-2.5 py-2 text-left transition-colors {index ===
+				activeIndex
+					? 'bg-canvas-secondary'
+					: 'hover:bg-canvas-secondary'}"
+			>
+				<div class="min-w-0">
+					<span class="block truncate text-xs font-medium text-fg-main">{item.label}</span>
+					{#if item.description}
+						<span class="mt-0.5 block truncate text-[11px] text-fg-light">{item.description}</span>
+					{/if}
+				</div>
+				{#if item.category}
+					<span
+						class="shrink-0 rounded bg-card-bg px-1.5 py-0.5 font-mono text-[10px] uppercase text-fg-light"
+					>
+						{item.category}
+					</span>
+				{/if}
+			</button>
+		{:else}
+			<p class="p-6 text-center text-xs text-fg-light">No matching results</p>
+		{/each}
+	</div>
+</section>

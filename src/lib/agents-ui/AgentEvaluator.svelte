@@ -1,0 +1,380 @@
+<script lang="ts">
+	export type EvalCriterionStatus = 'pass' | 'warn' | 'fail';
+
+	export interface EvalCriterion {
+		label: string;
+		score: number;
+		maxScore: number;
+		weight?: number;
+		status?: EvalCriterionStatus;
+		note?: string;
+	}
+
+	export interface EvalIteration {
+		id: string;
+		number: number;
+		output: string;
+		score: number;
+		feedback: string;
+		criteria: EvalCriterion[];
+		status: 'passed' | 'warning' | 'failed';
+	}
+
+	interface Props {
+		taskDescription?: string;
+		iterations?: EvalIteration[];
+		currentIteration?: number;
+		qualityThreshold?: number;
+		maxIterations?: number;
+		isRunning?: boolean;
+		onRunNext?: () => void;
+		onAccept?: () => void;
+		onReset?: () => void;
+		onAdjustThreshold?: (threshold: number) => void;
+		class?: string;
+	}
+
+	const defaultIterations: EvalIteration[] = [
+		{
+			id: 'iter-1',
+			number: 1,
+			output: 'Added retry handler in outbox service, checking revision before idempotency key.',
+			score: 58,
+			feedback:
+				'Referee send-back: Idempotency lookup must precede new-intent revision checks per ENG-0001.',
+			criteria: [
+				{
+					label: 'Authorization & Idempotency Order',
+					score: 40,
+					maxScore: 100,
+					weight: 40,
+					status: 'fail',
+					note: 'Revision check ran before idempotency lookup.'
+				},
+				{
+					label: 'Atomic Outbox & Journal Transaction',
+					score: 82,
+					maxScore: 100,
+					weight: 35,
+					status: 'warn',
+					note: 'Journal write lacked rollback test coverage.'
+				},
+				{
+					label: 'Svelte 5 Runes & Semantic Tokens',
+					score: 95,
+					maxScore: 100,
+					weight: 25,
+					status: 'pass',
+					note: 'Zero legacy reactivity or hardcoded hex tokens.'
+				}
+			],
+			status: 'failed'
+		},
+		{
+			id: 'iter-2',
+			number: 2,
+			output:
+				'Reordered domain pipeline: reauthorize session -> lookup idempotency key -> check revision -> atomic outbox commit.',
+			score: 94,
+			feedback:
+				'Referee pass: All red-team invariants satisfied with deterministic SQLite fixture coverage.',
+			criteria: [
+				{
+					label: 'Authorization & Idempotency Order',
+					score: 96,
+					maxScore: 100,
+					weight: 40,
+					status: 'pass',
+					note: 'Verified replay returns stored effect prior to revision check.'
+				},
+				{
+					label: 'Atomic Outbox & Journal Transaction',
+					score: 92,
+					maxScore: 100,
+					weight: 35,
+					status: 'pass',
+					note: 'Effects, outbox, and journal commit in single transaction.'
+				},
+				{
+					label: 'Svelte 5 Runes & Semantic Tokens',
+					score: 95,
+					maxScore: 100,
+					weight: 25,
+					status: 'pass',
+					note: 'Passes static audit and typecheck.'
+				}
+			],
+			status: 'passed'
+		}
+	];
+
+	let {
+		taskDescription = 'Rubric-based Referee & Red-Team Scorecard for Card 191 (Risk Tier T2)',
+		iterations = defaultIterations,
+		currentIteration,
+		qualityThreshold = 85,
+		maxIterations = 4,
+		isRunning = false,
+		onRunNext,
+		onAccept,
+		onReset,
+		onAdjustThreshold,
+		class: className = ''
+	}: Props = $props();
+
+	let localThreshold = $state(85);
+	let openIterationId = $state<string | undefined>('iter-2');
+	let accepted = $state(false);
+
+	$effect(() => {
+		localThreshold = qualityThreshold;
+		openIterationId = iterations.at(-1)?.id;
+	});
+
+	let latest = $derived(iterations.at(-1));
+	let passed = $derived(Boolean(latest && latest.score >= localThreshold));
+
+	/**
+	 * Determines the semantic status of an evaluation criterion.
+	 *
+	 * @param criterion - Rubric criterion item.
+	 * @returns Resolved `'pass' | 'warn' | 'fail'` status.
+	 */
+	function resolveCriterionStatus(criterion: EvalCriterion): EvalCriterionStatus {
+		if (criterion.status) {
+			return criterion.status;
+		}
+		const ratio = criterion.maxScore > 0 ? (criterion.score / criterion.maxScore) * 100 : 0;
+		if (ratio >= 85) return 'pass';
+		if (ratio >= 65) return 'warn';
+		return 'fail';
+	}
+
+	/**
+	 * Maps a criterion status to semantic badge classes.
+	 *
+	 * @param status - Criterion status value.
+	 * @returns Tailwind class string.
+	 */
+	function getCriterionBadgeClasses(status: EvalCriterionStatus): string {
+		switch (status) {
+			case 'pass':
+				return 'bg-status-success-subtle text-status-success';
+			case 'warn':
+				return 'bg-status-warning-subtle text-status-warning';
+			case 'fail':
+				return 'bg-status-danger-subtle text-status-danger';
+		}
+	}
+
+	/**
+	 * Updates the quality threshold slider and notifies the optional callback.
+	 *
+	 * @param event - Native input event from the range control.
+	 */
+	function handleThresholdInput(event: Event): void {
+		const target = event.currentTarget as HTMLInputElement;
+		const nextValue = Number(target.value);
+		localThreshold = nextValue;
+		onAdjustThreshold?.(nextValue);
+	}
+
+	/**
+	 * Accepts the evaluation result and invokes the optional callback.
+	 */
+	function handleAccept(): void {
+		accepted = true;
+		onAccept?.();
+	}
+
+	/**
+	 * Resets the accepted flag and invokes the optional reset callback.
+	 */
+	function handleReset(): void {
+		accepted = false;
+		onReset?.();
+	}
+</script>
+
+<section
+	aria-label="Referee evaluation scorecard"
+	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+>
+	<header
+		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
+	>
+		<div>
+			<div class="flex flex-wrap items-center gap-2">
+				<span
+					class="rounded bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] font-medium text-fg-light"
+				>
+					Referee Scorecard
+				</span>
+				<span
+					class="rounded-full px-2.5 py-0.5 text-xs font-medium {passed
+						? 'bg-status-success-subtle text-status-success'
+						: 'bg-status-warning-subtle text-status-warning'}"
+				>
+					{passed ? '✓ Gate Passed' : '⚠ Send-Back / Below Threshold'}
+				</span>
+			</div>
+			<h2 class="mt-1.5 text-base font-semibold text-fg-main">Rubric & Red-Team Evaluation</h2>
+			<p class="mt-0.5 text-xs text-fg-light">{taskDescription}</p>
+		</div>
+
+		<div class="flex flex-wrap items-center gap-2">
+			<button
+				type="button"
+				onclick={handleReset}
+				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+			>
+				↺ Reset
+			</button>
+			{#if passed}
+				<button
+					type="button"
+					onclick={handleAccept}
+					class="rounded-lg bg-status-success px-3 py-1.5 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
+				>
+					{accepted ? '✓ Accepted' : '✓ Accept Result'}
+				</button>
+			{:else}
+				<button
+					type="button"
+					disabled={isRunning}
+					onclick={() => onRunNext?.()}
+					class="rounded-lg bg-accent-primary px-3 py-1.5 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-40"
+				>
+					▶ Run Next Attempt
+				</button>
+			{/if}
+		</div>
+	</header>
+
+	{#if latest}
+		<div class="grid gap-5 border-b border-canvas-border p-4 lg:grid-cols-[210px_1fr]">
+			<div class="rounded-lg border border-canvas-border bg-canvas-primary p-3.5">
+				<p class="font-mono text-xs text-fg-light">Weighted Score</p>
+				<p class="mt-1 font-mono text-3xl font-bold tabular-nums text-fg-main">
+					{latest.score}
+					<span class="text-xs font-normal text-fg-light">/ 100</span>
+				</p>
+
+				<div class="mt-4">
+					<label
+						for="eval-threshold-slider"
+						class="flex items-center justify-between text-xs text-fg-light"
+					>
+						<span>Pass threshold</span>
+						<span class="font-mono font-medium text-fg-main">{localThreshold}</span>
+					</label>
+					<input
+						id="eval-threshold-slider"
+						type="range"
+						min="50"
+						max="100"
+						value={localThreshold}
+						oninput={handleThresholdInput}
+						class="mt-1.5 w-full accent-current text-accent-primary"
+					/>
+				</div>
+
+				<p class="mt-3 font-mono text-[11px] text-fg-light">
+					Attempt {currentIteration ?? latest.number} of {maxIterations}
+				</p>
+			</div>
+
+			<div>
+				<div class="rounded-lg border border-canvas-border bg-canvas-primary p-3">
+					<p class="text-xs font-semibold text-fg-main">Referee Verdict & Notes</p>
+					<p class="mt-1 text-xs leading-relaxed text-fg-light">{latest.feedback}</p>
+				</div>
+
+				<div class="mt-3 space-y-2.5">
+					{#each latest.criteria as criterion (criterion.label)}
+						{@const status = resolveCriterionStatus(criterion)}
+						{@const percent =
+							criterion.maxScore > 0
+								? Math.round((criterion.score / criterion.maxScore) * 100)
+								: 0}
+						<div class="rounded-lg border border-canvas-border bg-canvas-primary p-2.5">
+							<div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+								<div class="flex items-center gap-2">
+									<span class="font-medium text-fg-main">{criterion.label}</span>
+									{#if criterion.weight}
+										<span class="font-mono text-[11px] text-fg-light">
+											({criterion.weight}% weight)
+										</span>
+									{/if}
+								</div>
+								<div class="flex items-center gap-2">
+									<span
+										class="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase {getCriterionBadgeClasses(
+											status
+										)}"
+									>
+										{status}
+									</span>
+									<span class="font-mono text-xs tabular-nums text-fg-main">
+										{criterion.score}/{criterion.maxScore}
+									</span>
+								</div>
+							</div>
+							<div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-canvas-secondary">
+								<span
+									class="block h-full rounded-full {status === 'pass'
+										? 'bg-status-success'
+										: status === 'warn'
+											? 'bg-status-warning'
+											: 'bg-status-danger'}"
+									style="width: {percent}%;"
+								></span>
+							</div>
+							{#if criterion.note}
+								<p class="mt-1.5 text-[11px] text-fg-light">{criterion.note}</p>
+							{/if}
+						</div>
+					{/each}
+				</div>
+			</div>
+		</div>
+	{/if}
+
+	<div class="p-4">
+		<h3 class="text-xs font-semibold text-fg-main">Attempt History ({iterations.length})</h3>
+		<div class="mt-2 divide-y divide-canvas-border rounded-lg border border-canvas-border">
+			{#each iterations as item (item.id)}
+				{@const isOpen = openIterationId === item.id}
+				<div>
+					<button
+						type="button"
+						aria-expanded={isOpen}
+						onclick={() => (openIterationId = isOpen ? undefined : item.id)}
+						class="flex w-full items-center gap-3 px-3 py-2.5 text-left text-xs transition-colors hover:bg-canvas-primary"
+					>
+						<span class="w-20 shrink-0 font-mono text-fg-light">Attempt {item.number}</span>
+						<span class="min-w-0 flex-1 truncate text-fg-main">{item.output}</span>
+						<span
+							class="rounded-full px-2 py-0.5 font-mono text-[11px] font-semibold tabular-nums {item.score >=
+							localThreshold
+								? 'bg-status-success-subtle text-status-success'
+								: 'bg-status-warning-subtle text-status-warning'}"
+						>
+							{item.score}/100
+						</span>
+						<span class="text-fg-light">{isOpen ? '▴' : '▾'}</span>
+					</button>
+
+					{#if isOpen}
+						<div class="border-t border-canvas-border bg-canvas-primary px-3 py-2.5 text-xs">
+							<p class="font-medium text-fg-main">Summary</p>
+							<p class="mt-0.5 text-fg-light">{item.output}</p>
+							<p class="mt-2 font-medium text-fg-main">Referee Feedback</p>
+							<p class="mt-0.5 text-fg-light">{item.feedback}</p>
+						</div>
+					{/if}
+				</div>
+			{/each}
+		</div>
+	</div>
+</section>
