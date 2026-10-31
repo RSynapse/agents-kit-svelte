@@ -2,7 +2,20 @@
 	import { pillClass, SOFT } from '../ui/styles';
 	import { fade } from 'svelte/transition';
 	import { rise } from '../state/motion.svelte';
-	import { ArrowUp, AtSign, ChevronDown, FileIcon, GitBranch, Plus, Shield, Sparkles, Square, X } from '@lucide/svelte';
+	import {
+		ArrowUp,
+		AtSign,
+		Check,
+		ChevronDown,
+		FileIcon,
+		GitBranch,
+		Plus,
+		Shield,
+		Sparkle,
+		Sparkles,
+		Square,
+		X
+	} from '@lucide/svelte';
 	import { isImeComposing } from '../state/chat-helpers';
 	import type { SupportedAgentId, SupportedAgentOption } from '../types';
 
@@ -35,6 +48,8 @@
 	}: Props = $props();
 
 	let menuOpen = $state(false);
+	let agentMenuOpen = $state(false);
+	let formEl: HTMLFormElement | undefined = $state();
 	let canSend = $derived(value.trim().length > 0);
 	let selectedAgent = $derived(agents.find((agentOpt) => agentOpt.id === selectedAgentId));
 
@@ -109,6 +124,59 @@
 	}
 
 	/**
+	 * Selects an agent from the soft agent menu and closes it.
+	 *
+	 * @param agentId - Agent to run with.
+	 */
+	function pickAgent(agentId: SupportedAgentId): void {
+		agentMenuOpen = false;
+		if (agentId !== selectedAgentId) onAgentChange?.(agentId);
+	}
+
+	/**
+	 * Arrow keys move between agent options; Escape closes the menu.
+	 *
+	 * @param event - KeyboardEvent from the listbox.
+	 */
+	function handleAgentMenuKey(event: KeyboardEvent): void {
+		if (event.key === 'Escape') {
+			agentMenuOpen = false;
+			return;
+		}
+		if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+		event.preventDefault();
+		const options = Array.from(
+			(event.currentTarget as HTMLElement).querySelectorAll<HTMLButtonElement>('[role="option"]:not(:disabled)')
+		);
+		const current = options.indexOf(document.activeElement as HTMLButtonElement);
+		const next = event.key === 'ArrowDown' ? current + 1 : current - 1;
+		options[(next + options.length) % options.length]?.focus();
+	}
+
+	// Close either menu on an outside click or Escape.
+	$effect(() => {
+		if (!menuOpen && !agentMenuOpen) return;
+		const onPointer = (event: PointerEvent) => {
+			if (formEl && !formEl.contains(event.target as Node)) {
+				menuOpen = false;
+				agentMenuOpen = false;
+			}
+		};
+		const onKey = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				menuOpen = false;
+				agentMenuOpen = false;
+			}
+		};
+		document.addEventListener('pointerdown', onPointer);
+		document.addEventListener('keydown', onKey);
+		return () => {
+			document.removeEventListener('pointerdown', onPointer);
+			document.removeEventListener('keydown', onKey);
+		};
+	});
+
+	/**
 	 * Removes an attached context pill from the composer.
 	 *
 	 * @param tag - Context identifier to remove.
@@ -119,6 +187,7 @@
 </script>
 
 <form
+	bind:this={formEl}
 	onsubmit={(e) => {
 		e.preventDefault();
 		submitPrompt();
@@ -163,7 +232,10 @@
 				type="button"
 				aria-label="Add context or skill"
 				aria-expanded={menuOpen}
-				onclick={() => (menuOpen = !menuOpen)}
+				onclick={() => {
+					menuOpen = !menuOpen;
+					agentMenuOpen = false;
+				}}
 				class={pillClass('secondary', 'icon')}
 			>
 				<Plus aria-hidden="true" class="transition-transform duration-200 {menuOpen ? 'rotate-45' : ''}" />
@@ -207,30 +279,73 @@
 				</div>
 			{/if}
 
-			<label
-				class="relative inline-flex h-8 min-w-0 items-center gap-1 rounded-full pr-2.5 pl-3 text-[13px] text-fg-light transition-colors hover:bg-chat-user/70 hover:text-fg-main"
-			>
-				<span class="truncate">{selectedAgent?.label ?? 'Agent'}</span>
-				{#if selectedAgent?.version}
-					<span class="hidden text-fg-light/70 sm:inline">{selectedAgent.version}</span>
-				{/if}
-				<ChevronDown aria-hidden="true" class="size-3.5" />
-				<select
-					aria-label="Supported Agent"
-					value={selectedAgentId}
-					onchange={(e) => {
-						const target = e.currentTarget as HTMLSelectElement;
-						onAgentChange?.(target.value as SupportedAgentId);
+			<div class="relative min-w-0">
+				<button
+					type="button"
+					aria-label="Supported Agent: {selectedAgent?.label ?? 'none'}"
+					aria-haspopup="listbox"
+					aria-expanded={agentMenuOpen}
+					onclick={() => {
+						agentMenuOpen = !agentMenuOpen;
+						menuOpen = false;
 					}}
-					class="absolute inset-0 cursor-pointer opacity-0"
+					class="inline-flex h-8 max-w-full min-w-0 items-center gap-1 rounded-full pr-2.5 pl-3 text-[13px] transition-colors hover:bg-chat-user/70 hover:text-fg-main {agentMenuOpen
+						? 'bg-chat-user/70 text-fg-main'
+						: 'text-fg-light'}"
 				>
-					{#each agents as agentOpt (agentOpt.id)}
-						<option value={agentOpt.id}>
-							{agentOpt.label} ({agentOpt.version})
-						</option>
-					{/each}
-				</select>
-			</label>
+					<span class="truncate">{selectedAgent?.label ?? 'Agent'}</span>
+					{#if selectedAgent?.version}
+						<span class="hidden text-fg-light/70 sm:inline">{selectedAgent.version}</span>
+					{/if}
+					<ChevronDown
+						aria-hidden="true"
+						class="size-3.5 transition-transform duration-200 {agentMenuOpen ? 'rotate-180' : ''}"
+					/>
+				</button>
+
+				{#if agentMenuOpen}
+					<div
+						role="listbox"
+						tabindex="-1"
+						aria-label="Supported Agent"
+						transition:rise={{ y: 4, duration: 140 }}
+						onkeydown={handleAgentMenuKey}
+						class="absolute bottom-11 left-0 z-20 w-64 rounded-soft border border-chat-border bg-card-bg p-1.5 ak-shadow-soft"
+					>
+						<p class="px-2.5 pt-1 pb-1.5 text-[11px] font-medium text-fg-light">Run with</p>
+						{#each agents as agentOpt (agentOpt.id)}
+							{@const isSelected = agentOpt.id === selectedAgentId}
+							<button
+								type="button"
+								role="option"
+								aria-selected={isSelected}
+								disabled={!agentOpt.signedIn}
+								onclick={() => pickAgent(agentOpt.id)}
+								class="flex w-full items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-left transition-colors hover:bg-chat-surface focus-visible:bg-chat-surface disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:bg-transparent {isSelected
+									? 'bg-chat-surface'
+									: ''}"
+							>
+								<span
+									class="inline-flex size-7 shrink-0 items-center justify-center rounded-full [&_svg]:size-3.5 {isSelected
+										? 'bg-chat-accent-subtle text-chat-accent'
+										: 'bg-chat-user text-fg-light'}"
+								>
+									<Sparkle aria-hidden="true" class={isSelected ? 'fill-current' : ''} />
+								</span>
+								<span class="min-w-0 flex-1">
+									<span class="block truncate text-[13px] font-medium text-fg-main">{agentOpt.label}</span>
+									<span class="block text-[11px] text-fg-light">
+										v{agentOpt.version.replace(/^v/, "")} · {agentOpt.signedIn ? 'Signed in' : 'Not signed in'}
+									</span>
+								</span>
+								{#if isSelected}
+									<Check aria-hidden="true" class="size-4 shrink-0 text-chat-accent" />
+								{/if}
+							</button>
+						{/each}
+					</div>
+				{/if}
+			</div>
 
 			<span class="hidden h-7 items-center gap-1.5 rounded-full px-2.5 text-xs text-fg-light sm:inline-flex">
 				<Sparkles aria-hidden="true" class="size-3.5 text-chat-accent" />

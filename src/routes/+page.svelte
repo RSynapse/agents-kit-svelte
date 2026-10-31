@@ -365,7 +365,8 @@
 
 	const sampleAgents: SupportedAgentOption[] = [
 		{ id: 'claude-code', label: 'AK-S Agent', version: '0.3.0', signedIn: true },
-		{ id: 'codex', label: 'Codex CLI', version: '0.29.0', signedIn: true }
+		{ id: 'codex', label: 'Codex CLI', version: '0.29.0', signedIn: true },
+		{ id: 'gemini', label: 'Gemini CLI', version: '2.4.1', signedIn: false },
 	];
 
 	const sampleCitations: CitationItem[] = [
