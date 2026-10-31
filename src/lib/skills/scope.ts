@@ -1,7 +1,7 @@
 import { Box, FileCode, FileText, FolderGit2, Image, Puzzle, ScrollText, User } from '@lucide/svelte';
 import type { Component } from 'svelte';
-import type { UiTone } from '../ui/styles.ts';
-import type { SkillFileKind, SkillScope } from './types.ts';
+import type { UiTone } from '../ui/styles';
+import type { SkillFileKind, SkillScope } from './types';
 
 export interface SkillScopeMeta {
 	label: string;

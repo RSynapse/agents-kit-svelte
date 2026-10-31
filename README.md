@@ -20,6 +20,40 @@ A **Svelte 5 Runes** component collection for AI agent interfaces—porting [`ag
 
 ---
 
+## Install
+
+```bash
+pnpm add agents-kit-svelte   # or: npm install / yarn add / bun add
+```
+
+Requires **Svelte 5** and **Tailwind CSS v4** (SvelteKit or any Vite + Svelte app). In your main CSS file:
+
+```css
+@import "tailwindcss";
+@import "agents-kit-svelte/theme.css";
+@source "../node_modules/agents-kit-svelte/dist";
+```
+
+The theme provides the design tokens and light/dark palettes (toggle dark mode with a `dark` class or `data-theme="dark"` on `<html>`). The `@source` line lets Tailwind generate the utility classes the components use; adjust the relative path if your CSS file is not in `src/`.
+
+```svelte
+<script lang="ts">
+	import { ThinkingShimmer, TodoList, type TodoItem } from 'agents-kit-svelte';
+
+	const items: TodoItem[] = [
+		{ id: '1', label: 'Install agents-kit-svelte', status: 'completed' },
+		{ id: '2', label: 'Ship your agent UI', status: 'in-progress' }
+	];
+</script>
+
+<ThinkingShimmer label="Planning the next step…" />
+<TodoList title="Getting started" {items} />
+```
+
+A step-by-step guide with live output is on the showcase site under **Install**.
+
+---
+
 ## Local Development
 
 ```bash
@@ -37,7 +71,15 @@ corepack pnpm test
 
 # Run Playwright browser E2E suite
 corepack pnpm test:browser
+
+# Build the npm package into ./dist (svelte-package + publint)
+corepack pnpm package
+
+# Pack the library, install it into a fresh Svelte + Tailwind app, type-check and build it
+corepack pnpm test:install
 ```
+
+Releases are managed with Changesets; see [RELEASING.md](RELEASING.md).
 
 ---
 
