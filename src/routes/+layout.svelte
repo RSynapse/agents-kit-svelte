@@ -35,7 +35,7 @@
 
 <div class="min-h-screen bg-canvas-primary text-fg-main">
 	<header class="sticky top-0 z-40 border-b border-canvas-border/70 bg-canvas-primary">
-		<div class="mx-auto flex min-h-16 max-w-[1440px] flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 py-2 sm:h-16 sm:flex-nowrap sm:px-6 sm:py-0">
+		<div class="mx-auto flex min-h-16 max-w-[1440px] flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 py-2 lg:h-16 lg:flex-nowrap sm:px-6 lg:py-0">
 			<div class="flex items-center gap-2.5 sm:gap-3">
 				<a
 					href="{base}/"
@@ -59,7 +59,7 @@
 
 			<nav
 				aria-label="Showcase primary navigation"
-				class="order-last flex w-full items-center gap-0.5 overflow-x-auto rounded-full bg-canvas-secondary p-1 text-xs whitespace-nowrap [scrollbar-width:none] sm:order-none sm:ml-auto sm:w-auto sm:justify-start sm:text-[13px]"
+				class="order-last flex w-full items-center gap-0.5 overflow-x-auto rounded-full bg-canvas-secondary p-1 text-xs whitespace-nowrap [scrollbar-width:none] max-sm:[mask-image:linear-gradient(to_right,black_82%,transparent)] sm:justify-between sm:text-[13px] lg:order-none lg:ml-auto lg:w-auto lg:justify-start"
 			>
 				{#each NAV_LINKS as item (item.href)}
 					{@const normalizedPath = page.url.pathname.replace(/\/+$/, '') || '/'}

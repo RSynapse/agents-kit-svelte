@@ -11,6 +11,8 @@
 		maxTokens: number;
 		sources?: ContextSourceItem[];
 		defaultOpen?: boolean;
+		/** Which edge the breakdown panel lines up with. `auto` picks the side with room. */
+		align?: 'auto' | 'start' | 'end';
 		class?: string;
 	}
 
@@ -19,10 +21,45 @@
 		maxTokens,
 		sources = [],
 		defaultOpen = false,
+		align = 'auto',
 		class: className = ''
 	}: Props = $props();
 
 	let isOpen = $state(false);
+	let rootEl: HTMLElement | undefined = $state();
+	let resolvedAlign = $state<'start' | 'end'>('end');
+	const PANEL_WIDTH = 288;
+
+	/**
+	 * Chooses the panel edge that keeps it inside the nearest clipping ancestor
+	 * (or the viewport), so it never bleeds past a card or screen edge.
+	 */
+	function measureAlign(): void {
+		if (align !== 'auto') {
+			resolvedAlign = align;
+			return;
+		}
+		if (!rootEl) return;
+		const trigger = rootEl.getBoundingClientRect();
+		let left = 0;
+		let right = window.innerWidth;
+		for (let el = rootEl.parentElement; el; el = el.parentElement) {
+			const style = getComputedStyle(el);
+			if (style.overflowX !== 'visible' || style.overflow !== 'visible') {
+				const rect = el.getBoundingClientRect();
+				left = Math.max(left, rect.left);
+				right = Math.min(right, rect.right);
+				break;
+			}
+		}
+		const fitsEnd = trigger.right - PANEL_WIDTH >= left + 4;
+		const fitsStart = trigger.left + PANEL_WIDTH <= right - 4;
+		resolvedAlign = fitsEnd || !fitsStart ? 'end' : 'start';
+	}
+
+	$effect(() => {
+		if (isOpen) measureAlign();
+	});
 
 	$effect(() => {
 		isOpen = defaultOpen;
@@ -37,7 +74,7 @@
 	});
 </script>
 
-<div class="relative inline-block text-xs {className}">
+<div bind:this={rootEl} class="relative inline-block text-xs {className}">
 	<button
 		type="button"
 		aria-label="Context window {meter.formattedUsed} of {meter.formattedMax} tokens ({meter.percent}%)"
@@ -67,7 +104,9 @@
 		<div
 			id="agent-context-meter-panel"
 			transition:rise={{ y: -4 }}
-			class="absolute right-0 top-9 z-30 w-72 rounded-soft border border-chat-border bg-card-bg p-3.5 ak-shadow-soft"
+			class="absolute top-9 z-30 w-72 max-w-[calc(100vw-2rem)] rounded-soft {resolvedAlign === 'end'
+				? 'right-0'
+				: 'left-0'} border border-chat-border bg-card-bg p-3.5 ak-shadow-soft"
 		>
 			<div class="flex items-center justify-between border-b border-canvas-border pb-2">
 				<span class="font-semibold text-fg-main">Context Window Breakdown</span>
