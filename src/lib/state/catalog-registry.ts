@@ -179,7 +179,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
   const output = [
     '$ corepack pnpm check && corepack pnpm test',
     'svelte-check found 0 errors and 0 warnings',
-    '✔ all 68 Svelte components in src/ comply with Svelte 5 Runes'
+    '✔ all 76 Svelte components in src/ comply with Svelte 5 Runes'
   ].join('\\n');
 </script>
 
@@ -358,7 +358,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
     author="AK-S Agent"
     timestamp="21:16"
     collapsible={true}
-    text="All 68 Svelte 5 components are live with strict TypeScript Props, OKLCH dark/light tokens, and interactive showcases."
+    text="All 76 Svelte 5 components are live with strict TypeScript Props, OKLCH dark/light tokens, and interactive showcases."
   />
 </div>`
 	},
@@ -421,11 +421,11 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 
 <StreamingResponse
   status="complete"
-  copyText="All 68 Svelte 5 components verified with 0 errors and 0 warnings."
+  copyText="All 76 Svelte 5 components verified with 0 errors and 0 warnings."
   {sources}
 >
   <p class="text-sm text-fg-main">
-    All 68 Svelte 5 components verified with <code class="font-mono text-xs">svelte-check</code> (0 errors, 0 warnings).
+    All 76 Svelte 5 components verified with <code class="font-mono text-xs">svelte-check</code> (0 errors, 0 warnings).
   </p>
 </StreamingResponse>`
 	},
@@ -572,7 +572,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
   import { ToolChips, type ToolChipItem } from 'agents-kit-svelte';
 
   const chips: ToolChipItem[] = [
-    { id: 'tc-1', tool: 'Read', target: 'src/lib/index.ts', duration: '12ms', status: 'success', output: 'Exported 68 Svelte 5 components.' },
+    { id: 'tc-1', tool: 'Read', target: 'src/lib/index.ts', duration: '12ms', status: 'success', output: 'Exported 76 Svelte 5 components.' },
     { id: 'tc-2', tool: 'Bash', target: 'pnpm check', duration: '640ms', status: 'success', output: 'svelte-check found 0 errors and 0 warnings.' },
     { id: 'tc-3', tool: 'Search', target: 'CatalogItemMeta', duration: '28ms', status: 'running', output: 'Matched 4 files in src/.' }
   ];
@@ -620,7 +620,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
   const items: ContextCardItem[] = [
     { id: 'ctx-1', kind: 'file', title: 'src/lib/state/motion.svelte.ts', subtitle: 'Svelte 5 Spring & Tween helpers', tokens: 1420, pinned: true },
     { id: 'ctx-2', kind: 'issue', title: 'Issue #2151 · CardRunDrawer hydration', subtitle: 'RSynapse/trailside · ready', tokens: 890, pinned: true },
-    { id: 'ctx-3', kind: 'commit', title: 'Commit 456f3b4 · 68-card catalogue', subtitle: 'main · verified', tokens: 640 }
+    { id: 'ctx-3', kind: 'commit', title: 'Commit 456f3b4 · 76-card catalogue', subtitle: 'main · verified', tokens: 640 }
   ];
 </script>
 
@@ -640,7 +640,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
   const rows: DiffTableRow[] = [
     { field: 'framework', before: 'React 19 (useState / useMemo)', after: 'Svelte 5 ($state / $derived)', status: 'modified' },
     { field: 'motion.engine', before: 'motion/react', after: 'svelte/motion (Spring, Tween, crossfade)', status: 'modified' },
-    { field: 'github.suite', before: 'none', after: '7 components (Kanban, Bento, PR, Issue, Checks)', status: 'added' }
+    { field: 'github.suite', before: 'none', after: '15 components (Kanban, Bento, PR, Issue, Checks, Triage, Merge queue, Deploys, Releases, Incidents)', status: 'added' }
   ];
 </script>
 
@@ -794,7 +794,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 <SearchList {items} />`
 	},
 
-	// 3. GitHub Cards & Layouts (7 components)
+	// 3. GitHub Cards & Layouts (15 components)
 	{
 		slug: 'github-issue-card',
 		name: 'GitHubIssueCard',
@@ -878,7 +878,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 
   const commit: GitHubCommitData = {
     sha: '9f8e7d6c5b4a3210fedcba9876543210abcdef12',
-    message: 'feat(agents-kit): port 68 agent & GitHub UI components to Svelte 5 Runes',
+    message: 'feat(agents-kit): port 76 agent & GitHub UI components to Svelte 5 Runes',
     author: 'AK-S Agent',
     branch: 'trailside/2151-drawer-hydration',
     timestamp: '2m ago',
@@ -984,6 +984,164 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 
 <GitHubBentoLayout
   repo={activeRepo}
+/>`
+	},
+	{
+		slug: 'github-lifecycle-timeline',
+		name: 'GitHubLifecycleTimeline',
+		category: 'GitHub Cards & Layouts',
+		sveltePath: 'src/lib/github/GitHubLifecycleTimeline.svelte',
+		upstreamSource: 'Agents Kit Svelte · GitHub Lifecycle',
+		description:
+			'Ten-stage lifecycle stepper (issue, triage, branch, commits, PR, review, checks, merge, deploy, release) that plays itself and lets you pin any stage for details.',
+		usageSnippet: `<script lang="ts">
+  import { GitHubLifecycleTimeline, type GitHubLifecycleStage } from 'agents-kit-svelte';
+
+  let pinned = $state<GitHubLifecycleStage | null>(null);
+</script>
+
+<GitHubLifecycleTimeline
+  live
+  onSelectStage={(stage) => (pinned = stage)}
+/>`
+	},
+	{
+		slug: 'github-issue-triage',
+		name: 'GitHubIssueTriage',
+		category: 'GitHub Cards & Layouts',
+		sveltePath: 'src/lib/github/GitHubIssueTriage.svelte',
+		upstreamSource: 'Agents Kit Svelte · GitHub Lifecycle',
+		description:
+			'Issue intake card where an agent proposes type, priority, area, assignee and milestone with confidence bars, flags likely duplicates, and lets you drop suggestions before applying.',
+		usageSnippet: `<script lang="ts">
+  import { GitHubIssueTriage } from 'agents-kit-svelte';
+
+  let appliedLabels = $state<string[]>([]);
+</script>
+
+<GitHubIssueTriage
+  live
+  onApply={(issueNumber, labels) => (appliedLabels = labels)}
+  onMarkDuplicate={(issueNumber, duplicateOf) => console.log(issueNumber, duplicateOf)}
+/>`
+	},
+	{
+		slug: 'github-branch-card',
+		name: 'GitHubBranchCard',
+		category: 'GitHub Cards & Layouts',
+		sveltePath: 'src/lib/github/GitHubBranchCard.svelte',
+		upstreamSource: 'Agents Kit Svelte · GitHub Lifecycle',
+		description:
+			'Feature branch card with ahead/behind counts, a commit rail that fills as commits land, branch protection rules, and worktree / compare actions.',
+		usageSnippet: `<script lang="ts">
+  import { GitHubBranchCard } from 'agents-kit-svelte';
+
+  let worktree = $state<string | null>(null);
+</script>
+
+<GitHubBranchCard
+  live
+  onOpenWorktree={(branch) => (worktree = branch)}
+  onCompare={(branch, base) => console.log(base, branch)}
+/>`
+	},
+	{
+		slug: 'github-pr-review',
+		name: 'GitHubPullRequestReview',
+		category: 'GitHub Cards & Layouts',
+		sveltePath: 'src/lib/github/GitHubPullRequestReview.svelte',
+		upstreamSource: 'Agents Kit Svelte · GitHub Lifecycle',
+		description:
+			'Files-changed review surface: file list with viewed checkboxes, a unified diff with inline comments, and an Approve / Comment / Request changes verdict.',
+		usageSnippet: `<script lang="ts">
+  import { GitHubPullRequestReview, type GitHubReviewVerdict } from 'agents-kit-svelte';
+
+  let verdict = $state<GitHubReviewVerdict | null>(null);
+</script>
+
+<GitHubPullRequestReview
+  live
+  prNumber={2210}
+  onSubmitReview={(prNumber, v) => (verdict = v)}
+/>`
+	},
+	{
+		slug: 'github-merge-queue',
+		name: 'GitHubMergeQueue',
+		category: 'GitHub Cards & Layouts',
+		sveltePath: 'src/lib/github/GitHubMergeQueue.svelte',
+		upstreamSource: 'Agents Kit Svelte · GitHub Lifecycle',
+		description:
+			'Merge queue for a protected branch: the head group runs checks, the next is tested speculatively, merged PRs slide out with flip animations, and you can hold the queue or pull an entry.',
+		usageSnippet: `<script lang="ts">
+  import { GitHubMergeQueue } from 'agents-kit-svelte';
+
+  let removed = $state<number[]>([]);
+</script>
+
+<GitHubMergeQueue
+  live
+  baseBranch="main"
+  onRemove={(prNumber) => (removed = [...removed, prNumber])}
+/>`
+	},
+	{
+		slug: 'github-deployment-pipeline',
+		name: 'GitHubDeploymentPipeline',
+		category: 'GitHub Cards & Layouts',
+		sveltePath: 'src/lib/github/GitHubDeploymentPipeline.svelte',
+		upstreamSource: 'Agents Kit Svelte · GitHub Lifecycle',
+		description:
+			'Environment promotion from Preview to Staging to Production, with a protected-environment approval gate, staged traffic rollout and one-click rollback.',
+		usageSnippet: `<script lang="ts">
+  import { GitHubDeploymentPipeline } from 'agents-kit-svelte';
+
+  let lastAction = $state('');
+</script>
+
+<GitHubDeploymentPipeline
+  live
+  sha="9b07d3e"
+  onApprove={(env) => (lastAction = \`approved \${env}\`)}
+  onRollback={(env) => (lastAction = \`rolled back \${env}\`)}
+/>`
+	},
+	{
+		slug: 'github-release-card',
+		name: 'GitHubReleaseCard',
+		category: 'GitHub Cards & Layouts',
+		sveltePath: 'src/lib/github/GitHubReleaseCard.svelte',
+		upstreamSource: 'Agents Kit Svelte · GitHub Lifecycle',
+		description:
+			'Draft release whose notes are written from merged PRs and grouped by type, with contributors, assets, and a Latest / Pre-release publish control.',
+		usageSnippet: `<script lang="ts">
+  import { GitHubReleaseCard } from 'agents-kit-svelte';
+
+  let publishedTag = $state<string | null>(null);
+</script>
+
+<GitHubReleaseCard
+  live
+  onPublish={(tag, prerelease) => (publishedTag = tag)}
+/>`
+	},
+	{
+		slug: 'github-incident-card',
+		name: 'GitHubIncidentCard',
+		category: 'GitHub Cards & Layouts',
+		sveltePath: 'src/lib/github/GitHubIncidentCard.svelte',
+		upstreamSource: 'Agents Kit Svelte · GitHub Lifecycle',
+		description:
+			'Production incident card: a live error-rate sparkline crosses its threshold, the suspect deploy is identified, and a revert walks the incident to resolved.',
+		usageSnippet: `<script lang="ts">
+  import { GitHubIncidentCard } from 'agents-kit-svelte';
+
+  let reverted = $state<number | null>(null);
+</script>
+
+<GitHubIncidentCard
+  live
+  onRevert={(prNumber, sha) => (reverted = prNumber)}
 />`
 	},
 
@@ -1138,7 +1296,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
   const lanes: ParallelJobLane[] = [
     { id: 'l-1', name: 'Lane A · svelte-check', progress: 100, status: 'completed', durationMs: 840, output: '0 errors, 0 warnings' },
     { id: 'l-2', name: 'Lane B · Unit & Audit Suite', progress: 100, status: 'completed', durationMs: 105, output: '9/9 tests passed' },
-    { id: 'l-3', name: 'Lane C · Chromium Showcase', progress: 78, status: 'running', durationMs: 3200, output: 'Capturing 68 component cards…' }
+    { id: 'l-3', name: 'Lane C · Chromium Showcase', progress: 78, status: 'running', durationMs: 3200, output: 'Capturing 76 component cards…' }
   ];
 </script>
 
@@ -1197,7 +1355,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
   import { AgentEvaluator, type EvaluationCriterion } from 'agents-kit-svelte';
 
   const criteria: EvaluationCriterion[] = [
-    { id: 'c-1', name: 'Svelte 5 Runes Compliance ($props, $state, $derived)', score: 100, weight: '35%', passed: true, note: 'Zero legacy export let or $: statements across 68 files' },
+    { id: 'c-1', name: 'Svelte 5 Runes Compliance ($props, $state, $derived)', score: 100, weight: '35%', passed: true, note: 'Zero legacy export let or $: statements across 76 files' },
     { id: 'c-2', name: 'Semantic Design System (Zero Hex Literals)', score: 100, weight: '35%', passed: true, note: 'All surfaces use bg-canvas-*, bg-card-*, text-fg-* tokens' },
     { id: 'c-3', name: 'Interactive Usage & Source Code Tabs', score: 98, weight: '30%', passed: true, note: 'Every component showcases Preview, Usage Code, and Source' }
   ];
@@ -1259,7 +1417,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 
   const markdown = [
     '# Agents Kit Svelte v0.3',
-    '- 68 Svelte 5 Runes components',
+    '- 76 Svelte 5 Runes components',
     '- GitHub Kanban & Bento suite',
     '- Dynamic IntelligentUIRenderer'
   ].join('\\n');
@@ -1380,7 +1538,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 
   const checkpoint: CheckpointEntry = {
     id: 'cp-1',
-    title: 'Verified 68 Svelte 5 components + unit suite',
+    title: 'Verified 76 Svelte 5 components + unit suite',
     description: 'All static and unit checks green',
     commitSha: '456f3b4',
     worktreeBranch: 'trailside/2151-drawer-hydration',
@@ -1405,7 +1563,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 
   const steps: ThoughtStep[] = [
     { id: 'th-1', title: 'Inspect upstream agents-kit catalogue layout', detail: 'Matched sticky left sidebar + dashed section dividers + Preview/Source tabs', durationMs: 420, status: 'complete' },
-    { id: 'th-2', title: 'Generate complete Svelte 5 usage snippets', detail: 'Included $state, typed sample data, and callbacks for all 68 components', durationMs: 680, status: 'complete' }
+    { id: 'th-2', title: 'Generate complete Svelte 5 usage snippets', detail: 'Included $state, typed sample data, and callbacks for all 76 components', durationMs: 680, status: 'complete' }
   ];
 </script>
 
@@ -1516,7 +1674,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 
   const consoleLogs = [
     '[vite] connected to http://127.0.0.1:5173',
-    '[ak-s] Hydrated 68 Svelte 5 components in 14ms'
+    '[ak-s] Hydrated 76 Svelte 5 components in 14ms'
   ];
 </script>
 
@@ -1586,7 +1744,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
       name: 'tests/svelte5-audit.test.ts',
       status: 'passed',
       tests: [
-        { id: 'tc-1', name: 'all 68 Svelte components comply with Svelte 5 Runes and semantic tokens', status: 'passed', durationMs: 6 },
+        { id: 'tc-1', name: 'all 76 Svelte components comply with Svelte 5 Runes and semantic tokens', status: 'passed', durationMs: 6 },
         { id: 'tc-2', name: 'every component has a dedicated 1-to-1 showcase entry and usage snippet', status: 'passed', durationMs: 2 }
       ]
     }
@@ -1609,7 +1767,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
     [
       '$ corepack pnpm check && corepack pnpm test',
       'svelte-check found 0 errors and 0 warnings',
-      '✔ all 68 Svelte components pass audit (105ms)'
+      '✔ all 76 Svelte components pass audit (105ms)'
     ].join('\\n')
   );
 </script>
@@ -1641,7 +1799,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
       children: [
         { path: 'src/lib/agents', name: 'agents/ (19 components)', kind: 'file', additions: 19 },
         { path: 'src/lib/beautiful', name: 'beautiful/ (11 components)', kind: 'file', additions: 11 },
-        { path: 'src/lib/github', name: 'github/ (7 components)', kind: 'file', additions: 7 },
+        { path: 'src/lib/github', name: 'github/ (15 components)', kind: 'file', additions: 15 },
         { path: 'src/lib/intelligent-ui', name: 'intelligent-ui/ (3 components)', kind: 'file', additions: 3 }
       ]
     }

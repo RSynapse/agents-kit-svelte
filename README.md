@@ -6,10 +6,10 @@ A **Svelte 5 Runes** component collection for AI agent interfaces—porting [`ag
 
 ## Highlights
 
-- **68 Svelte 5 Runes Components** (`$props()`, `$state()`, `$derived()`, `$effect()`, `Spring`, `Tween`, `crossfade`, `flip`, `SvelteSet`, `SvelteMap`) across 7 collections:
+- **76 Svelte 5 Runes Components** (`$props()`, `$state()`, `$derived()`, `$effect()`, `Spring`, `Tween`, `crossfade`, `flip`, `SvelteSet`, `SvelteMap`) across 7 collections:
   1. **beUI Agents (20)**: `TrailsideClaudeChat` (`AK-S Chat`), `AgentActivity`, `TodoList`, `ToolApproval`, `ToolResult`, `FileDiff`, `CodeBlock`, `ApprovalCard`, `PromptInput`, `Message`, `MessageBubble`, `MessageScroller`, `StreamingResponse`, `Citations`, `ImageGeneration`, `AISidebar`, `ThinkingShimmer`, `AgentProgress`, `ReasoningText`, `AgentDisclosure`.
   2. **Beautiful UI (11)**: `ToolChips`, `RecommendationCard`, `InsightCards`, `ContextCards`, `Flowchart`, `FineTuneCard`, `SearchList`, `FilterTable`, `SelectionActions`, `RecordsTable`, `DiffTable`.
-  3. **GitHub Cards & Layouts (7)**: `GitHubIssueCard`, `GitHubPullRequestCard`, `GitHubCommitCard`, `GitHubChecksPanel`, `GitHubReviewThreadCard`, `GitHubBentoLayout`, `GitHubKanbanBoard`.
+  3. **GitHub Cards & Layouts (15)**: `GitHubIssueCard`, `GitHubPullRequestCard`, `GitHubCommitCard`, `GitHubChecksPanel`, `GitHubReviewThreadCard`, `GitHubBentoLayout`, `GitHubKanbanBoard`, plus the dev lifecycle set: `GitHubLifecycleTimeline`, `GitHubIssueTriage`, `GitHubBranchCard`, `GitHubPullRequestReview`, `GitHubMergeQueue`, `GitHubDeploymentPipeline`, `GitHubReleaseCard`, `GitHubIncidentCard`.
   4. **Intelligent UI & Generative (3)**: `IntelligentUIRenderer`, `AgentGenerativeSurface`, `ResultActions`.
   5. **Agents UI Orchestration (11)**: `AgentContextMeter`, `AgentThinkingIndicator`, `AgentTaskQueue`, `AgentCheckpoint`, `AgentToolPalette`, `AgentArtifact`, `AgentFormGenerator`, `AgentOrchestrator`, `AgentRoutingHub`, `AgentEvaluator`, `AgentSequentialWorkflow`, `AgentParallelProcessor`, `AgentOpsMonitor`.
   6. **AI Elements & Coding (13)**: `ChainOfThought`, `PlanCard`, `PromptSuggestions`, `WebPreview`, `FileTree`, `Terminal`, `TestResults`, `StackTrace`, `SchemaDisplay`, `EnvironmentVariables`, `PackageInfo`.
