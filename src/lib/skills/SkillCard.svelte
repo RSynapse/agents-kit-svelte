@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronDown, MessageSquareQuote, Pencil, Play, Wrench } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import { badgeClass, pillClass } from '../ui/styles';
@@ -6,7 +7,7 @@
 	import { SAMPLE_SKILLS } from './fixtures';
 	import type { AgentSkill } from './types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'skill' | 'compact' | 'defaultFilesOpen' | 'active' | 'onToggle' | 'onInvoke' | 'onEdit'> {
 		skill?: AgentSkill;
 		/** Hides triggers, tools and files for dense grids. */
 		compact?: boolean;
@@ -28,7 +29,8 @@
 		onToggle,
 		onInvoke,
 		onEdit,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let enabled = $state(true);
@@ -57,7 +59,7 @@
 	}
 </script>
 
-<article
+<article {...rest}
 	aria-label="{skill.name} skill"
 	data-enabled={enabled}
 	class="flex w-full flex-col overflow-hidden rounded-[20px] border bg-card-bg text-sm transition-[border-color,box-shadow,opacity] duration-200 {active

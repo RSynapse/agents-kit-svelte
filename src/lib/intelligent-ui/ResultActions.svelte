@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Bookmark, Check, Columns2, Copy, Download, Maximize2, Minimize2, Pencil } from '@lucide/svelte';
 	import { buttonClass, toggleButtonClass } from '../ui/styles';
 	import type { ResultActionState } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'state' | 'saved' | 'onExpand' | 'onEdit' | 'onCompare' | 'onSave' | 'onCopy' | 'onDownload'> {
 		state?: ResultActionState;
 		saved?: boolean;
 		onExpand?: () => void;
@@ -24,7 +25,8 @@
 		onSave,
 		onCopy,
 		onDownload,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let copied = $state(false);
@@ -41,7 +43,7 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	role="toolbar"
 	aria-label="Generated result actions"
 	class="inline-flex flex-wrap items-center gap-0.5 rounded-control border border-card-border bg-card-bg p-0.5 ak-shadow-btn {className}"

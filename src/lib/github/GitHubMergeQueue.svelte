@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { GitMerge, ListOrdered, Pause, Play, X } from '@lucide/svelte';
 	import { flip } from 'svelte/animate';
 	import { fade } from 'svelte/transition';
@@ -7,7 +8,7 @@
 	import type { GitHubMergeQueueEntry } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'baseBranch' | 'entries' | 'ticksPerMerge' | 'live' | 'onRemove'> {
 		baseBranch?: string;
 		entries?: GitHubMergeQueueEntry[];
 		/** Ticks needed to finish one merge group's checks. */
@@ -24,7 +25,8 @@
 		ticksPerMerge = 3,
 		live = false,
 		onRemove,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	const loop = new LiveLoop(() => (entries.length - 1) * ticksPerMerge, 4);
@@ -61,7 +63,7 @@
 	}
 </script>
 
-<section aria-label="Merge queue for {baseBranch}" class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<section {...rest} aria-label="Merge queue for {baseBranch}" class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex items-center gap-2">
 			<ListOrdered aria-hidden="true" class="size-4 text-fg-light" />

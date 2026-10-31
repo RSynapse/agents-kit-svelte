@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { AudioWaveform, Ellipsis, Infinity as InfinityIcon, LoaderCircle, Pause, Play, Sparkles } from '@lucide/svelte';
 	import type { Component } from 'svelte';
 	import { buttonClass, SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
@@ -15,7 +16,7 @@
 		| 'breathing'
 		| 'shaping';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'variant' | 'state' | 'label' | 'detail' | 'paused' | 'showControls' | 'onVariantChange'> {
 		variant?: ThinkingVariant;
 		state?: ThinkingState;
 		label?: string;
@@ -54,7 +55,8 @@
 		paused = false,
 		showControls = true,
 		onVariantChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeVariant = $state<ThinkingVariant>('orbs');
@@ -78,7 +80,7 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	role="status"
 	aria-live="polite"
 	data-paused={isPaused}

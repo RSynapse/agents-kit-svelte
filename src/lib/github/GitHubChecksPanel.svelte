@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, RefreshCw, X, Zap } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import type { GitHubCheckItem } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'title' | 'checks' | 'onFixWithAgent' | 'onRerunCheck'> {
 		title?: string;
 		checks?: GitHubCheckItem[];
 		onFixWithAgent?: (checkId: string) => void;
@@ -16,7 +17,8 @@
 		checks = [],
 		onFixWithAgent,
 		onRerunCheck,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let fixingIds = $state<Record<string, boolean>>({});
@@ -43,7 +45,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label={title}
 	class="rounded-card border border-card-border bg-card-bg p-4 text-sm {className}"
 >

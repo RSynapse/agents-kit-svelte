@@ -1,10 +1,11 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { Check, ChevronDown, Copy, SquareTerminal } from '@lucide/svelte';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import type { ToolResultStatus } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'tool' | 'summary' | 'output' | 'status' | 'meta' | 'defaultOpen' | 'onRetry'> {
 		tool: string;
 		summary?: string;
 		output: string;
@@ -25,7 +26,8 @@
 		meta,
 		defaultOpen = true,
 		onRetry,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isOpen = $state(true);
@@ -49,7 +51,7 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	data-state={status}
 	aria-busy={status === 'running'}
 	class="w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm {className}"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	export interface FineTuneField {
 		id: string;
@@ -11,7 +12,7 @@
 		suffix?: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'title' | 'fields' | 'onChange' | 'onApply' | 'onReset'> {
 		title?: string;
 		fields?: FineTuneField[];
 		onChange?: (id: string, value: string | number) => void;
@@ -62,7 +63,8 @@
 		onChange,
 		onApply,
 		onReset,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let internalFields = $state<FineTuneField[]>([]);
@@ -104,7 +106,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	class="w-full max-w-md rounded-card border border-card-border bg-card-bg p-4 text-fg-main {className}"
 >
 	<div class="flex items-center justify-between gap-2">

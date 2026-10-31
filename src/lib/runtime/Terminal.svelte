@@ -1,6 +1,7 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { SquareTerminal } from '@lucide/svelte';
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'title' | 'output' | 'streaming' | 'onClear'> {
 		title?: string;
 		output: string;
 		streaming?: boolean;
@@ -15,7 +16,8 @@
 		output,
 		streaming = false,
 		onClear,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let copied = $state(false);
@@ -32,7 +34,7 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	class="flex flex-col overflow-hidden rounded-xl border border-card-border bg-terminal-bg text-terminal-fg {className}"
 >
 	<div class="flex h-10 items-center justify-between border-b border-canvas-border px-3.5 text-xs">

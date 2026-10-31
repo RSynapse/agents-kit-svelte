@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { fly } from 'svelte/transition';
@@ -44,13 +45,13 @@
 		activityItems?: ActivityItem[];
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'initialDark' | 'embedded'> {
 		initialDark?: boolean;
 		embedded?: boolean;
 		class?: string;
 	}
 
-	let { initialDark = false, embedded = false, class: className = '' }: Props = $props();
+	let { initialDark = false, embedded = false, class: className = '', ...rest }: Props = $props();
 
 	const SUPPORTED_AGENTS: SupportedAgentOption[] = [
 		{ id: 'claude-code', label: 'AK-S Agent', version: 'v0.3.0', signedIn: true },
@@ -469,7 +470,7 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	bind:this={root}
 	class="flex {embedded
 		? 'h-[760px]'

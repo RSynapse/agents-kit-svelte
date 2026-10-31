@@ -1,6 +1,7 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Sparkle } from '@lucide/svelte';
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLSpanElement>, 'class' | 'children' | 'phrases' | 'interval'> {
 		phrases?: string[];
 		interval?: number;
 		class?: string;
@@ -17,7 +18,8 @@
 	let {
 		phrases = DEFAULT_PHRASES,
 		interval = 1800,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let currentIndex = $state(0);
@@ -36,7 +38,7 @@
 	});
 </script>
 
-<span
+<span {...rest}
 	role="status"
 	aria-live="polite"
 	class="inline-flex items-center gap-2 text-[15px] font-medium text-fg-light {className}"

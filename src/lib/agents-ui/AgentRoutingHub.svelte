@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { History, RefreshCw } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type RouteStatus = 'selected' | 'available' | 'unavailable';
@@ -26,7 +27,7 @@
 		timestamp: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'inputQuery' | 'classification' | 'routes' | 'selectedRouteId' | 'routingHistory' | 'isClassifying' | 'onReclassify' | 'onOverrideRoute' | 'onViewHistory'> {
 		inputQuery?: string;
 		classification?: RouteClassification;
 		routes?: AgentRoute[];
@@ -103,7 +104,8 @@
 		onReclassify,
 		onOverrideRoute,
 		onViewHistory,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeRouteId = $state('claude-code');
@@ -133,7 +135,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Intent classifier and agent router"
 	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >

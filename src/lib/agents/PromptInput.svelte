@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLFormAttributes } from 'svelte/elements';
 	import { pillClass, SOFT } from '../ui/styles';
 	import { fade } from 'svelte/transition';
 	import { rise } from '../state/motion.svelte';
@@ -19,7 +20,7 @@
 	import { isImeComposing } from '../state/chat-helpers';
 	import type { SupportedAgentId, SupportedAgentOption } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLFormAttributes, 'class' | 'children' | 'value' | 'placeholder' | 'busy' | 'agents' | 'selectedAgentId' | 'activeSkill' | 'onAgentChange' | 'onSubmit' | 'onStop' | 'onQuickContext'> {
 		value?: string;
 		placeholder?: string;
 		busy?: boolean;
@@ -44,7 +45,8 @@
 		onSubmit,
 		onStop,
 		onQuickContext,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let menuOpen = $state(false);
@@ -186,7 +188,7 @@
 	}
 </script>
 
-<form
+<form {...rest}
 	bind:this={formEl}
 	onsubmit={(e) => {
 		e.preventDefault();

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronDown } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export interface RecordRow {
@@ -13,7 +14,7 @@
 
 	type SortColumn = 'name' | 'categories' | 'updated' | 'strength' | 'links';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'records' | 'sortKey' | 'sortDirection' | 'selectedIds' | 'onSort' | 'onSelect' | 'onSelectionChange'> {
 		records?: RecordRow[];
 		sortKey?: SortColumn;
 		sortDirection?: 'asc' | 'desc';
@@ -70,7 +71,8 @@
 		onSort,
 		onSelect,
 		onSelectionChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let currentSortKey = $state<SortColumn>('links');
@@ -148,7 +150,7 @@
 	let totalLinks = $derived(records.reduce((sum, r) => sum + (r.links ?? 0), 0));
 </script>
 
-<section
+<section {...rest}
 	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<div role="region" aria-label="Agent records table" class="overflow-x-auto">

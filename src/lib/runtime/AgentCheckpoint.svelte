@@ -1,15 +1,16 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import { Check, GitCommitHorizontal, RotateCcw } from '@lucide/svelte';
 	import type { CheckpointEntry } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'checkpoint' | 'onRestore'> {
 		checkpoint: CheckpointEntry;
 		onRestore?: (checkpointId: string) => void;
 		class?: string;
 	}
 
-	let { checkpoint, onRestore, class: className = '' }: Props = $props();
+	let { checkpoint, onRestore, class: className = '', ...rest }: Props = $props();
 
 	let restored = $state(false);
 
@@ -22,7 +23,7 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	role="region"
 	aria-label="Worktree checkpoint {checkpoint.commitSha}"
 	class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-card-border bg-card-bg px-3.5 py-2.5 text-xs {className}"

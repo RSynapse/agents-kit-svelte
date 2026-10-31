@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronDown, FileIcon, PenLine, Terminal } from '@lucide/svelte';
 	export interface ToolStep {
 		id: string;
@@ -17,7 +18,7 @@
 		lines?: string[];
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'steps' | 'diffs' | 'expandedId' | 'visibleStepCount' | 'onToggle' | 'onDiffToggle'> {
 		steps?: ToolStep[];
 		diffs?: ToolDiff[];
 		expandedId?: string;
@@ -86,7 +87,8 @@
 		visibleStepCount,
 		onToggle,
 		onDiffToggle,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localExpanded = $state<string | undefined>('step-edit');
@@ -123,7 +125,7 @@
 	);
 </script>
 
-<div
+<div {...rest}
 	class="divide-y divide-canvas-border overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<div class="flex items-center justify-between bg-canvas-secondary/40 px-3.5 py-2 text-xs">

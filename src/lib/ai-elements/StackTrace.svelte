@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronDown, Sparkles } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
@@ -19,7 +20,7 @@
 		raw: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'trace' | 'sourceSnippet' | 'defaultOpen' | 'defaultShowInternal' | 'onFilePathClick' | 'onSendToAgent'> {
 		trace: string;
 		sourceSnippet?: {
 			filePath: string;
@@ -56,7 +57,8 @@
 		defaultShowInternal = false,
 		onFilePathClick,
 		onSendToAgent,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isOpen = $state(true);
@@ -194,7 +196,7 @@
 	}
 </script>
 
-<div class="w-full overflow-hidden rounded-xl border border-status-danger bg-card-bg text-sm {className}">
+<div {...rest} class="w-full overflow-hidden rounded-xl border border-status-danger bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2 bg-status-danger-subtle px-4 py-3">
 		<button
 			type="button"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import GitHubChecksPanel from './GitHubChecksPanel.svelte';
 	import GitHubCommitCard from './GitHubCommitCard.svelte';
 	import GitHubIssueCard from './GitHubIssueCard.svelte';
@@ -13,7 +14,7 @@
 		GitHubReviewThreadData
 	} from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'repoName' | 'repoDetail' | 'defaultBranch' | 'branchDetail' | 'stats' | 'pullRequest' | 'checks' | 'issue' | 'commit' | 'thread'> {
 		repoName: string;
 		/** Line under the repository name. */
 		repoDetail?: string;
@@ -41,11 +42,12 @@
 		issue,
 		commit,
 		thread,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 </script>
 
-<section aria-label="GitHub Repository Bento Dashboard" class="@container space-y-4 {className}">
+<section {...rest} aria-label="GitHub Repository Bento Dashboard" class="@container space-y-4 {className}">
 	<!-- Top Repository Status Strip -->
 	<div class="grid gap-3 @sm:grid-cols-2 @3xl:grid-cols-4">
 		<div class="rounded-card border border-card-border bg-card-bg p-3.5">

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronRight, Play, RefreshCw, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type ParallelLaneStatus = 'waiting' | 'processing' | 'done' | 'error';
@@ -14,7 +15,7 @@
 		tokens?: number;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'taskDescription' | 'lanes' | 'mergeStatus' | 'mergedOutput' | 'totalTokens' | 'totalCost' | 'onStartAll' | 'onCancelAll' | 'onRetryFailed' | 'onRetryLane'> {
 		taskDescription?: string;
 		lanes?: ParallelLane[];
 		mergeStatus?: 'idle' | 'merging' | 'complete';
@@ -81,7 +82,8 @@
 		onCancelAll,
 		onRetryFailed,
 		onRetryLane,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localLanes = $state<ParallelLane[]>([]);
@@ -194,7 +196,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Parallel worker pool monitor"
 	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >

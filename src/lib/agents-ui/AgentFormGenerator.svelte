@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ArrowDown, ArrowUp, Check, LoaderCircle, RefreshCw, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type FormFieldType = 'text' | 'email' | 'select' | 'textarea' | 'number' | 'checkbox';
@@ -22,7 +23,7 @@
 		validation?: FormFieldValidation;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'formTitle' | 'formDescription' | 'fields' | 'isGenerating' | 'showPreview' | 'onAddField' | 'onRemoveField' | 'onRegenerate' | 'onExportSchema' | 'onFieldReorder' | 'onSubmitPayload'> {
 		formTitle?: string;
 		formDescription?: string;
 		fields?: FormField[];
@@ -100,7 +101,8 @@
 		onExportSchema,
 		onFieldReorder,
 		onSubmitPayload,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localFields = $state<FormField[]>([]);
@@ -239,7 +241,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Dynamic schema-to-form generator"
 	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >

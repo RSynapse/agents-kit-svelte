@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	export type InsightKind = 'compare' | 'anomaly' | 'allocation';
 
 	export interface InsightCard {
@@ -11,7 +12,7 @@
 		series?: number[];
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'insights' | 'onSelect'> {
 		insights?: InsightCard[];
 		onSelect?: (id: string) => void;
 		class?: string;
@@ -50,7 +51,8 @@
 	let {
 		insights = DEFAULT_INSIGHTS,
 		onSelect,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let selectedId = $state<string | null>(null);
@@ -115,7 +117,7 @@
 	}
 </script>
 
-<div class="grid gap-3 md:grid-cols-3 {className}">
+<div {...rest} class="grid gap-3 md:grid-cols-3 {className}">
 	{#each insights as item (item.id)}
 		{@const isSelected = selectedId === item.id}
 		{@const spark = buildSparkline(item.series)}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronRight, Download, MoveRight, TrendingDown, TrendingUp, TriangleAlert } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export interface OpsSignal {
@@ -25,7 +26,7 @@
 		actionNeeded?: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'environment' | 'daemonStatus' | 'uptime' | 'signals' | 'metrics' | 'incidents' | 'onAcknowledge' | 'onEscalate' | 'onExportReport'> {
 		environment?: string;
 		daemonStatus?: 'Connected' | 'Degraded' | 'Offline';
 		uptime?: string;
@@ -117,7 +118,8 @@
 		onAcknowledge,
 		onEscalate,
 		onExportReport,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localSignals = $state<OpsSignal[]>([]);
@@ -157,7 +159,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Operations and Companion daemon monitor"
 	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >

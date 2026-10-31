@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { Check, ChevronDown, ShieldCheck, X } from '@lucide/svelte';
 	import { fade } from 'svelte/transition';
@@ -6,7 +7,7 @@
 	import { motionDuration, rise } from '../state/motion.svelte';
 	import type { ToolApprovalParam, ToolApprovalStatus } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'tool' | 'summary' | 'params' | 'status' | 'defaultOpen' | 'approveLabel' | 'alwaysApproveLabel' | 'denyLabel' | 'onApprove' | 'onAlwaysApprove' | 'onDeny'> {
 		tool: string;
 		summary?: string;
 		params?: ToolApprovalParam[];
@@ -43,7 +44,8 @@
 		onApprove,
 		onAlwaysApprove,
 		onDeny,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let internalStatus = $state<ToolApprovalStatus>('pending');
@@ -92,7 +94,7 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	role="group"
 	aria-label="{tool} tool approval"
 	data-state={activeStatus}

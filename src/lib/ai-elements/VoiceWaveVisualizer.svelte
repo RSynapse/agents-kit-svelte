@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	import { Mic, MicOff, VolumeX } from '@lucide/svelte';
 	export type VoiceSessionState = 'idle' | 'listening' | 'speaking' | 'processing';
@@ -15,7 +16,7 @@
 		tone: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'defaultState' | 'defaultMicId' | 'defaultPersonaId' | 'devices' | 'personas' | 'transcript' | 'onStateChange'> {
 		defaultState?: VoiceSessionState;
 		defaultMicId?: string;
 		defaultPersonaId?: string;
@@ -42,7 +43,8 @@
 		personas = [],
 		transcript = '',
 		onStateChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let sessionState = $state<VoiceSessionState>('listening');
@@ -87,7 +89,7 @@
 	}
 </script>
 
-<div class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
+<div {...rest} class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border pb-3">
 		<div class="flex items-center gap-2.5">
 			<span

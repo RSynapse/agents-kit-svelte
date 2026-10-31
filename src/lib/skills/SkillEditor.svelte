@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLFormAttributes } from 'svelte/elements';
 	import { Check, CircleAlert, ScrollText, TriangleAlert } from '@lucide/svelte';
 	import { fade } from 'svelte/transition';
 	import { motionDuration } from '../state/motion.svelte';
@@ -12,7 +13,7 @@
 	import { SAMPLE_SKILLS, SAMPLE_SKILL_BODY } from './fixtures';
 	import type { SkillManifest } from './types';
 
-	interface Props {
+	interface Props extends Omit<HTMLFormAttributes, 'class' | 'children' | 'manifest' | 'title' | 'saveLabel' | 'onSave' | 'onCancel'> {
 		manifest?: SkillManifest;
 		title?: string;
 		saveLabel?: string;
@@ -34,7 +35,8 @@
 		saveLabel = 'Save skill',
 		onSave,
 		onCancel,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let name = $state('');
@@ -84,7 +86,7 @@
 	});
 </script>
 
-<form
+<form {...rest}
 	aria-label={title}
 	onsubmit={save}
 	class="@container w-full overflow-hidden rounded-window border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm {className}"

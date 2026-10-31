@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronDown, FileText, LoaderCircle, Settings, Sparkles } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import ThinkingShimmer from '../agents/ThinkingShimmer.svelte';
@@ -16,7 +17,7 @@
 		status: ChainStepStatus;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'title' | 'steps' | 'defaultOpen' | 'isStreaming' | 'totalDurationMs'> {
 		title?: string;
 		steps?: ChainOfThoughtStepItem[];
 		defaultOpen?: boolean;
@@ -31,7 +32,8 @@
 		defaultOpen = true,
 		isStreaming = false,
 		totalDurationMs,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isOpen = $state(true);
@@ -105,7 +107,7 @@
 	}
 </script>
 
-<div class="w-full rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class="w-full rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<button
 		type="button"
 		aria-expanded={isOpen}

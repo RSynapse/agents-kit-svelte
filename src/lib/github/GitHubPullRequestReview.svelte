@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, CircleCheck, FileCode, MessageSquare, MessageSquareWarning } from '@lucide/svelte';
 	import { SvelteSet } from 'svelte/reactivity';
 	import { slide } from 'svelte/transition';
@@ -7,7 +8,7 @@
 	import type { GitHubReviewFile, GitHubReviewVerdict } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'prNumber' | 'title' | 'reviewer' | 'files' | 'live' | 'onSubmitReview'> {
 		prNumber: number;
 		title: string;
 		reviewer?: string;
@@ -31,7 +32,8 @@
 		files = [],
 		live = false,
 		onSubmitReview,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	// Steps: read file 1 → comment lands → each file marked viewed in turn → approve.
@@ -77,7 +79,7 @@
 	}
 </script>
 
-<article class="@container overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<article {...rest} class="@container overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="min-w-0">
 			<h3 class="truncate font-semibold text-fg-main">{title} <span class="font-normal text-fg-light">#{prNumber}</span></h3>

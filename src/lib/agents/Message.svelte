@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Sparkle } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import { SOFT } from '../ui/styles';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'id' | 'role' | 'author' | 'badge' | 'timestamp' | 'children'> {
 		id?: string;
 		role: 'user' | 'assistant' | 'system';
 		author: string;
@@ -20,11 +21,12 @@
 		badge,
 		timestamp,
 		class: className = '',
-		children
+		children,
+		...rest
 	}: Props = $props();
 </script>
 
-<article
+<article {...rest}
 	{id}
 	data-slot="message"
 	data-from={role}

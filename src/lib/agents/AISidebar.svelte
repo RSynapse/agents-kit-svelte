@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Bookmark, FileText, Folder, FolderOpen, GitBranch, Pencil, Pin, PinOff } from '@lucide/svelte';
 	import type { Component } from 'svelte';
 	import { buttonClass } from '../ui/styles';
@@ -20,7 +21,7 @@
 		parentId: string | null;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'items' | 'activeId' | 'defaultExpandedIds' | 'ariaLabel' | 'searchable' | 'onSelect' | 'onActiveChange' | 'onRename' | 'onTogglePin'> {
 		items?: SidebarResource[];
 		activeId?: string | null;
 		defaultExpandedIds?: string[];
@@ -43,7 +44,8 @@
 		onActiveChange,
 		onRename,
 		onTogglePin,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let internalItems = $state<SidebarResource[]>([]);
@@ -247,7 +249,7 @@
 	let pinnedItems = $derived(collectPinned(internalItems));
 </script>
 
-<aside
+<aside {...rest}
 	aria-label={ariaLabel}
 	class="flex w-full max-w-xs flex-col rounded-card border border-card-border bg-card-bg p-3 text-sm text-fg-main {className}"
 >

@@ -1,11 +1,12 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, Package, Sparkles, Tag } from '@lucide/svelte';
 	import { rise } from '../state/motion.svelte';
 	import { badgeClass, buttonClass, segmentClass, SEGMENT_GROUP_CLASS } from '../ui/styles';
 	import type { GitHubReleaseData } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'release' | 'live' | 'onPublish'> {
 		release: GitHubReleaseData;
 		/** Demo mode: writes the release notes line by line, then loops. Off by default. */
 		live?: boolean;
@@ -13,7 +14,7 @@
 		class?: string;
 	}
 
-	let { release, live = false, onPublish, class: className = '' }: Props = $props();
+	let { release, live = false, onPublish, class: className = '', ...rest }: Props = $props();
 
 	const flatCount = $derived(release.groups.reduce((n, g) => n + g.items.length, 0));
 	const contributors = $derived([...new Set(release.groups.flatMap((g) => g.items.map((i) => i.author)))]);
@@ -44,7 +45,7 @@
 	}
 </script>
 
-<article class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<article {...rest} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<header class="flex flex-wrap items-start justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="min-w-0">
 			<p class="flex flex-wrap items-center gap-2">

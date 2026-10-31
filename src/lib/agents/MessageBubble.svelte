@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { ChevronDown } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
@@ -6,7 +7,7 @@
 	export type MessageBubbleVariant = 'solid' | 'soft' | 'tint' | 'outline' | 'ghost' | 'danger';
 	export type MessageBubbleAlign = 'start' | 'end';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'id' | 'author' | 'avatar' | 'timestamp' | 'status' | 'variant' | 'align' | 'text' | 'collapsible' | 'collapsedLines' | 'defaultOpen' | 'moreLabel' | 'lessLabel' | 'onOpenChange' | 'children'> {
 		id?: string;
 		author?: string;
 		avatar?: string;
@@ -41,7 +42,8 @@
 		lessLabel = 'Show less',
 		onOpenChange,
 		children,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isExpanded = $state(false);
@@ -101,7 +103,7 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	{id}
 	data-slot="message"
 	data-from={align === 'end' ? 'user' : 'assistant'}

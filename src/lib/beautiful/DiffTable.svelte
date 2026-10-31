@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export interface DiffTableRow {
@@ -9,7 +10,7 @@
 		status?: 'pending' | 'accepted' | 'rejected';
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'rows' | 'title' | 'onAccept' | 'onReject' | 'onApplyAll'> {
 		rows?: DiffTableRow[];
 		title?: string;
 		onAccept?: (id: string) => void;
@@ -48,7 +49,8 @@
 		onAccept,
 		onReject,
 		onApplyAll,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let internalRows = $state<DiffTableRow[]>([]);
@@ -87,7 +89,7 @@
 	let pendingCount = $derived(internalRows.length - acceptedCount - rejectedCount);
 </script>
 
-<section
+<section {...rest}
 	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<header

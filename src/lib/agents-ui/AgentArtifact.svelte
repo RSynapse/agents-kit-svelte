@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Share2, Check, Copy, Download, LoaderCircle, Pencil, RefreshCw } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	export type ArtifactType = 'document' | 'code' | 'table' | 'chart';
@@ -19,7 +20,7 @@
 		schemaJson?: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'title' | 'artifactType' | 'content' | 'language' | 'versions' | 'currentVersion' | 'isGenerating' | 'metadata' | 'onCopy' | 'onDownload' | 'onEdit' | 'onRegenerate' | 'onShare' | 'onVersionChange'> {
 		title?: string;
 		artifactType?: ArtifactType;
 		content?: string;
@@ -104,7 +105,8 @@
 		onRegenerate,
 		onShare,
 		onVersionChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	type ActiveTab = 'preview' | 'source' | 'schema' | 'versions';
@@ -150,7 +152,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Rich agent artifact viewer"
 	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >

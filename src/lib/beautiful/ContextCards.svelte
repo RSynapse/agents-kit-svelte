@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import { AlignLeft, ArrowUpRight, X } from '@lucide/svelte';
 	import { formatCompactTokens } from '../state/chat-helpers';
@@ -15,7 +16,7 @@
 		score?: number;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'chunks' | 'selectedId' | 'onSelect' | 'onRemove'> {
 		chunks?: ContextChunk[];
 		selectedId?: string;
 		onSelect?: (id: string) => void;
@@ -58,7 +59,8 @@
 		selectedId = undefined,
 		onSelect,
 		onRemove,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let internalChunks = $state<ContextChunk[]>([]);
@@ -121,7 +123,7 @@
 	);
 </script>
 
-<div class="flex w-full flex-col gap-2.5 text-fg-main {className}">
+<div {...rest} class="flex w-full flex-col gap-2.5 text-fg-main {className}">
 	<header class="flex items-center justify-between gap-2 px-0.5 text-xs">
 		<div class="flex items-center gap-2">
 			<span class="text-[13px] font-semibold text-fg-main">Retrieved chunks</span>

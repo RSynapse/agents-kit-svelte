@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Activity, Check, GitCommitHorizontal, RotateCcw, Siren } from '@lucide/svelte';
 	import { Tween } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
@@ -7,7 +8,7 @@
 	import type { GitHubIncidentData, GitHubIncidentStatus } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'incident' | 'live' | 'onRevert'> {
 		incident: GitHubIncidentData;
 		/** Demo mode: plays the alert firing, the suspect deploy being found and reverted, then loops. Off by default. */
 		live?: boolean;
@@ -26,7 +27,7 @@
 	const HEIGHT = 64;
 	const FIRST_VISIBLE = 4;
 
-	let { incident, live = false, onRevert, class: className = '' }: Props = $props();
+	let { incident, live = false, onRevert, class: className = '', ...rest }: Props = $props();
 
 	const loop = new LiveLoop(() => incident.series.length - FIRST_VISIBLE, 5);
 	const readout = new Tween(0, { duration: 300, easing: cubicOut });
@@ -75,7 +76,7 @@
 	}
 </script>
 
-<article class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<article {...rest} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex min-w-0 items-center gap-2">
 			<span class="inline-flex size-7 shrink-0 items-center justify-center rounded-full {level === -1 || level === 3 ? 'bg-canvas-secondary text-fg-light' : 'bg-status-danger-subtle text-status-danger'}">

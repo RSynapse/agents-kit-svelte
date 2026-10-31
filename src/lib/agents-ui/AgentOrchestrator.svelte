@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ArrowRight, Check, ChevronDown, ChevronRight, LoaderCircle, Pause, Play, RefreshCw } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import { formatCompactTokens } from '../state/chat-helpers';
@@ -32,7 +33,7 @@
 		message: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'orchestratorName' | 'supervisorModel' | 'description' | 'subAgents' | 'communicationLog' | 'aggregatedResult' | 'isProcessing' | 'timestamp' | 'onStart' | 'onPauseAll' | 'onRedistribute' | 'onRetryAgent'> {
 		orchestratorName?: string;
 		supervisorModel?: string;
 		description?: string;
@@ -129,7 +130,8 @@
 		onPauseAll,
 		onRedistribute,
 		onRetryAgent,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localAgents = $state<SubAgent[]>([]);
@@ -253,7 +255,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Agent orchestrator"
 	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >

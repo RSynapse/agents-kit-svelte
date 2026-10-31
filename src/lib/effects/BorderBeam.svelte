@@ -1,11 +1,12 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import type { Snippet } from 'svelte';
 
 	export type BorderBeamTone = 'accent' | 'success' | 'warning' | 'danger';
 	export type BorderBeamSize = 'sm' | 'md' | 'line' | 'pulse';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'active' | 'tone' | 'size' | 'durationSeconds' | 'label' | 'children'> {
 		active?: boolean;
 		tone?: BorderBeamTone;
 		size?: BorderBeamSize;
@@ -22,7 +23,8 @@
 		durationSeconds = 6,
 		label = 'Active Worktree Run · Claude Code',
 		children,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isActive = $state(true);
@@ -53,7 +55,7 @@
 	let beamColor = $derived(resolveBeamColorVar(tone));
 </script>
 
-<div
+<div {...rest}
 	style:--ak-beam-color={beamColor}
 	style:--ak-beam-duration="{durationSeconds}s"
 	data-active={isActive}

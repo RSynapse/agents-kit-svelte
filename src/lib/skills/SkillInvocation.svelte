@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { BookOpenText, Check, ChevronDown, CircleDashed, LoaderCircle, X } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import { Tween } from 'svelte/motion';
@@ -11,7 +12,7 @@
 	import { SKILL_SCOPE_META } from './scope';
 	import type { AgentSkill, SkillInvocationStatus, SkillInvocationStep } from './types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'skill' | 'steps' | 'status' | 'durationSeconds' | 'defaultOpen' | 'result'> {
 		skill?: AgentSkill;
 		steps?: SkillInvocationStep[];
 		status?: SkillInvocationStatus;
@@ -30,7 +31,8 @@
 		durationSeconds,
 		defaultOpen = true,
 		result,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let open = $state(true);
@@ -67,7 +69,7 @@
 	);
 </script>
 
-<div
+<div {...rest}
 	role="group"
 	aria-label="{title} {skill.name}"
 	aria-busy={busy}

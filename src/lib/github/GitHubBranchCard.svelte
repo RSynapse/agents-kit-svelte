@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ArrowDown, ArrowUp, Check, Circle, FolderGit2, GitBranch, GitCompare, ShieldCheck } from '@lucide/svelte';
 	import { flip } from 'svelte/animate';
 	import { motionDuration, rise } from '../state/motion.svelte';
@@ -6,7 +7,7 @@
 	import type { GitHubBranchData } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'branch' | 'live' | 'onOpenWorktree' | 'onCompare'> {
 		branch: GitHubBranchData;
 		/** Demo mode: plays branch creation and commits landing one by one, then loops. Off by default. */
 		live?: boolean;
@@ -15,7 +16,7 @@
 		class?: string;
 	}
 
-	let { branch, live = false, onOpenWorktree, onCompare, class: className = '' }: Props = $props();
+	let { branch, live = false, onOpenWorktree, onCompare, class: className = '', ...rest }: Props = $props();
 
 	const loop = new LiveLoop(() => branch.commits.length + 1, 4);
 	let worktreeOpen = $state(false);
@@ -30,7 +31,7 @@
 	const landed = $derived([...branch.commits.slice(0, Math.max(0, step - 1))].reverse());
 </script>
 
-<article class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<article {...rest} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex min-w-0 items-center gap-2">
 			<GitBranch aria-hidden="true" class="size-4 shrink-0 text-accent-primary" />

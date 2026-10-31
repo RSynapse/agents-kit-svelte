@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import {
 		CircleDot,
 		Eye,
@@ -18,7 +19,7 @@
 	import type { GitHubLifecycleStage, GitHubLifecycleStageId } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'title' | 'stages' | 'live' | 'current' | 'onSelectStage'> {
 		title?: string;
 		stages?: GitHubLifecycleStage[];
 		/** Demo mode: plays the lifecycle stage by stage, then loops. Off by default. */
@@ -48,7 +49,8 @@
 		live = false,
 		current,
 		onSelectStage,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	const loop = new LiveLoop(() => stages.length - 1, 4);
@@ -77,7 +79,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label={title}
 	class="@container overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >

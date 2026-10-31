@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronDown, Pause, Play, RefreshCw, RotateCcw, SkipForward } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type WorkflowStepStatus = 'waiting' | 'running' | 'completed' | 'failed' | 'skipped';
@@ -16,7 +17,7 @@
 		tokens?: number;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'workflowName' | 'description' | 'steps' | 'currentStepId' | 'totalDuration' | 'totalTokens' | 'isRunning' | 'onStart' | 'onPause' | 'onRetryStep' | 'onSkipStep' | 'onReset'> {
 		workflowName?: string;
 		description?: string;
 		steps?: WorkflowStep[];
@@ -94,7 +95,8 @@
 		onRetryStep,
 		onSkipStep,
 		onReset,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localSteps = $state<WorkflowStep[]>([]);
@@ -197,7 +199,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Sequential workflow pipeline"
 	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >

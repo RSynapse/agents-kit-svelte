@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, FileText } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import GitHubIssueCard from '../github/GitHubIssueCard.svelte';
@@ -6,7 +7,7 @@
 	import ResultActions from './ResultActions.svelte';
 	import type { GeneratedSurfaceContent, ResultActionState } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'content' | 'showResultActions' | 'onAction'> {
 		content?: GeneratedSurfaceContent;
 		showResultActions?: boolean;
 		onAction?: (action: string, id?: string) => void;
@@ -47,7 +48,8 @@
 		content = DEFAULT_SURFACE,
 		showResultActions = true,
 		onAction,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let currentContent = $state<GeneratedSurfaceContent>(DEFAULT_SURFACE);
@@ -161,7 +163,7 @@
 	}
 </script>
 
-<div class="w-full space-y-2.5 {className}">
+<div {...rest} class="w-full space-y-2.5 {className}">
 	<div
 		class="overflow-hidden rounded-window border border-card-border bg-card-bg p-4 text-sm shadow-xs transition-all {mode !==
 		'view'

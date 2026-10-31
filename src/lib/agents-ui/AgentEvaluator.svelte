@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronDown, Play, RotateCcw, TriangleAlert } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type EvalCriterionStatus = 'pass' | 'warn' | 'fail';
@@ -22,7 +23,7 @@
 		status: 'passed' | 'warning' | 'failed';
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'taskDescription' | 'iterations' | 'currentIteration' | 'qualityThreshold' | 'maxIterations' | 'isRunning' | 'onRunNext' | 'onAccept' | 'onReset' | 'onAdjustThreshold'> {
 		taskDescription?: string;
 		iterations?: EvalIteration[];
 		currentIteration?: number;
@@ -121,7 +122,8 @@
 		onAccept,
 		onReset,
 		onAdjustThreshold,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localThreshold = $state(85);
@@ -198,7 +200,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Referee evaluation scorecard"
 	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ArrowUp, CornerDownRight, Route } from '@lucide/svelte';
 	import { Tween } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
@@ -9,7 +10,7 @@
 	import { SKILL_SCOPE_META } from './scope';
 	import type { AgentSkill, SkillMatch } from './types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'skills' | 'prompt' | 'threshold' | 'limit' | 'readonly' | 'clearOnRoute' | 'onRoute'> {
 		skills?: AgentSkill[];
 		/** Prompt to route. The field stays editable unless `readonly` is set. */
 		prompt?: string;
@@ -33,7 +34,8 @@
 		readonly = false,
 		clearOnRoute = false,
 		onRoute,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let draft = $state('');
@@ -73,7 +75,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Skill router"
 	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm {className}"
 >

@@ -1,10 +1,11 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import { ArrowRight, Check, ChevronDown, GitPullRequest, ShieldCheck } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import type { GitHubPullRequestData } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'pr' | 'defaultChecksOpen' | 'onApproveMerge' | 'onRequestChanges'> {
 		pr: GitHubPullRequestData;
 		defaultChecksOpen?: boolean;
 		onApproveMerge?: (prNumber: number) => void;
@@ -17,7 +18,8 @@
 		defaultChecksOpen = true,
 		onApproveMerge,
 		onRequestChanges,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let checksOpen = $state(true);
@@ -37,7 +39,7 @@
 	let panelId = $derived(`gh-pr-checks-${pr.number}`);
 </script>
 
-<article
+<article {...rest}
 	aria-label="GitHub Pull Request {pr.number}: {pr.title}"
 	class="rounded-card border border-card-border bg-card-bg p-4 text-sm {className}"
 >

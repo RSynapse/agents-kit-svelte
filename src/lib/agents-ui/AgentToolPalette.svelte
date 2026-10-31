@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	export type ToolCategory = 'all' | 'worktree' | 'contracts' | 'companion' | 'verification';
 
@@ -20,7 +21,7 @@
 		parameters?: AgentToolParameter[];
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'tools' | 'onToolClick' | 'onToolToggle' | 'showUsageStats' | 'gridView'> {
 		tools?: AgentTool[];
 		onToolClick?: (tool: AgentTool) => void;
 		onToolToggle?: (toolId: string, enabled: boolean) => void;
@@ -109,7 +110,8 @@
 		onToolToggle,
 		showUsageStats = true,
 		gridView = true,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localTools = $state<AgentTool[]>([]);
@@ -165,7 +167,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Interactive command and MCP tool palette"
 	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >

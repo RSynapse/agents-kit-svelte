@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, Eye, EyeOff, Settings } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export interface EnvVariableEntry {
@@ -9,7 +10,7 @@
 		description?: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'title' | 'variables' | 'defaultShowValues' | 'onShowValuesChange'> {
 		title?: string;
 		variables?: EnvVariableEntry[];
 		defaultShowValues?: boolean;
@@ -22,7 +23,8 @@
 		variables = [],
 		defaultShowValues = false,
 		onShowValuesChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let showAllValues = $state(false);
@@ -94,7 +96,7 @@
 	}
 </script>
 
-<div class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex items-center gap-2">
 			<span

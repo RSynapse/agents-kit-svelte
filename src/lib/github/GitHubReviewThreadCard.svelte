@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import type { GitHubReviewThreadData } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'thread' | 'currentUser' | 'onApplySuggestion' | 'onReply'> {
 		thread: GitHubReviewThreadData;
 		/** Author name shown on replies typed into the card. */
 		currentUser?: string;
@@ -17,7 +18,8 @@
 		currentUser = 'You',
 		onApplySuggestion,
 		onReply,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isResolved = $state(false);
@@ -44,7 +46,7 @@
 	}
 </script>
 
-<div class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary px-3.5 py-2 text-xs">
 		<div class="flex items-center gap-2 font-mono">
 			<code class="font-semibold text-fg-main">{thread.filePath}</code>

@@ -1,7 +1,8 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { Check, Code, Copy } from '@lucide/svelte';
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'code' | 'language' | 'filename' | 'status' | 'showLineNumbers' | 'highlightLines' | 'maxHeight'> {
 		code: string;
 		language?: string;
 		filename?: string;
@@ -22,7 +23,8 @@
 		showLineNumbers = true,
 		highlightLines = [],
 		maxHeight = 260,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let copied = $state(false);
@@ -41,7 +43,7 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	data-state={status}
 	aria-busy={status === 'streaming'}
 	class="w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm {className}"

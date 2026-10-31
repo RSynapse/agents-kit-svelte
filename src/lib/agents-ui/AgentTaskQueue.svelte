@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ArrowUp, ArrowUpDown, ChevronRight, Circle, CircleCheck, LoaderCircle, Pause, Play, Plus, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type AgentTaskStatus =
@@ -32,7 +33,7 @@
 		metrics?: { tokens?: number; cost?: string; confidence?: number };
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'tasks' | 'activeTaskId' | 'autoStart' | 'concurrencyLimit' | 'isProcessing' | 'showTimeline' | 'timestamp' | 'onStartTask' | 'onPauseTask' | 'onResumeTask' | 'onCancelTask' | 'onReorder' | 'onToggleAutoStart' | 'onClearCompleted' | 'onAddTask'> {
 		tasks?: AgentTask[];
 		activeTaskId?: string | null;
 		autoStart?: boolean;
@@ -115,7 +116,8 @@
 		onToggleAutoStart,
 		onClearCompleted,
 		onAddTask,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localTasks = $state<AgentTask[]>([]);
@@ -205,7 +207,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Prioritized agent task queue"
 	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check } from '@lucide/svelte';
 	export interface FlowchartNode {
 		id: string;
@@ -16,7 +17,7 @@
 		to: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'nodes' | 'edges' | 'selectedNodeId' | 'onSelect' | 'onNodeMove' | 'onConditionChange'> {
 		nodes?: FlowchartNode[];
 		edges?: FlowchartEdge[];
 		selectedNodeId?: string;
@@ -68,7 +69,8 @@
 		selectedNodeId = undefined,
 		onSelect,
 		onConditionChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeNodeId = $state<string>('node-run');
@@ -117,7 +119,7 @@
 	let activeNode = $derived(nodes.find((n) => n.id === activeNodeId) ?? nodes[0]);
 </script>
 
-<div
+<div {...rest}
 	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<div class="overflow-x-auto bg-canvas-secondary/60 p-4">

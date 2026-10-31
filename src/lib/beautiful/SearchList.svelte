@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Search } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	export interface SearchListItem {
@@ -8,7 +9,7 @@
 		category?: 'issue' | 'file' | 'run' | 'doc';
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'value' | 'items' | 'placeholder' | 'onValueChange' | 'onSelect'> {
 		value?: string;
 		items?: SearchListItem[];
 		placeholder?: string;
@@ -50,7 +51,8 @@
 		placeholder = 'Search issues, files, runs, and ADRs…',
 		onValueChange,
 		onSelect,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let internalQuery = $state('');
@@ -104,7 +106,7 @@
 	);
 </script>
 
-<section
+<section {...rest}
 	class="w-full max-w-xl rounded-card border border-card-border bg-card-bg p-3 text-fg-main {className}"
 >
 	<div class="flex items-center gap-2 border-b border-canvas-border pb-2.5">

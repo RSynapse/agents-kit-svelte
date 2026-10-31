@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, badgeClass, segmentClass } from '../ui/styles';
 	import { ArrowRight, BadgeCheck, Check, Package } from '@lucide/svelte';
 	export type PackageChangeType = 'major' | 'minor' | 'patch' | 'added' | 'removed';
@@ -14,7 +15,7 @@
 		command: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'name' | 'currentVersion' | 'newVersion' | 'changeType' | 'license' | 'description' | 'verified' | 'scripts' | 'dependencies'> {
 		name: string;
 		currentVersion?: string;
 		newVersion?: string;
@@ -37,7 +38,8 @@
 		verified = true,
 		scripts = [],
 		dependencies = [],
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeTab = $state<'dependencies' | 'scripts'>('dependencies');
@@ -64,7 +66,7 @@
 	}
 </script>
 
-<div class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
+<div {...rest} class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
 	<div class="flex flex-wrap items-start justify-between gap-3">
 		<div class="space-y-1">
 			<div class="flex flex-wrap items-center gap-2">

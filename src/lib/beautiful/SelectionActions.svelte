@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	export interface SelectionAction {
 		id: string;
@@ -6,7 +7,7 @@
 		tone?: 'default' | 'accent' | 'danger';
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'selectedText' | 'selectedCount' | 'actions' | 'result' | 'isWorking' | 'onAction' | 'onReplace' | 'onClear'> {
 		selectedText?: string;
 		selectedCount?: number;
 		actions?: SelectionAction[];
@@ -34,7 +35,8 @@
 		onAction,
 		onReplace,
 		onClear,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeActionId = $state<string | null>(null);
@@ -63,7 +65,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	class="rounded-card border border-card-border bg-card-bg p-4 text-fg-main shadow-xs {className}"
 >
 	<div class="flex flex-wrap items-center justify-between gap-2">

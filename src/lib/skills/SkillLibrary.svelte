@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Plus, Search } from '@lucide/svelte';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
@@ -12,7 +13,7 @@
 
 	type ScopeFilter = 'all' | SkillScope;
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'skills' | 'title' | 'activeSkillId' | 'detailed' | 'onToggle' | 'onInvoke' | 'onEdit' | 'onCreate'> {
 		skills?: AgentSkill[];
 		title?: string;
 		/** Skill to highlight, e.g. the one the router just picked. */
@@ -35,7 +36,8 @@
 		onInvoke,
 		onEdit,
 		onCreate,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	const SCOPE_ORDER: ScopeFilter[] = ['all', 'personal', 'project', 'plugin', 'built-in'];
@@ -77,7 +79,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="{title} library"
 	class="w-full overflow-hidden rounded-window border border-chat-border bg-chat-surface text-sm ak-shadow-soft-sm {className}"
 >

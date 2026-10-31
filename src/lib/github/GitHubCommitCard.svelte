@@ -1,10 +1,11 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, Copy, GitCommitHorizontal, RotateCcw } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import type { GitHubCommitData } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'commit' | 'defaultOpen' | 'onRestore'> {
 		commit: GitHubCommitData;
 		defaultOpen?: boolean;
 		onRestore?: (sha: string) => void;
@@ -17,7 +18,8 @@
 		commit,
 		defaultOpen = true,
 		onRestore,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isOpen = $state(true);
@@ -40,7 +42,7 @@
 	}
 </script>
 
-<div class="rounded-card border border-card-border bg-card-bg p-3.5 text-sm {className}">
+<div {...rest} class="rounded-card border border-card-border bg-card-bg p-3.5 text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2">
 		<div class="flex min-w-0 flex-1 items-center gap-2">
 			<button

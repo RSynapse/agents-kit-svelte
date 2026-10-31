@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, CircleDot, Copy, Sparkles, X } from '@lucide/svelte';
 	import { SvelteSet } from 'svelte/reactivity';
 	import { slide } from 'svelte/transition';
@@ -7,7 +8,7 @@
 	import type { GitHubTriageIssue } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'issue' | 'live' | 'onApply' | 'onMarkDuplicate'> {
 		issue: GitHubTriageIssue;
 		/** Demo mode: reveals the agent's suggestions one at a time, then loops. Off by default. */
 		live?: boolean;
@@ -16,7 +17,7 @@
 		class?: string;
 	}
 
-	let { issue, live = false, onApply, onMarkDuplicate, class: className = '' }: Props = $props();
+	let { issue, live = false, onApply, onMarkDuplicate, class: className = '', ...rest }: Props = $props();
 
 	const loop = new LiveLoop(() => issue.suggestions.length + 2, 4);
 	const rejected = new SvelteSet<string>();
@@ -51,7 +52,7 @@
 	}
 </script>
 
-<article class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<article {...rest} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<header class="border-b border-canvas-border px-4 py-3">
 		<div class="flex items-start gap-2.5">
 			<CircleDot aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-status-success" />

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import { Check, CircleCheck, CircleDot, GitBranch, Play } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
@@ -7,7 +8,7 @@
 	import { motionDuration, rise } from '../state/motion.svelte';
 	import type { GitHubIssueData } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'issue' | 'compact' | 'onDispatchRun' | 'onOpenChat' | 'onClaimToggle' | 'footerActions'> {
 		issue: GitHubIssueData;
 		compact?: boolean;
 		onDispatchRun?: (issueNumber: number) => void;
@@ -24,7 +25,8 @@
 		onOpenChat,
 		onClaimToggle,
 		footerActions,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let claimed = $state(true);
@@ -89,7 +91,7 @@
 	}
 </script>
 
-<article
+<article {...rest}
 	aria-label="GitHub Issue {issue.number}: {issue.title}"
 	class="ak-micro-lift flex min-w-0 flex-col justify-between overflow-hidden rounded-card border border-card-border bg-card-bg {compact
 		? 'p-3.5'

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
@@ -36,13 +37,13 @@
 		ToolApprovalParam
 	} from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'nodes' | 'onIntent'> {
 		nodes: DynamicUINode[];
 		onIntent?: (intent: { nodeId: string; action: string; detail?: string }) => void;
 		class?: string;
 	}
 
-	let { nodes, onIntent, class: className = '' }: Props = $props();
+	let { nodes, onIntent, class: className = '', ...rest }: Props = $props();
 </script>
 
 {#snippet missingProp(name: string)}
@@ -51,7 +52,7 @@
 	</p>
 {/snippet}
 
-<div class="space-y-4 {className}">
+<div {...rest} class="space-y-4 {className}">
 	{#each nodes as node (node.id)}
 		<div
 			animate:flip={{ duration: motionDuration(240), easing: cubicOut }}

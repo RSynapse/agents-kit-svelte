@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, Clock, ExternalLink, Hourglass, RefreshCw, Rocket, RotateCcw, ShieldAlert, X } from '@lucide/svelte';
 	import { slide } from 'svelte/transition';
 	import { motionDuration } from '../state/motion.svelte';
@@ -6,7 +7,7 @@
 	import type { GitHubDeploymentEnvironment, GitHubDeploymentStatus } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'sha' | 'ref' | 'environments' | 'live' | 'onApprove' | 'onRollback'> {
 		sha?: string;
 		ref?: string;
 		environments?: GitHubDeploymentEnvironment[];
@@ -30,7 +31,8 @@
 		live = false,
 		onApprove,
 		onRollback,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	interface EnvPlan {
@@ -97,7 +99,7 @@
 	}
 </script>
 
-<section aria-label={sha ? `Deployments for ${sha}` : 'Deployments'} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<section {...rest} aria-label={sha ? `Deployments for ${sha}` : 'Deployments'} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex items-center gap-2">
 			<Rocket aria-hidden="true" class="size-4 text-fg-light" />

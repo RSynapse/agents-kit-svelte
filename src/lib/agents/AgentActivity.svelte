@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
@@ -9,7 +10,7 @@
 	import { motionDuration, rise } from '../state/motion.svelte';
 	import type { ActivityItem, ActivityStatus } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'items' | 'status' | 'title' | 'durationSeconds' | 'defaultOpen'> {
 		items: ActivityItem[];
 		status?: ActivityStatus;
 		title?: string;
@@ -24,7 +25,8 @@
 		title,
 		durationSeconds,
 		defaultOpen = true,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isOpen = $state(true);
@@ -67,7 +69,7 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	data-state={status}
 	aria-busy={status === 'working'}
 	class="w-full text-sm {className}"

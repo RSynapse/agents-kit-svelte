@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	export type FilterStatus = 'todo' | 'progress' | 'done';
 
@@ -11,7 +12,7 @@
 		tag?: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'rows' | 'filter' | 'onFilterChange'> {
 		rows?: FilterTableRow[];
 		filter?: FilterStatus | 'all';
 		onFilterChange?: (value: FilterStatus | 'all') => void;
@@ -51,7 +52,8 @@
 		rows = DEFAULT_ROWS,
 		filter = undefined,
 		onFilterChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeFilter = $state<FilterStatus | 'all'>('all');
@@ -99,7 +101,7 @@
 	);
 </script>
 
-<section
+<section {...rest}
 	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<div

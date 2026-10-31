@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
@@ -7,7 +8,7 @@
 	import GitHubIssueCard from './GitHubIssueCard.svelte';
 	import type { GitHubIssueData, GitHubIssueState } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'issues' | 'title' | 'badge' | 'description' | 'onSelectIssue'> {
 		issues?: GitHubIssueData[];
 		title?: string;
 		/** Small badge next to the title, such as the sync source. */
@@ -34,7 +35,8 @@
 		badge,
 		description,
 		onSelectIssue,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	const [send, receive] = createBoardCrossfade(260);
@@ -81,7 +83,7 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="GitHub Reactive Board Layout"
 	class="@container space-y-4 rounded-2xl border border-card-border bg-canvas-secondary p-4 sm:p-5 {className}"
 >

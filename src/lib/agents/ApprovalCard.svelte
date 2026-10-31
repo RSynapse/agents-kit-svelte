@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { MessageCircleQuestion, Check } from '@lucide/svelte';
 	import type { ApprovalCardAnswers, ApprovalQuestion } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'title' | 'description' | 'questions' | 'submitLabel' | 'onSubmit' | 'onCancel'> {
 		title: string;
 		description?: string;
 		questions: ApprovalQuestion[];
@@ -20,7 +21,8 @@
 		submitLabel = 'Submit decision',
 		onSubmit,
 		onCancel,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let currentStep = $state(0);
@@ -88,7 +90,7 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	role="region"
 	aria-label={title}
 	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg ak-shadow-soft p-5 text-sm {className}"

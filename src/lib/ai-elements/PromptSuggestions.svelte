@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	export interface PromptSuggestionItem {
 		id: string;
@@ -7,7 +8,7 @@
 		prompt: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'suggestions' | 'highlightQuery' | 'selectedCategory' | 'onSelect'> {
 		suggestions?: PromptSuggestionItem[];
 		highlightQuery?: string;
 		selectedCategory?: 'all' | 'inspect' | 'implement' | 'verify' | 'review';
@@ -29,7 +30,8 @@
 		highlightQuery = '',
 		selectedCategory = 'all',
 		onSelect,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeCategory = $state<'all' | 'inspect' | 'implement' | 'verify' | 'review'>('all');
@@ -92,7 +94,7 @@
 	}
 </script>
 
-<div class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
+<div {...rest} class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2 pb-3">
 		<div class="{SEGMENT_GROUP_CLASS} flex-wrap">
 			{#each CATEGORIES as cat (cat.id)}

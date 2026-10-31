@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, Lightbulb, Sparkles, X } from '@lucide/svelte';
 	import { scale } from 'svelte/transition';
 	import { motionDuration } from '../state/motion.svelte';
@@ -9,7 +10,7 @@
 
 	type View = 'changes' | 'file';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'proposal' | 'status' | 'onSave' | 'onDismiss'> {
 		proposal?: SkillProposal;
 		status?: SkillProposalStatus;
 		onSave?: (proposal: SkillProposal) => void;
@@ -22,7 +23,8 @@
 		status = 'pending',
 		onSave,
 		onDismiss,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localStatus = $state<SkillProposalStatus>('pending');
@@ -59,7 +61,7 @@
 	}
 </script>
 
-<article
+<article {...rest}
 	aria-label="Skill proposal: {proposal.name}"
 	data-state={localStatus}
 	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft {className}"
