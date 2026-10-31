@@ -9,7 +9,7 @@
 	}
 
 	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'title' | 'description' | 'summary' | 'confidence' | 'reasoning' | 'acceptLabel' | 'alternatives' | 'onAccept' | 'onSelectAlternative'> {
-		title?: string;
+		title: string;
 		description?: string;
 		summary?: string;
 		confidence?: number;
@@ -21,33 +21,14 @@
 		class?: string;
 	}
 
-	const DEFAULT_REASONING: string[] = [
-		'Isolates database outbox writes and journal append inside a single transaction boundary.',
-		'Preserves idempotency lookup before revision checks on retry attempts.',
-		'Matches T2 referee verification rules with zero schema drift.'
-	];
-
-	const DEFAULT_ALTERNATIVES: RecommendationOption[] = [
-		{
-			id: 'alt-optimistic',
-			label: 'Optimistic in-memory queue',
-			description: 'Lower latency but requires manual replay on companion disconnect.'
-		},
-		{
-			id: 'alt-polling',
-			label: 'Periodic checkpoint polling',
-			description: 'Simpler worker loop with higher idle read overhead.'
-		}
-	];
-
 	let {
-		title = 'Use atomic outbox + journal transaction for Run dispatch',
+		title,
 		description,
-		summary = 'Ensures every dispatched workflow card records its state transition and companion payload atomically before notifying the worker stream.',
-		confidence = 0.94,
-		reasoning = DEFAULT_REASONING,
+		summary,
+		confidence,
+		reasoning = [],
 		acceptLabel = 'Accept recommendation',
-		alternatives = DEFAULT_ALTERNATIVES,
+		alternatives = [],
 		onAccept,
 		onSelectAlternative,
 		class: className = '',

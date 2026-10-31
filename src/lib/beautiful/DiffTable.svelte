@@ -19,32 +19,8 @@
 		class?: string;
 	}
 
-	const DEFAULT_ROWS: DiffTableRow[] = [
-		{
-			id: 'row-tier',
-			field: 'riskTier',
-			before: 'T1 (Read-only)',
-			after: 'T2 (Worktree isolated)',
-			status: 'accepted'
-		},
-		{
-			id: 'row-timeout',
-			field: 'maxRunDurationSec',
-			before: '300',
-			after: '900',
-			status: 'pending'
-		},
-		{
-			id: 'row-branch',
-			field: 'worktreeBranch',
-			before: 'main',
-			after: 'worktree/card-184-attempt-1',
-			status: 'pending'
-		}
-	];
-
 	let {
-		rows = DEFAULT_ROWS,
+		rows = [],
 		title = 'Review field changes',
 		onAccept,
 		onReject,

@@ -4,11 +4,10 @@
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import { badgeClass, pillClass } from '../ui/styles';
 	import { SKILL_FILE_ICON, SKILL_SCOPE_META, switchThumbClass, switchTrackClass } from './scope';
-	import { SAMPLE_SKILLS } from './fixtures';
 	import type { AgentSkill } from './types';
 
 	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'skill' | 'compact' | 'defaultFilesOpen' | 'active' | 'onToggle' | 'onInvoke' | 'onEdit'> {
-		skill?: AgentSkill;
+		skill: AgentSkill;
 		/** Hides triggers, tools and files for dense grids. */
 		compact?: boolean;
 		/** Opens the bundled files list on first render. */
@@ -22,7 +21,7 @@
 	}
 
 	let {
-		skill = SAMPLE_SKILLS[0],
+		skill,
 		compact = false,
 		defaultFilesOpen = false,
 		active = false,

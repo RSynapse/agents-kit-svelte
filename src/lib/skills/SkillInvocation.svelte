@@ -8,12 +8,11 @@
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import { motionDuration } from '../state/motion.svelte';
 	import { PROGRESS_TRACK_CLASS, badgeClass, progressFillClass } from '../ui/styles';
-	import { SAMPLE_SKILLS, SAMPLE_SKILL_STEPS } from './fixtures';
 	import { SKILL_SCOPE_META } from './scope';
 	import type { AgentSkill, SkillInvocationStatus, SkillInvocationStep } from './types';
 
 	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'skill' | 'steps' | 'status' | 'durationSeconds' | 'defaultOpen' | 'result'> {
-		skill?: AgentSkill;
+		skill: AgentSkill;
 		steps?: SkillInvocationStep[];
 		status?: SkillInvocationStatus;
 		/** Seconds the run took, shown once it completes. */
@@ -25,8 +24,8 @@
 	}
 
 	let {
-		skill = SAMPLE_SKILLS[0],
-		steps = SAMPLE_SKILL_STEPS,
+		skill,
+		steps = [],
 		status = 'complete',
 		durationSeconds,
 		defaultOpen = true,

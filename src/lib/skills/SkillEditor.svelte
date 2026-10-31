@@ -10,7 +10,6 @@
 		validateSkillManifest
 	} from '../state/skill-helpers';
 	import { INPUT_CLASS, pillClass } from '../ui/styles';
-	import { SAMPLE_SKILLS, SAMPLE_SKILL_BODY } from './fixtures';
 	import type { SkillManifest } from './types';
 
 	interface Props extends Omit<HTMLFormAttributes, 'class' | 'children' | 'manifest' | 'title' | 'saveLabel' | 'onSave' | 'onCancel'> {
@@ -22,15 +21,10 @@
 		class?: string;
 	}
 
-	const DEFAULT_MANIFEST: SkillManifest = {
-		name: SAMPLE_SKILLS[0].name,
-		description: SAMPLE_SKILLS[0].description,
-		allowedTools: SAMPLE_SKILLS[0].allowedTools,
-		body: SAMPLE_SKILL_BODY
-	};
+	const EMPTY_MANIFEST: SkillManifest = { name: '', description: '', allowedTools: [], body: '' };
 
 	let {
-		manifest = DEFAULT_MANIFEST,
+		manifest = EMPTY_MANIFEST,
 		title = 'Edit skill',
 		saveLabel = 'Save skill',
 		onSave,

@@ -6,3 +6,4 @@
 export * from '../skills/fixtures';
 export * from '../fixtures/github';
 export * from '../fixtures/chat';
+export * from '../fixtures/data';

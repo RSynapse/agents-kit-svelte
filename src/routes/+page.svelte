@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SAMPLE_CONTEXT_CHUNKS, SAMPLE_DIFF_ROWS, SAMPLE_FILTER_ROWS, SAMPLE_FINE_TUNE_FIELDS, SAMPLE_FLOWCHART_NODES, SAMPLE_INSIGHTS, SAMPLE_RECOMMENDATION_ALTERNATIVES, SAMPLE_RECOMMENDATION_REASONING, SAMPLE_RECORDS, SAMPLE_SEARCH_ITEMS, SAMPLE_SELECTION_ACTIONS, SAMPLE_TOOL_DIFFS, SAMPLE_TOOL_STEPS } from '$lib/fixtures/data';
 	import { SAMPLE_CHAIN_OF_THOUGHT, SAMPLE_ENV_VARIABLES, SAMPLE_PACKAGE_DEPENDENCIES, SAMPLE_PACKAGE_SCRIPTS, SAMPLE_PLAN_MILESTONES, SAMPLE_PREVIEW_LOGS, SAMPLE_PROMPT_SUGGESTIONS, SAMPLE_SCHEMA_PARAMETERS, SAMPLE_SCHEMA_REQUEST_BODY, SAMPLE_SCHEMA_RESPONSE_BODY, SAMPLE_SIDEBAR_RESOURCES, SAMPLE_STACK_SNIPPET, SAMPLE_STACK_TRACE, SAMPLE_VOICE_DEVICES, SAMPLE_VOICE_PERSONAS } from '$lib/fixtures/chat';
 	import {
 		SAMPLE_BENTO_STATS,
@@ -123,7 +124,7 @@
 		VoiceWaveVisualizer,
 		WebPreview
 	} from '$lib';
-	import { SAMPLE_SKILLS, SAMPLE_SKILL_STEPS } from '$lib/entries/fixtures';
+	import { SAMPLE_SKILLS, SAMPLE_SKILL_MANIFEST, SAMPLE_SKILL_PROPOSAL, SAMPLE_SKILL_STEPS } from '$lib/entries/fixtures';
 	import { CATALOG_ITEMS, type CatalogCategory } from '$site/catalog-registry';
 	import { holdHeight } from '$site/hold-height';
 	import { SvelteSet } from 'svelte/reactivity';
@@ -1399,33 +1400,33 @@
 							{:else if item.slug === 'reasoning-text'}
 								<ReasoningText />
 							{:else if item.slug === 'tool-chips'}
-								<ToolChips />
+								<ToolChips steps={SAMPLE_TOOL_STEPS} diffs={SAMPLE_TOOL_DIFFS} />
 							{:else if item.slug === 'recommendation-card'}
-								<RecommendationCard />
+								<RecommendationCard title="Use atomic outbox + journal transaction for Run dispatch" summary="Ensures every dispatched workflow card records its state transition and companion payload atomically before notifying the worker stream." confidence={0.94} reasoning={SAMPLE_RECOMMENDATION_REASONING} alternatives={SAMPLE_RECOMMENDATION_ALTERNATIVES} />
 							{:else if item.slug === 'context-cards'}
-								<ContextCards />
+								<ContextCards chunks={SAMPLE_CONTEXT_CHUNKS} />
 							{:else if item.slug === 'diff-table'}
-								<DiffTable />
+								<DiffTable rows={SAMPLE_DIFF_ROWS} />
 							{:else if item.slug === 'records-table'}
-								<RecordsTable
+								<RecordsTable records={SAMPLE_RECORDS}
 									selectedIds={selectedRecordIds}
 									onSelectionChange={(ids) => (selectedRecordIds = ids)}
 								/>
 							{:else if item.slug === 'selection-actions'}
-								<SelectionActions
+								<SelectionActions selectedText="Retries must reauthorize before the idempotency lookup, and the lookup must precede new-intent revision checks." actions={SAMPLE_SELECTION_ACTIONS}
 									selectedCount={selectedRecordIds.length || 2}
 									onClear={() => (selectedRecordIds = [])}
 								/>
 							{:else if item.slug === 'filter-table'}
-								<FilterTable />
+								<FilterTable rows={SAMPLE_FILTER_ROWS} />
 							{:else if item.slug === 'flowchart'}
-								<Flowchart />
+								<Flowchart nodes={SAMPLE_FLOWCHART_NODES} />
 							{:else if item.slug === 'insight-cards'}
-								<InsightCards />
+								<InsightCards insights={SAMPLE_INSIGHTS} />
 							{:else if item.slug === 'fine-tune-card'}
-								<FineTuneCard />
+								<FineTuneCard title="Agent Runtime Parameters" fields={SAMPLE_FINE_TUNE_FIELDS} />
 							{:else if item.slug === 'search-list'}
-								<SearchList />
+								<SearchList items={SAMPLE_SEARCH_ITEMS} placeholder="Search issues, files, runs, and ADRs…" />
 							{:else if item.slug === 'github-issue-card'}
 								<GitHubIssueCard issue={sampleIssue} />
 							{:else if item.slug === 'github-pr-card'}
@@ -1522,7 +1523,7 @@
 							{:else if item.slug === 'file-tree'}
 								<FileTree nodes={sampleFileTree} />
 							{:else if item.slug === 'skill-library'}
-								<SkillLibrary activeSkillId={liveActiveSkill()} />
+								<SkillLibrary skills={SAMPLE_SKILLS} activeSkillId={liveActiveSkill()} />
 							{:else if item.slug === 'skill-card'}
 								<div class="mx-auto max-w-md">
 									<SkillCard
@@ -1551,10 +1552,10 @@
 									</SkillInvocation>
 								</div>
 							{:else if item.slug === 'skill-editor'}
-								<SkillEditor />
+								<SkillEditor manifest={SAMPLE_SKILL_MANIFEST} />
 							{:else if item.slug === 'skill-proposal-card'}
 								<div class="mx-auto max-w-xl">
-									<SkillProposalCard />
+									<SkillProposalCard proposal={SAMPLE_SKILL_PROPOSAL} />
 								</div>
 							{:else if item.slug === 'voice-wave-visualizer'}
 								<VoiceWaveVisualizer devices={SAMPLE_VOICE_DEVICES} personas={SAMPLE_VOICE_PERSONAS} defaultPersonaId="sol" defaultMicId="mic-macbook-pro" transcript="Check the failing unit test in chat-helpers and explain why the token ratio threshold triggered a warning." />

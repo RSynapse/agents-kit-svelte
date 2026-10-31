@@ -38,7 +38,15 @@ test('every component forwards rest props to its root element', () => {
 });
 
 /** Folders already moved to fixtures. The rest follow collection by collection. */
-const NO_DEMO_DEFAULTS = ['src/lib/github/', 'src/lib/agents/', 'src/lib/ai-elements/', 'src/lib/runtime/'];
+const NO_DEMO_DEFAULTS = [
+	'src/lib/github/',
+	'src/lib/agents/',
+	'src/lib/ai-elements/',
+	'src/lib/runtime/',
+	'src/lib/beautiful/',
+	'src/lib/skills/',
+	'src/lib/intelligent-ui/'
+];
 /** UI defaults that are not demo data. */
 const ALLOWED_DEFAULTS = new Set(['DEFAULT_PHRASES', 'DEFAULT_PROGRESS', 'DEFAULT_FOLLOW_THRESHOLD_PX']);
 
@@ -49,6 +57,7 @@ test('migrated collections have no demo-data defaults', () => {
 			assert.ok(ALLOWED_DEFAULTS.has(name), `${rel} still defines ${name}; move sample data to src/lib/fixtures`);
 		}
 		assert.doesNotMatch(source, /RSynapse\/trailside|argon-agent/, `${rel} hard-codes Trailside sample data`);
+		assert.doesNotMatch(source, /from '[./]*(fixtures|skills\/fixtures)(\/\w+)?'/, `${rel} imports sample data`);
 	}
 });
 

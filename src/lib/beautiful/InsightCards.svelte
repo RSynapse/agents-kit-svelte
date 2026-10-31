@@ -18,38 +18,8 @@
 		class?: string;
 	}
 
-	const DEFAULT_INSIGHTS: InsightCard[] = [
-		{
-			id: 'ins-pass-rate',
-			title: 'First-pass Referee Acceptance',
-			value: '94.2%',
-			delta: '+6.4%',
-			kind: 'compare',
-			description: 'T2 worktree runs passing automated checks without human send-back.',
-			series: [78, 82, 85, 89, 91, 94]
-		},
-		{
-			id: 'ins-latency',
-			title: 'Worktree Cold-start Spike',
-			value: '1.8s',
-			delta: 'Anomaly',
-			kind: 'anomaly',
-			description: 'Peak worktree checkout latency observed during concurrent contract regeneration.',
-			series: [12, 14, 13, 42, 15, 14]
-		},
-		{
-			id: 'ins-tokens',
-			title: 'Context Window Allocation',
-			value: '68.4k',
-			delta: '34% used',
-			kind: 'allocation',
-			description: 'Distribution across system prompt, repository diff, and tool transcripts.',
-			series: [22, 48, 30]
-		}
-	];
-
 	let {
-		insights = DEFAULT_INSIGHTS,
+		insights = [],
 		onSelect,
 		class: className = '',
 		...rest

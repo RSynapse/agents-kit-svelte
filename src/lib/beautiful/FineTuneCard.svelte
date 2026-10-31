@@ -21,45 +21,9 @@
 		class?: string;
 	}
 
-	const DEFAULT_FIELDS: FineTuneField[] = [
-		{
-			id: 'risk-tier',
-			label: 'Risk Tier Policy',
-			value: 'T2 · Worktree Isolated',
-			options: ['T0 · Docs Only', 'T1 · Read-Only Probe', 'T2 · Worktree Isolated', 'T3 · Human Co-sign']
-		},
-		{
-			id: 'thinking-budget',
-			label: 'Thinking Token Budget',
-			value: 16000,
-			min: 2000,
-			max: 64000,
-			step: 2000,
-			suffix: 'tokens per attempt'
-		},
-		{
-			id: 'max-turns',
-			label: 'Max Autonomous Tool Turns',
-			value: 24,
-			min: 4,
-			max: 60,
-			step: 2,
-			suffix: 'turns before checkpoint'
-		},
-		{
-			id: 'temperature',
-			label: 'Sampling Temperature',
-			value: 0.2,
-			min: 0,
-			max: 1,
-			step: 0.05,
-			suffix: 'deterministic bias'
-		}
-	];
-
 	let {
-		title = 'Agent Runtime Parameters',
-		fields = DEFAULT_FIELDS,
+		title = 'Parameters',
+		fields = [],
 		onChange,
 		onApply,
 		onReset,

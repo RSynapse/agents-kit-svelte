@@ -18,37 +18,10 @@
 		class?: string;
 	}
 
-	const DEFAULT_ITEMS: SearchListItem[] = [
-		{
-			id: 'sl-184',
-			label: 'Issue 184 · Isolated git worktree per dispatched Run',
-			description: 'Ready · T2 · Assigned to Claude Code',
-			category: 'issue'
-		},
-		{
-			id: 'sl-file-chat',
-			label: 'src/lib/trailside/TrailsideClaudeChat.svelte',
-			description: 'Interactive workbench shell with context meter and checkpoints',
-			category: 'file'
-		},
-		{
-			id: 'sl-run-92',
-			label: 'Run Attempt 2 · Card 184 verification pass',
-			description: 'Completed in 41s · 19/19 checks green',
-			category: 'run'
-		},
-		{
-			id: 'sl-doc-adr',
-			label: 'docs/engineering/adr/ENG-0009-showcase-scope.md',
-			description: 'Owner decision lifting local worktree execution limits',
-			category: 'doc'
-		}
-	];
-
 	let {
 		value = undefined,
-		items = DEFAULT_ITEMS,
-		placeholder = 'Search issues, files, runs, and ADRs…',
+		items = [],
+		placeholder = 'Search…',
 		onValueChange,
 		onSelect,
 		class: className = '',

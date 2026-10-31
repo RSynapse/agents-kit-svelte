@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { HTMLAttributes } from 'svelte/elements';
+	import type { ComponentProps } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
@@ -169,13 +170,17 @@
 						onIntent?.({ nodeId: node.id, action: 'fix-check', detail: id })}
 				/>
 			{:else if node.component === 'recommendation-card'}
-				<RecommendationCard />
+				{#if typeof node.props.title === 'string'}
+					<RecommendationCard {...node.props as unknown as ComponentProps<typeof RecommendationCard>} />
+				{:else}
+					{@render missingProp('title')}
+				{/if}
 			{:else if node.component === 'diff-table'}
-				<DiffTable />
+				<DiffTable {...node.props as ComponentProps<typeof DiffTable>} />
 			{:else if node.component === 'insight-cards'}
-				<InsightCards />
+				<InsightCards {...node.props as ComponentProps<typeof InsightCards>} />
 			{:else if node.component === 'flowchart'}
-				<Flowchart />
+				<Flowchart {...node.props as ComponentProps<typeof Flowchart>} />
 			{:else if node.component === 'agent-orchestrator'}
 				<AgentOrchestrator />
 			{:else if node.component === 'agent-evaluator'}
@@ -192,12 +197,14 @@
 				{:else}
 					{@render missingProp('path')}
 				{/if}
-			{:else}
+			{:else if node.props.content}
 				<AgentGenerativeSurface
-					content={node.props.content as GeneratedSurfaceContent | undefined}
+					content={node.props.content as GeneratedSurfaceContent}
 					onAction={(act, id) =>
 						onIntent?.({ nodeId: node.id, action: act, detail: id })}
 				/>
+			{:else}
+				{@render missingProp('content')}
 			{/if}
 		</div>
 	{/each}

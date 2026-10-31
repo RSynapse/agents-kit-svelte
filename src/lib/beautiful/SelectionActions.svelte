@@ -19,17 +19,10 @@
 		class?: string;
 	}
 
-	const DEFAULT_ACTIONS: SelectionAction[] = [
-		{ id: 'approve', label: 'Approve selected', tone: 'accent' },
-		{ id: 'rerun', label: 'Re-run in worktree', tone: 'default' },
-		{ id: 'export', label: 'Export patch', tone: 'default' },
-		{ id: 'clear', label: 'Clear', tone: 'danger' }
-	];
-
 	let {
-		selectedText = 'Retries must reauthorize before the idempotency lookup, and the lookup must precede new-intent revision checks.',
-		selectedCount = 3,
-		actions = DEFAULT_ACTIONS,
+		selectedText,
+		selectedCount = 1,
+		actions = [],
 		result = undefined,
 		isWorking = false,
 		onAction,

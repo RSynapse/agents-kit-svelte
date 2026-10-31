@@ -27,44 +27,8 @@
 		class?: string;
 	}
 
-	const DEFAULT_NODES: FlowchartNode[] = [
-		{
-			id: 'node-auth',
-			kind: 'Gate',
-			label: 'Reauthorize Session',
-			detail: 'Verify human session & companion consent',
-			status: 'complete',
-			x: 24,
-			y: 28
-		},
-		{
-			id: 'node-idem',
-			kind: 'Lookup',
-			label: 'Idempotency Check',
-			detail: 'Check prior request outcome before revision guard',
-			status: 'complete',
-			x: 230,
-			y: 28,
-			condition: { field: 'tier', operator: '<=', value: 'T2' }
-		},
-		{
-			id: 'node-run',
-			kind: 'Worktree',
-			label: 'Execute Agent Run',
-			detail: 'Isolated git worktree + atomic journal write',
-			status: 'running',
-			x: 436,
-			y: 28
-		}
-	];
-
-	const DEFAULT_EDGES: FlowchartEdge[] = [
-		{ from: 'node-auth', to: 'node-idem' },
-		{ from: 'node-idem', to: 'node-run' }
-	];
-
 	let {
-		nodes = DEFAULT_NODES,
+		nodes = [],
 		edges = undefined,
 		selectedNodeId = undefined,
 		onSelect,

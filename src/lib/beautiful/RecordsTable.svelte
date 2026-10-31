@@ -33,38 +33,8 @@
 		{ key: 'links', label: 'Links' }
 	];
 
-	const DEFAULT_RECORDS: RecordRow[] = [
-		{
-			id: 'rec-1',
-			name: 'Card 184 · Worktree Isolation',
-			categories: ['runtime', 'T2'],
-			updated: '2m ago',
-			strength: 'Strong',
-			status: 'verified',
-			links: 14
-		},
-		{
-			id: 'rec-2',
-			name: 'Card 191 · Companion Probe',
-			categories: ['cli', 'T1'],
-			updated: '18m ago',
-			strength: 'Verified',
-			status: 'active',
-			links: 9
-		},
-		{
-			id: 'rec-3',
-			name: 'Card 205 · Referee Checklist',
-			categories: ['review', 'T2'],
-			updated: '1h ago',
-			strength: 'Pending',
-			status: 'queued',
-			links: 6
-		}
-	];
-
 	let {
-		records = DEFAULT_RECORDS,
+		records = [],
 		sortKey = undefined,
 		sortDirection = 'asc',
 		selectedIds = undefined,

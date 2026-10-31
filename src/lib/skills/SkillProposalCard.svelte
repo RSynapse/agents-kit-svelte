@@ -5,13 +5,12 @@
 	import { motionDuration } from '../state/motion.svelte';
 	import { diffSkillLines } from '../state/skill-helpers';
 	import { SEGMENT_GROUP_CLASS, badgeClass, pillClass, segmentClass } from '../ui/styles';
-	import { SAMPLE_SKILL_PROPOSAL } from './fixtures';
 	import type { SkillProposal, SkillProposalStatus } from './types';
 
 	type View = 'changes' | 'file';
 
 	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'proposal' | 'status' | 'onSave' | 'onDismiss'> {
-		proposal?: SkillProposal;
+		proposal: SkillProposal;
 		status?: SkillProposalStatus;
 		onSave?: (proposal: SkillProposal) => void;
 		onDismiss?: (proposal: SkillProposal) => void;
@@ -19,7 +18,7 @@
 	}
 
 	let {
-		proposal = SAMPLE_SKILL_PROPOSAL,
+		proposal,
 		status = 'pending',
 		onSave,
 		onDismiss,

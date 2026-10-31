@@ -21,35 +21,8 @@
 
 	const FILTER_TABS: (FilterStatus | 'all')[] = ['all', 'todo', 'progress', 'done'];
 
-	const DEFAULT_ROWS: FilterTableRow[] = [
-		{
-			id: 'ft-1',
-			task: 'Verify idempotency lookup order on retry dispatch',
-			date: 'Oct 30',
-			status: 'done',
-			owner: 'Claude Code · T2',
-			tag: 'contracts'
-		},
-		{
-			id: 'ft-2',
-			task: 'Stream worktree unified diff hunks into review drawer',
-			date: 'Oct 30',
-			status: 'progress',
-			owner: 'Codex · T2',
-			tag: 'ui'
-		},
-		{
-			id: 'ft-3',
-			task: 'Audit companion probe argument arrays against allowlist',
-			date: 'Oct 31',
-			status: 'todo',
-			owner: 'Referee · T1',
-			tag: 'security'
-		}
-	];
-
 	let {
-		rows = DEFAULT_ROWS,
+		rows = [],
 		filter = undefined,
 		onFilterChange,
 		class: className = '',

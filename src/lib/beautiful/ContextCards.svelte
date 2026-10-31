@@ -24,38 +24,8 @@
 		class?: string;
 	}
 
-	const DEFAULT_CHUNKS: ContextChunk[] = [
-		{
-			id: 'ctx-spec',
-			title: 'G0 Browser Read Contract',
-			source: 'docs/specs/browser-read-contract.md',
-			kind: 'file',
-			tokens: 4200,
-			score: 0.96,
-			content: 'Defines sample workspace isolation, provenance badges, and client stream recovery.'
-		},
-		{
-			id: 'ctx-issue',
-			title: 'Issue 184: Worktree isolation guard',
-			source: 'RSynapse/trailside · Issue 184',
-			kind: 'issue',
-			tokens: 1450,
-			score: 0.91,
-			content: 'Each dispatched workflow run executes in a dedicated git worktree with clean status.'
-		},
-		{
-			id: 'ctx-schema',
-			title: 'RunEnvelope JSON Schema',
-			source: 'contracts/g0/schema/run-envelope.json',
-			kind: 'schema',
-			tokens: 980,
-			score: 0.88,
-			content: 'Strict protocol shape validation separated from pure domain decisions.'
-		}
-	];
-
 	let {
-		chunks = DEFAULT_CHUNKS,
+		chunks = [],
 		selectedId = undefined,
 		onSelect,
 		onRemove,

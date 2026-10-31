@@ -6,7 +6,6 @@
 	import { motionDuration } from '../state/motion.svelte';
 	import { rankSkills } from '../state/skill-helpers';
 	import { PROGRESS_TRACK_CLASS, badgeClass, pillClass, progressFillClass } from '../ui/styles';
-	import { SAMPLE_SKILLS } from './fixtures';
 	import { SKILL_SCOPE_META } from './scope';
 	import type { AgentSkill, SkillMatch } from './types';
 
@@ -27,7 +26,7 @@
 	}
 
 	let {
-		skills = SAMPLE_SKILLS,
+		skills = [],
 		prompt = 'Write the release notes for everything that shipped this week',
 		threshold = 0.45,
 		limit = 4,

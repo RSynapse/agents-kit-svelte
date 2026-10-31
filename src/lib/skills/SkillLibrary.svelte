@@ -7,7 +7,6 @@
 	import { motionDuration } from '../state/motion.svelte';
 	import { SEGMENT_GROUP_CLASS, pillClass, segmentClass } from '../ui/styles';
 	import SkillCard from './SkillCard.svelte';
-	import { SAMPLE_SKILLS } from './fixtures';
 	import { SKILL_SCOPE_META } from './scope';
 	import type { AgentSkill, SkillScope } from './types';
 
@@ -28,7 +27,7 @@
 	}
 
 	let {
-		skills = SAMPLE_SKILLS,
+		skills = [],
 		title = 'Skills',
 		activeSkillId = null,
 		detailed = false,
