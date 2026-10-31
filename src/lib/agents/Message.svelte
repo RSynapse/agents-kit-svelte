@@ -24,6 +24,8 @@
 
 <article
 	{id}
+	data-slot="message"
+	data-from={role}
 	data-role={role}
 	class="flex w-full gap-3 {role === 'user' ? 'justify-end' : 'justify-start'} {className}"
 >
@@ -55,12 +57,13 @@
 
 		{#if role === 'user'}
 			<div
+				data-slot="message-content"
 				class="rounded-2xl rounded-tr-sm border border-card-border bg-canvas-secondary px-3.5 py-2.5 text-sm leading-6 text-fg-main"
 			>
 				{@render children()}
 			</div>
 		{:else}
-			<div class="space-y-3.5">
+			<div data-slot="message-content" class="space-y-3.5">
 				{@render children()}
 			</div>
 		{/if}

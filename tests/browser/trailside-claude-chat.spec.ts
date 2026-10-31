@@ -50,6 +50,21 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 			animations: 'disabled'
 		});
 
+		// Verify MessageScroller interactive PreviewRail hover card, container-scoped jump, and Jump to latest
+		const scrollerArticle = page.locator('article[data-component-slug="message-scroller"]');
+		await scrollerArticle.scrollIntoViewIfNeeded();
+		const firstRailTick = scrollerArticle.locator('[data-slot="preview-rail-item"]').first();
+		await expect(firstRailTick).toBeVisible();
+		await firstRailTick.hover();
+		await expect(scrollerArticle.locator('[data-slot="preview-rail-card"]')).toBeVisible();
+		await firstRailTick.click();
+		await expect(scrollerArticle.getByRole('button', { name: /Jump to latest/i })).toBeVisible();
+		await scrollerArticle.screenshot({
+			path: `${ARTIFACT_DIR}/catalogue-message-scroller.png`,
+			animations: 'disabled'
+		});
+		await scrollerArticle.getByRole('button', { name: /Jump to latest/i }).click();
+
 		// Filter to Agents UI Orchestration
 		await page.getByRole('tab', { name: /Agents UI Orchestration/i }).click();
 		await expect(page.getByRole('heading', { name: 'AgentOrchestrator' })).toBeVisible();

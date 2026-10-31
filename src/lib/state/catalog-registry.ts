@@ -369,34 +369,33 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		sveltePath: 'src/lib/agents/MessageScroller.svelte',
 		upstreamSource: 'beUI · components/beui/components/agents/message-scroller.tsx',
 		description:
-			'Auto-pinned conversation scroll container with quick-jump rail and floating Jump to latest pill.',
+			'Auto-pinned conversation scroll container with interactive PreviewRail hover cards, container-scoped jump navigation, and floating Jump to latest pill.',
 		usageSnippet: `<script lang="ts">
   import { MessageScroller, MessageBubble } from 'agents-kit-svelte';
 
-  const items = [
-    { id: 'ms-1', label: 'Prompt #1', role: 'user' as const },
-    { id: 'ms-2', label: 'AK-S Response', role: 'assistant' as const }
+  const turns = [
+    { id: 'scope-q', from: 'user' as const, author: 'You', content: 'What should the first field study include?' },
+    { id: 'scope-a', from: 'assistant' as const, author: 'AK-S Agent', content: 'Start with eight rider interviews and two station walkthroughs.' },
+    { id: 'states-q', from: 'user' as const, author: 'You', content: 'Include wheelchair users and people traveling with luggage.' },
+    { id: 'states-a', from: 'assistant' as const, author: 'AK-S Agent', content: 'Yes. Both groups encounter the same lift bottlenecks and wayfinding gaps.' }
   ];
 </script>
 
 <MessageScroller
-  {items}
-  class="max-h-48 rounded-xl border border-card-border bg-canvas-primary p-4"
+  navigation="rail"
+  followOutput={true}
+  class="h-[420px] rounded-xl border border-card-border bg-card-bg"
 >
-  <div class="space-y-3">
+  {#each turns as turn (turn.id)}
     <MessageBubble
-      variant="tint"
-      align="end"
-      author="gregory.winkler"
-      text="Verify auto-follow scroll rail behavior."
+      id={turn.id}
+      variant={turn.from === 'user' ? 'solid' : 'soft'}
+      align={turn.from === 'user' ? 'end' : 'start'}
+      author={turn.author}
+      collapsible={false}
+      text={turn.content}
     />
-    <MessageBubble
-      variant="soft"
-      align="start"
-      author="AK-S Agent"
-      text="MessageScroller tracks scroll distance from the bottom edge and pins live streaming updates."
-    />
-  </div>
+  {/each}
 </MessageScroller>`
 	},
 	{

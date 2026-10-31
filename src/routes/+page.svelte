@@ -124,6 +124,151 @@
 	let heroNotice = $state('');
 	let ready = $state(false);
 
+	interface ScrollerTurn {
+		id: string;
+		from: 'user' | 'assistant';
+		author: string;
+		timestamp: string;
+		content: string;
+		streaming?: boolean;
+	}
+
+	let scrollerTurns = $state<ScrollerTurn[]>([
+		{
+			id: 'scope-question',
+			from: 'user',
+			author: 'You',
+			timestamp: '20:41',
+			content: 'What should the first field study include?'
+		},
+		{
+			id: 'scope-answer',
+			from: 'assistant',
+			author: 'AK-S Agent',
+			timestamp: '20:41',
+			content: 'Start with eight rider interviews and two station walkthroughs across peak hours.'
+		},
+		{
+			id: 'states-question',
+			from: 'user',
+			author: 'You',
+			timestamp: '20:42',
+			content: 'Include wheelchair users and people traveling with luggage.'
+		},
+		{
+			id: 'states-answer',
+			from: 'assistant',
+			author: 'AK-S Agent',
+			timestamp: '20:42',
+			content: 'Yes. Both groups encounter the same lift bottlenecks and platform wayfinding gaps.'
+		},
+		{
+			id: 'evidence-question',
+			from: 'user',
+			author: 'You',
+			timestamp: '20:44',
+			content: 'How should we present the synthesis findings?'
+		},
+		{
+			id: 'evidence-answer',
+			from: 'assistant',
+			author: 'AK-S Agent',
+			timestamp: '20:44',
+			content:
+				'Keep each finding beside the verbatim interview quote or field note that supports it.'
+		},
+		{
+			id: 'approval-question',
+			from: 'user',
+			author: 'You',
+			timestamp: '20:46',
+			content: 'What needs confirmation before the field study begins?'
+		},
+		{
+			id: 'approval-answer',
+			from: 'assistant',
+			author: 'AK-S Agent',
+			timestamp: '20:46',
+			content:
+				'Confirm participant consent language, audio recording scope, and how station coordinates may be shared.'
+		},
+		{
+			id: 'summary-question',
+			from: 'user',
+			author: 'You',
+			timestamp: '20:48',
+			content: 'Can the transcript stay easy to navigate as turns grow?'
+		},
+		{
+			id: 'summary-answer',
+			from: 'assistant',
+			author: 'AK-S Agent',
+			timestamp: '20:48',
+			content:
+				'Hover the right-hand preview rail to inspect any turn and click a tick to jump smoothly without losing your place.'
+		}
+	]);
+	let scrollerInput = $state('');
+	let scrollerStreaming = $state(false);
+
+	/**
+	 * Appends a user turn to the MessageScroller showcase and streams a simulated assistant reply.
+	 *
+	 * @param rawPrompt - User prompt submitted from the showcase composer.
+	 */
+	function submitScrollerTurn(rawPrompt: string): void {
+		const trimmed = rawPrompt.trim();
+		if (!trimmed || scrollerStreaming) return;
+
+		const turnNum = scrollerTurns.length + 1;
+		const userId = `scroller-user-${turnNum}`;
+		const assistantId = `scroller-assistant-${turnNum + 1}`;
+		const fullReply =
+			"I'll prepare the interview guide, flag unresolved consent questions, and keep every synthesis claim linked to its source.";
+
+		scrollerTurns = [
+			...scrollerTurns,
+			{
+				id: userId,
+				from: 'user',
+				author: 'You',
+				timestamp: 'Now',
+				content: trimmed
+			},
+			{
+				id: assistantId,
+				from: 'assistant',
+				author: 'AK-S Agent',
+				timestamp: 'Streaming',
+				content: '',
+				streaming: true
+			}
+		];
+		scrollerInput = '';
+		scrollerStreaming = true;
+
+		let charIdx = 0;
+		const timer = setInterval(() => {
+			charIdx = Math.min(fullReply.length, charIdx + 6);
+			const nextSlice = fullReply.slice(0, charIdx);
+			const done = charIdx >= fullReply.length;
+			scrollerTurns = scrollerTurns.map((t) =>
+				t.id === assistantId
+					? {
+							...t,
+							content: nextSlice,
+							timestamp: done ? 'Now' : 'Streaming',
+							streaming: !done
+						}
+					: t
+			);
+			if (done) {
+				clearInterval(timer);
+				scrollerStreaming = false;
+			}
+		}, 35);
+	}
+
 	$effect(() => {
 		ready = true;
 	});
@@ -918,28 +1063,55 @@ svelte-check found 0 errors and 0 warnings
 									/>
 								</div>
 							{:else if item.slug === 'message-scroller'}
-								<MessageScroller
-									items={[
-										{ id: 'ms-1', label: 'Prompt #1', role: 'user' },
-										{ id: 'ms-2', label: 'AK-S Response', role: 'assistant' }
-									]}
-									class="max-h-48 rounded-xl border border-card-border bg-card-bg p-4"
+								<div
+									class="mx-auto flex h-[440px] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-card-border bg-card-bg shadow-[var(--shadow-card)]"
 								>
-									<div class="space-y-3">
-										<MessageBubble
-											variant="tint"
-											align="end"
-											author="gregory.winkler"
-											text="Verify auto-follow scroll rail behavior."
+									<MessageScroller
+										navigation="rail"
+										streaming={scrollerStreaming}
+										busy={scrollerStreaming}
+										class="min-h-0 flex-1"
+									>
+										{#each scrollerTurns as turn (turn.id)}
+											<MessageBubble
+												id={turn.id}
+												variant={turn.from === 'user' ? 'solid' : 'soft'}
+												align={turn.from === 'user' ? 'end' : 'start'}
+												author={turn.author}
+												avatar={turn.from === 'user' ? 'YO' : 'AK'}
+												timestamp={turn.timestamp}
+												status={turn.streaming ? 'streaming' : 'delivered'}
+												collapsible={false}
+												text={turn.content || 'Preparing response…'}
+											/>
+										{/each}
+									</MessageScroller>
+
+									<form
+										onsubmit={(event) => {
+											event.preventDefault();
+											submitScrollerTurn(
+												scrollerInput || 'Draft the synthesis checklist for station interviews.'
+											);
+										}}
+										class="flex shrink-0 items-center gap-2 border-t border-card-border bg-canvas-secondary px-3 py-2.5"
+									>
+										<input
+											type="text"
+											bind:value={scrollerInput}
+											aria-label="Send a message to test MessageScroller auto-follow"
+											placeholder="Ask about the study or click Stream turn to test auto-follow…"
+											class="h-8 min-w-0 flex-1 rounded-lg border border-card-border bg-card-bg px-3 text-xs text-fg-main outline-none focus:border-accent-primary"
 										/>
-										<MessageBubble
-											variant="soft"
-											align="start"
-											author="AK-S Agent"
-											text="MessageScroller tracks scroll distance from the bottom edge and pins live streaming updates."
-										/>
-									</div>
-								</MessageScroller>
+										<button
+											type="submit"
+											disabled={scrollerStreaming}
+											class="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg bg-fg-main px-3 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
+										>
+											<span>{scrollerStreaming ? 'Streaming…' : 'Stream turn'}</span>
+										</button>
+									</form>
+								</div>
 							{:else if item.slug === 'streaming-response'}
 								<StreamingResponse
 									status="complete"

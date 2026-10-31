@@ -5,6 +5,7 @@
 	export type MessageBubbleAlign = 'start' | 'end';
 
 	interface Props {
+		id?: string;
 		author?: string;
 		avatar?: string;
 		timestamp?: string;
@@ -26,6 +27,7 @@
 		'Completed verification on the isolated worktree branch. All 19 unit and contract suites pass with zero regressions. Expanded logs include full unified diff hunks, schema validation traces, and referee sign-off details.';
 
 	let {
+		id,
 		author = 'AK-S Agent',
 		avatar = 'AK',
 		timestamp = '14:32 UTC',
@@ -101,7 +103,9 @@
 </script>
 
 <div
-	data-slot="message-bubble"
+	{id}
+	data-slot="message"
+	data-from={align === 'end' ? 'user' : 'assistant'}
 	data-align={align}
 	data-variant={variant}
 	class="flex w-full gap-2.5 {align === 'end' ? 'flex-row-reverse' : 'flex-row'} {className}"
