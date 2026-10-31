@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
+	import { pillClass } from '../ui/styles';
 	import { Check, ChevronDown, Copy, FileCode } from '@lucide/svelte';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import { parseUnifiedDiff } from '../state/chat-helpers';
@@ -56,7 +56,7 @@
 <div
 	data-state={status}
 	aria-busy={status === 'streaming'}
-	class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm {className}"
 >
 	<div class="flex h-10 items-center gap-2 px-3">
 		<button
@@ -88,7 +88,7 @@
 			type="button"
 			aria-label={copied ? 'Copied diff' : 'Copy diff'}
 			onclick={handleCopy}
-			class={buttonClass('ghost', 'icon-sm')}
+			class={pillClass('ghost', 'icon-sm')}
 		>
 			{#if copied}
 				<Check aria-hidden="true" class="size-3.5 text-status-success" />
@@ -102,7 +102,7 @@
 		<div
 			role={status === 'streaming' ? 'log' : undefined}
 			aria-live={status === 'streaming' ? 'polite' : undefined}
-			class="overflow-auto border-t border-canvas-border bg-canvas-secondary/60 py-1.5 font-mono text-xs leading-5"
+			class="overflow-auto border-t border-chat-border/70 bg-chat-surface/60 py-1.5 font-mono text-xs leading-5"
 			style="max-height: {maxHeight}px;"
 		>
 			<div class="min-w-max">
@@ -114,7 +114,7 @@
 							: line.kind === 'delete'
 								? 'bg-diff-del-bg text-diff-del-fg'
 								: line.kind === 'hunk'
-									? 'bg-canvas-secondary text-fg-light'
+									? 'bg-chat-surface text-fg-light'
 									: 'text-fg-main'}"
 					>
 						<span class="select-none pr-1.5 text-right tabular-nums text-fg-light/60">

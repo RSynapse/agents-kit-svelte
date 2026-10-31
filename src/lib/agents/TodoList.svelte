@@ -45,7 +45,7 @@
 	});
 </script>
 
-<div class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm {className}">
 	<button
 		type="button"
 		aria-expanded={isOpen}
@@ -103,14 +103,14 @@
 	</div>
 
 	<AgentDisclosure id={panelId} open={isOpen}>
-		<ol class="space-y-0.5 border-t border-canvas-border px-2 py-2">
+		<ol class="space-y-0.5 border-t border-chat-border/70 px-2 py-2">
 			{#each items as item (item.id)}
 				<li
 					animate:flip={{ duration: motionDuration(220), easing: cubicOut }}
 					in:rise
-					class="flex min-h-9 items-start gap-2.5 rounded-md px-1.5 py-1 text-sm leading-5 transition-colors {item.status ===
+					class="flex min-h-9 items-start gap-2.5 rounded-[10px] px-1.5 py-1 text-sm leading-5 transition-colors {item.status ===
 					'in-progress'
-						? 'bg-canvas-secondary/60'
+						? 'bg-chat-surface/60'
 						: ''}"
 				>
 					{#key item.status}

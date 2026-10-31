@@ -11,8 +11,9 @@ export type UiTone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger';
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'accent';
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'icon-xs' | 'icon-sm' | 'icon';
 
-const BUTTON_BASE =
-	'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-control font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0';
+const BUTTON_CORE =
+	'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0';
+const BUTTON_BASE = `${BUTTON_CORE} rounded-control`;
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
 	primary: 'bg-fg-main text-fg-inverse hover:bg-fg-main/88',
@@ -144,5 +145,66 @@ export const SEGMENT_GROUP_CLASS = 'inline-flex items-center gap-0.5 rounded-[10
 export function toggleButtonClass(active: boolean, size: ButtonSize = 'sm', extra = ''): string {
 	return `${BUTTON_BASE} ${BUTTON_SIZES[size]} ${
 		active ? 'bg-canvas-secondary text-fg-main' : 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'
+	} ${extra}`.trim();
+}
+
+/**
+ * Soft chat language: warm paper surfaces, pill controls and diffuse shadows,
+ * used by the conversation components (composer, messages, tool cards).
+ */
+export const SOFT = {
+	card: 'overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm',
+	panel: 'rounded-[12px] bg-chat-surface',
+	header: 'px-4 pt-3.5 pb-3',
+	footer: 'border-t border-chat-border/70 bg-chat-surface/60 px-4 py-3',
+	chip: 'inline-flex items-center gap-1.5 rounded-full bg-chat-user px-2.5 py-0.5 text-xs text-fg-main [&_svg]:size-3',
+	avatar:
+		'inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-chat-accent-subtle text-chat-accent [&_svg]:size-3.5'
+} as const;
+
+const PILL_VARIANTS: Record<ButtonVariant, string> = {
+	primary: 'bg-fg-main text-fg-inverse hover:bg-fg-main/85',
+	accent: 'bg-chat-accent text-white hover:bg-chat-accent/90',
+	secondary: 'border border-chat-border bg-card-bg text-fg-main hover:bg-chat-surface',
+	ghost: 'text-fg-light hover:bg-chat-user/70 hover:text-fg-main',
+	danger: 'border border-chat-border bg-card-bg text-status-danger hover:bg-status-danger-subtle'
+};
+
+const PILL_SIZES: Record<ButtonSize, string> = {
+	xs: 'h-6 px-2.5 text-xs [&_svg]:size-3',
+	sm: 'h-7 px-3 text-xs [&_svg]:size-3.5',
+	md: 'h-8 px-3.5 text-[13px] [&_svg]:size-3.5',
+	'icon-xs': 'size-6 [&_svg]:size-3.5',
+	'icon-sm': 'size-7 [&_svg]:size-3.5',
+	icon: 'size-8 [&_svg]:size-4'
+};
+
+/**
+ * Builds the class list for a fully rounded "pill" button in the soft chat style.
+ *
+ * @param variant - Visual weight (default `secondary`).
+ * @param size - Height and padding preset (default `sm`).
+ * @param extra - Additional classes appended last.
+ * @returns Space-separated class string.
+ */
+export function pillClass(
+	variant: ButtonVariant = 'secondary',
+	size: ButtonSize = 'sm',
+	extra = ''
+): string {
+	return `${BUTTON_CORE} rounded-full ${PILL_VARIANTS[variant]} ${PILL_SIZES[size]} ${extra}`.trim();
+}
+
+/**
+ * Builds the class list for a soft pill toggle (feedback, filters inside chat).
+ *
+ * @param active - Whether the toggle is on.
+ * @param size - Height and padding preset (default `sm`).
+ * @param extra - Additional classes appended last.
+ * @returns Space-separated class string.
+ */
+export function togglePillClass(active: boolean, size: ButtonSize = 'sm', extra = ''): string {
+	return `${BUTTON_CORE} rounded-full ${PILL_SIZES[size]} ${
+		active ? 'bg-chat-user text-fg-main' : 'text-fg-light hover:bg-chat-user/70 hover:text-fg-main'
 	} ${extra}`.trim();
 }

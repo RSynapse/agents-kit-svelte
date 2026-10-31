@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
+	import { pillClass } from '../ui/styles';
 	import { Check, ChevronDown, ShieldCheck, X } from '@lucide/svelte';
 	import { fade } from 'svelte/transition';
 	import AgentDisclosure from './AgentDisclosure.svelte';
@@ -97,19 +97,19 @@
 	aria-label="{tool} tool approval"
 	data-state={activeStatus}
 	aria-busy={isBusy}
-	class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg ak-shadow-soft text-sm {className}"
 >
 	<div class="flex items-start gap-3 p-4">
 		{#key activeStatus}
 			<span
 				in:fade={{ duration: motionDuration(140) }}
 				aria-hidden="true"
-				class="flex size-8 shrink-0 items-center justify-center rounded-md border border-card-border bg-card-bg {activeStatus ===
+				class="flex size-9 shrink-0 items-center justify-center rounded-full bg-chat-surface {activeStatus ===
 					'approved' || activeStatus === 'complete'
 					? 'text-status-success'
 					: activeStatus === 'denied' || activeStatus === 'error'
 						? 'text-status-danger'
-						: 'text-fg-light'}"
+						: 'text-chat-accent'}"
 			>
 				{#if activeStatus === 'approved' || activeStatus === 'complete'}
 					<Check class="size-4" />
@@ -131,12 +131,12 @@
 				<span
 					role="status"
 					aria-live="polite"
-					class="inline-flex shrink-0 items-center gap-1.5 rounded-chip px-1.5 py-px text-[11px] font-medium {activeStatus ===
+					class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium {activeStatus ===
 						'approved' || activeStatus === 'complete'
 						? 'bg-status-success-subtle text-status-success'
 						: activeStatus === 'denied' || activeStatus === 'error'
 							? 'bg-status-danger-subtle text-status-danger'
-							: 'bg-canvas-secondary text-fg-light'}"
+							: 'bg-chat-surface text-fg-light'}"
 				>
 					<span
 						aria-hidden="true"
@@ -152,7 +152,7 @@
 
 			{#if summary}
 				<p class="mt-1 leading-relaxed text-fg-light">
-					<code class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-xs text-fg-main">
+					<code class="rounded bg-chat-surface px-1.5 py-0.5 font-mono text-xs text-fg-main">
 						{summary}
 					</code>
 				</p>
@@ -165,7 +165,7 @@
 						aria-expanded={isOpen}
 						aria-controls={panelId}
 						onclick={() => (isOpen = !isOpen)}
-						class={buttonClass('ghost', 'sm', 'group')}
+						class={pillClass('ghost', 'sm', 'group')}
 					>
 						<span>{isOpen ? 'Hide details' : 'View details'}</span>
 						<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-150 {isOpen ? 'rotate-180' : ''}" />
@@ -173,7 +173,7 @@
 
 					<AgentDisclosure id={panelId} open={isOpen}>
 						<dl
-							class="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-md border border-card-border bg-canvas-secondary/60 px-3 py-2 text-xs"
+							class="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-[10px] border border-chat-border bg-chat-surface/60 px-3 py-2 text-xs"
 						>
 							{#each params as param (param.label)}
 								<dt class="font-medium text-fg-light">{param.label}</dt>
@@ -193,13 +193,13 @@
 	{#if isWaiting}
 		<div
 			in:rise
-			class="flex flex-wrap items-center justify-end gap-2 border-t border-canvas-border bg-canvas-secondary/40 px-4 py-2.5"
+			class="flex flex-wrap items-center justify-end gap-2 border-t border-chat-border/70 bg-chat-surface/40 px-4 py-2.5"
 		>
 			<button
 				type="button"
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleDeny}
-				class={buttonClass('secondary', 'md')}
+				class={pillClass('secondary', 'md')}
 			>
 				{denyLabel}
 			</button>
@@ -207,7 +207,7 @@
 				type="button"
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleAlwaysApprove}
-				class={buttonClass('secondary', 'md')}
+				class={pillClass('secondary', 'md')}
 			>
 				{alwaysApproveLabel}
 			</button>
@@ -215,7 +215,7 @@
 				type="button"
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleApprove}
-				class={buttonClass('primary', 'md')}
+				class={pillClass('primary', 'md')}
 			>
 				{approveLabel}
 			</button>

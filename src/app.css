@@ -37,6 +37,24 @@
 	--color-terminal-fg-val: oklch(0.945 0.004 247.839);
 	--color-terminal-muted-val: oklch(0.685 0.01 260.731);
 
+	/* Soft chat surface: warm paper tones, rounder shapes, diffuse shadows */
+	--color-chat-surface-val: oklch(0.982 0.004 84);
+	--color-chat-user-val: oklch(0.948 0.009 78);
+	--color-chat-border-val: oklch(0.905 0.009 78);
+	--color-chat-accent-val: oklch(0.665 0.135 42);
+	--color-chat-accent-subtle-val: oklch(0.95 0.025 50);
+	--shadow-soft:
+		0 1px 2px 0 oklch(0.35 0.02 60 / 0.05),
+		0 6px 20px -4px oklch(0.35 0.02 60 / 0.07),
+		0 16px 40px -12px oklch(0.35 0.02 60 / 0.08);
+	--shadow-soft-sm:
+		0 1px 2px 0 oklch(0.35 0.02 60 / 0.05),
+		0 3px 10px -4px oklch(0.35 0.02 60 / 0.06);
+	--shadow-soft-focus:
+		0 1px 2px 0 oklch(0.35 0.02 60 / 0.06),
+		0 8px 28px -6px oklch(0.35 0.02 60 / 0.12),
+		0 0 0 4px oklch(0.665 0.135 42 / 0.08);
+
 	/* Multi-layered hairline elevation shadows from upstream beautiful-ui.css */
 	--shadow-card:
 		0 18px 47px 0 oklch(0 0 0 / 0.025),
@@ -79,6 +97,22 @@
 	--color-terminal-fg-val: oklch(0.945 0.004 247.839);
 	--color-terminal-muted-val: oklch(0.685 0.01 260.731);
 
+	--color-chat-surface-val: oklch(0.205 0.005 70);
+	--color-chat-user-val: oklch(0.285 0.007 70);
+	--color-chat-border-val: oklch(0.33 0.008 70);
+	--color-chat-accent-val: oklch(0.72 0.13 45);
+	--color-chat-accent-subtle-val: oklch(0.3 0.04 45);
+	--shadow-soft:
+		0 1px 2px 0 oklch(0 0 0 / 0.3),
+		0 8px 24px -6px oklch(0 0 0 / 0.35);
+	--shadow-soft-sm:
+		0 1px 2px 0 oklch(0 0 0 / 0.3),
+		0 3px 10px -4px oklch(0 0 0 / 0.3);
+	--shadow-soft-focus:
+		0 1px 2px 0 oklch(0 0 0 / 0.3),
+		0 10px 28px -6px oklch(0 0 0 / 0.45),
+		0 0 0 4px oklch(0.72 0.13 45 / 0.12);
+
 	--shadow-card:
 		0 18px 47px 0 oklch(0 0 0 / 0.28),
 		0 7.5px 19px 0 oklch(0 0 0 / 0.18),
@@ -97,6 +131,15 @@
 	--radius-control: 8px;
 	--radius-card: 10px;
 	--radius-window: 14px;
+	--radius-soft: 16px;
+	--radius-bubble: 20px;
+	--radius-composer: 26px;
+
+	--color-chat-surface: var(--color-chat-surface-val);
+	--color-chat-user: var(--color-chat-user-val);
+	--color-chat-border: var(--color-chat-border-val);
+	--color-chat-accent: var(--color-chat-accent-val);
+	--color-chat-accent-subtle: var(--color-chat-accent-subtle-val);
 
 	--color-canvas-primary: var(--color-canvas-primary-val);
 	--color-canvas-secondary: var(--color-canvas-secondary-val);
@@ -188,6 +231,44 @@
 
 .ak-shadow-card {
 	box-shadow: var(--shadow-card);
+}
+
+.ak-shadow-soft {
+	box-shadow: var(--shadow-soft);
+}
+
+.ak-shadow-soft-sm {
+	box-shadow: var(--shadow-soft-sm);
+}
+
+/* Soft composer: lifts and glows faintly while focused */
+.ak-soft-focus {
+	box-shadow: var(--shadow-soft);
+	transition:
+		box-shadow 220ms ease,
+		border-color 220ms ease;
+}
+
+.ak-soft-focus:focus-within {
+	box-shadow: var(--shadow-soft-focus);
+}
+
+/* Slow, calm rotation for the thinking spark */
+@keyframes ak-spark {
+	0% {
+		transform: rotate(0deg) scale(1);
+	}
+	50% {
+		transform: rotate(180deg) scale(0.86);
+	}
+	100% {
+		transform: rotate(360deg) scale(1);
+	}
+}
+
+.ak-spark {
+	animation: ak-spark 2.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+	transform-origin: center;
 }
 
 .ak-shadow-btn {

@@ -52,18 +52,34 @@
 <span
 	role="status"
 	aria-label="{label}, in progress"
-	class="inline-flex items-center gap-2.5 font-mono text-xs text-fg-light {className}"
+	class="inline-flex items-center gap-2.5 rounded-full bg-chat-surface py-1 pr-3 pl-2 text-xs text-fg-light {className}"
 >
 	<span aria-hidden="true" class="grid size-4 shrink-0 grid-cols-3 gap-[2px]">
 		{#each GRID_DELAYS as delay (delay)}
 			<span
-				class="rounded-[1px] bg-accent-primary animate-pulse"
+				class="ak-progress-cell rounded-full bg-chat-accent"
 				style="animation-delay: {delay}ms;"
 			></span>
 		{/each}
 	</span>
-	<span class="font-sans font-medium text-fg-main">{label}</span>
+	<span class="font-medium text-fg-main">{label}</span>
 	<span aria-hidden="true" class="tabular-nums text-fg-light">
 		{formatElapsed(displayedElapsed)}
 	</span>
 </span>
+
+<style>
+	@keyframes ak-progress-cell {
+		0%,
+		100% {
+			opacity: 0.25;
+		}
+		50% {
+			opacity: 1;
+		}
+	}
+
+	.ak-progress-cell {
+		animation: ak-progress-cell 1.4s ease-in-out infinite;
+	}
+</style>

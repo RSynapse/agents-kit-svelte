@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { rise } from '../state/motion.svelte';
-	import { buttonClass } from '../ui/styles';
+	import { pillClass } from '../ui/styles';
 	import { ArrowDown } from '@lucide/svelte';
 	import { untrack, type Snippet } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -540,7 +540,7 @@
 		{#if canScrollUp}
 			<div
 				aria-hidden="true"
-				class="pointer-events-none sticky top-0 right-0 left-0 z-10 h-4 bg-gradient-to-b from-canvas-primary/80 to-transparent"
+				class="pointer-events-none sticky top-0 right-0 left-0 z-10 h-4 bg-gradient-to-b from-chat-surface to-transparent"
 			></div>
 		{/if}
 
@@ -550,7 +550,7 @@
 			aria-live="polite"
 			aria-relevant="additions text"
 			aria-busy={busy || streaming}
-			class="space-y-5 px-4 py-5 sm:px-6 {contentClass}"
+			class="mx-auto w-full max-w-3xl space-y-7 px-5 py-6 sm:px-8 {contentClass}"
 		>
 			{@render children()}
 		</div>
@@ -602,11 +602,11 @@
 			>
 				<div
 					data-slot="preview-rail-card"
-					class="overflow-hidden rounded-window border border-card-border bg-card-bg p-3 shadow-[var(--shadow-card)]"
+					class="overflow-hidden rounded-soft border border-chat-border bg-card-bg p-3 ak-shadow-soft"
 				>
 					<div class="mb-1 flex items-center justify-between gap-2">
 						<span
-							class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] font-medium text-fg-light"
+							class="rounded-full bg-chat-user px-2 py-px text-[10px] font-medium text-fg-light"
 						>
 							{activePreviewItem.role === 'user' ? 'User Prompt' : 'Agent Turn'}
 						</span>
@@ -638,7 +638,7 @@
 			type="button"
 			transition:rise={{ y: 4 }}
 			onclick={() => scrollToEnd('smooth')}
-			class={buttonClass('secondary', 'sm', 'absolute bottom-3 left-1/2 z-20')}
+			class={pillClass('secondary', 'sm', 'absolute bottom-3 left-1/2 z-20 -translate-x-1/2 ak-shadow-soft')}
 		>
 			<ArrowDown aria-hidden="true" class="size-3" />
 			<span>Jump to latest</span>

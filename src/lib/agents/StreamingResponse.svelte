@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass, toggleButtonClass } from '../ui/styles';
+	import { pillClass, togglePillClass } from '../ui/styles';
 	import { Check, Copy, RefreshCw, ThumbsDown, ThumbsUp } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import Citations from './Citations.svelte';
@@ -55,7 +55,7 @@
 					type="button"
 					aria-label={copied ? 'Copied response' : 'Copy response'}
 					onclick={handleCopy}
-					class={buttonClass('ghost', 'sm')}
+					class={pillClass('ghost', 'sm')}
 				>
 					{#if copied}
 						<Check aria-hidden="true" class="size-3.5 text-status-success" />
@@ -71,7 +71,7 @@
 					type="button"
 					aria-label="Retry response"
 					onclick={onRetry}
-					class={buttonClass('ghost', 'sm')}
+					class={pillClass('ghost', 'sm')}
 				>
 					<RefreshCw aria-hidden="true" class="size-3.5" />
 					<span>Retry</span>
@@ -82,7 +82,7 @@
 				aria-label="Helpful"
 				aria-pressed={feedback === 'up'}
 				onclick={() => (feedback = feedback === 'up' ? null : 'up')}
-				class={toggleButtonClass(feedback === 'up', 'icon-sm')}
+				class={togglePillClass(feedback === 'up', 'icon-sm')}
 			>
 				<ThumbsUp aria-hidden="true" class="size-3.5" />
 			</button>
@@ -91,7 +91,7 @@
 				aria-label="Not helpful"
 				aria-pressed={feedback === 'down'}
 				onclick={() => (feedback = feedback === 'down' ? null : 'down')}
-				class={toggleButtonClass(feedback === 'down', 'icon-sm')}
+				class={togglePillClass(feedback === 'down', 'icon-sm')}
 			>
 				<ThumbsDown aria-hidden="true" class="size-3.5" />
 			</button>

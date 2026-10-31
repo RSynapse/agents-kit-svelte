@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
+	import { pillClass } from '../ui/styles';
 	import { Check, Code, Copy } from '@lucide/svelte';
 	interface Props {
 		code: string;
@@ -44,7 +44,7 @@
 <div
 	data-state={status}
 	aria-busy={status === 'streaming'}
-	class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm {className}"
 >
 	<div class="flex h-10 items-center gap-2 px-3">
 		<Code aria-hidden="true" class="size-4 shrink-0 text-fg-light" />
@@ -52,7 +52,7 @@
 		{#if filename}
 			<code class="min-w-0 truncate font-mono text-xs text-fg-main">{filename}</code>
 		{/if}
-		<span class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[11px] text-fg-light">
+		<span class="rounded bg-chat-surface px-1.5 py-0.5 font-mono text-[11px] text-fg-light">
 			{language}
 		</span>
 
@@ -67,7 +67,7 @@
 				type="button"
 				aria-label={copied ? 'Copied code' : 'Copy code'}
 				onclick={handleCopy}
-				class={buttonClass('ghost', 'icon-sm')}
+				class={pillClass('ghost', 'icon-sm')}
 			>
 				{#if copied}
 					<Check aria-hidden="true" class="size-3.5 text-status-success" />
@@ -79,7 +79,7 @@
 	</div>
 
 	<div
-		class="overflow-auto border-t border-canvas-border bg-canvas-secondary/60 py-2 font-mono text-xs leading-5 text-fg-main"
+		class="overflow-auto border-t border-chat-border/70 bg-chat-surface/60 py-2 font-mono text-xs leading-5 text-fg-main"
 		style="max-height: {maxHeight}px;"
 	>
 		<div class="min-w-max">

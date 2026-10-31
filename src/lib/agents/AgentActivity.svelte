@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
+	import { pillClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
 	import { ChevronDown, FileText, Globe, Pencil, Search, SquareTerminal, Wrench } from '@lucide/svelte';
@@ -77,11 +77,11 @@
 		aria-expanded={isOpen}
 		aria-controls={panelId}
 		onclick={() => (isOpen = !isOpen)}
-		class={buttonClass('ghost', 'sm', 'group')}
+		class={pillClass('ghost', 'sm', 'group')}
 	>
 		<span>
 			{#if status === 'working'}
-				<ThinkingShimmer label={resolvedTitle} />
+				<ThinkingShimmer label={resolvedTitle} spark />
 			{:else}
 				{resolvedTitle}
 			{/if}
@@ -104,7 +104,7 @@
 	</button>
 
 	<AgentDisclosure id={panelId} open={isOpen}>
-		<ol class="mt-2 space-y-2.5 border-l border-canvas-border pl-3.5">
+		<ol class="mt-2 space-y-2.5 border-l border-chat-border/70 pl-3.5">
 			{#each items as item (item.id)}
 				<li
 					animate:flip={{ duration: motionDuration(200), easing: cubicOut }}
@@ -140,7 +140,7 @@
 
 							{#if item.target}
 								<span
-									class="inline-flex min-w-0 max-w-full items-center gap-2 rounded-chip bg-canvas-secondary px-1.5 py-0.5 font-mono text-xs text-fg-main"
+									class="inline-flex min-w-0 max-w-full items-center gap-2 rounded-chip bg-chat-surface px-1.5 py-0.5 font-mono text-xs text-fg-main"
 								>
 									<span class="truncate">{item.target}</span>
 									{#if item.type === 'tool' && (item.additions !== undefined || item.deletions !== undefined)}

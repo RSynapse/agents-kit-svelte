@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
+	import { pillClass } from '../ui/styles';
 	import { Check, ChevronDown, Copy, SquareTerminal } from '@lucide/svelte';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import type { ToolResultStatus } from '../types';
@@ -52,7 +52,7 @@
 <div
 	data-state={status}
 	aria-busy={status === 'running'}
-	class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm {className}"
 >
 	<div class="flex h-10 items-center gap-2 px-3">
 		<button
@@ -76,7 +76,7 @@
 			<span class="font-medium text-fg-main">{tool}</span>
 
 			{#if summary}
-				<code class="min-w-0 truncate rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-xs text-fg-light">
+				<code class="min-w-0 truncate rounded bg-chat-surface px-1.5 py-0.5 font-mono text-xs text-fg-light">
 					{summary}
 				</code>
 			{/if}
@@ -95,7 +95,7 @@
 				<button
 					type="button"
 					onclick={onRetry}
-					class={buttonClass('ghost', 'sm')}
+					class={pillClass('ghost', 'sm')}
 				>
 					Retry
 				</button>
@@ -104,7 +104,7 @@
 				type="button"
 				aria-label={copied ? 'Copied output' : 'Copy output'}
 				onclick={handleCopy}
-				class={buttonClass('ghost', 'icon-sm')}
+				class={pillClass('ghost', 'icon-sm')}
 			>
 				{#if copied}
 					<Check aria-hidden="true" class="size-3.5 text-status-success" />
@@ -119,7 +119,7 @@
 		<div
 			role={status === 'running' ? 'log' : undefined}
 			aria-live={status === 'running' ? 'polite' : undefined}
-			class="max-h-56 overflow-auto border-t border-canvas-border bg-terminal-bg px-3.5 py-2.5 font-mono text-xs leading-5 text-terminal-fg"
+			class="max-h-56 overflow-auto border-t border-chat-border/70 bg-terminal-bg px-3.5 py-2.5 font-mono text-xs leading-5 text-terminal-fg"
 		>
 			<pre class="m-0 whitespace-pre-wrap break-words">{output}</pre>
 		</div>

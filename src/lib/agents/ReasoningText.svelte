@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Sparkle } from '@lucide/svelte';
 	interface Props {
 		phrases?: string[];
 		interval?: number;
@@ -38,11 +39,8 @@
 <span
 	role="status"
 	aria-live="polite"
-	class="inline-flex items-center gap-2 text-sm font-medium text-fg-light {className}"
+	class="inline-flex items-center gap-2 text-[15px] font-medium text-fg-light {className}"
 >
-	<span
-		aria-hidden="true"
-		class="inline-block size-2 rounded-full bg-accent-primary ak-breathe"
-	></span>
+	<Sparkle aria-hidden="true" class="ak-spark size-3.5 fill-current text-chat-accent" />
 	<span class="ak-shimmer-text">{activePhrase}…</span>
 </span>

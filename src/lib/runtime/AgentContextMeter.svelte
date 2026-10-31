@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
+	import { pillClass } from '../ui/styles';
 	import { Spring, prefersReducedMotion } from 'svelte/motion';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import { computeContextMeter, formatCompactTokens } from '../state/chat-helpers';
@@ -44,10 +44,10 @@
 		aria-expanded={isOpen}
 		aria-controls="agent-context-meter-panel"
 		onclick={() => (isOpen = !isOpen)}
-		class={buttonClass('secondary', 'sm')}
+		class={pillClass('secondary', 'sm')}
 	>
 		<span class="text-fg-light">Context</span>
-		<span class="h-1.5 w-14 overflow-hidden rounded-full bg-card-bg">
+		<span class="h-1.5 w-14 overflow-hidden rounded-full bg-chat-user">
 			<span
 				class="block h-full rounded-full transition-colors {meter.tone === 'danger'
 					? 'bg-status-danger'
@@ -67,7 +67,7 @@
 		<div
 			id="agent-context-meter-panel"
 			transition:rise={{ y: -4 }}
-			class="absolute right-0 top-9 z-30 w-72 rounded-card border border-card-border bg-card-bg p-3 shadow-lg"
+			class="absolute right-0 top-9 z-30 w-72 rounded-soft border border-chat-border bg-card-bg p-3.5 ak-shadow-soft"
 		>
 			<div class="flex items-center justify-between border-b border-canvas-border pb-2">
 				<span class="font-semibold text-fg-main">Context Window Breakdown</span>

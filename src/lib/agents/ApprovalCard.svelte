@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
-	import { Check } from '@lucide/svelte';
+	import { pillClass } from '../ui/styles';
+	import { MessageCircleQuestion, Check } from '@lucide/svelte';
 	import type { ApprovalCardAnswers, ApprovalQuestion } from '../types';
 
 	interface Props {
@@ -91,25 +91,26 @@
 <div
 	role="region"
 	aria-label={title}
-	class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg p-4 text-sm {className}"
+	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg ak-shadow-soft p-5 text-sm {className}"
 >
 	<div class="flex items-start justify-between gap-2">
 		<div>
 			<div class="flex items-center gap-2">
 				<span
-					class="inline-flex items-center gap-1 rounded-full bg-accent-subtle px-2 py-0.5 text-[11px] font-medium text-accent-primary"
+					class="inline-flex items-center gap-1.5 rounded-full bg-chat-accent-subtle px-2.5 py-0.5 text-[11px] font-medium text-chat-accent"
 				>
+					<MessageCircleQuestion aria-hidden="true" class="size-3" />
 					Decision needed
 				</span>
 				{#if questions.length > 1 && !submitted}
-					<span class="font-mono text-xs tabular-nums text-fg-light">
+					<span class="text-xs tabular-nums text-fg-light">
 						Step {currentStep + 1} of {questions.length}
 					</span>
 				{/if}
 			</div>
-			<h4 class="mt-1.5 font-medium text-fg-main">{title}</h4>
+			<h4 class="mt-2.5 text-base font-semibold tracking-[-0.01em] text-fg-main">{title}</h4>
 			{#if description}
-				<p class="mt-0.5 text-xs leading-5 text-fg-light">{description}</p>
+				<p class="mt-1 text-[13px] leading-5 text-fg-light">{description}</p>
 			{/if}
 		</div>
 	</div>
@@ -118,7 +119,7 @@
 		<div
 			role="status"
 			aria-live="polite"
-			class="mt-3 flex items-center gap-2 rounded-md border border-card-border bg-status-success-subtle px-3 py-2 text-xs text-status-success"
+			class="mt-3 flex items-center gap-2 rounded-2xl bg-status-success-subtle px-3.5 py-2.5 text-[13px] text-status-success"
 		>
 			<Check aria-hidden="true" class="size-4 shrink-0" />
 			<p class="font-medium">
@@ -128,13 +129,13 @@
 			</p>
 		</div>
 	{:else if activeQuestion}
-		<div class="mt-3 space-y-2.5">
-			<p class="text-xs font-medium text-fg-main">{activeQuestion.question}</p>
+		<div class="mt-4 space-y-3">
+			<p class="text-[13px] text-fg-light">{activeQuestion.question}</p>
 
 			<div
 				role={activeQuestion.multiple ? 'group' : 'radiogroup'}
 				aria-label={activeQuestion.question}
-				class="grid gap-1.5"
+				class="grid gap-2"
 			>
 				{#each activeQuestion.options as option, idx (option.id)}
 					{@const isSelected = currentSelected.includes(option.label)}
@@ -144,18 +145,20 @@
 						aria-checked={isSelected}
 						disabled={!ready}
 						onclick={() => selectOption(option.label)}
-						class="flex w-full items-start gap-2.5 rounded-lg border px-3 py-2 text-left text-xs transition-colors {isSelected
-							? 'border-accent-primary bg-accent-subtle/60 text-fg-main'
-							: 'border-card-border bg-canvas-secondary/40 text-fg-main hover:bg-canvas-secondary'}"
+						class="flex w-full items-start gap-3 rounded-2xl border px-3.5 py-3 text-left text-[13px] transition-[background-color,border-color,box-shadow] duration-200 {isSelected
+							? 'border-chat-accent/50 bg-chat-accent-subtle/50 text-fg-main ak-shadow-soft-sm'
+							: 'border-chat-border bg-card-bg text-fg-main hover:border-fg-light/30 hover:bg-chat-surface'}"
 					>
 						<span
 							aria-hidden="true"
-							class="mt-0.5 inline-flex size-4 shrink-0 items-center justify-center rounded border font-mono text-[10px] {isSelected
-								? 'border-accent-primary bg-accent-primary text-fg-inverse'
-								: 'border-card-border bg-card-bg text-fg-light'}"
+							class="mt-px inline-flex size-[18px] shrink-0 items-center justify-center border text-[10px] tabular-nums transition-colors duration-200 {activeQuestion.multiple
+								? 'rounded-[6px]'
+								: 'rounded-full'} {isSelected
+								? 'border-chat-accent bg-chat-accent text-white'
+								: 'border-chat-border bg-card-bg text-fg-light'}"
 						>
 							{#if isSelected}
-								<Check class="size-2.5" />
+								<Check class="size-3" strokeWidth={3} />
 							{:else}
 								{idx + 1}
 							{/if}
@@ -182,7 +185,7 @@
 								const target = e.currentTarget as HTMLInputElement;
 								customText = { ...customText, [activeQuestion.id]: target.value };
 							}}
-							class="h-8 w-full rounded-lg border border-card-border bg-canvas-secondary/40 px-2.5 text-xs text-fg-main placeholder:text-fg-light focus:border-accent-primary focus:outline-none"
+							class="h-10 w-full rounded-2xl border border-chat-border bg-card-bg px-3.5 text-[13px] text-fg-main placeholder:text-fg-light transition-colors focus:border-fg-light/50 focus:outline-none"
 						/>
 					</label>
 				</div>
@@ -194,7 +197,7 @@
 						<button
 							type="button"
 							onclick={() => (currentStep -= 1)}
-							class={buttonClass('secondary', 'md')}
+							class={pillClass('secondary', 'md')}
 						>
 							Back
 						</button>
@@ -203,7 +206,7 @@
 						<button
 							type="button"
 							onclick={onCancel}
-							class={buttonClass('ghost', 'md')}
+							class={pillClass('ghost', 'md')}
 						>
 							Skip
 						</button>
@@ -214,7 +217,7 @@
 					type="button"
 					disabled={!canAdvance}
 					onclick={handleNextOrSubmit}
-					class={buttonClass('primary', 'md')}
+					class={pillClass('primary', 'md')}
 				>
 					{currentStep < questions.length - 1 ? 'Next question' : submitLabel}
 				</button>

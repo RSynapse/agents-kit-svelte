@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
+	import { pillClass } from '../ui/styles';
 	import { Check, CircleAlert, ImageIcon } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 
@@ -87,7 +87,7 @@
 	data-slot="image-generation"
 	data-state={currentStatus}
 	aria-busy={isActive}
-	class="w-full rounded-card border border-card-border bg-card-bg p-3.5 text-fg-main {size === 'compact'
+	class="w-full rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm p-3.5 text-fg-main {size === 'compact'
 		? 'max-w-xs'
 		: ''} {className}"
 >
@@ -95,11 +95,11 @@
 		role="img"
 		aria-label={resolvedLabel}
 		style="aspect-ratio: {aspectRatio}"
-		class="relative isolate flex w-full flex-col justify-between overflow-hidden rounded-lg border border-canvas-border bg-canvas-secondary p-3.5"
+		class="relative isolate flex w-full flex-col justify-between overflow-hidden rounded-xl border border-chat-border/70 bg-chat-surface p-3.5"
 	>
 		<div class="relative z-10 flex items-center justify-between gap-2">
 			<span
-				class="inline-flex items-center gap-1.5 rounded-full border border-card-border bg-card-bg px-2.5 py-0.5 text-[11px] font-medium {currentStatus ===
+				class="inline-flex items-center gap-1.5 rounded-full border border-chat-border bg-card-bg px-2.5 py-0.5 text-[11px] font-medium {currentStatus ===
 				'error'
 					? 'text-status-danger'
 					: currentStatus === 'complete'
@@ -119,7 +119,7 @@
 
 			{#if resolution}
 				<span
-					class="rounded-full border border-card-border bg-card-bg px-2 py-0.5 font-mono text-[10px] text-fg-light tabular-nums"
+					class="rounded-full border border-chat-border bg-card-bg px-2 py-0.5 font-mono text-[10px] text-fg-light tabular-nums"
 				>
 					{resolution} · {aspectRatio}
 				</span>
@@ -128,26 +128,26 @@
 
 		<div class="my-auto flex flex-col items-center justify-center py-4 text-center">
 			{#if children}
-				<div class="w-full overflow-hidden rounded-md">
+				<div class="w-full overflow-hidden rounded-[10px]">
 					{@render children()}
 				</div>
 			{:else if currentStatus === 'complete'}
 				<div
-					class="flex size-10 items-center justify-center rounded-lg border border-card-border bg-card-bg text-status-success"
+					class="flex size-10 items-center justify-center rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-status-success"
 				>
 					<Check aria-hidden="true" class="size-5" />
 				</div>
 				<p class="mt-2 text-xs font-medium text-fg-main">Render pass verified</p>
 			{:else if currentStatus === 'error'}
 				<div
-					class="flex size-10 items-center justify-center rounded-lg border border-card-border bg-card-bg text-status-danger"
+					class="flex size-10 items-center justify-center rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-status-danger"
 				>
 					<CircleAlert aria-hidden="true" class="size-5" />
 				</div>
 				<p class="mt-2 text-xs text-status-danger">Sampler timeout exceeded</p>
 			{:else}
 				<div
-					class="flex size-10 items-center justify-center rounded-lg border border-card-border bg-card-bg text-fg-light"
+					class="flex size-10 items-center justify-center rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-fg-light"
 				>
 					<ImageIcon aria-hidden="true" class="size-5 ak-breathe" />
 				</div>
@@ -160,7 +160,7 @@
 				<span>Pass progress</span>
 				<span>{resolvedProgress}%</span>
 			</div>
-			<div class="h-1 w-full overflow-hidden rounded-full bg-canvas-primary">
+			<div class="h-1 w-full overflow-hidden rounded-full bg-chat-surface">
 				<div
 					class="h-full rounded-full transition-all duration-300 {currentStatus === 'error'
 						? 'bg-status-danger'
@@ -189,7 +189,7 @@
 			<button
 				type="button"
 				onclick={handleRegenerate}
-				class={buttonClass('secondary', 'sm', 'shrink-0')}
+				class={pillClass('secondary', 'sm', 'shrink-0')}
 			>
 				{currentStatus === 'error' ? 'Retry' : 'Cycle state'}
 			</button>

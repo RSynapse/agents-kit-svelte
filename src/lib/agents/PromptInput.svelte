@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
-	import { ArrowUp, FileIcon, Plus, Shield, Sparkles, Square, X } from '@lucide/svelte';
+	import { pillClass, SOFT } from '../ui/styles';
+	import { fade } from 'svelte/transition';
+	import { rise } from '../state/motion.svelte';
+	import { ArrowUp, AtSign, ChevronDown, FileIcon, GitBranch, Plus, Shield, Sparkles, Square, X } from '@lucide/svelte';
 	import { isImeComposing } from '../state/chat-helpers';
 	import type { SupportedAgentId, SupportedAgentOption } from '../types';
 
@@ -33,6 +35,33 @@
 	}: Props = $props();
 
 	let menuOpen = $state(false);
+	let canSend = $derived(value.trim().length > 0);
+	let selectedAgent = $derived(agents.find((agentOpt) => agentOpt.id === selectedAgentId));
+
+	/**
+	 * Picks a Lucide icon for a context chip based on its `kind:` prefix.
+	 *
+	 * @param chip - Chip tag such as `worktree:…` or `file:…`.
+	 * @returns Icon component.
+	 */
+	function chipIcon(chip: string) {
+		if (chip.startsWith('worktree:')) return GitBranch;
+		if (chip.startsWith('skill:')) return Sparkles;
+		if (chip.startsWith('gate:')) return Shield;
+		if (chip.startsWith('file:')) return FileIcon;
+		return AtSign;
+	}
+
+	/**
+	 * Strips the `kind:` prefix for display.
+	 *
+	 * @param chip - Chip tag.
+	 * @returns Human-readable label.
+	 */
+	function chipLabel(chip: string): string {
+		const idx = chip.indexOf(':');
+		return idx >= 0 ? chip.slice(idx + 1) : chip;
+	}
 	let attachedChips = $state<string[]>(['worktree:trailside/1210-auth-redirect']);
 	let ready = $state(false);
 
@@ -94,23 +123,22 @@
 		e.preventDefault();
 		submitPrompt();
 	}}
-	class="w-full rounded-card border border-card-border bg-card-bg p-2.5 transition-colors focus-within:border-fg-light/50 {className}"
+	data-busy={busy}
+	class="ak-soft-focus w-full rounded-composer border border-chat-border bg-card-bg px-3 pt-3 pb-2.5 focus-within:border-fg-light/35 {className}"
 >
 	{#if attachedChips.length > 0}
-		<div class="mb-2 flex flex-wrap items-center gap-1.5 px-1">
+		<div class="mb-1.5 flex flex-wrap items-center gap-1.5 px-1">
 			{#each attachedChips as chip (chip)}
-				<span
-					class="inline-flex items-center gap-1.5 rounded-md border border-card-border bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-main"
-				>
-					<FileIcon aria-hidden="true" class="size-3 text-fg-light" />
-					<span>@{chip}</span>
+				{@const ChipIcon = chipIcon(chip)}
+				<span in:rise={{ y: 2 }} class="{SOFT.chip} max-w-full pr-1">
+					<ChipIcon aria-hidden="true" class="text-fg-light" />
+					<span class="truncate font-mono text-[11px]">{chipLabel(chip)}</span>
 					<button
 						type="button"
 						aria-label="Remove {chip}"
 						onclick={() => removeContextChip(chip)}
-						class={buttonClass('ghost', 'icon-sm')}
-					><X aria-hidden="true" class="size-3" />
-					</button>
+						class="inline-flex size-4 items-center justify-center rounded-full text-fg-light transition-colors hover:bg-fg-main/10 hover:text-fg-main"
+					><X aria-hidden="true" class="size-3" /></button>
 				</span>
 			{/each}
 		</div>
@@ -125,60 +153,68 @@
 			disabled={!ready}
 			aria-label={placeholder}
 			onkeydown={handleKeyDown}
-			class="w-full resize-none bg-transparent px-1.5 py-1 text-sm leading-6 text-fg-main placeholder:text-fg-light focus:outline-none disabled:opacity-50"
+			class="field-sizing-content max-h-60 min-h-12 w-full resize-none bg-transparent px-1.5 py-1 text-[15px] leading-6 text-fg-main placeholder:text-fg-light/80 focus:outline-none disabled:opacity-50"
 		></textarea>
 	</label>
 
-	<div class="mt-2 flex flex-wrap items-center justify-between gap-2 pt-1">
-		<div class="relative flex flex-wrap items-center gap-1.5">
+	<div class="mt-1 flex items-center justify-between gap-2">
+		<div class="relative flex min-w-0 items-center gap-1">
 			<button
 				type="button"
 				aria-label="Add context or skill"
 				aria-expanded={menuOpen}
 				onclick={() => (menuOpen = !menuOpen)}
-				class={buttonClass('ghost', 'icon')}
+				class={pillClass('secondary', 'icon')}
 			>
-				<Plus aria-hidden="true" class="size-4" />
+				<Plus aria-hidden="true" class="transition-transform duration-200 {menuOpen ? 'rotate-45' : ''}" />
 			</button>
 
 			{#if menuOpen}
 				<div
 					role="menu"
 					aria-label="Context attachments"
-					class="absolute bottom-10 left-0 z-20 w-60 rounded-lg border border-card-border bg-card-bg p-1.5 shadow-lg"
+					transition:rise={{ y: 4, duration: 140 }}
+					class="absolute bottom-11 left-0 z-20 w-64 rounded-soft border border-chat-border bg-card-bg p-1.5 ak-shadow-soft"
 				>
+					<p class="px-2.5 pt-1 pb-1.5 text-[11px] font-medium text-fg-light">Add to context</p>
 					<button
 						type="button"
 						role="menuitem"
 						onclick={() => addContextChip('file:apps/web/src/routes/auth/callback/+server.ts')}
-						class="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
+						class="flex w-full items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-left text-[13px] text-fg-main transition-colors hover:bg-chat-surface"
 					>
-						<FileIcon aria-hidden="true" class="size-3.5 text-fg-light" />
+						<FileIcon aria-hidden="true" class="size-4 text-fg-light" />
 						<span>Attach callback/+server.ts</span>
 					</button>
 					<button
 						type="button"
 						role="menuitem"
 						onclick={() => addContextChip(`skill:${activeSkill}`)}
-						class="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
+						class="flex w-full items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-left text-[13px] text-fg-main transition-colors hover:bg-chat-surface"
 					>
-						<Sparkles aria-hidden="true" class="size-3.5 text-fg-light" />
+						<Sparkles aria-hidden="true" class="size-4 text-fg-light" />
 						<span>Pin skill: {activeSkill}</span>
 					</button>
 					<button
 						type="button"
 						role="menuitem"
 						onclick={() => addContextChip('gate:check-boundaries')}
-						class="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
+						class="flex w-full items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-left text-[13px] text-fg-main transition-colors hover:bg-chat-surface"
 					>
-						<Shield aria-hidden="true" class="size-3.5 text-fg-light" />
+						<Shield aria-hidden="true" class="size-4 text-fg-light" />
 						<span>Include boundary gate check</span>
 					</button>
 				</div>
 			{/if}
 
-			<label class="inline-flex items-center gap-1.5 text-xs text-fg-light">
-				<span class="sr-only">Supported Agent</span>
+			<label
+				class="relative inline-flex h-8 min-w-0 items-center gap-1 rounded-full pr-2.5 pl-3 text-[13px] text-fg-light transition-colors hover:bg-chat-user/70 hover:text-fg-main"
+			>
+				<span class="truncate">{selectedAgent?.label ?? 'Agent'}</span>
+				{#if selectedAgent?.version}
+					<span class="hidden text-fg-light/70 sm:inline">{selectedAgent.version}</span>
+				{/if}
+				<ChevronDown aria-hidden="true" class="size-3.5" />
 				<select
 					aria-label="Supported Agent"
 					value={selectedAgentId}
@@ -186,7 +222,7 @@
 						const target = e.currentTarget as HTMLSelectElement;
 						onAgentChange?.(target.value as SupportedAgentId);
 					}}
-					class="h-8 rounded-lg px-2 text-xs font-medium text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main focus:outline-none"
+					class="absolute inset-0 cursor-pointer opacity-0"
 				>
 					{#each agents as agentOpt (agentOpt.id)}
 						<option value={agentOpt.id}>
@@ -196,31 +232,33 @@
 				</select>
 			</label>
 
-			<span
-				class="hidden rounded-lg bg-canvas-secondary px-2.5 py-1 text-xs font-medium text-fg-light sm:inline-block"
-			>
-				Skill: {activeSkill}
+			<span class="hidden h-7 items-center gap-1.5 rounded-full px-2.5 text-xs text-fg-light sm:inline-flex">
+				<Sparkles aria-hidden="true" class="size-3.5 text-chat-accent" />
+				{activeSkill}
 			</span>
 		</div>
 
-		<div class="flex items-center gap-2">
+		<div class="flex shrink-0 items-center gap-2">
 			{#if busy}
 				<button
+					in:fade={{ duration: 120 }}
 					type="button"
 					onclick={onStop}
 					aria-label="Stop run"
-					class={buttonClass('primary', 'icon')}
+					class={pillClass('primary', 'icon')}
 				>
-					<Square aria-hidden="true" class="size-3" />
+					<Square aria-hidden="true" class="size-3 fill-current" />
 				</button>
 			{:else}
 				<button
 					type="submit"
-					disabled={!value.trim()}
+					disabled={!canSend}
 					aria-label="Send prompt"
-					class={buttonClass('primary', 'icon')}
+					class="inline-flex size-8 items-center justify-center rounded-full transition-colors duration-200 {canSend
+						? 'bg-chat-accent text-white hover:bg-chat-accent/90'
+						: 'bg-chat-user text-fg-light'}"
 				>
-					<ArrowUp aria-hidden="true" class="size-4" />
+					<ArrowUp aria-hidden="true" class="size-4" strokeWidth={2.25} />
 				</button>
 			{/if}
 		</div>
