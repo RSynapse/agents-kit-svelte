@@ -45,7 +45,7 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 			fullPage: false,
 			animations: 'disabled'
 		});
-		await page.locator('article[data-component-slug="trailside-claude-chat"]').screenshot({
+		await page.locator('article[data-component-slug="chat-workbench"]').screenshot({
 			path: `${ARTIFACT_DIR}/catalogue-aks-chat-card.png`,
 			animations: 'disabled'
 		});

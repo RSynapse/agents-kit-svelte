@@ -33,7 +33,12 @@ export { default as AgentContextMeter } from '../runtime/AgentContextMeter.svelt
 export { default as FileTree } from '../runtime/FileTree.svelte';
 export { default as Terminal } from '../runtime/Terminal.svelte';
 export { default as TestResults } from '../runtime/TestResults.svelte';
-export { default as TrailsideClaudeChat } from '../trailside/TrailsideClaudeChat.svelte';
+import ChatWorkbench from '../workbench/ChatWorkbench.svelte';
+export { ChatWorkbench };
+/**
+ * @deprecated Renamed to `ChatWorkbench`. This alias will be removed in the next major release.
+ */
+export const TrailsideClaudeChat: typeof ChatWorkbench = ChatWorkbench;
 
 export * from '../state/chat-helpers';
 export * from '../core/agent';

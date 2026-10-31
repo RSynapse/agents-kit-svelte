@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TrailsideClaudeChat from '$lib/trailside/TrailsideClaudeChat.svelte';
+	import ChatWorkbench from '$lib/workbench/ChatWorkbench.svelte';
 </script>
 
-<TrailsideClaudeChat />
+<ChatWorkbench />

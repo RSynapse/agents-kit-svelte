@@ -1,13 +1,13 @@
 # Agents Kit Svelte (`agents-kit-svelte`)
 
-A **Svelte 5 Runes** component collection for AI agent interfaces—porting [`agents-ui/agents-kit`](https://agents-ui.github.io/agents-kit/) to Svelte 5 and adding **AK-S Chat (`TrailsideClaudeChat`)**, **GitHub Cards & Reactive Kanban/Bento Layouts**, and a **Schema-Driven Intelligent UI Engine**.
+A **Svelte 5 Runes** component collection for AI agent interfaces—porting [`agents-ui/agents-kit`](https://agents-ui.github.io/agents-kit/) to Svelte 5 and adding **`ChatWorkbench`**, **GitHub Cards & Reactive Kanban/Bento Layouts**, and a **Schema-Driven Intelligent UI Engine**.
 
 ---
 
 ## Highlights
 
 - **82 Svelte 5 Runes Components** (`$props()`, `$state()`, `$derived()`, `$effect()`, `Spring`, `Tween`, `crossfade`, `flip`, `SvelteSet`, `SvelteMap`) across 8 collections:
-  1. **beUI Agents (20)**: `TrailsideClaudeChat` (`AK-S Chat`), `AgentActivity`, `TodoList`, `ToolApproval`, `ToolResult`, `FileDiff`, `CodeBlock`, `ApprovalCard`, `PromptInput`, `Message`, `MessageBubble`, `MessageScroller`, `StreamingResponse`, `Citations`, `ImageGeneration`, `AISidebar`, `ThinkingShimmer`, `AgentProgress`, `ReasoningText`, `AgentDisclosure`.
+  1. **beUI Agents (20)**: `ChatWorkbench`, `AgentActivity`, `TodoList`, `ToolApproval`, `ToolResult`, `FileDiff`, `CodeBlock`, `ApprovalCard`, `PromptInput`, `Message`, `MessageBubble`, `MessageScroller`, `StreamingResponse`, `Citations`, `ImageGeneration`, `AISidebar`, `ThinkingShimmer`, `AgentProgress`, `ReasoningText`, `AgentDisclosure`.
   2. **Beautiful UI (11)**: `ToolChips`, `RecommendationCard`, `InsightCards`, `ContextCards`, `Flowchart`, `FineTuneCard`, `SearchList`, `FilterTable`, `SelectionActions`, `RecordsTable`, `DiffTable`.
   3. **GitHub Cards & Layouts (15)**: `GitHubIssueCard`, `GitHubPullRequestCard`, `GitHubCommitCard`, `GitHubChecksPanel`, `GitHubReviewThreadCard`, `GitHubBentoLayout`, `GitHubKanbanBoard`, plus the dev lifecycle set: `GitHubLifecycleTimeline`, `GitHubIssueTriage`, `GitHubBranchCard`, `GitHubPullRequestReview`, `GitHubMergeQueue`, `GitHubDeploymentPipeline`, `GitHubReleaseCard`, `GitHubIncidentCard`.
   4. **Intelligent UI & Generative (3)**: `IntelligentUIRenderer`, `AgentGenerativeSurface`, `ResultActions`.
@@ -58,7 +58,7 @@ Import everything from `agents-kit-svelte`, or from one collection to keep edito
 
 | Import | Contains |
 | --- | --- |
-| `agents-kit-svelte/chat` | Messages, composer, activity, todos, tool approval and results, diffs, code, terminal, context meter, checkpoints, `TrailsideClaudeChat` |
+| `agents-kit-svelte/chat` | Messages, composer, activity, todos, tool approval and results, diffs, code, terminal, context meter, checkpoints, `ChatWorkbench` |
 | `agents-kit-svelte/github` | Issue, PR, commit, checks and review cards, Kanban and bento layouts, the dev-lifecycle set |
 | `agents-kit-svelte/skills` | Skill library, card, router, invocation, editor, proposal card and their helpers |
 | `agents-kit-svelte/workflows` | Orchestrator, routing hub, task queue, parallel and sequential workflows, evaluator, ops monitor |

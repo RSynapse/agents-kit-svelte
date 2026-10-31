@@ -98,7 +98,7 @@ mount(App, { target: document.getElementById('app')! });
 `,
 		'src/App.svelte': `<script lang="ts">
 	import { CodeBlock, ThinkingShimmer, TodoList, type TodoItem } from 'agents-kit-svelte';
-	import { TrailsideClaudeChat } from 'agents-kit-svelte/chat';
+	import { ChatWorkbench, TrailsideClaudeChat } from 'agents-kit-svelte/chat';
 	import { GitHubIssueCard } from 'agents-kit-svelte/github';
 	import { SkillCard } from 'agents-kit-svelte/skills';
 	import { AgentOrchestrator } from 'agents-kit-svelte/workflows';
@@ -123,6 +123,8 @@ mount(App, { target: document.getElementById('app')! });
 	<TodoList {items} data-testid="plan" aria-label="Plan" />
 	<CodeBlock code="pnpm add agents-kit-svelte" language="bash" />
 	<GitHubIssueCard issue={SAMPLE_ISSUE} compact />
+	<ChatWorkbench />
+	<!-- The deprecated alias still works until the next major. -->
 	<TrailsideClaudeChat />
 	<SkillCard skill={SAMPLE_SKILLS[0]} />
 	<AgentOrchestrator orchestratorName="Release run" subAgents={SAMPLE_SUB_AGENTS} />
