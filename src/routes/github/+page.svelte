@@ -6,6 +6,14 @@
 	import GitHubKanbanBoard from '$lib/github/GitHubKanbanBoard.svelte';
 	import GitHubPullRequestCard from '$lib/github/GitHubPullRequestCard.svelte';
 	import GitHubReviewThreadCard from '$lib/github/GitHubReviewThreadCard.svelte';
+	import { SEGMENT_GROUP_CLASS, segmentClass } from '$lib/ui/styles';
+	import { Columns3, LayoutGrid, SquareStack } from '@lucide/svelte';
+
+	const VIEWS = [
+		{ id: 'kanban', label: 'Kanban board', icon: Columns3 },
+		{ id: 'bento', label: 'Repository pulse', icon: LayoutGrid },
+		{ id: 'cards', label: 'Card primitives', icon: SquareStack }
+	] as const;
 
 	let activeView = $state<'kanban' | 'bento' | 'cards'>('kanban');
 	let ready = $state(false);
@@ -27,69 +35,41 @@
 	}
 </script>
 
-<div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
+<div class="mx-auto max-w-7xl space-y-6 px-4 py-10 sm:px-6">
 	<!-- Page Header -->
-	<div class="flex flex-wrap items-end justify-between gap-4 border-b border-canvas-border pb-4">
-		<div>
-			<span class="font-mono text-xs font-semibold uppercase tracking-wider text-accent-primary">
-				GitHub Card Features & Layouts
-			</span>
-			<h1 class="mt-1 text-2xl font-bold text-fg-main">
-				GitHub Issues, Pull Requests, Checks & Reactive Board Layouts
+	<div class="flex flex-wrap items-end justify-between gap-5">
+		<div class="max-w-2xl">
+			<p class="text-xs font-medium text-accent-primary">GitHub suite</p>
+			<h1 class="mt-2 font-display text-[2.25rem] leading-tight font-normal tracking-[-0.02em] text-fg-main">
+				Issues, pull requests and checks, all in one calm board.
 			</h1>
-			<p class="mt-1 text-xs text-fg-light">
-				Portable Svelte 5 components for GitHub triage, worktree agent runs, referee reviews, and CI check suites.
+			<p class="mt-3 text-sm leading-6 text-fg-light">
+				Portable Svelte 5 components for GitHub triage, worktree agent runs, referee reviews and CI
+				check suites.
 			</p>
 		</div>
 
-		<div
-			role="tablist"
-			aria-label="GitHub layout views"
-			class="flex rounded-xl border border-card-border bg-canvas-secondary p-1 text-xs"
-		>
-			<button
-				type="button"
-				role="tab"
-				disabled={!ready}
-				aria-selected={activeView === 'kanban'}
-				onclick={() => (activeView = 'kanban')}
-				class="rounded-lg px-3 py-1.5 font-semibold transition-colors {activeView === 'kanban'
-					? 'bg-card-bg text-fg-main shadow-xs'
-					: 'text-fg-light hover:text-fg-main'}"
-			>
-				Reactive Kanban Board
-			</button>
-			<button
-				type="button"
-				role="tab"
-				disabled={!ready}
-				aria-selected={activeView === 'bento'}
-				onclick={() => (activeView = 'bento')}
-				class="rounded-lg px-3 py-1.5 font-semibold transition-colors {activeView === 'bento'
-					? 'bg-card-bg text-fg-main shadow-xs'
-					: 'text-fg-light hover:text-fg-main'}"
-			>
-				Repository Bento Pulse
-			</button>
-			<button
-				type="button"
-				role="tab"
-				disabled={!ready}
-				aria-selected={activeView === 'cards'}
-				onclick={() => (activeView = 'cards')}
-				class="rounded-lg px-3 py-1.5 font-semibold transition-colors {activeView === 'cards'
-					? 'bg-card-bg text-fg-main shadow-xs'
-					: 'text-fg-light hover:text-fg-main'}"
-			>
-				Individual Card Primitives
-			</button>
+		<div role="tablist" aria-label="GitHub layout views" class={SEGMENT_GROUP_CLASS}>
+			{#each VIEWS as view (view.id)}
+				<button
+					type="button"
+					role="tab"
+					disabled={!ready}
+					aria-selected={activeView === view.id}
+					onclick={() => (activeView = view.id)}
+					class={segmentClass(activeView === view.id)}
+				>
+					<view.icon aria-hidden="true" />
+					{view.label}
+				</button>
+			{/each}
 		</div>
 	</div>
 
 	<!-- Live Interaction Telemetry Bar -->
-	<div class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-card-border bg-card-bg px-4 py-2.5 font-mono text-xs">
-		<span class="inline-flex items-center gap-1.5 font-medium text-fg-main"><span aria-hidden="true" class="ak-breathe size-1.5 rounded-full bg-status-success"></span>Live intent stream:</span>
-		<span class="truncate text-fg-main">{eventLog[0]}</span>
+	<div class="flex flex-wrap items-center justify-between gap-2 rounded-full border border-card-border bg-card-bg px-4 py-2 text-xs ak-shadow-soft-sm">
+		<span class="inline-flex items-center gap-1.5 font-medium text-fg-main"><span aria-hidden="true" class="ak-breathe size-1.5 rounded-full bg-status-success"></span>Live intent stream</span>
+		<span class="min-w-0 flex-1 truncate font-mono text-[11px] text-fg-light">{eventLog[0]}</span>
 		<span class="text-fg-light">{eventLog.length} events</span>
 	</div>
 
@@ -102,7 +82,7 @@
 	{:else}
 		<div class="grid gap-6 lg:grid-cols-2">
 			<div class="space-y-4">
-				<h2 class="text-sm font-bold uppercase tracking-wider text-fg-light">
+				<h2 class="px-1 text-xs font-medium text-fg-light">
 					GitHubIssueCard & GitHubPullRequestCard
 				</h2>
 				<GitHubIssueCard
@@ -115,7 +95,7 @@
 				/>
 			</div>
 			<div class="space-y-4">
-				<h2 class="text-sm font-bold uppercase tracking-wider text-fg-light">
+				<h2 class="px-1 text-xs font-medium text-fg-light">
 					GitHubChecksPanel, GitHubCommitCard & GitHubReviewThreadCard
 				</h2>
 				<GitHubChecksPanel

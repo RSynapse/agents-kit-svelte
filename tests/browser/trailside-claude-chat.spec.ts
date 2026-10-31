@@ -11,7 +11,7 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 
 		await expect(
 			page.getByRole('heading', {
-				name: /Build better\s*agent interfaces/i
+				name: /Gentle interfaces for\s*thoughtful agents/i
 			})
 		).toBeVisible();
 
@@ -144,7 +144,7 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 
 		await expect(
 			page.getByRole('heading', {
-				name: /GitHub Issues, Pull Requests, Checks & Reactive Board Layouts/i
+				name: /Issues, pull requests and checks/i
 			})
 		).toBeVisible();
 
@@ -161,11 +161,11 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		});
 
 		// Switch to Repository Bento Pulse tab
-		await page.getByRole('tab', { name: /Repository Bento Pulse/i }).click();
+		await page.getByRole('tab', { name: /Repository pulse/i }).click();
 		await expect(page.getByText(/RSynapse\/trailside/i).first()).toBeVisible();
 
 		// Switch to Individual Card Primitives tab
-		await page.getByRole('tab', { name: /Individual Card Primitives/i }).click();
+		await page.getByRole('tab', { name: /Card primitives/i }).click();
 		await expect(
 			page.getByRole('heading', { name: /GitHubIssueCard & GitHubPullRequestCard/i })
 		).toBeVisible();
@@ -179,7 +179,7 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 
 		await expect(
 			page.getByRole('heading', {
-				name: /Schema-Driven Intelligent UI Renderer & Generative Surface Suite/i
+				name: /Turn structured model output into interfaces/i
 			})
 		).toBeVisible();
 
@@ -194,7 +194,7 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 
 		// Switch schema presets
 		await page
-			.getByRole('button', { name: /Preset: Architecture Decision Flow/i })
+			.getByRole('button', { name: /^Architecture Decision Flow$/ })
 			.click();
 		await expect(page.getByText(/1\. Generated Tradeoff Matrix/i).first()).toBeVisible();
 	});

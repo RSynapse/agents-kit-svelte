@@ -1,34 +1,34 @@
 /**
  * Shared class recipes for the Agents Kit Svelte visual language.
  *
- * Mirrors the restrained upstream agents-kit foundation (DESIGN.md): neutral primary
- * buttons, 1px hairlines, chip/control/card/window radii, plain-text status labels,
- * slim progress tracks and 14–16px Lucide icons. Components compose these strings so
+ * A soft, warm foundation: pill buttons and tabs, warm hairlines, generous card and
+ * window radii, diffuse shadows, slim progress tracks and 14–16px Lucide icons. Components compose these strings so
  * every collection shares one look without a parallel component layer.
  */
 
 export type UiTone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger';
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'accent';
-export type ButtonSize = 'xs' | 'sm' | 'md' | 'icon-xs' | 'icon-sm' | 'icon';
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'icon-xs' | 'icon-sm' | 'icon';
 
 const BUTTON_CORE =
 	'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0';
-const BUTTON_BASE = `${BUTTON_CORE} rounded-control`;
+const BUTTON_BASE = `${BUTTON_CORE} rounded-full`;
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
-	primary: 'bg-fg-main text-fg-inverse hover:bg-fg-main/88',
-	accent: 'bg-accent-primary text-fg-inverse hover:bg-accent-primary/90',
+	primary: 'bg-fg-main text-fg-inverse hover:bg-fg-main/85',
+	accent: 'bg-accent-primary text-white hover:bg-accent-primary/90',
 	secondary:
-		'border border-card-border bg-card-bg text-fg-main ak-shadow-btn hover:bg-canvas-secondary',
+		'border border-card-border bg-card-bg text-fg-main ak-shadow-btn hover:bg-canvas-primary',
 	ghost: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main',
 	danger:
 		'border border-card-border bg-card-bg text-status-danger ak-shadow-btn hover:bg-status-danger-subtle'
 };
 
 const BUTTON_SIZES: Record<ButtonSize, string> = {
-	xs: 'h-6 px-2 text-xs [&_svg]:size-3',
-	sm: 'h-7 px-2.5 text-xs [&_svg]:size-3.5',
-	md: 'h-8 px-3 text-xs [&_svg]:size-3.5',
+	xs: 'h-6 px-2.5 text-xs [&_svg]:size-3',
+	sm: 'h-7 px-3 text-xs [&_svg]:size-3.5',
+	md: 'h-8 px-3.5 text-[13px] [&_svg]:size-3.5',
+	lg: 'h-10 px-5 text-sm [&_svg]:size-4',
 	'icon-xs': 'size-6 [&_svg]:size-3.5',
 	'icon-sm': 'size-7 [&_svg]:size-3.5',
 	icon: 'size-8 [&_svg]:size-4'
@@ -75,7 +75,7 @@ const BADGE_TONES: Record<UiTone, string> = {
  * @returns Space-separated class string.
  */
 export function badgeClass(tone: UiTone = 'neutral', extra = ''): string {
-	return `inline-flex shrink-0 items-center gap-1 rounded-chip px-1.5 py-px text-[11px] font-medium leading-4 whitespace-nowrap [&_svg]:size-3 ${BADGE_TONES[tone]} ${extra}`.trim();
+	return `inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-px text-[11px] font-medium leading-4 whitespace-nowrap [&_svg]:size-3 ${BADGE_TONES[tone]} ${extra}`.trim();
 }
 
 /** Background fill per tone for status dots and progress fills. */
@@ -115,7 +115,7 @@ export const SURFACE = {
 
 /** Text input / select / textarea recipe. */
 export const INPUT_CLASS =
-	'h-8 w-full rounded-control border border-card-border bg-card-bg px-2.5 text-[13px] text-fg-main placeholder:text-fg-light transition-colors focus:border-fg-light focus:outline-none';
+	'h-8 w-full rounded-control border border-card-border bg-card-bg px-3 text-[13px] text-fg-main placeholder:text-fg-light transition-[border-color,box-shadow] focus:border-accent-primary/50 focus:shadow-[0_0_0_3px_color-mix(in_oklch,var(--color-accent-primary)_14%,transparent)] focus:outline-none';
 
 /**
  * Builds the class list for a segmented/tab trigger.
@@ -124,15 +124,15 @@ export const INPUT_CLASS =
  * @returns Space-separated class string.
  */
 export function segmentClass(active: boolean): string {
-	return `inline-flex h-7 items-center gap-1.5 rounded-control px-2.5 text-xs font-medium transition-colors [&_svg]:size-3.5 ${
+	return `inline-flex h-7 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-colors [&_svg]:size-3.5 ${
 		active
-			? 'bg-card-bg text-fg-main ak-shadow-btn ring-1 ring-card-border'
+			? 'bg-card-bg text-fg-main ak-shadow-btn'
 			: 'text-fg-light hover:text-fg-main'
 	}`;
 }
 
 /** Container for `segmentClass` triggers. */
-export const SEGMENT_GROUP_CLASS = 'inline-flex items-center gap-0.5 rounded-[10px] bg-canvas-secondary p-0.5';
+export const SEGMENT_GROUP_CLASS = 'inline-flex items-center gap-0.5 rounded-full bg-canvas-secondary p-0.5';
 
 /**
  * Builds the class list for a ghost toggle button (toolbar, feedback, filters).
@@ -174,6 +174,7 @@ const PILL_SIZES: Record<ButtonSize, string> = {
 	xs: 'h-6 px-2.5 text-xs [&_svg]:size-3',
 	sm: 'h-7 px-3 text-xs [&_svg]:size-3.5',
 	md: 'h-8 px-3.5 text-[13px] [&_svg]:size-3.5',
+	lg: 'h-10 px-5 text-sm [&_svg]:size-4',
 	'icon-xs': 'size-6 [&_svg]:size-3.5',
 	'icon-sm': 'size-7 [&_svg]:size-3.5',
 	icon: 'size-8 [&_svg]:size-4'

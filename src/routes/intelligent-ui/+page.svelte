@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Check } from '@lucide/svelte';
+	import { SEGMENT_GROUP_CLASS, segmentClass, togglePillClass } from '$lib/ui/styles';
 	import AgentGenerativeSurface from '$lib/intelligent-ui/AgentGenerativeSurface.svelte';
 	import IntelligentUIRenderer from '$lib/intelligent-ui/IntelligentUIRenderer.svelte';
 	import type { DynamicUINode, GeneratedSurfaceContent } from '$lib/types';
@@ -254,45 +255,42 @@
 	}
 </script>
 
-<div class="mx-auto max-w-7xl space-y-8 px-4 py-6 sm:px-6">
+<div class="mx-auto max-w-7xl space-y-12 px-4 py-10 sm:px-6">
 	<!-- Header -->
-	<div class="border-b border-canvas-border pb-4">
-		<span class="font-mono text-xs font-semibold uppercase tracking-wider text-accent-primary">
-			Dynamic Intelligent UI & Generative Surfaces
-		</span>
-		<h1 class="mt-1 text-2xl font-bold text-fg-main">
-			Schema-Driven Intelligent UI Renderer & Generative Surface Suite
+	<div class="max-w-2xl">
+		<p class="text-xs font-medium text-accent-primary">Intelligent UI playground</p>
+		<h1 class="mt-2 font-display text-[2.25rem] leading-tight font-normal tracking-[-0.02em] text-fg-main">
+			Turn structured model output into interfaces people can use.
 		</h1>
-		<p class="mt-1 text-xs text-fg-light">
-			Adaptable, portable Svelte 5 surfaces that turn structured LLM tool calls and JSON streams into interactive UI with inline edit, compare, expand, and intent callbacks.
+		<p class="mt-3 text-sm leading-6 text-fg-light">
+			Portable Svelte 5 surfaces that render tool calls and JSON streams as interactive UI, with
+			inline edit, compare, expand and intent callbacks.
 		</p>
 	</div>
 
 	<!-- Section 1: AgentGenerativeSurface Showcase -->
-	<section class="space-y-4">
+	<section class="space-y-5 rounded-window border border-card-border bg-card-bg p-5 ak-shadow-soft-sm sm:p-6">
 		<div class="flex flex-wrap items-center justify-between gap-3">
 			<div>
-				<h2 class="text-base font-bold text-fg-main">
-					1. AgentGenerativeSurface (Edit · Compare · Expand · Save)
+				<h2 class="text-[17px] font-semibold tracking-[-0.01em] text-fg-main">
+					Generative surfaces
 				</h2>
-				<p class="text-xs text-fg-light">
-					Ported from <code class="font-mono">components/agents-ui/agent-generative-surface.tsx</code> with Trailside & GitHub extensions
+				<p class="mt-1 text-xs text-fg-light">
+					AgentGenerativeSurface with edit, compare, expand and save.
 				</p>
 			</div>
 
 			<div
 				role="group"
 				aria-label="Select generative surface type"
-				class="flex flex-wrap gap-1 rounded-xl border border-card-border bg-canvas-secondary p-1 text-xs"
+				class="{SEGMENT_GROUP_CLASS} flex-wrap"
 			>
 				{#each SURFACE_EXAMPLES as item, idx (item.label)}
 					<button
 						type="button"
 						aria-pressed={selectedSurfaceIdx === idx}
 						onclick={() => (selectedSurfaceIdx = idx)}
-						class="rounded-lg px-2.5 py-1 font-medium transition-colors {selectedSurfaceIdx === idx
-							? 'bg-card-bg text-fg-main shadow-xs'
-							: 'text-fg-light hover:text-fg-main'}"
+						class={segmentClass(selectedSurfaceIdx === idx)}
 					>
 						{item.label}
 					</button>
@@ -314,13 +312,13 @@
 	</section>
 
 	<!-- Section 2: Dynamic JSON-to-Svelte5 IntelligentUIRenderer Playground -->
-	<section class="space-y-4 border-t border-canvas-border pt-6">
+	<section class="space-y-5 rounded-window border border-card-border bg-card-bg p-5 ak-shadow-soft-sm sm:p-6">
 		<div class="flex flex-wrap items-center justify-between gap-3">
 			<div>
-				<h2 class="text-base font-bold text-fg-main">
-					2. Dynamic IntelligentUIRenderer (JSON Schema → Live Svelte 5 Components)
+				<h2 class="text-[17px] font-semibold tracking-[-0.01em] text-fg-main">
+					Schema renderer
 				</h2>
-				<p class="text-xs text-fg-light">
+				<p class="mt-1 text-xs text-fg-light">
 					Stream or edit declarative <code class="font-mono">DynamicUINode[]</code> JSON to compose any combination of agent, GitHub, and generative components on the fly.
 				</p>
 			</div>
@@ -331,12 +329,9 @@
 						type="button"
 						disabled={!ready}
 						onclick={() => selectPreset(idx)}
-						class="rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors {selectedPresetIdx ===
-						idx
-							? 'border-accent-primary bg-accent-subtle text-accent-primary'
-							: 'border-card-border bg-card-bg text-fg-main hover:bg-canvas-secondary'}"
+						class={togglePillClass(selectedPresetIdx === idx)}
 					>
-						Preset: {preset.name}
+						{preset.name}
 					</button>
 				{/each}
 			</div>
@@ -346,8 +341,8 @@
 			<!-- Left: Live JSON Schema Editor -->
 			<div class="space-y-2 lg:col-span-5">
 				<div class="flex items-center justify-between text-xs">
-					<label for="intelligent-ui-json-editor" class="font-mono font-semibold text-fg-main">
-						Declarative UI Payload (JSON)
+					<label for="intelligent-ui-json-editor" class="font-medium text-fg-main">
+						UI payload (JSON)
 					</label>
 					{#if parsedSchema.error}
 						<span class="font-mono text-status-danger">{parsedSchema.error}</span>
@@ -359,12 +354,12 @@
 					id="intelligent-ui-json-editor"
 					rows={18}
 					bind:value={customJson}
-					class="w-full rounded-xl border border-card-border bg-terminal-bg p-3.5 font-mono text-xs leading-5 text-terminal-fg focus:border-accent-primary focus:outline-none"
+					class="w-full rounded-[18px] border border-card-border bg-terminal-bg p-4 font-mono text-xs leading-5 text-terminal-fg focus:border-accent-primary/60 focus:outline-none"
 				></textarea>
 
-				<div class="rounded-xl border border-card-border bg-card-bg p-3 font-mono text-xs">
-					<p class="font-semibold text-accent-primary">Emitted UI Intents:</p>
-					<ul class="mt-1.5 space-y-1 text-[11px] text-fg-light">
+				<div class="rounded-[18px] bg-canvas-secondary/70 p-4 text-xs">
+					<p class="font-medium text-fg-main">Emitted intents</p>
+					<ul class="mt-2 space-y-1 font-mono text-[11px] text-fg-light">
 						{#each intentHistory as item, i (i)}
 							<li class="truncate">{item}</li>
 						{/each}
@@ -374,7 +369,7 @@
 
 			<!-- Right: Rendered Svelte 5 Intelligent UI -->
 			<div class="lg:col-span-7">
-				<div class="rounded-2xl border border-card-border bg-canvas-secondary p-4">
+				<div class="rounded-[18px] bg-canvas-secondary/70 p-4">
 					<IntelligentUIRenderer
 						nodes={parsedSchema.nodes}
 						onIntent={(intent) => {

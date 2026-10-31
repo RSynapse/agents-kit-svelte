@@ -1,6 +1,19 @@
 <script lang="ts">
 	import { SEGMENT_GROUP_CLASS, badgeClass, buttonClass, segmentClass } from '$lib/ui/styles';
-	import { ArrowRight, Check, ChevronDown, Code, Copy, Eye, FileCode, Search } from '@lucide/svelte';
+	import {
+		ArrowRight,
+		Check,
+		ChevronDown,
+		Code,
+		Copy,
+		Eye,
+		FileCode,
+		GitPullRequest,
+		LayoutTemplate,
+		MessagesSquare,
+		Search,
+		Sparkle
+	} from '@lucide/svelte';
 	import { base } from '$app/paths';
 	import {
 		AISidebar,
@@ -598,6 +611,36 @@ svelte-check found 0 errors and 0 warnings
 			if (copiedSlug === slug) copiedSlug = null;
 		}, 1500);
 	}
+
+	const APP_EXAMPLES = [
+		{
+			href: `${base}/claude-code/`,
+			icon: MessagesSquare,
+			eyebrow: 'Agentic coding workbench',
+			title: 'AK-S Chat',
+			description:
+				'A multi-turn agent session with tool traces, inline diffs, bash permissions and a context meter.',
+			cta: 'Try AK-S Chat'
+		},
+		{
+			href: `${base}/github/`,
+			icon: GitPullRequest,
+			eyebrow: 'Repository and board suite',
+			title: 'GitHub cards, bento and kanban',
+			description:
+				'A crossfading issue board, run dispatch cards, PR referee cards, CI checks and review threads.',
+			cta: 'Try the GitHub suite'
+		},
+		{
+			href: `${base}/intelligent-ui/`,
+			icon: LayoutTemplate,
+			eyebrow: 'Generative surfaces',
+			title: 'Intelligent UI playground',
+			description:
+				'A JSON schema to Svelte renderer plus generated surfaces you can edit, compare and export.',
+			cta: 'Try the playground'
+		}
+	];
 </script>
 
 <svelte:head>
@@ -605,32 +648,37 @@ svelte-check found 0 errors and 0 warnings
 </svelte:head>
 
 <main>
-	<!-- 1. Upstream Agents-Kit Hero Section + Interactive HomeChatPreview -->
-	<section class="mx-auto max-w-[860px] px-5 pt-14 pb-12 text-center sm:pt-20">
-		<a
-			href="#components"
-			class="inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg py-1 pr-3 pl-1 text-xs text-fg-light no-underline ak-shadow-btn transition-colors hover:text-fg-main"
-		>
-			<span class={badgeClass('neutral')}>v0.1</span>
-			<span>68 Svelte 5 components, AK-S Chat &amp; GitHub suite</span>
-			<ArrowRight aria-hidden="true" class="size-3.5" />
-		</a>
+	<!-- 1. Hero: warm serif headline + live PromptInput -->
+	<section class="relative overflow-hidden">
+		<div
+			aria-hidden="true"
+			class="pointer-events-none absolute inset-x-0 top-0 -z-0 h-[520px] bg-[radial-gradient(60%_60%_at_50%_0%,color-mix(in_oklch,var(--color-accent-primary)_9%,transparent),transparent_70%)]"
+		></div>
+		<div class="relative mx-auto max-w-[880px] px-5 pt-16 pb-14 text-center sm:pt-24">
+			<a
+				href="#components"
+				class="inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg py-1 pr-3 pl-1 text-xs text-fg-light no-underline ak-shadow-btn transition-colors hover:text-fg-main"
+			>
+				<span class={badgeClass('accent')}>v0.1</span>
+				<span>68 Svelte 5 components, AK-S Chat &amp; GitHub suite</span>
+				<ArrowRight aria-hidden="true" class="size-3.5" />
+			</a>
 
-		<h1 class="mt-5 text-4xl leading-[1.08] font-semibold tracking-tight text-fg-main sm:text-6xl">
-			Build better
-			<br />
-			agent interfaces.
-		</h1>
+			<h1
+				class="mt-7 font-display text-[2.6rem] leading-[1.05] font-normal tracking-[-0.02em] text-fg-main sm:text-[4.25rem]"
+			>
+				Gentle interfaces for
+				<br class="hidden sm:block" />
+				<span class="text-accent-primary">thoughtful</span> agents.
+			</h1>
 
-		<p class="mx-auto mt-5 max-w-xl text-base leading-7 text-fg-light">
-			agents-kit-svelte: Dynamic Agentic, GitHub &amp; Intelligent UI Kit. Chat, voice, tools,
-			approvals, and results people can work with. Built in Svelte 5 Runes. Yours to copy and
-			change.
-		</p>
+			<p class="mx-auto mt-6 max-w-xl text-base leading-7 text-fg-light sm:text-[17px]">
+				Chat, tools, approvals, GitHub workflows and generated results, built with Svelte 5
+				Runes. Soft by default, and yours to copy and change.
+			</p>
 
-		<!-- Interactive HomeChatPreview (matching upstream HomeChatPreview) -->
-		<div class="mx-auto mt-8 w-full max-w-[600px] text-left">
-			<div class="rounded-window ak-shadow-card">
+			<!-- Interactive HomeChatPreview -->
+			<div class="mx-auto mt-10 w-full max-w-[620px] text-left">
 				<PromptInput
 					bind:value={heroPromptValue}
 					agents={sampleAgents}
@@ -642,128 +690,82 @@ svelte-check found 0 errors and 0 warnings
 						heroNotice = `Prompt "${submitted}" previewed with ${agentLabel}. No model was contacted.`;
 					}}
 				/>
+				<p class="mt-3 text-center text-xs text-fg-light" role="status">
+					{heroNotice || 'Live PromptInput preview. Nothing is sent to a model.'}
+				</p>
 			</div>
-			<p class="mt-2.5 text-center text-xs text-fg-light" role="status">
-				{heroNotice || 'Live PromptInput preview. Nothing is sent to a model.'}
-			</p>
-		</div>
 
-		<div class="mt-7 flex flex-wrap justify-center gap-3">
-			<a
-				href="#components"
-				class="inline-flex h-9 items-center gap-2 rounded-lg bg-fg-main px-4 text-sm font-medium text-fg-inverse no-underline transition-opacity hover:opacity-90"
-			>
-				<span>Browse 68 components</span>
-				<ArrowRight aria-hidden="true" class="size-4" />
-			</a>
-			<a
-				href="{base}/claude-code/"
-				class="inline-flex h-9 items-center gap-2 rounded-lg border border-card-border bg-card-bg px-4 text-sm font-medium text-fg-main no-underline transition-colors hover:bg-canvas-secondary"
-			>
-				Open AK-S Chat
-			</a>
-			<a
-				href="{base}/github/"
-				class="inline-flex h-9 items-center gap-2 rounded-lg border border-card-border bg-card-bg px-4 text-sm font-medium text-fg-main no-underline transition-colors hover:bg-canvas-secondary"
-			>
-				Explore GitHub Suite
-			</a>
-			<a
-				href="{base}/intelligent-ui/"
-				class="inline-flex h-9 items-center gap-2 rounded-lg border border-card-border bg-card-bg px-4 text-sm font-medium text-fg-main no-underline transition-colors hover:bg-canvas-secondary"
-			>
-				Intelligent UI Playground
-			</a>
+			<div class="mt-8 flex flex-wrap justify-center gap-2.5">
+				<a href="#components" class="{buttonClass('primary', 'lg')} no-underline">
+					Browse 68 components
+					<ArrowRight aria-hidden="true" />
+				</a>
+				<a href="{base}/claude-code/" class="{buttonClass('secondary', 'lg')} no-underline">
+					<Sparkle aria-hidden="true" class="fill-current text-accent-primary" />
+					Open AK-S Chat
+				</a>
+			</div>
 		</div>
 	</section>
 
-	<!-- 2. Upstream "Build with the kit · Start with a complete app" Section -->
-	<section
-		id="app-examples"
-		class="mx-auto max-w-[1160px] border-t border-canvas-border px-5 py-10 sm:px-8"
-	>
-		<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+	<!-- 2. Build with the kit · complete app examples -->
+	<section id="app-examples" class="mx-auto max-w-[1160px] px-5 pt-4 pb-16 sm:px-8">
+		<div class="mb-7 flex flex-wrap items-end justify-between gap-4">
 			<div>
-				<p class="text-xs text-fg-light">Build with the kit</p>
-				<h2 class="mt-1.5 text-xl font-medium tracking-tight text-fg-main">
+				<p class="text-xs font-medium text-accent-primary">Build with the kit</p>
+				<h2 class="mt-2 font-display text-[1.75rem] leading-tight font-normal tracking-[-0.015em] text-fg-main">
 					Start with a complete app.
 				</h2>
 			</div>
 			<a
 				href="{base}/claude-code/"
-				class="inline-flex items-center gap-1 text-sm text-fg-light no-underline transition-colors hover:text-fg-main"
+				class="{buttonClass('ghost', 'md')} no-underline"
 			>
-				Explore interactive workbenches
-				<ArrowRight aria-hidden="true" class="size-3.5" />
+				Explore the workbenches
+				<ArrowRight aria-hidden="true" />
 			</a>
 		</div>
 
 		<div class="grid gap-4 sm:grid-cols-3">
-			<a
-				href="{base}/claude-code/"
-				class="group flex flex-col justify-between rounded-[10px] border border-canvas-border bg-card-bg p-4 no-underline transition-colors hover:bg-canvas-secondary"
-			>
-				<div>
-					<p class="text-xs text-fg-light">01 · Agentic Coding Workbench</p>
-					<h3 class="mt-1.5 text-sm font-medium text-fg-main">AK-S Chat Workbench</h3>
-					<p class="mt-2 text-[13px] leading-6 text-fg-light">
-						Multi-turn agent session with collapsible tool traces, inline unified diffs, bash permissions, and worktree context meter.
-					</p>
-				</div>
-				<span class="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-fg-main">
-					<span>Try AK-S Chat</span>
-					<ArrowRight aria-hidden="true" class="size-3.5 text-fg-light transition-colors group-hover:text-fg-main" />
-				</span>
-			</a>
-
-			<a
-				href="{base}/github/"
-				class="group flex flex-col justify-between rounded-[10px] border border-canvas-border bg-card-bg p-4 no-underline transition-colors hover:bg-canvas-secondary"
-			>
-				<div>
-					<p class="text-xs text-fg-light">02 · Repository &amp; Board Suite</p>
-					<h3 class="mt-1.5 text-sm font-medium text-fg-main">GitHub Cards, Bento &amp; Kanban</h3>
-					<p class="mt-2 text-[13px] leading-6 text-fg-light">
-						Reactive 4-column crossfade board, issue run dispatch cards, PR referee cards, CI check suites, and review threads.
-					</p>
-				</div>
-				<span class="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-fg-main">
-					<span>Try GitHub Suite</span>
-					<ArrowRight aria-hidden="true" class="size-3.5 text-fg-light transition-colors group-hover:text-fg-main" />
-				</span>
-			</a>
-
-			<a
-				href="{base}/intelligent-ui/"
-				class="group flex flex-col justify-between rounded-[10px] border border-canvas-border bg-card-bg p-4 no-underline transition-colors hover:bg-canvas-secondary"
-			>
-				<div>
-					<p class="text-xs text-fg-light">03 · Generative Surfaces</p>
-					<h3 class="mt-1.5 text-sm font-medium text-fg-main">Dynamic Intelligent UI Engine</h3>
-					<p class="mt-2 text-[13px] leading-6 text-fg-light">
-						Declarative JSON-schema to Svelte 5 renderer plus polymorphic generative surfaces with inline Edit, Compare, and export.
-					</p>
-				</div>
-				<span class="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-fg-main">
-					<span>Try Intelligent UI</span>
-					<ArrowRight aria-hidden="true" class="size-3.5 text-fg-light transition-colors group-hover:text-fg-main" />
-				</span>
-			</a>
+			{#each APP_EXAMPLES as example (example.href)}
+				<a
+					href={example.href}
+					class="group flex flex-col justify-between rounded-window border border-card-border bg-card-bg p-5 no-underline ak-shadow-soft-sm ak-hover-soft hover:border-accent-primary/30"
+				>
+					<div>
+						<span
+							class="inline-flex size-9 items-center justify-center rounded-full bg-accent-subtle text-accent-primary [&_svg]:size-4"
+						>
+							<example.icon aria-hidden="true" />
+						</span>
+						<p class="mt-4 text-xs text-fg-light">{example.eyebrow}</p>
+						<h3 class="mt-1 text-[15px] font-semibold text-fg-main">{example.title}</h3>
+						<p class="mt-2 text-[13px] leading-6 text-fg-light">{example.description}</p>
+					</div>
+					<span class="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-fg-main">
+						{example.cta}
+						<ArrowRight
+							aria-hidden="true"
+							class="size-3.5 text-fg-light transition-colors group-hover:text-accent-primary"
+						/>
+					</span>
+				</a>
+			{/each}
 		</div>
 	</section>
 
 	<!-- 3. Upstream Two-Column Sticky Sidebar + Main Component Catalogue -->
 	<div
 		id="components"
-		class="mx-auto grid max-w-7xl scroll-mt-16 border-t border-canvas-border lg:grid-cols-[224px_minmax(0,1fr)]"
+		class="mx-auto grid max-w-7xl scroll-mt-16 border-t border-canvas-border/70 lg:grid-cols-[240px_minmax(0,1fr)]"
 	>
 		<!-- Left Sticky Sidebar (matches components/gallery/catalogue.tsx) -->
 		<aside
 			aria-label="Catalogue filter and component index"
-			class="border-b border-canvas-border p-4 lg:sticky lg:top-16 lg:h-[calc(100dvh-4rem)] lg:overflow-auto lg:border-r lg:border-b-0"
+			class="border-b border-canvas-border/70 p-4 lg:sticky lg:top-16 lg:h-[calc(100dvh-4rem)] lg:overflow-auto lg:border-r lg:border-b-0 lg:py-6"
 		>
 			<label
-				class="flex h-8 items-center gap-2 rounded-control border border-card-border bg-card-bg px-2.5 transition-colors focus-within:border-fg-light"
+				class="flex h-9 items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 ak-shadow-btn transition-[border-color,box-shadow] focus-within:border-accent-primary/50 focus-within:shadow-[0_0_0_3px_color-mix(in_oklch,var(--color-accent-primary)_14%,transparent)]"
 			>
 				<Search aria-hidden="true" class="size-3.5 text-fg-light" />
 				<input
@@ -771,12 +773,12 @@ svelte-check found 0 errors and 0 warnings
 					aria-label="Search components"
 					placeholder="Search 68 components"
 					bind:value={searchQuery}
-					class="min-w-0 flex-1 bg-transparent text-xs text-fg-main outline-none"
+					class="min-w-0 flex-1 bg-transparent text-[13px] text-fg-main outline-none placeholder:text-fg-light"
 				/>
 			</label>
 
 			<div class="mt-4">
-				<label for="collection-source" class="text-xs text-fg-light">Collection</label>
+				<label for="collection-source" class="px-1 text-xs font-medium text-fg-light">Collection</label>
 				<select
 					id="collection-source"
 					value={selectedCategory}
@@ -784,7 +786,7 @@ svelte-check found 0 errors and 0 warnings
 						(selectedCategory = (e.currentTarget as HTMLSelectElement).value as
 							| 'All'
 							| CatalogCategory)}
-					class="mt-1.5 h-8 w-full rounded-control border border-card-border bg-card-bg px-2 text-xs text-fg-main"
+					class="mt-1.5 h-9 w-full rounded-full border border-card-border bg-card-bg px-3 text-[13px] text-fg-main"
 				>
 					{#each CATEGORIES as cat (cat)}
 						{@const count =
@@ -799,14 +801,14 @@ svelte-check found 0 errors and 0 warnings
 			</div>
 
 			<nav class="mt-6 hidden lg:block" aria-label="Component families">
-				<p class="mb-2 px-2 text-xs font-medium text-fg-light">
+				<p class="mb-2 px-3 text-xs font-medium text-fg-light">
 					Components ({filteredCatalog.length})
 				</p>
 				<div class="space-y-0.5">
 					{#each filteredCatalog as item (item.slug)}
 						<a
 							href="#{item.slug}"
-							class="block truncate rounded-control px-2 py-1.5 text-[13px] text-fg-light no-underline transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+							class="block truncate rounded-full px-3 py-1.5 text-[13px] text-fg-light no-underline transition-colors hover:bg-canvas-secondary hover:text-fg-main"
 						>
 							{item.name}
 						</a>
@@ -816,10 +818,10 @@ svelte-check found 0 errors and 0 warnings
 		</aside>
 
 		<!-- Right Main Catalogue Column -->
-		<div class="min-w-0 px-4 py-6 sm:px-6 lg:px-8">
-			<header class="mb-6 max-w-2xl">
-				<p class="text-xs text-fg-light">Components</p>
-				<h2 class="mt-1.5 text-2xl font-semibold tracking-tight text-fg-main">
+		<div class="min-w-0 px-4 py-8 sm:px-6 lg:px-10">
+			<header class="mb-7 max-w-2xl">
+				<p class="text-xs font-medium text-accent-primary">Components</p>
+				<h2 class="mt-2 font-display text-[2rem] leading-tight font-normal tracking-[-0.015em] text-fg-main">
 					An interface for every part of agent work.
 				</h2>
 				<p class="mt-2.5 text-sm leading-6 text-fg-light">
@@ -846,10 +848,10 @@ svelte-check found 0 errors and 0 warnings
 						disabled={!ready}
 						aria-selected={selectedCategory === category}
 						onclick={() => (selectedCategory = category)}
-						class="inline-flex h-7 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-colors {selectedCategory ===
+						class="inline-flex h-8 items-center gap-1.5 rounded-full border px-3.5 text-xs font-medium transition-colors {selectedCategory ===
 						category
-							? 'bg-fg-main text-fg-inverse'
-							: 'border border-card-border text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+							? 'border-fg-main bg-fg-main text-fg-inverse'
+							: 'border-card-border bg-card-bg text-fg-light hover:border-fg-light/40 hover:text-fg-main'}"
 					>
 						{category}
 						<span class="tabular-nums opacity-60">{count}</span>
@@ -858,20 +860,20 @@ svelte-check found 0 errors and 0 warnings
 			</div>
 
 			<!-- 68 Component Sections (upstream dashed-border FamilyPreview layout) -->
-			<div class="space-y-10">
+			<div class="space-y-6">
 				{#each filteredCatalog as item (item.slug)}
 					{@const tabMode = getTabMode(item.slug)}
 					{@const showCode = tabMode !== 'preview'}
 					<article
 						id={item.slug}
 						data-component-slug={item.slug}
-						class="scroll-mt-24 border-b border-canvas-border pb-8"
+						class="scroll-mt-24 rounded-window border border-card-border bg-card-bg p-4 ak-shadow-soft-sm sm:p-5"
 					>
 						<!-- Upstream FamilyPreview Header -->
-						<header class="mb-3 flex flex-wrap items-start justify-between gap-3">
+						<header class="mb-4 flex flex-wrap items-start justify-between gap-3 px-1">
 							<div class="max-w-2xl">
 								<div class="flex flex-wrap items-center gap-2">
-									<h3 class="text-sm font-semibold text-fg-main">
+									<h3 class="text-[15px] font-semibold text-fg-main">
 										{item.name}
 									</h3>
 									<span class={badgeClass('neutral')}>
@@ -938,7 +940,7 @@ svelte-check found 0 errors and 0 warnings
 
 						<!-- Upstream rounded-[14px] Stage -->
 						<div
-							class="relative isolate overflow-x-auto rounded-window border border-canvas-border bg-canvas-secondary/60 p-4 sm:p-6"
+							class="relative isolate overflow-x-auto rounded-[18px] bg-canvas-secondary/70 p-4 sm:p-6"
 						>
 							{#if tabMode === 'usage'}
 								<CodeBlock

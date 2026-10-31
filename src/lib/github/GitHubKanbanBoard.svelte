@@ -241,7 +241,7 @@
 			<div class="flex min-w-0 flex-col rounded-xl border border-card-border bg-canvas-primary p-3">
 				<header class="mb-3 flex min-h-10 items-start justify-between gap-2 border-b border-canvas-border pb-2.5">
 					<div class="min-w-0">
-						<h3 class="truncate text-xs font-bold uppercase tracking-wider text-fg-main">{col.label}</h3>
+						<h3 class="truncate text-[13px] font-semibold text-fg-main">{col.label}</h3>
 						<p class="mt-0.5 truncate text-[11px] text-fg-light">{col.description}</p>
 					</div>
 					<span class="shrink-0 rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-xs font-semibold tabular-nums text-fg-main">
