@@ -216,13 +216,13 @@
 	<label class="block">
 		<span class="sr-only">{placeholder}</span>
 		<textarea
-			rows={2}
+			rows={1}
 			bind:value
 			{placeholder}
 			disabled={!ready}
 			aria-label={placeholder}
 			onkeydown={handleKeyDown}
-			class="field-sizing-content max-h-60 min-h-12 w-full resize-none bg-transparent px-1.5 py-1 text-[15px] leading-6 text-fg-main placeholder:text-fg-light/80 focus:outline-none disabled:opacity-50"
+			class="field-sizing-content max-h-60 min-h-10 w-full sm:min-h-12 resize-none bg-transparent px-1.5 py-1 text-[15px] leading-6 text-fg-main placeholder:text-fg-light/80 focus:outline-none disabled:opacity-50"
 		></textarea>
 	</label>
 

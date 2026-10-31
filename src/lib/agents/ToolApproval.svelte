@@ -104,7 +104,7 @@
 			<span
 				in:fade={{ duration: motionDuration(140) }}
 				aria-hidden="true"
-				class="flex size-9 shrink-0 items-center justify-center rounded-full bg-chat-surface {activeStatus ===
+				class="flex size-9 shrink-0 items-center justify-center rounded-full bg-chat-surface max-sm:hidden {activeStatus ===
 					'approved' || activeStatus === 'complete'
 					? 'text-status-success'
 					: activeStatus === 'denied' || activeStatus === 'error'
@@ -173,12 +173,12 @@
 
 					<AgentDisclosure id={panelId} open={isOpen}>
 						<dl
-							class="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-[10px] border border-chat-border bg-chat-surface/60 px-3 py-2 text-xs"
+							class="mt-2 grid grid-cols-1 gap-x-4 gap-y-0.5 rounded-[12px] border sm:grid-cols-[auto_1fr] sm:gap-y-1.5 border-chat-border bg-chat-surface/60 px-3 py-2 text-xs"
 						>
 							{#each params as param (param.label)}
-								<dt class="font-medium text-fg-light">{param.label}</dt>
+								<dt class="font-medium text-fg-light max-sm:not-first:mt-1.5">{param.label}</dt>
 								<dd
-									class="min-w-0 break-all text-fg-main {param.code ? 'font-mono' : ''}"
+									class="min-w-0 text-fg-main [overflow-wrap:anywhere] {param.code ? 'font-mono' : ''}"
 								>
 									{param.value}
 								</dd>
@@ -193,13 +193,13 @@
 	{#if isWaiting}
 		<div
 			in:rise
-			class="flex flex-wrap items-center justify-end gap-2 border-t border-chat-border/70 bg-chat-surface/40 px-4 py-2.5"
+			class="grid grid-cols-3 gap-2 border-t border-chat-border/70 bg-chat-surface/40 px-3 py-2.5 sm:flex sm:items-center sm:justify-end sm:px-4"
 		>
 			<button
 				type="button"
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleDeny}
-				class={pillClass('secondary', 'md')}
+				class={pillClass('secondary', 'md', 'max-sm:px-2')}
 			>
 				{denyLabel}
 			</button>
@@ -207,7 +207,7 @@
 				type="button"
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleAlwaysApprove}
-				class={pillClass('secondary', 'md')}
+				class={pillClass('secondary', 'md', 'max-sm:px-2')}
 			>
 				{alwaysApproveLabel}
 			</button>
@@ -215,7 +215,7 @@
 				type="button"
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleApprove}
-				class={pillClass('primary', 'md')}
+				class={pillClass('primary', 'md', 'max-sm:px-2')}
 			>
 				{approveLabel}
 			</button>
