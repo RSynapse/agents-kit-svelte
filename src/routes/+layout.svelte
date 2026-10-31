@@ -5,6 +5,7 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import '../app.css';
+	import VersionMenu from './VersionMenu.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -49,12 +50,7 @@
 					<span class="font-display text-[17px] font-normal tracking-[-0.01em]">Agents Kit</span>
 					<span class="text-xs font-medium text-fg-light">Svelte</span>
 				</a>
-				<select
-					aria-label="Library version"
-					class="h-7 rounded-full border border-card-border bg-card-bg px-2.5 text-xs text-fg-light"
-				>
-					<option value="0.1">v0.1 · Svelte 5</option>
-				</select>
+				<VersionMenu />
 			</div>
 
 			<nav
