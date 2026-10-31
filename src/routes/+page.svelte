@@ -107,6 +107,7 @@
 		ResultActionState,
 		SupportedAgentId,
 		SupportedAgentOption,
+		ContextSourceItem,
 		TodoItem,
 		ToolApprovalParam
 	} from '$lib';
@@ -361,6 +362,13 @@
 				}
 			]
 		}
+	];
+
+	const sampleContextSources: ContextSourceItem[] = [
+		{ id: 'sys', label: 'System prompt and guardrails', tokens: 11_200, category: 'system' },
+		{ id: 'wt', label: 'Worktree diff and symbols', tokens: 24_600, category: 'worktree' },
+		{ id: 'conv', label: 'Conversation so far', tokens: 22_700, category: 'conversation' },
+		{ id: 'tools', label: 'Tool schemas', tokens: 5_700, category: 'tools' }
 	];
 
 	const sampleAgents: SupportedAgentOption[] = [
@@ -1371,7 +1379,7 @@
 							{:else if item.slug === 'agent-thinking-indicator'}
 								<AgentThinkingIndicator />
 							{:else if item.slug === 'agent-context-meter'}
-								<AgentContextMeter usedTokens={64200} maxTokens={200000} />
+								<div class="min-h-56"><AgentContextMeter usedTokens={64200} maxTokens={200000} sources={sampleContextSources} /></div>
 							{:else if item.slug === 'agent-checkpoint'}
 								<AgentCheckpoint checkpoint={sampleCheckpoint} />
 							{:else if item.slug === 'chain-of-thought'}
