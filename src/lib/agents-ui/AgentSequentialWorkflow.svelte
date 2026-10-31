@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ChevronDown, Pause, Play, RefreshCw, RotateCcw, SkipForward } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type WorkflowStepStatus = 'waiting' | 'running' | 'completed' | 'failed' | 'skipped';
 
 	export interface WorkflowStep {
@@ -197,13 +199,13 @@
 
 <section
 	aria-label="Sequential workflow pipeline"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
 	>
 		<div>
-			<p class="font-mono text-xs font-medium text-fg-light">Sequential Workflow</p>
+			<p class="text-xs font-medium text-fg-light">Sequential Workflow</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">{workflowName}</h2>
 			<p class="mt-0.5 text-xs text-fg-light">{description}</p>
 		</div>
@@ -216,14 +218,15 @@
 					? 'border border-card-border bg-canvas-primary text-fg-main hover:bg-canvas-secondary'
 					: 'bg-accent-primary text-fg-inverse'}"
 			>
-				{localRunning ? '⏸ Pause' : '▶ Start'}
+				{#if localRunning}<Pause aria-hidden="true" />Pause{:else}<Play aria-hidden="true" />Start{/if}
 			</button>
 			<button
 				type="button"
 				onclick={handleReset}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				↺ Reset
+				<RotateCcw aria-hidden="true" />
+				Reset
 			</button>
 		</div>
 	</header>
@@ -261,19 +264,19 @@
 							<span class="font-mono text-xs tabular-nums text-fg-light">{step.duration}</span>
 						{/if}
 						<span
-							class="rounded-full px-2 py-0.5 text-[11px] font-medium {getStepStatusClasses(
+							class="rounded-chip px-1.5 py-px text-[11px] font-medium {getStepStatusClasses(
 								step.status
 							)}"
 						>
 							{getStepStatusLabel(step.status)}
 						</span>
-						<span class="text-xs text-fg-light">{isSelected ? '▴' : '▾'}</span>
+						<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-200 {isSelected ? 'rotate-180' : ''}" />
 					</span>
 				</button>
 
 				{#if isSelected}
 					<div
-						class="grid gap-3 border-t border-canvas-border bg-canvas-primary px-4 py-3 text-xs sm:grid-cols-2"
+						class="grid gap-3 border-t border-canvas-border px-4 py-3 text-xs sm:grid-cols-2"
 					>
 						<div>
 							<p class="font-semibold text-fg-main">Stage Input</p>
@@ -285,7 +288,7 @@
 								{step.outputSummary || 'Available once this stage completes.'}
 							</p>
 						</div>
-						<div class="flex items-center gap-3 font-mono text-[11px] text-fg-light">
+						<div class="flex items-center gap-3 text-xs text-fg-light">
 							{#if step.duration}
 								<span>Duration: {step.duration}</span>
 							{/if}
@@ -297,17 +300,19 @@
 							<button
 								type="button"
 								onclick={() => handleRetryStep(step.id)}
-								class="rounded-lg border border-card-border bg-card-bg px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+								class={buttonClass('secondary', 'sm')}
 							>
-								↻ Retry stage
+								<RefreshCw aria-hidden="true" />
+								Retry stage
 							</button>
 							{#if step.status === 'waiting' || step.status === 'running'}
 								<button
 									type="button"
 									onclick={() => handleSkipStep(step.id)}
-									class="rounded-lg border border-card-border bg-card-bg px-2.5 py-1 text-xs font-medium text-fg-light hover:bg-canvas-secondary hover:text-fg-main"
+									class={buttonClass('secondary', 'sm')}
 								>
-									⏭ Skip stage
+									<SkipForward aria-hidden="true" />
+									Skip stage
 								</button>
 							{/if}
 						</div>
@@ -318,7 +323,7 @@
 	</ol>
 
 	<footer
-		class="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-border bg-canvas-primary px-4 py-3 font-mono text-xs text-fg-light"
+		class="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-border px-4 py-3 text-xs text-fg-light"
 	>
 		<span>
 			{completedCount} of {localSteps.length} stages complete

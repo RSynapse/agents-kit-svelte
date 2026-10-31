@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ArrowRight, Check, ChevronDown, ChevronRight, LoaderCircle, Pause, Play, RefreshCw } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import { formatCompactTokens } from '../state/chat-helpers';
 
 	export type SubAgentStatus = 'idle' | 'running' | 'completed' | 'failed';
@@ -253,7 +255,7 @@
 
 <section
 	aria-label="Agent orchestrator"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
@@ -266,11 +268,11 @@
 					{supervisorModel}
 				</span>
 				<span
-					class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium {localProcessing
+					class="inline-flex items-center gap-1 rounded-chip px-1.5 py-px text-[11px] font-medium {localProcessing
 						? 'bg-accent-subtle text-accent-primary'
 						: 'bg-status-success-subtle text-status-success'}"
 				>
-					{localProcessing ? '◎ Delegation active' : '✓ Run paused / complete'}
+					{#if localProcessing}<LoaderCircle aria-hidden="true" class="animate-spin" />Delegation active{:else}<Check aria-hidden="true" />Run paused / complete{/if}
 				</span>
 			</div>
 			<h2 class="mt-1.5 text-base font-semibold text-fg-main">{orchestratorName}</h2>
@@ -282,28 +284,31 @@
 				type="button"
 				disabled={localProcessing}
 				onclick={handleStart}
-				class="rounded-lg bg-accent-primary px-3 py-1.5 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-40"
+				class={buttonClass('primary', 'md')}
 			>
-				▶ Start
+				<Play aria-hidden="true" />
+				Start
 			</button>
 			<button
 				type="button"
 				onclick={handlePauseAll}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				⏸ Pause all
+				<Pause aria-hidden="true" />
+				Pause all
 			</button>
 			<button
 				type="button"
 				onclick={handleRedistribute}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				↻ Rebalance
+				<RefreshCw aria-hidden="true" />
+				Rebalance
 			</button>
 		</div>
 	</header>
 
-	<div class="border-b border-canvas-border bg-canvas-primary px-4 py-3">
+	<div class="border-b border-canvas-border px-4 py-3">
 		<div class="flex flex-wrap items-center justify-between gap-2 text-xs text-fg-light">
 			<span>
 				<strong class="font-medium text-fg-main">{completedCount}</strong> of {localAgents.length} subagents
@@ -354,7 +359,7 @@
 								</span>
 							{/if}
 							<span
-								class="rounded-full px-2 py-0.5 text-[11px] font-medium {getStatusBadgeClasses(
+								class="rounded-chip px-1.5 py-px text-[11px] font-medium {getStatusBadgeClasses(
 									worker.status
 								)}"
 							>
@@ -379,7 +384,7 @@
 						</div>
 
 						{#if worker.metrics}
-							<div class="mt-2 flex flex-wrap items-center gap-3 font-mono text-[11px] text-fg-light">
+							<div class="mt-2 flex flex-wrap items-center gap-3 text-xs text-fg-light">
 								{#if worker.metrics.tokens !== undefined}
 									<span>
 										{worker.metrics.tokens.toLocaleString()}
@@ -404,9 +409,10 @@
 							<button
 								type="button"
 								onclick={() => handleRetry(worker.id)}
-								class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+								class={buttonClass('secondary', 'sm')}
 							>
-								↻ Retry
+								<RefreshCw aria-hidden="true" />
+								Retry
 							</button>
 						{/if}
 						{#if worker.logs && worker.logs.length > 0}
@@ -414,9 +420,9 @@
 								type="button"
 								aria-expanded={isExpanded}
 								onclick={() => toggleAgentLogs(worker.id)}
-								class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs text-fg-light hover:bg-canvas-secondary hover:text-fg-main"
+								class={buttonClass('secondary', 'sm')}
 							>
-								Logs ({worker.logs.length}) {isExpanded ? '▴' : '▾'}
+								Logs ({worker.logs.length}) <ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-200 {isExpanded ? 'rotate-180' : ''}" />
 							</button>
 						{/if}
 					</div>
@@ -424,11 +430,11 @@
 
 				{#if isExpanded && worker.logs && worker.logs.length > 0}
 					<ul
-						class="mt-2.5 space-y-1 rounded-lg border border-canvas-border bg-canvas-primary p-2.5 font-mono text-xs text-fg-light"
+						class="mt-2.5 space-y-1 rounded-control bg-canvas-secondary/70 p-2.5 font-mono text-xs text-fg-light"
 					>
 						{#each worker.logs as logLine, logIdx (`${worker.id}-log-${logIdx}`)}
 							<li class="flex items-start gap-2">
-								<span class="text-accent-primary">›</span>
+								<ChevronRight aria-hidden="true" class="mt-0.5 size-3 shrink-0 text-fg-light" />
 								<span>{logLine}</span>
 							</li>
 						{/each}
@@ -439,7 +445,7 @@
 	</div>
 
 	<div class="border-t border-canvas-border p-4">
-		<div class="rounded-lg border border-canvas-border bg-canvas-primary p-3">
+		<div class="rounded-control bg-canvas-secondary/70 p-3">
 			<p class="text-xs font-semibold text-fg-main">Supervisor Synthesis</p>
 			<p class="mt-1 text-xs leading-relaxed text-fg-light">{aggregatedResult}</p>
 		</div>
@@ -449,21 +455,21 @@
 				type="button"
 				aria-expanded={showCommLog}
 				onclick={() => (showCommLog = !showCommLog)}
-				class="flex items-center gap-1.5 text-xs font-medium text-fg-light hover:text-fg-main"
+				class={buttonClass('ghost', 'sm')}
 			>
-				<span>{showCommLog ? '▾' : '▸'}</span>
+				<ChevronRight aria-hidden="true" class="size-3.5 transition-transform duration-200 {showCommLog ? 'rotate-90' : ''}" />
 				<span>Handoff communication log ({communicationLog.length})</span>
 			</button>
 
 			{#if showCommLog}
 				<ol
-					class="mt-2 divide-y divide-canvas-border rounded-lg border border-canvas-border bg-canvas-primary px-3"
+					class="mt-2 divide-y divide-canvas-border rounded-control bg-canvas-secondary/70 px-3"
 				>
 					{#each communicationLog as entry (entry.id)}
 						<li class="grid gap-1 py-2 text-xs sm:grid-cols-[4.5rem_11rem_1fr]">
 							<time class="font-mono text-fg-light">{entry.timestamp}</time>
 							<span class="font-medium text-fg-main">
-								{entry.from} → {entry.to}
+								<span class="inline-flex items-center gap-1">{entry.from}<ArrowRight aria-hidden="true" class="size-3 text-fg-light" />{entry.to}</span>
 							</span>
 							<span class="text-fg-light">{entry.message}</span>
 						</li>
@@ -473,7 +479,7 @@
 		</div>
 
 		<footer
-			class="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-canvas-border pt-3 font-mono text-xs text-fg-light"
+			class="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-canvas-border pt-3 text-xs text-fg-light"
 		>
 			<span>{localAgents.length} subagents · {totalTokens.toLocaleString()} total tokens</span>
 			<span>{timestamp}</span>

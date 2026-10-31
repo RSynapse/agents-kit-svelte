@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { backOut, cubicOut } from 'svelte/easing';
-	import { fly, scale } from 'svelte/transition';
+	import { pillClass } from '../ui/styles';
+	import { Check, ChevronDown, ShieldCheck, X } from '@lucide/svelte';
+	import { fade } from 'svelte/transition';
 	import AgentDisclosure from './AgentDisclosure.svelte';
-	import { motionDuration, pressScale } from '../state/motion.svelte';
+	import { motionDuration, rise } from '../state/motion.svelte';
 	import type { ToolApprovalParam, ToolApprovalStatus } from '../types';
 
 	interface Props {
@@ -96,58 +97,26 @@
 	aria-label="{tool} tool approval"
 	data-state={activeStatus}
 	aria-busy={isBusy}
-	class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg ak-shadow-soft text-sm {className}"
 >
 	<div class="flex items-start gap-3 p-4">
 		{#key activeStatus}
 			<span
-				in:scale={{ start: 0.85, duration: motionDuration(180), easing: backOut }}
+				in:fade={{ duration: motionDuration(140) }}
 				aria-hidden="true"
-				class="flex size-8 shrink-0 items-center justify-center rounded-md border border-card-border bg-card-bg {activeStatus ===
+				class="flex size-9 shrink-0 items-center justify-center rounded-full bg-chat-surface {activeStatus ===
 					'approved' || activeStatus === 'complete'
 					? 'text-status-success'
 					: activeStatus === 'denied' || activeStatus === 'error'
 						? 'text-status-danger'
-						: 'text-fg-light'}"
+						: 'text-chat-accent'}"
 			>
 				{#if activeStatus === 'approved' || activeStatus === 'complete'}
-					<svg
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<path d="M20 6 9 17l-5-5" />
-					</svg>
+					<Check class="size-4" />
 				{:else if activeStatus === 'denied' || activeStatus === 'error'}
-					<svg
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<path d="M18 6 6 18" />
-						<path d="m6 6 12 12" />
-					</svg>
+					<X class="size-4" />
 				{:else}
-					<svg
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.75"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-						<path d="m9 12 2 2 4-4" />
-					</svg>
+					<ShieldCheck class="size-4" />
 				{/if}
 			</span>
 		{/key}
@@ -162,12 +131,12 @@
 				<span
 					role="status"
 					aria-live="polite"
-					class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium {activeStatus ===
+					class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium {activeStatus ===
 						'approved' || activeStatus === 'complete'
 						? 'bg-status-success-subtle text-status-success'
 						: activeStatus === 'denied' || activeStatus === 'error'
 							? 'bg-status-danger-subtle text-status-danger'
-							: 'bg-canvas-secondary text-fg-light'}"
+							: 'bg-chat-surface text-fg-light'}"
 				>
 					<span
 						aria-hidden="true"
@@ -183,7 +152,7 @@
 
 			{#if summary}
 				<p class="mt-1 leading-relaxed text-fg-light">
-					<code class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-xs text-fg-main">
+					<code class="rounded bg-chat-surface px-1.5 py-0.5 font-mono text-xs text-fg-main">
 						{summary}
 					</code>
 				</p>
@@ -196,26 +165,15 @@
 						aria-expanded={isOpen}
 						aria-controls={panelId}
 						onclick={() => (isOpen = !isOpen)}
-						class="group inline-flex items-center gap-1 text-xs font-medium text-fg-light outline-none transition-colors hover:text-fg-main"
+						class={pillClass('ghost', 'sm', 'group')}
 					>
 						<span>{isOpen ? 'Hide details' : 'View details'}</span>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.8"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3.5 transition-transform duration-150 {isOpen ? 'rotate-180' : ''}"
-						>
-							<path d="m6 9 6 6 6-6" />
-						</svg>
+						<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-150 {isOpen ? 'rotate-180' : ''}" />
 					</button>
 
 					<AgentDisclosure id={panelId} open={isOpen}>
 						<dl
-							class="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-md border border-card-border bg-canvas-secondary/60 px-3 py-2 text-xs"
+							class="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-[10px] border border-chat-border bg-chat-surface/60 px-3 py-2 text-xs"
 						>
 							{#each params as param (param.label)}
 								<dt class="font-medium text-fg-light">{param.label}</dt>
@@ -234,33 +192,30 @@
 
 	{#if isWaiting}
 		<div
-			in:fly={{ y: 4, duration: motionDuration(160), easing: cubicOut }}
-			class="flex flex-wrap items-center justify-end gap-2 border-t border-canvas-border bg-canvas-secondary/40 px-4 py-2.5"
+			in:rise
+			class="flex flex-wrap items-center justify-end gap-2 border-t border-chat-border/70 bg-chat-surface/40 px-4 py-2.5"
 		>
 			<button
 				type="button"
-				use:pressScale
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleDeny}
-				class="inline-flex h-8 items-center justify-center rounded-md border border-card-border bg-card-bg px-3 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
+				class={pillClass('secondary', 'md')}
 			>
 				{denyLabel}
 			</button>
 			<button
 				type="button"
-				use:pressScale
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleAlwaysApprove}
-				class="inline-flex h-8 items-center justify-center rounded-md border border-card-border bg-card-bg px-3 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
+				class={pillClass('secondary', 'md')}
 			>
 				{alwaysApproveLabel}
 			</button>
 			<button
 				type="button"
-				use:pressScale
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleApprove}
-				class="inline-flex h-8 items-center justify-center rounded-md bg-fg-main px-3 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
+				class={pillClass('primary', 'md')}
 			>
 				{approveLabel}
 			</button>

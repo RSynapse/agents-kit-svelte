@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { SEGMENT_GROUP_CLASS, badgeClass, segmentClass } from '../ui/styles';
+	import { ArrowRight, BadgeCheck, Check, Package } from '@lucide/svelte';
 	export type PackageChangeType = 'major' | 'minor' | 'patch' | 'added' | 'removed';
 
 	export interface PackageDependencyItem {
@@ -75,7 +77,7 @@
 	}
 </script>
 
-<div class="w-full rounded-xl border border-card-border bg-card-bg p-4 text-sm {className}">
+<div class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
 	<div class="flex flex-wrap items-start justify-between gap-3">
 		<div class="space-y-1">
 			<div class="flex flex-wrap items-center gap-2">
@@ -83,14 +85,15 @@
 					aria-hidden="true"
 					class="inline-flex size-6 items-center justify-center rounded-md bg-accent-subtle font-mono text-xs text-accent-primary"
 				>
-					📦
+					<Package aria-hidden="true" />
 				</span>
 				<span class="font-mono text-sm font-semibold text-fg-main">{name}</span>
 				{#if verified}
 					<span
-						class="rounded-full bg-status-success-subtle px-2 py-0.5 font-mono text-[11px] font-medium text-status-success"
+						class={badgeClass('success')}
 					>
-						✓ verified
+						<BadgeCheck aria-hidden="true" />
+						Verified
 					</span>
 				{/if}
 			</div>
@@ -101,7 +104,7 @@
 						<span>v{currentVersion}</span>
 					{/if}
 					{#if currentVersion && newVersion}
-						<span aria-hidden="true">→</span>
+						<ArrowRight aria-hidden="true" class="size-3" />
 					{/if}
 					{#if newVersion}
 						<span class="font-semibold text-fg-main">v{newVersion}</span>
@@ -115,7 +118,7 @@
 
 		{#if changeType}
 			<span
-				class="rounded-full px-2.5 py-0.5 font-mono text-xs font-medium capitalize {getChangeBadgeClasses(
+				class="rounded-chip px-1.5 py-px font-mono text-[11px] font-medium capitalize {getChangeBadgeClasses(
 					changeType
 				)}"
 			>
@@ -129,24 +132,18 @@
 	{/if}
 
 	<div class="mt-3 border-t border-canvas-border pt-3">
-		<div class="mb-2.5 flex items-center gap-2">
+		<div class="{SEGMENT_GROUP_CLASS} mb-2.5">
 			<button
 				type="button"
 				onclick={() => (activeTab = 'dependencies')}
-				class="rounded-md px-2.5 py-1 font-mono text-xs font-medium transition-colors {activeTab ===
-				'dependencies'
-					? 'bg-accent-subtle text-accent-primary'
-					: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+				class="{segmentClass(activeTab === 'dependencies')}"
 			>
 				Dependencies ({dependencies.length})
 			</button>
 			<button
 				type="button"
 				onclick={() => (activeTab = 'scripts')}
-				class="rounded-md px-2.5 py-1 font-mono text-xs font-medium transition-colors {activeTab ===
-				'scripts'
-					? 'bg-accent-subtle text-accent-primary'
-					: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+				class="{segmentClass(activeTab === 'scripts')}"
 			>
 				Scripts ({scripts.length})
 			</button>

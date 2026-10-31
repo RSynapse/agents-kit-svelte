@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	export type ToolCategory = 'all' | 'worktree' | 'contracts' | 'companion' | 'verification';
 
 	export interface AgentToolParameter {
@@ -166,13 +167,13 @@
 
 <section
 	aria-label="Interactive command and MCP tool palette"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-center sm:justify-between"
 	>
 		<div>
-			<p class="font-mono text-xs font-medium text-fg-light">Command & MCP Tool Registry</p>
+			<p class="text-xs font-medium text-fg-light">Command & MCP Tool Registry</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">Available Agent Tools</h2>
 			<p class="mt-0.5 font-mono text-xs text-fg-light">
 				{enabledCount} enabled · {localTools.length} registered
@@ -200,7 +201,7 @@
 	<div
 		role="tablist"
 		aria-label="Tool categories"
-		class="flex flex-wrap gap-1 border-b border-canvas-border bg-canvas-primary px-4 py-2"
+		class="{SEGMENT_GROUP_CLASS} mx-4 my-3 flex-wrap"
 	>
 		{#each categories as cat (cat.id)}
 			<button
@@ -208,10 +209,7 @@
 				role="tab"
 				aria-selected={activeCategory === cat.id}
 				onclick={() => (activeCategory = cat.id)}
-				class="rounded-lg px-2.5 py-1 text-xs font-medium transition-colors {activeCategory ===
-				cat.id
-					? 'bg-accent-primary text-fg-inverse'
-					: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+				class="{segmentClass(activeCategory === cat.id)}"
 			>
 				{cat.label}
 			</button>
@@ -239,7 +237,7 @@
 									{tool.name}
 								</button>
 								<span
-									class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] uppercase text-fg-light"
+									class="rounded bg-canvas-secondary px-1.5 py-0.5 text-[11px] capitalize text-fg-light font-medium"
 								>
 									{tool.category}
 								</span>
@@ -265,7 +263,7 @@
 								<button
 									type="button"
 									onclick={() => handleToggleTool(tool.id)}
-									class="rounded border border-card-border bg-card-bg px-2 py-0.5 text-[11px] text-fg-light hover:text-fg-main"
+									class={buttonClass('secondary', 'sm')}
 								>
 									{isEnabled ? 'Disable' : 'Enable'}
 								</button>
@@ -273,7 +271,7 @@
 									type="button"
 									disabled={!isEnabled}
 									onclick={() => handleInvokeTool(tool)}
-									class="rounded bg-accent-primary px-2.5 py-0.5 text-[11px] font-medium text-fg-inverse hover:opacity-90 disabled:opacity-40"
+									class={buttonClass('primary', 'sm')}
 								>
 									Invoke
 								</button>
@@ -289,7 +287,7 @@
 		{/if}
 
 		{#if selectedTool && selectedTool.parameters && selectedTool.parameters.length > 0}
-			<div class="mt-4 rounded-lg border border-canvas-border bg-canvas-primary p-3">
+			<div class="mt-4 rounded-control bg-canvas-secondary/70 p-3">
 				<p class="font-mono text-xs font-semibold text-fg-main">
 					Parameter Preview · {selectedTool.name}
 				</p>

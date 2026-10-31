@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/RSynapse/agents-kit-svelte/issues"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "private": false,
   "type": "module",
   "packageManager": "pnpm@10.34.5",
@@ -83,6 +83,9 @@
     "**/*.css",
     "**/*.svelte"
   ],
+  "dependencies": {
+    "@lucide/svelte": "^1.66.0"
+  },
   "peerDependencies": {
     "svelte": "^5.0.0",
     "tailwindcss": "^4.0.0"

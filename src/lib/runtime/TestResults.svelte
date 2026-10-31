@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Check, ChevronDown, X } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 
 	export interface SuiteTestItem {
@@ -65,43 +66,20 @@
 	}
 </script>
 
-<div class="w-full rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border px-4 py-3">
 		<div class="flex flex-wrap items-center gap-2">
 			<span
 				class="inline-flex items-center gap-1.5 rounded-full bg-status-success-subtle px-2.5 py-0.5 text-xs font-medium text-status-success"
 			>
-				<svg
-					aria-hidden="true"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="size-3.5"
-				>
-					<path d="M20 6 9 17l-5-5" />
-				</svg>
+				<Check aria-hidden="true" class="size-3.5" />
 				{counts.passed} passed
 			</span>
 			{#if counts.failed > 0}
 				<span
 					class="inline-flex items-center gap-1.5 rounded-full bg-status-danger-subtle px-2.5 py-0.5 text-xs font-medium text-status-danger"
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3.5"
-					>
-						<path d="M18 6 6 18" />
-						<path d="m6 6 12 12" />
-					</svg>
+					<X aria-hidden="true" class="size-3.5" />
 					{counts.failed} failed
 				</span>
 			{/if}
@@ -136,50 +114,16 @@
 								: 'text-status-success'}"
 						>
 							{#if suite.status === 'failed'}
-								<svg
-									aria-hidden="true"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									class="size-3.5"
-								>
-									<path d="M18 6 6 18" />
-									<path d="m6 6 12 12" />
-								</svg>
+								<X aria-hidden="true" class="size-3.5" />
 							{:else}
-								<svg
-									aria-hidden="true"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									class="size-3.5"
-								>
-									<path d="M20 6 9 17l-5-5" />
-								</svg>
+								<Check aria-hidden="true" class="size-3.5" />
 							{/if}
 						</span>
 						<span>{suite.name}</span>
 					</span>
-					<span class="inline-flex items-center gap-1.5 font-mono text-[11px] text-fg-light">
+					<span class="inline-flex items-center gap-1.5 text-xs text-fg-light">
 						<span>{suite.tests.length} {suite.tests.length === 1 ? 'test' : 'tests'}</span>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.8"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3.5 transition-transform duration-150 {open ? 'rotate-180' : ''}"
-						>
-							<path d="m6 9 6 6 6-6" />
-						</svg>
+						<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-150 {open ? 'rotate-180' : ''}" />
 					</span>
 				</button>
 
@@ -196,32 +140,9 @@
 												: 'text-status-success'}"
 										>
 											{#if testItem.status === 'failed'}
-												<svg
-													aria-hidden="true"
-													viewBox="0 0 24 24"
-													fill="none"
-													stroke="currentColor"
-													stroke-width="2"
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													class="size-3.5"
-												>
-													<path d="M18 6 6 18" />
-													<path d="m6 6 12 12" />
-												</svg>
+												<X aria-hidden="true" class="size-3.5" />
 											{:else}
-												<svg
-													aria-hidden="true"
-													viewBox="0 0 24 24"
-													fill="none"
-													stroke="currentColor"
-													stroke-width="2"
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													class="size-3.5"
-												>
-													<path d="M20 6 9 17l-5-5" />
-												</svg>
+												<Check aria-hidden="true" class="size-3.5" />
 											{/if}
 										</span>
 										<span>{testItem.name}</span>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, ChevronDown, LoaderCircle } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import ThinkingShimmer from '../agents/ThinkingShimmer.svelte';
 	import type { RiskTier } from '../types';
@@ -107,7 +109,7 @@
 	}
 </script>
 
-<div class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-start justify-between gap-3 border-b border-canvas-border px-4 py-3.5">
 		<div class="min-w-0 flex-1 space-y-1">
 			<div class="flex flex-wrap items-center gap-2">
@@ -136,9 +138,9 @@
 				aria-label="Toggle plan milestones"
 				aria-expanded={isOpen}
 				onclick={() => (isOpen = !isOpen)}
-				class="inline-flex size-7 items-center justify-center rounded-md border border-card-border bg-canvas-primary text-xs text-fg-light hover:text-fg-main"
+				class={buttonClass('secondary', 'icon-sm')}
 			>
-				<span class="transition-transform {isOpen ? 'rotate-180' : ''}">▾</span>
+				<ChevronDown aria-hidden="true" class="transition-transform duration-200 {isOpen ? 'rotate-180' : ''}" />
 			</button>
 		</div>
 	</div>
@@ -150,14 +152,20 @@
 					<div class="flex items-start gap-3">
 						<span
 							aria-hidden="true"
-							class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full font-mono text-xs {item.status ===
+							class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium tabular-nums {item.status ===
 							'completed'
 								? 'bg-status-success-subtle text-status-success'
 								: item.status === 'in-progress'
 									? 'bg-accent-subtle text-accent-primary'
 									: 'bg-canvas-secondary text-fg-light'}"
 						>
-							{item.status === 'completed' ? '✓' : item.status === 'in-progress' ? '◎' : idx + 1}
+							{#if item.status === 'completed'}
+								<Check class="size-3" />
+							{:else if item.status === 'in-progress'}
+								<LoaderCircle class="size-3 animate-spin" />
+							{:else}
+								{idx + 1}
+							{/if}
 						</span>
 
 						<div class="min-w-0 flex-1 space-y-1.5">
@@ -183,17 +191,18 @@
 			{/each}
 		</ol>
 
-		<div class="flex flex-wrap items-center justify-between gap-2 border-t border-canvas-border bg-canvas-primary px-4 py-3">
+		<div class="flex flex-wrap items-center justify-between gap-2 border-t border-canvas-border px-4 py-3">
 			{#if decision === 'approved'}
 				<span
 					class="inline-flex items-center gap-1.5 rounded-md bg-status-success-subtle px-3 py-1 font-mono text-xs font-medium text-status-success"
 				>
-					✓ Plan approved for execution
+					<Check aria-hidden="true" />
+					Plan approved for execution
 				</span>
 				<button
 					type="button"
 					onclick={() => (decision = 'pending')}
-					class="font-mono text-xs text-fg-light underline hover:text-fg-main"
+					class={buttonClass('ghost', 'sm')}
 				>
 					Change decision
 				</button>
@@ -209,14 +218,14 @@
 					<button
 						type="button"
 						onclick={submitRevision}
-						class="rounded-md bg-accent-primary px-3 py-1.5 font-mono text-xs font-medium text-fg-inverse"
+						class={buttonClass('primary', 'md')}
 					>
 						Send Revision
 					</button>
 					<button
 						type="button"
 						onclick={() => (decision = 'pending')}
-						class="rounded-md border border-card-border bg-card-bg px-2.5 py-1.5 font-mono text-xs text-fg-light"
+						class={buttonClass('secondary', 'md')}
 					>
 						Cancel
 					</button>
@@ -227,16 +236,17 @@
 					<button
 						type="button"
 						onclick={() => (decision = 'revising')}
-						class="rounded-md border border-card-border bg-card-bg px-3 py-1.5 font-mono text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+						class={buttonClass('secondary', 'md')}
 					>
 						Request Changes
 					</button>
 					<button
 						type="button"
 						onclick={handleApprove}
-						class="rounded-md bg-accent-primary px-3 py-1.5 font-mono text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
+						class={buttonClass('primary', 'md')}
 					>
-						✓ Approve Plan
+						<Check aria-hidden="true" />
+						Approve Plan
 					</button>
 				</div>
 			{/if}

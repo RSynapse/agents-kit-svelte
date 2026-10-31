@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { History, RefreshCw } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type RouteStatus = 'selected' | 'available' | 'unavailable';
 
 	export interface RouteClassification {
@@ -133,13 +135,13 @@
 
 <section
 	aria-label="Intent classifier and agent router"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
 	>
 		<div>
-			<p class="font-mono text-xs font-medium text-fg-light">Intent Classifier & Model Router</p>
+			<p class="text-xs font-medium text-fg-light">Intent Classifier & Model Router</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">{classification.intent}</h2>
 			<p class="mt-1 rounded bg-canvas-primary px-2.5 py-1.5 font-mono text-xs text-fg-light">
 				"{inputQuery}"
@@ -151,22 +153,24 @@
 				type="button"
 				disabled={isClassifying}
 				onclick={() => onReclassify?.()}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-40"
+				class={buttonClass('secondary', 'md')}
 			>
-				↻ {isClassifying ? 'Classifying…' : 'Reclassify'}
+				<RefreshCw aria-hidden="true" />
+				{isClassifying ? 'Classifying…' : 'Reclassify'}
 			</button>
 			<button
 				type="button"
 				aria-expanded={showHistory}
 				onclick={handleToggleHistory}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				🕒 History ({routingHistory.length})
+				<History aria-hidden="true" />
+				History ({routingHistory.length})
 			</button>
 		</div>
 	</header>
 
-	<div class="border-b border-canvas-border bg-canvas-primary p-4">
+	<div class="border-b border-canvas-border p-4">
 		<div class="flex items-start justify-between gap-4">
 			<div>
 				<p class="text-xs font-semibold text-fg-main">Routing Reasoning</p>
@@ -206,7 +210,7 @@
 						<h3 class="font-medium text-fg-main">{route.agentName}</h3>
 						<span class="text-xs text-fg-light">· {route.specialty}</span>
 						<span
-							class="rounded-full px-2 py-0.5 text-[11px] font-medium {route.status ===
+							class="rounded-chip px-1.5 py-px text-[11px] font-medium {route.status ===
 							'unavailable'
 								? 'bg-status-danger-subtle text-status-danger'
 								: isSelected
@@ -216,7 +220,7 @@
 							{route.status === 'unavailable'
 								? 'Unavailable'
 								: isSelected
-									? '✓ Routed'
+									? 'Routed'
 									: 'Available'}
 						</span>
 					</div>
@@ -242,7 +246,7 @@
 					<button
 						type="button"
 						onclick={() => handleSelectRoute(route.id)}
-						class="shrink-0 rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+						class={buttonClass('secondary', 'sm', 'shrink-0')}
 					>
 						Route here
 					</button>
@@ -252,7 +256,7 @@
 	</div>
 
 	{#if showHistory}
-		<div class="border-t border-canvas-border bg-canvas-primary p-4">
+		<div class="border-t border-canvas-border p-4">
 			<p class="text-xs font-semibold text-fg-main">Recent Routing Decisions</p>
 			<div class="mt-2 divide-y divide-canvas-border rounded-lg border border-canvas-border bg-card-bg px-3">
 				{#each routingHistory as item (item.id)}

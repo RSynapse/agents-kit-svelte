@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { Sparkle } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
+	import { SOFT } from '../ui/styles';
 
 	interface Props {
 		id?: string;
@@ -27,43 +29,40 @@
 	data-slot="message"
 	data-from={role}
 	data-role={role}
-	class="flex w-full gap-3 {role === 'user' ? 'justify-end' : 'justify-start'} {className}"
+	class="group/message flex w-full gap-3 {role === 'user' ? 'justify-end' : 'justify-start'} {className}"
 >
 	{#if role !== 'user'}
-		<div
-			aria-hidden="true"
-			class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg border border-card-border bg-card-bg font-mono text-[11px] font-semibold text-fg-main"
-		>
-			{author.slice(0, 2).toUpperCase()}
+		<div aria-hidden="true" class="{SOFT.avatar} mt-0.5">
+			<Sparkle class="fill-current" />
 		</div>
 	{/if}
 
-	<div class="min-w-0 {role === 'user' ? 'max-w-[82%]' : 'flex-1'} space-y-2.5">
+	<div class="min-w-0 {role === 'user' ? 'flex max-w-[80%] flex-col items-end' : 'flex-1'} space-y-1.5">
 		<header
-			class="flex items-center gap-2 text-xs {role === 'user' ? 'justify-end' : 'justify-start'}"
+			class="flex items-center gap-2 text-xs text-fg-light {role === 'user'
+				? 'justify-end opacity-0 transition-opacity group-hover/message:opacity-100 focus-within:opacity-100'
+				: 'h-7 justify-start'}"
 		>
-			<span class="font-medium text-fg-main">{author}</span>
+			<span class="font-medium {role === 'user' ? '' : 'text-fg-main'}">{author}</span>
 			{#if badge}
-				<span
-					class="rounded-md bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] text-fg-light"
-				>
+				<span class="rounded-full bg-chat-user px-2 py-px text-[11px] text-fg-light">
 					{badge}
 				</span>
 			{/if}
 			{#if timestamp}
-				<span class="font-mono text-[11px] text-fg-light">{timestamp}</span>
+				<span class="tabular-nums">{timestamp}</span>
 			{/if}
 		</header>
 
 		{#if role === 'user'}
 			<div
 				data-slot="message-content"
-				class="rounded-2xl rounded-tr-sm border border-card-border bg-canvas-secondary px-3.5 py-2.5 text-sm leading-6 text-fg-main"
+				class="rounded-bubble bg-chat-user px-4 py-2.5 text-[15px] leading-6 text-fg-main"
 			>
 				{@render children()}
 			</div>
 		{:else}
-			<div data-slot="message-content" class="space-y-3.5">
+			<div data-slot="message-content" class="space-y-3.5 text-[15px] leading-7 text-fg-main">
 				{@render children()}
 			</div>
 		{/if}

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
+	import { Mic, MicOff, VolumeX } from '@lucide/svelte';
 	export type VoiceSessionState = 'idle' | 'listening' | 'speaking' | 'processing';
 
 	export interface VoiceDeviceOption {
@@ -97,7 +99,7 @@
 	}
 </script>
 
-<div class="w-full rounded-xl border border-card-border bg-card-bg p-4 text-sm {className}">
+<div class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border pb-3">
 		<div class="flex items-center gap-2.5">
 			<span
@@ -124,7 +126,7 @@
 				class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 font-mono text-xs text-fg-main outline-none focus:border-accent-primary"
 			>
 				{#each devices as mic (mic.id)}
-					<option value={mic.id}>🎙 {mic.label}</option>
+					<option value={mic.id}>{mic.label}</option>
 				{/each}
 			</select>
 
@@ -134,7 +136,7 @@
 				class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 font-mono text-xs text-fg-main outline-none focus:border-accent-primary"
 			>
 				{#each personas as persona (persona.id)}
-					<option value={persona.id}>🔊 {persona.name} ({persona.accent})</option>
+					<option value={persona.id}>{persona.name} ({persona.accent})</option>
 				{/each}
 			</select>
 		</div>
@@ -172,16 +174,13 @@
 	</div>
 
 	<div class="flex flex-wrap items-center justify-between gap-2">
-		<div class="flex flex-wrap items-center gap-1.5">
+		<div class="{SEGMENT_GROUP_CLASS} flex-wrap">
 			{#each ['idle', 'listening', 'processing', 'speaking'] as const as mode (mode)}
 				<button
 					type="button"
 					aria-pressed={sessionState === mode}
 					onclick={() => setVoiceState(mode)}
-					class="rounded-md px-2.5 py-1 font-mono text-xs capitalize transition-colors {sessionState ===
-					mode
-						? 'bg-accent-subtle font-semibold text-accent-primary'
-						: 'bg-canvas-secondary text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(sessionState === mode)} capitalize"
 				>
 					{mode}
 				</button>
@@ -192,11 +191,9 @@
 			type="button"
 			aria-pressed={muted}
 			onclick={() => (muted = !muted)}
-			class="rounded-md px-3 py-1 font-mono text-xs font-medium transition-colors {muted
-				? 'bg-status-danger-subtle text-status-danger'
-				: 'border border-card-border bg-canvas-primary text-fg-main hover:bg-canvas-secondary'}"
+			class={buttonClass(muted ? 'danger' : 'secondary', 'sm')}
 		>
-			{muted ? '🔇 Unmute Mic' : '🎙 Mute Mic'}
+			{#if muted}<MicOff aria-hidden="true" />Unmute{:else}<Mic aria-hidden="true" />Mute{/if}
 		</button>
 	</div>
 </div>

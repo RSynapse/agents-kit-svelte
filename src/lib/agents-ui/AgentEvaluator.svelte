@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, ChevronDown, Play, RotateCcw, TriangleAlert } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type EvalCriterionStatus = 'pass' | 'warn' | 'fail';
 
 	export interface EvalCriterion {
@@ -198,7 +200,7 @@
 
 <section
 	aria-label="Referee evaluation scorecard"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
@@ -211,11 +213,11 @@
 					Referee Scorecard
 				</span>
 				<span
-					class="rounded-full px-2.5 py-0.5 text-xs font-medium {passed
+					class="rounded-chip px-1.5 py-px text-[11px] font-medium {passed
 						? 'bg-status-success-subtle text-status-success'
 						: 'bg-status-warning-subtle text-status-warning'}"
 				>
-					{passed ? '✓ Gate Passed' : '⚠ Send-Back / Below Threshold'}
+					{#if passed}<Check aria-hidden="true" />Gate Passed{:else}<TriangleAlert aria-hidden="true" />Send-Back / Below Threshold{/if}
 				</span>
 			</div>
 			<h2 class="mt-1.5 text-base font-semibold text-fg-main">Rubric & Red-Team Evaluation</h2>
@@ -226,9 +228,10 @@
 			<button
 				type="button"
 				onclick={handleReset}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				↺ Reset
+				<RotateCcw aria-hidden="true" />
+				Reset
 			</button>
 			{#if passed}
 				<button
@@ -236,16 +239,17 @@
 					onclick={handleAccept}
 					class="rounded-lg bg-status-success px-3 py-1.5 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
 				>
-					{accepted ? '✓ Accepted' : '✓ Accept Result'}
+					{#if accepted}<Check aria-hidden="true" />Accepted{:else}<Check aria-hidden="true" />Accept Result{/if}
 				</button>
 			{:else}
 				<button
 					type="button"
 					disabled={isRunning}
 					onclick={() => onRunNext?.()}
-					class="rounded-lg bg-accent-primary px-3 py-1.5 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-40"
+					class={buttonClass('primary', 'md')}
 				>
-					▶ Run Next Attempt
+					<Play aria-hidden="true" />
+					Run Next Attempt
 				</button>
 			{/if}
 		</div>
@@ -253,7 +257,7 @@
 
 	{#if latest}
 		<div class="grid gap-5 border-b border-canvas-border p-4 lg:grid-cols-[210px_1fr]">
-			<div class="rounded-lg border border-canvas-border bg-canvas-primary p-3.5">
+			<div class="rounded-control bg-canvas-secondary/70 p-3.5">
 				<p class="font-mono text-xs text-fg-light">Weighted Score</p>
 				<p class="mt-1 font-mono text-3xl font-bold tabular-nums text-fg-main">
 					{latest.score}
@@ -285,7 +289,7 @@
 			</div>
 
 			<div>
-				<div class="rounded-lg border border-canvas-border bg-canvas-primary p-3">
+				<div class="rounded-control bg-canvas-secondary/70 p-3">
 					<p class="text-xs font-semibold text-fg-main">Referee Verdict & Notes</p>
 					<p class="mt-1 text-xs leading-relaxed text-fg-light">{latest.feedback}</p>
 				</div>
@@ -297,7 +301,7 @@
 							criterion.maxScore > 0
 								? Math.round((criterion.score / criterion.maxScore) * 100)
 								: 0}
-						<div class="rounded-lg border border-canvas-border bg-canvas-primary p-2.5">
+						<div class="rounded-control bg-canvas-secondary/70 p-2.5">
 							<div class="flex flex-wrap items-center justify-between gap-2 text-xs">
 								<div class="flex items-center gap-2">
 									<span class="font-medium text-fg-main">{criterion.label}</span>
@@ -309,7 +313,7 @@
 								</div>
 								<div class="flex items-center gap-2">
 									<span
-										class="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase {getCriterionBadgeClasses(
+										class="rounded-chip px-1.5 py-px text-[11px] font-medium capitalize {getCriterionBadgeClasses(
 											status
 										)}"
 									>
@@ -355,18 +359,18 @@
 						<span class="w-20 shrink-0 font-mono text-fg-light">Attempt {item.number}</span>
 						<span class="min-w-0 flex-1 truncate text-fg-main">{item.output}</span>
 						<span
-							class="rounded-full px-2 py-0.5 font-mono text-[11px] font-semibold tabular-nums {item.score >=
+							class="rounded-chip px-1.5 py-px font-mono text-[11px] font-semibold tabular-nums {item.score >=
 							localThreshold
 								? 'bg-status-success-subtle text-status-success'
 								: 'bg-status-warning-subtle text-status-warning'}"
 						>
 							{item.score}/100
 						</span>
-						<span class="text-fg-light">{isOpen ? '▴' : '▾'}</span>
+						<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-200 {isOpen ? 'rotate-180' : ''}" />
 					</button>
 
 					{#if isOpen}
-						<div class="border-t border-canvas-border bg-canvas-primary px-3 py-2.5 text-xs">
+						<div class="border-t border-canvas-border px-3 py-2.5 text-xs">
 							<p class="font-medium text-fg-main">Summary</p>
 							<p class="mt-0.5 text-fg-light">{item.output}</p>
 							<p class="mt-2 font-medium text-fg-main">Referee Feedback</p>

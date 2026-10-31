@@ -1,8 +1,9 @@
 <script lang="ts">
+	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
-	import { fade, fly } from 'svelte/transition';
-	import { createBoardCrossfade, motionDuration, pressScale } from '../state/motion.svelte';
+	import { fade } from 'svelte/transition';
+	import { createBoardCrossfade, motionDuration, rise } from '../state/motion.svelte';
 	import GitHubIssueCard from './GitHubIssueCard.svelte';
 	import type { GitHubIssueData, GitHubIssueState } from '../types';
 
@@ -207,34 +208,25 @@
 				class="h-8 w-56 rounded-lg border border-card-border bg-card-bg px-3 text-xs text-fg-main placeholder:text-fg-light focus:border-accent-primary focus:outline-none"
 			/>
 
-			<div role="group" aria-label="Filter by area" class="flex rounded-lg border border-card-border bg-card-bg p-0.5 text-xs">
+			<div role="group" aria-label="Filter by area" class="{SEGMENT_GROUP_CLASS} text-xs">
 				<button
 					type="button"
-					use:pressScale
 					onclick={() => (selectedArea = 'all')}
-					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'all'
-						? 'bg-canvas-secondary text-fg-main'
-						: 'text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(selectedArea === 'all')} whitespace-nowrap"
 				>
 					All ({boardItems.length})
 				</button>
 				<button
 					type="button"
-					use:pressScale
 					onclick={() => (selectedArea = 'area:landing')}
-					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:landing'
-						? 'bg-canvas-secondary text-fg-main'
-						: 'text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(selectedArea === 'area:landing')} whitespace-nowrap"
 				>
 					Landing
 				</button>
 				<button
 					type="button"
-					use:pressScale
 					onclick={() => (selectedArea = 'area:app')}
-					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:app'
-						? 'bg-canvas-secondary text-fg-main'
-						: 'text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(selectedArea === 'area:app')} whitespace-nowrap"
 				>
 					App
 				</button>
@@ -249,7 +241,7 @@
 			<div class="flex min-w-0 flex-col rounded-xl border border-card-border bg-canvas-primary p-3">
 				<header class="mb-3 flex min-h-10 items-start justify-between gap-2 border-b border-canvas-border pb-2.5">
 					<div class="min-w-0">
-						<h3 class="truncate text-xs font-bold uppercase tracking-wider text-fg-main">{col.label}</h3>
+						<h3 class="truncate text-[13px] font-semibold text-fg-main">{col.label}</h3>
 						<p class="mt-0.5 truncate text-[11px] text-fg-light">{col.description}</p>
 					</div>
 					<span class="shrink-0 rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-xs font-semibold tabular-nums text-fg-main">
@@ -290,7 +282,7 @@
 
 	{#if activeDrawerIssue}
 		<div
-			transition:fly={{ y: 10, duration: motionDuration(200), easing: cubicOut }}
+			transition:rise
 			role="region"
 			aria-label="Selected card inspector"
 			class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-accent-primary bg-accent-subtle px-4 py-3 text-xs"
@@ -308,7 +300,6 @@
 			</div>
 			<button
 				type="button"
-				use:pressScale
 				onclick={() => (activeDrawerIssue = null)}
 				class="rounded-md bg-card-bg px-2.5 py-1 font-medium text-fg-main hover:bg-canvas-primary"
 			>

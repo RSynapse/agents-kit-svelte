@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, ChevronRight, Download, MoveRight, TrendingDown, TrendingUp, TriangleAlert } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export interface OpsSignal {
 		id: string;
 		title: string;
@@ -157,7 +159,7 @@
 
 <section
 	aria-label="Operations and Companion daemon monitor"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
@@ -166,14 +168,15 @@
 			<div class="flex flex-wrap items-center gap-2">
 				<span class="font-mono text-xs text-fg-light">{environment}</span>
 				<span
-					class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium {daemonStatus ===
+					class="inline-flex items-center gap-1 rounded-chip px-1.5 py-px text-[11px] font-medium {daemonStatus ===
 					'Connected'
 						? 'bg-status-success-subtle text-status-success'
 						: daemonStatus === 'Degraded'
 							? 'bg-status-warning-subtle text-status-warning'
 							: 'bg-status-danger-subtle text-status-danger'}"
 				>
-					● Companion {daemonStatus}
+					<span aria-hidden="true" class="size-1.5 rounded-full bg-current"></span>
+					Companion {daemonStatus}
 				</span>
 			</div>
 			<h2 class="mt-1 text-base font-semibold text-fg-main">Live Agent & Daemon Health</h2>
@@ -185,25 +188,29 @@
 		<button
 			type="button"
 			onclick={() => onExportReport?.()}
-			class="self-start rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+			class={buttonClass('secondary', 'md', 'self-start')}
 		>
-			↓ Export Snapshot
+			<Download aria-hidden="true" />
+			Export
 		</button>
 	</header>
 
-	<div class="grid grid-cols-2 gap-3 border-b border-canvas-border bg-canvas-primary p-4 sm:grid-cols-4">
+	<div class="grid grid-cols-2 gap-3 border-b border-canvas-border p-4 sm:grid-cols-4">
 		{#each metrics as metric (metric.label)}
-			<div class="rounded-lg border border-canvas-border bg-card-bg p-3">
+			<div class="rounded-control bg-canvas-secondary/70 p-3">
 				<p class="text-[11px] text-fg-light">{metric.label}</p>
 				<p class="mt-1 font-mono text-base font-semibold tabular-nums text-fg-main">
 					{metric.value}
 				</p>
-				<p class="mt-1 font-mono text-[11px] text-fg-light">
-					Target {metric.threshold} · {metric.trend === 'up'
-						? '↑'
-						: metric.trend === 'down'
-							? '↓'
-							: '→'}
+				<p class="mt-1 inline-flex items-center gap-1 text-[11px] text-fg-light">
+					Target {metric.threshold}
+					{#if metric.trend === 'up'}
+						<TrendingUp aria-label="Trending up" class="size-3" />
+					{:else if metric.trend === 'down'}
+						<TrendingDown aria-label="Trending down" class="size-3" />
+					{:else}
+						<MoveRight aria-label="Flat" class="size-3" />
+					{/if}
 				</p>
 			</div>
 		{/each}
@@ -216,18 +223,18 @@
 					<div class="flex flex-wrap items-center gap-2">
 						<h3 class="font-medium text-fg-main">{signal.title}</h3>
 						<span
-							class="rounded-full px-2 py-0.5 text-[11px] font-medium capitalize {getSignalBadgeClasses(
+							class="rounded-chip px-1.5 py-px text-[11px] font-medium capitalize {getSignalBadgeClasses(
 								signal.status
 							)}"
 						>
 							{signal.status}
 						</span>
 						{#if signal.acknowledged}
-							<span class="font-mono text-[11px] text-status-success">✓ Acknowledged</span>
+							<span class="inline-flex items-center gap-1 text-xs text-status-success"><Check aria-hidden="true" class="size-3.5" />Acknowledged</span>
 						{/if}
 					</div>
 					<p class="mt-1 text-xs text-fg-light">{signal.detail}</p>
-					<div class="mt-1.5 flex flex-wrap gap-3 font-mono text-[11px] text-fg-light">
+					<div class="mt-1.5 flex flex-wrap gap-3 text-xs text-fg-light">
 						<span>Source: {signal.owner ?? 'Unassigned'}</span>
 						<span>{signal.lastUpdated ?? 'Just now'}</span>
 					</div>
@@ -238,17 +245,19 @@
 						type="button"
 						disabled={signal.acknowledged}
 						onclick={() => handleAcknowledge(signal)}
-						class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary disabled:opacity-40"
+						class={buttonClass('secondary', 'sm')}
 					>
-						✓ Ack
+						<Check aria-hidden="true" />
+						Ack
 					</button>
 					{#if signal.status !== 'healthy'}
 						<button
 							type="button"
 							onclick={() => onEscalate?.(signal)}
-							class="rounded-lg bg-status-danger-subtle px-2.5 py-1 text-xs font-medium text-status-danger"
+							class={buttonClass('danger', 'sm')}
 						>
-							⚠ Escalate
+							<TriangleAlert aria-hidden="true" />
+							Escalate
 						</button>
 					{/if}
 				</div>
@@ -261,15 +270,15 @@
 			type="button"
 			aria-expanded={showEvents}
 			onclick={() => (showEvents = !showEvents)}
-			class="flex items-center gap-1.5 text-xs font-medium text-fg-light hover:text-fg-main"
+			class={buttonClass('ghost', 'sm')}
 		>
-			<span>{showEvents ? '▾' : '▸'}</span>
+			<ChevronRight aria-hidden="true" class="size-3.5 transition-transform duration-200 {showEvents ? 'rotate-90' : ''}" />
 			<span>Recent Daemon & Journal Events ({incidents.length})</span>
 		</button>
 
 		{#if showEvents}
 			<div
-				class="mt-2 divide-y divide-canvas-border rounded-lg border border-canvas-border bg-canvas-primary px-3"
+				class="mt-2 divide-y divide-canvas-border rounded-control bg-canvas-secondary/70 px-3"
 			>
 				{#each incidents as incident (incident.id)}
 					<div class="grid grid-cols-[3.5rem_1fr_auto] items-center gap-3 py-2 text-xs">

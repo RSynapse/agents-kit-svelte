@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ChevronRight } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 
 	export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'TOOL';
@@ -179,9 +180,7 @@
 					onclick={() => toggleProperty(key)}
 					class="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-fg-main hover:text-accent-primary"
 				>
-					<span class="text-[10px] text-fg-light transition-transform {open ? 'rotate-90' : ''}">
-						▸
-					</span>
+					<ChevronRight aria-hidden="true" class="size-3.5 text-fg-light transition-transform duration-200 {open ? 'rotate-90' : ''}" />
 					<span>{prop.name}</span>
 				</button>
 			{:else}
@@ -208,7 +207,7 @@
 		{/if}
 
 		{#if hasNested && open && prop.properties}
-			<div class="mt-2 ml-3 divide-y divide-canvas-border rounded-lg border border-canvas-border bg-canvas-primary">
+			<div class="mt-2 ml-3 divide-y divide-canvas-border rounded-control bg-canvas-secondary/70">
 				{#each prop.properties as childProp (childProp.name)}
 					{@render propertyRow(childProp, key)}
 				{/each}
@@ -217,7 +216,7 @@
 	</div>
 {/snippet}
 
-<div class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center gap-3 border-b border-canvas-border px-4 py-3">
 		<span
 			class="rounded-md px-2.5 py-0.5 font-mono text-xs font-bold {getMethodBadgeStyle(method)}"
@@ -238,7 +237,7 @@
 	</div>
 
 	{#if description}
-		<p class="border-b border-canvas-border bg-canvas-primary px-4 py-2.5 text-xs text-fg-light">
+		<p class="border-b border-canvas-border px-4 py-2.5 text-xs text-fg-light">
 			{description}
 		</p>
 	{/if}
@@ -253,7 +252,7 @@
 					class="flex w-full items-center justify-between px-4 py-2.5 text-left text-xs font-semibold text-fg-main hover:bg-canvas-secondary"
 				>
 					<span class="flex items-center gap-2">
-						<span class="text-fg-light transition-transform {paramsOpen ? 'rotate-90' : ''}">▸</span>
+						<ChevronRight aria-hidden="true" class="size-3.5 text-fg-light transition-transform duration-200 {paramsOpen ? 'rotate-90' : ''}" />
 						<span>Parameters</span>
 					</span>
 					<span class="rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-light">
@@ -306,7 +305,7 @@
 					class="flex w-full items-center justify-between px-4 py-2.5 text-left text-xs font-semibold text-fg-main hover:bg-canvas-secondary"
 				>
 					<span class="flex items-center gap-2">
-						<span class="text-fg-light transition-transform {requestOpen ? 'rotate-90' : ''}">▸</span>
+						<ChevronRight aria-hidden="true" class="size-3.5 text-fg-light transition-transform duration-200 {requestOpen ? 'rotate-90' : ''}" />
 						<span>Request Body</span>
 					</span>
 					<span class="rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-light">
@@ -333,7 +332,7 @@
 					class="flex w-full items-center justify-between px-4 py-2.5 text-left text-xs font-semibold text-fg-main hover:bg-canvas-secondary"
 				>
 					<span class="flex items-center gap-2">
-						<span class="text-fg-light transition-transform {responseOpen ? 'rotate-90' : ''}">▸</span>
+						<ChevronRight aria-hidden="true" class="size-3.5 text-fg-light transition-transform duration-200 {responseOpen ? 'rotate-90' : ''}" />
 						<span>Response Schema</span>
 					</span>
 					<span class="rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-light">

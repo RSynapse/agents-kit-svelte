@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, ChevronDown, LoaderCircle, RefreshCw } from '@lucide/svelte';
+	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	import type { Snippet } from 'svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 
@@ -104,16 +106,16 @@
 	let warnLogCount = $derived(logs.filter((l) => l.level === 'warn').length);
 </script>
 
-<div class="flex w-full flex-col overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="flex w-full flex-col overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary px-3 py-2">
 		<div class="flex items-center gap-1.5">
 			<button
 				type="button"
 				aria-label="Reload preview"
 				onclick={reloadPreview}
-				class="inline-flex size-7 items-center justify-center rounded-md border border-card-border bg-card-bg font-mono text-xs text-fg-main transition-colors hover:bg-canvas-primary"
+				class={buttonClass('secondary', 'icon-sm')}
 			>
-				↻
+				<RefreshCw aria-hidden="true" />
 			</button>
 		</div>
 
@@ -128,21 +130,19 @@
 			<button
 				type="button"
 				onclick={submitUrl}
-				class="rounded-md bg-accent-subtle px-2.5 py-1 font-mono text-xs font-medium text-accent-primary transition-opacity hover:opacity-90"
+				class={buttonClass('secondary', 'sm')}
 			>
 				Go
 			</button>
 		</div>
 
-		<div class="flex items-center gap-1 rounded-lg border border-card-border bg-card-bg p-0.5">
+		<div class="{SEGMENT_GROUP_CLASS}">
 			{#each VIEWPORTS as vp (vp.id)}
 				<button
 					type="button"
 					aria-pressed={viewport === vp.id}
 					onclick={() => (viewport = vp.id)}
-					class="rounded-md px-2 py-0.5 font-mono text-xs transition-colors {viewport === vp.id
-						? 'bg-accent-primary font-semibold text-fg-inverse'
-						: 'text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(viewport === vp.id)}"
 				>
 					{vp.label}
 				</button>
@@ -170,18 +170,18 @@
 					</div>
 
 					<div class="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-						<div class="rounded-lg border border-card-border bg-canvas-primary p-3">
-							<div class="font-mono text-[11px] text-fg-light">Triage Queue</div>
+						<div class="rounded-control border border-card-border p-3">
+							<div class="text-xs text-fg-light">Triage Queue</div>
 							<div class="mt-1 font-semibold text-fg-main">3 Cards Ready</div>
-							<div class="mt-1 text-xs text-status-success">✓ All checks green</div>
+							<div class="mt-1 inline-flex items-center gap-1 text-xs text-status-success"><Check aria-hidden="true" class="size-3.5" />All checks green</div>
 						</div>
-						<div class="rounded-lg border border-card-border bg-canvas-primary p-3">
-							<div class="font-mono text-[11px] text-fg-light">Active Worktree</div>
+						<div class="rounded-control border border-card-border p-3">
+							<div class="text-xs text-fg-light">Active Worktree</div>
 							<div class="mt-1 font-semibold text-fg-main">feat/svelte5-primitives</div>
-							<div class="mt-1 text-xs text-accent-primary">◎ Claude Code running</div>
+							<div class="mt-1 inline-flex items-center gap-1 text-xs text-accent-primary"><LoaderCircle aria-hidden="true" class="size-3.5 animate-spin" />Claude Code running</div>
 						</div>
-						<div class="rounded-lg border border-card-border bg-canvas-primary p-3">
-							<div class="font-mono text-[11px] text-fg-light">Referee Gate</div>
+						<div class="rounded-control border border-card-border p-3">
+							<div class="text-xs text-fg-light">Referee Gate</div>
 							<div class="mt-1 font-semibold text-fg-main">Pass (0 violations)</div>
 							<div class="mt-1 text-xs text-fg-light">OKLCH tokens verified</div>
 						</div>
@@ -214,9 +214,7 @@
 					</span>
 				{/if}
 			</div>
-			<span class="text-terminal-muted transition-transform {consoleOpen ? 'rotate-180' : ''}">
-				▾
-			</span>
+			<ChevronDown aria-hidden="true" class="size-3.5 text-terminal-muted transition-transform duration-200 {consoleOpen ? 'rotate-180' : ''}" />
 		</button>
 
 		<AgentDisclosure open={consoleOpen}>

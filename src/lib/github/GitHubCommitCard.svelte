@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, Copy, GitCommitHorizontal, RotateCcw } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import type { GitHubCommitData } from '../types';
 
@@ -69,7 +71,7 @@
 	}
 </script>
 
-<div class="rounded-xl border border-card-border bg-card-bg p-3.5 text-sm {className}">
+<div class="rounded-card border border-card-border bg-card-bg p-3.5 text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2">
 		<div class="flex min-w-0 flex-1 items-center gap-2">
 			<button
@@ -78,12 +80,7 @@
 				onclick={() => (isOpen = !isOpen)}
 				class="flex min-w-0 flex-1 items-center gap-2 text-left"
 			>
-				<span
-					aria-hidden="true"
-					class="inline-flex size-6 shrink-0 items-center justify-center rounded-md bg-accent-subtle font-mono text-xs font-bold text-accent-primary"
-				>
-					⊙
-				</span>
+				<GitCommitHorizontal aria-hidden="true" class="size-4 shrink-0 text-fg-light" />
 				<span class="truncate font-semibold text-fg-main">{commit.message}</span>
 			</button>
 		</div>
@@ -91,7 +88,7 @@
 		<div class="flex items-center gap-1.5 font-mono text-xs">
 			{#if commit.verified}
 				<span
-					class="rounded-full bg-status-success-subtle px-2 py-0.5 text-[10px] font-semibold text-status-success"
+					class="rounded-chip bg-status-success-subtle px-1.5 py-px font-sans text-[11px] font-medium text-status-success"
 				>
 					Verified
 				</span>
@@ -100,9 +97,10 @@
 				type="button"
 				onclick={copySha}
 				title="Copy commit SHA"
-				class="rounded border border-card-border bg-canvas-secondary px-2 py-0.5 text-[11px] text-fg-main hover:bg-canvas-primary"
+				class={buttonClass('secondary', 'sm', 'font-mono')}
 			>
-				{copied ? '✓ Copied' : commit.sha}
+				{#if copied}<Check aria-hidden="true" class="text-status-success" />{:else}<Copy aria-hidden="true" />{/if}
+				{commit.sha.slice(0, 7)}
 			</button>
 		</div>
 	</div>
@@ -150,9 +148,9 @@
 					restored = true;
 					onRestore?.(commit.sha);
 				}}
-				class="rounded-md border border-card-border bg-canvas-secondary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-primary"
+				class={buttonClass('secondary', 'sm')}
 			>
-				{restored ? '✓ Checked out in worktree' : '↺ Checkout commit in worktree'}
+				{#if restored}<Check aria-hidden="true" />Checked out in worktree{:else}<RotateCcw aria-hidden="true" />Checkout commit in worktree{/if}
 			</button>
 		</div>
 	</AgentDisclosure>

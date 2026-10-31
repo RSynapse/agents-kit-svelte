@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Check, ChevronDown, FileText, LoaderCircle, Settings, Sparkles } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import ThinkingShimmer from '../agents/ThinkingShimmer.svelte';
 
@@ -136,7 +137,7 @@
 	}
 </script>
 
-<div class="w-full rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<button
 		type="button"
 		aria-expanded={isOpen}
@@ -148,7 +149,7 @@
 				aria-hidden="true"
 				class="inline-flex size-6 shrink-0 items-center justify-center rounded-md bg-accent-subtle font-mono text-xs text-accent-primary"
 			>
-				✦
+				<Sparkles aria-hidden="true" />
 			</span>
 			<span class="truncate font-medium text-fg-main">
 				{#if isStreaming}
@@ -173,12 +174,10 @@
 			<span class="font-mono text-xs tabular-nums text-fg-light">
 				{formatDuration(computedDurationMs)}
 			</span>
-			<span
+			<ChevronDown
 				aria-hidden="true"
-				class="text-xs text-fg-light transition-transform duration-150 {isOpen ? 'rotate-180' : ''}"
-			>
-				▾
-			</span>
+				class="size-3.5 text-fg-light transition-transform duration-200 {isOpen ? 'rotate-180' : ''}"
+			/>
 		</div>
 	</button>
 
@@ -191,14 +190,20 @@
 						<div class="flex flex-col items-center">
 							<span
 								aria-hidden="true"
-								class="inline-flex size-5 shrink-0 items-center justify-center rounded-full font-mono text-[11px] {step.status ===
+								class="inline-flex size-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium tabular-nums {step.status ===
 								'active'
 									? 'bg-accent-subtle text-accent-primary'
 									: step.status === 'complete'
 										? 'bg-status-success-subtle text-status-success'
 										: 'bg-canvas-secondary text-fg-light'}"
 							>
-								{step.status === 'complete' ? '✓' : step.status === 'active' ? '◎' : index + 1}
+								{#if step.status === 'complete'}
+									<Check class="size-3" />
+								{:else if step.status === 'active'}
+									<LoaderCircle class="size-3 animate-spin" />
+								{:else}
+									{index + 1}
+								{/if}
 							</span>
 							{#if index < steps.length - 1}
 								<div class="mt-1 w-px flex-1 bg-canvas-border"></div>
@@ -248,7 +253,8 @@
 												<span
 													class="inline-flex items-center gap-1 rounded border border-card-border bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-main"
 												>
-													⚙ {tool}
+													<Settings aria-hidden="true" />
+													{tool}
 												</span>
 											{/each}
 										{/if}
@@ -257,7 +263,8 @@
 												<span
 													class="inline-flex items-center gap-1 rounded bg-accent-subtle px-2 py-0.5 font-mono text-[11px] text-accent-primary"
 												>
-													📄 {source}
+													<FileText aria-hidden="true" />
+													{source}
 												</span>
 											{/each}
 										{/if}

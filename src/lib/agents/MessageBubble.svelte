@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { pillClass } from '../ui/styles';
+	import { ChevronDown } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 
 	export type MessageBubbleVariant = 'solid' | 'soft' | 'tint' | 'outline' | 'ghost' | 'danger';
@@ -62,16 +64,16 @@
 			case 'solid':
 				return 'bg-fg-main text-fg-inverse border-transparent';
 			case 'tint':
-				return 'bg-accent-subtle text-fg-main border-card-border';
+				return 'bg-chat-accent-subtle text-fg-main border-transparent';
 			case 'outline':
-				return 'bg-card-bg text-fg-main border-card-border';
+				return 'bg-card-bg text-fg-main border-chat-border ak-shadow-soft-sm';
 			case 'danger':
-				return 'bg-status-danger-subtle text-status-danger border-status-danger';
+				return 'bg-status-danger-subtle text-status-danger border-status-danger/30';
 			case 'ghost':
 				return 'bg-transparent text-fg-main border-transparent px-0 py-0';
 			case 'soft':
 			default:
-				return 'bg-canvas-secondary text-fg-main border-card-border';
+				return 'bg-chat-user text-fg-main border-transparent';
 		}
 	}
 
@@ -112,7 +114,9 @@
 >
 	<div
 		aria-hidden="true"
-		class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg border border-card-border bg-card-bg font-mono text-[11px] font-semibold text-fg-main"
+		class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full {align === 'end'
+			? 'bg-chat-user text-fg-main'
+			: 'bg-chat-accent-subtle text-chat-accent'} text-[11px] font-semibold"
 	>
 		{avatar}
 	</div>
@@ -121,13 +125,13 @@
 		<div class="mb-1 flex items-center gap-2 text-xs text-fg-light">
 			<span class="font-medium text-fg-main">{author}</span>
 			{#if timestamp}
-				<span class="font-mono text-[11px]">{timestamp}</span>
+				<span class="tabular-nums">{timestamp}</span>
 			{/if}
 			{#if status}
 				<span
-					class="rounded-full px-1.5 py-0.5 font-mono text-[10px] {status === 'error'
+					class="rounded-full px-2 py-px text-[11px] {status === 'error'
 						? 'bg-status-danger-subtle text-status-danger'
-						: 'bg-canvas-secondary text-fg-light'}"
+						: 'bg-chat-user text-fg-light'}"
 				>
 					{status}
 				</span>
@@ -136,7 +140,9 @@
 
 		<div
 			data-slot="message-bubble-content"
-			class="relative rounded-2xl border px-3.5 py-2.5 text-sm leading-6 {getVariantClasses(variant)}"
+			class="relative rounded-bubble border px-4 py-2.5 text-[15px] leading-6 {align === 'end'
+				? 'rounded-br-md'
+				: 'rounded-bl-md'} {getVariantClasses(variant)}"
 		>
 			<div class={!isExpanded && collapsible ? getClampClass(collapsedLines) : ''}>
 				{#if children}
@@ -151,21 +157,10 @@
 					type="button"
 					aria-expanded={isExpanded}
 					onclick={toggleCollapsible}
-					class="mt-1.5 inline-flex items-center gap-1 rounded-full border border-card-border bg-card-bg px-2.5 py-0.5 text-[11px] font-medium text-fg-light transition-colors hover:text-fg-main"
+					class={pillClass('ghost', 'xs', '-ml-2 mt-1')}
 				>
 					<span>{isExpanded ? lessLabel : moreLabel}</span>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3 transition-transform {isExpanded ? 'rotate-180' : ''}"
-					>
-						<path d="m6 9 6 6 6-6" />
-					</svg>
+					<ChevronDown aria-hidden="true" class="size-3 transition-transform {isExpanded ? 'rotate-180' : ''}" />
 				</button>
 			{/if}
 		</div>

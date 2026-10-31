@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { flip } from 'svelte/animate';
-	import { backOut, cubicOut } from 'svelte/easing';
+	import { cubicOut } from 'svelte/easing';
+	import { ChevronDown, CircleCheck, ListTodo } from '@lucide/svelte';
 	import { Tween, prefersReducedMotion } from 'svelte/motion';
-	import { fly, scale } from 'svelte/transition';
+	import { fade, scale } from 'svelte/transition';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import ThinkingShimmer from './ThinkingShimmer.svelte';
 	import { summarizeTodos } from '../state/chat-helpers';
-	import { motionDuration, pressScale } from '../state/motion.svelte';
+	import { motionDuration, rise } from '../state/motion.svelte';
 	import type { TodoItem } from '../types';
 
 	interface Props {
@@ -44,10 +45,9 @@
 	});
 </script>
 
-<div class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm {className}">
 	<button
 		type="button"
-		use:pressScale={0.995}
 		aria-expanded={isOpen}
 		aria-controls={panelId}
 		onclick={() => (isOpen = !isOpen)}
@@ -55,41 +55,16 @@
 	>
 		{#key summary.allCompleted}
 			<span
-				in:scale={{ start: 0.85, duration: motionDuration(180), easing: backOut }}
+				in:fade={{ duration: motionDuration(140) }}
 				aria-hidden="true"
 				class="inline-flex size-4 shrink-0 items-center justify-center {summary.allCompleted
 					? 'text-status-success'
 					: 'text-fg-light group-hover:text-fg-main'}"
 			>
 				{#if summary.allCompleted}
-					<svg
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<circle cx="12" cy="12" r="10" />
-						<path d="m9 12 2 2 4-4" />
-					</svg>
+					<CircleCheck class="size-4" />
 				{:else}
-					<svg
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<rect x="3" y="5" width="6" height="6" rx="1" />
-						<path d="m3 17 2 2 4-4" />
-						<path d="M13 6h8" />
-						<path d="M13 12h8" />
-						<path d="M13 18h8" />
-					</svg>
+					<ListTodo class="size-4" />
 				{/if}
 			</span>
 		{/key}
@@ -98,7 +73,7 @@
 
 		{#if summary.inProgressItem && !isOpen}
 			<span
-				in:fly={{ x: -6, duration: motionDuration(160), easing: cubicOut }}
+				in:fade={{ duration: motionDuration(140) }}
 				class="min-w-0 flex-1 truncate text-xs text-fg-light"
 			>
 				· {summary.inProgressItem.label}
@@ -109,24 +84,16 @@
 			{summary.completedCount}/{summary.totalCount}
 		</span>
 
-		<svg
+		<ChevronDown
 			aria-hidden="true"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="1.8"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			class="size-4 shrink-0 text-fg-light transition-transform duration-150 group-hover:text-fg-main {isOpen
+			class="size-3.5 shrink-0 text-fg-light transition-transform duration-200 group-hover:text-fg-main {isOpen
 				? 'rotate-180'
 				: ''}"
-		>
-			<path d="m6 9 6 6 6-6" />
-		</svg>
+		/>
 	</button>
 
 	<!-- Svelte 5 Tween progress bar -->
-	<div class="h-0.5 w-full overflow-hidden bg-canvas-secondary">
+	<div class="h-px w-full overflow-hidden bg-canvas-border">
 		<div
 			class="h-full transition-colors {summary.allCompleted
 				? 'bg-status-success'
@@ -136,19 +103,19 @@
 	</div>
 
 	<AgentDisclosure id={panelId} open={isOpen}>
-		<ol class="space-y-0.5 border-t border-canvas-border px-2 py-2">
+		<ol class="space-y-0.5 border-t border-chat-border/70 px-2 py-2">
 			{#each items as item (item.id)}
 				<li
 					animate:flip={{ duration: motionDuration(220), easing: cubicOut }}
-					in:fly={{ y: 6, duration: motionDuration(180), easing: cubicOut }}
-					class="flex min-h-9 items-start gap-2.5 rounded-md px-1.5 py-1 text-sm leading-5 transition-colors {item.status ===
+					in:rise
+					class="flex min-h-9 items-start gap-2.5 rounded-[10px] px-1.5 py-1 text-sm leading-5 transition-colors {item.status ===
 					'in-progress'
-						? 'bg-canvas-secondary/60'
+						? 'bg-chat-surface/60'
 						: ''}"
 				>
 					{#key item.status}
 						<svg
-							in:scale={{ start: 0.85, duration: motionDuration(160), easing: backOut }}
+							in:scale={{ start: 0.9, opacity: 0, duration: motionDuration(140), easing: cubicOut }}
 							aria-hidden="true"
 							viewBox="0 0 20 20"
 							fill="none"

@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { rise } from '../state/motion.svelte';
+	import { pillClass } from '../ui/styles';
+	import { ArrowDown } from '@lucide/svelte';
 	import { untrack, type Snippet } from 'svelte';
-	import { fly } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 
 	export interface RailItem {
 		id: string;
@@ -537,7 +540,7 @@
 		{#if canScrollUp}
 			<div
 				aria-hidden="true"
-				class="pointer-events-none sticky top-0 right-0 left-0 z-10 h-4 bg-gradient-to-b from-canvas-primary/80 to-transparent"
+				class="pointer-events-none sticky top-0 right-0 left-0 z-10 h-4 bg-gradient-to-b from-chat-surface to-transparent"
 			></div>
 		{/if}
 
@@ -547,7 +550,7 @@
 			aria-live="polite"
 			aria-relevant="additions text"
 			aria-busy={busy || streaming}
-			class="space-y-5 px-4 py-5 sm:px-6 {contentClass}"
+			class="mx-auto w-full max-w-3xl space-y-7 px-5 py-6 sm:px-8 {contentClass}"
 		>
 			{@render children()}
 		</div>
@@ -594,16 +597,16 @@
 			<div
 				aria-hidden="true"
 				style="top: calc(50% + {previewOffsetY}px);"
-				transition:fly={{ x: 6, duration: 150 }}
+				transition:fade={{ duration: 120 }}
 				class="pointer-events-none absolute right-9 z-30 w-64 max-w-[calc(100%-3rem)] -translate-y-1/2 transition-[top] duration-150 ease-out"
 			>
 				<div
 					data-slot="preview-rail-card"
-					class="overflow-hidden rounded-2xl border border-card-border bg-card-bg p-3 shadow-[var(--shadow-card)]"
+					class="overflow-hidden rounded-soft border border-chat-border bg-card-bg p-3 ak-shadow-soft"
 				>
 					<div class="mb-1 flex items-center justify-between gap-2">
 						<span
-							class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] font-medium text-fg-light"
+							class="rounded-full bg-chat-user px-2 py-px text-[10px] font-medium text-fg-light"
 						>
 							{activePreviewItem.role === 'user' ? 'User Prompt' : 'Agent Turn'}
 						</span>
@@ -633,23 +636,11 @@
 	{#if !isPinnedToBottom && railOverflowing}
 		<button
 			type="button"
-			transition:fly={{ y: 8, duration: 150 }}
+			transition:rise={{ y: 4 }}
 			onclick={() => scrollToEnd('smooth')}
-			class="absolute bottom-3 left-1/2 z-20 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-card-border bg-card-bg px-3 py-1 text-xs font-medium text-fg-main shadow-[var(--shadow-btn)] transition-colors hover:bg-canvas-secondary"
+			class={pillClass('secondary', 'sm', 'absolute bottom-3 left-1/2 z-20 -translate-x-1/2 ak-shadow-soft')}
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-3"
-			>
-				<path d="M12 5v14" />
-				<path d="m19 12-7 7-7-7" />
-			</svg>
+			<ArrowDown aria-hidden="true" class="size-3" />
 			<span>Jump to latest</span>
 		</button>
 	{/if}

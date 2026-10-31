@@ -11,7 +11,7 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 
 		await expect(
 			page.getByRole('heading', {
-				name: /Build better\s*agent interfaces/i
+				name: /Gentle interfaces for\s*thoughtful agents/i
 			})
 		).toBeVisible();
 
@@ -31,11 +31,11 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		// Verify all 68 individual component showcase cards are rendered on /
 		await expect(page.locator('article[data-component-slug]')).toHaveCount(68);
 
-		// Toggle Svelte 5 Code preview on the first component card
-		const firstCodeToggle = page.getByRole('button', { name: /Svelte 5 Code/i }).first();
-		await firstCodeToggle.click();
-		await expect(page.getByRole('button', { name: /Live Preview/i }).first()).toBeVisible();
-		await page.getByRole('button', { name: /Live Preview/i }).first().click();
+		// Toggle the Usage code view on the first component card
+		const firstUsageToggle = page.getByRole('button', { name: /^Usage$/ }).first();
+		await firstUsageToggle.click();
+		await expect(firstUsageToggle).toHaveAttribute('aria-pressed', 'true');
+		await page.getByRole('button', { name: /^Preview$/ }).first().click();
 
 		// Toggle dark mode and capture screenshot of the main Component Catalogue
 		await page.getByRole('button', { name: /Toggle global color theme/i }).click();
@@ -73,7 +73,7 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		// Filter to Voice & Effects and test Svelte5MotionLab (Spring, crossfade, SvelteSet/SvelteMap)
 		await page.getByRole('tab', { name: /Voice & Effects/i }).click();
 		await expect(page.getByRole('heading', { name: 'Svelte5MotionLab' })).toBeVisible();
-		const springBtn = page.getByRole('button', { name: 'Spring → 98%' });
+		const springBtn = page.getByRole('button', { name: 'Spring to 98%' });
 		await springBtn.click();
 		const crossfadeCard = page.getByRole('button', { name: /Card 2177 · Skills Scroll Cue/i });
 		await crossfadeCard.click();
@@ -144,7 +144,7 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 
 		await expect(
 			page.getByRole('heading', {
-				name: /GitHub Issues, Pull Requests, Checks & Reactive Board Layouts/i
+				name: /Issues, pull requests and checks/i
 			})
 		).toBeVisible();
 
@@ -161,11 +161,11 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		});
 
 		// Switch to Repository Bento Pulse tab
-		await page.getByRole('tab', { name: /Repository Bento Pulse/i }).click();
+		await page.getByRole('tab', { name: /Repository pulse/i }).click();
 		await expect(page.getByText(/RSynapse\/trailside/i).first()).toBeVisible();
 
 		// Switch to Individual Card Primitives tab
-		await page.getByRole('tab', { name: /Individual Card Primitives/i }).click();
+		await page.getByRole('tab', { name: /Card primitives/i }).click();
 		await expect(
 			page.getByRole('heading', { name: /GitHubIssueCard & GitHubPullRequestCard/i })
 		).toBeVisible();
@@ -179,11 +179,13 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 
 		await expect(
 			page.getByRole('heading', {
-				name: /Schema-Driven Intelligent UI Renderer & Generative Surface Suite/i
+				name: /Turn structured model output into interfaces/i
 			})
 		).toBeVisible();
 
-		// Verify live schema renderer output
+		// Verify the generated interface and the studio inspector
+		await expect(page.getByText(/Generated tradeoff matrix/i).first()).toBeVisible();
+		await page.getByRole('button', { name: /Open in studio/i }).click();
 		await expect(page.getByText(/Valid schema/i)).toBeVisible();
 
 		await page.screenshot({
@@ -192,10 +194,8 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 			animations: 'disabled'
 		});
 
-		// Switch schema presets
-		await page
-			.getByRole('button', { name: /Preset: Architecture Decision Flow/i })
-			.click();
-		await expect(page.getByText(/1\. Generated Tradeoff Matrix/i).first()).toBeVisible();
+		// Ask for a different interface and watch it build
+		await page.getByRole('button', { name: /^Triage this pull request$/ }).click();
+		await expect(page.getByText(/Candidate pull request/i).first()).toBeVisible();
 	});
 });

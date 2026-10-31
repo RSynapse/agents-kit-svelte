@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, FileText } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import GitHubIssueCard from '../github/GitHubIssueCard.svelte';
 	import GitHubPullRequestCard from '../github/GitHubPullRequestCard.svelte';
 	import ResultActions from './ResultActions.svelte';
@@ -161,7 +163,7 @@
 
 <div class="w-full space-y-2.5 {className}">
 	<div
-		class="overflow-hidden rounded-2xl border border-card-border bg-card-bg p-4 text-sm shadow-xs transition-all {mode !==
+		class="overflow-hidden rounded-window border border-card-border bg-card-bg p-4 text-sm shadow-xs transition-all {mode !==
 		'view'
 			? 'ring-1 ring-accent-primary'
 			: ''}"
@@ -169,7 +171,7 @@
 		{#if currentContent.type === 'comparison'}
 			<div class="space-y-3">
 				<div>
-					<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-accent-primary">
+					<span class="text-[11px] font-medium capitalize text-accent-primary">
 						Intelligent UI · Architecture Comparison
 					</span>
 					<h3 class="mt-1 font-semibold text-fg-main">{currentContent.title}</h3>
@@ -223,7 +225,7 @@
 		{:else if currentContent.type === 'recommendation'}
 			<div class="space-y-3">
 				<div class="flex items-center justify-between gap-2">
-					<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-accent-primary">
+					<span class="text-[11px] font-medium capitalize text-accent-primary">
 						Agent Recommendation
 					</span>
 					<span class="rounded-full bg-status-success-subtle px-2 py-0.5 font-mono text-xs font-semibold text-status-success">
@@ -233,10 +235,10 @@
 				<h3 class="font-semibold text-fg-main">{currentContent.title}</h3>
 				<p class="text-xs leading-relaxed text-fg-light">{currentContent.summary}</p>
 				{#if currentContent.reasoning && currentContent.reasoning.length > 0}
-					<ul class="space-y-1 rounded-lg bg-canvas-secondary p-2.5 text-xs text-fg-main">
+					<ul class="space-y-1.5 rounded-control bg-canvas-secondary/70 p-3 text-xs text-fg-main">
 						{#each currentContent.reasoning as reason (reason)}
 							<li class="flex items-start gap-2">
-								<span class="text-accent-primary">•</span>
+								<span aria-hidden="true" class="mt-1.5 size-1 shrink-0 rounded-full bg-fg-light"></span>
 								<span>{reason}</span>
 							</li>
 						{/each}
@@ -270,11 +272,11 @@
 		{:else if currentContent.type === 'document'}
 			<div class="space-y-2.5">
 				<div class="flex items-center justify-between text-xs text-fg-light">
-					<span class="font-mono font-semibold text-accent-primary">📄 {currentContent.format}</span>
-					<span class="font-mono">{currentContent.size} · {currentContent.updated}</span>
+					<span class="inline-flex items-center gap-1.5 font-medium text-fg-main"><FileText aria-hidden="true" class="size-3.5 text-fg-light" />{currentContent.format}</span>
+					<span>{currentContent.size} · {currentContent.updated}</span>
 				</div>
 				<h3 class="font-semibold text-fg-main">{currentContent.title}</h3>
-				<p class="rounded-lg border border-card-border bg-canvas-primary p-3 text-xs leading-relaxed text-fg-main">
+				<p class="rounded-control border border-card-border p-3 text-sm leading-6 text-fg-main">
 					{currentContent.excerpt}
 				</p>
 			</div>
@@ -290,14 +292,14 @@
 							<button
 								type="button"
 								onclick={() => toggleChecklistItem(item.id)}
-								class="flex w-full items-start gap-2.5 rounded-lg border border-card-border bg-canvas-primary px-3 py-2 text-left text-xs hover:bg-canvas-secondary"
+								class="flex w-full items-start gap-2.5 rounded-control px-2.5 py-2 text-left text-xs transition-colors hover:bg-canvas-secondary"
 							>
 								<span
-									class="mt-0.5 inline-flex size-4 shrink-0 items-center justify-center rounded font-mono text-[10px] {item.completed
-										? 'bg-status-success text-fg-inverse'
+									class="mt-0.5 inline-flex size-4 shrink-0 items-center justify-center rounded-[4px] {item.completed
+										? 'bg-fg-main text-fg-inverse'
 										: 'border border-card-border bg-card-bg text-fg-light'}"
 								>
-									{item.completed ? '✓' : ''}
+									{#if item.completed}<Check class="size-3" strokeWidth={3} />{/if}
 								</span>
 								<span>
 									<span class="block font-medium text-fg-main {item.completed ? 'line-through text-fg-light' : ''}">
@@ -314,7 +316,7 @@
 			</div>
 		{:else if currentContent.type === 'source-brief'}
 			<div class="space-y-2.5">
-				<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-accent-primary">
+				<span class="text-[11px] font-medium capitalize text-accent-primary">
 					Grounded Source Brief
 				</span>
 				<h3 class="font-semibold text-fg-main">{currentContent.title}</h3>
@@ -363,7 +365,7 @@
 		{:else}
 			{@const summary = extractEditableFields(currentContent)}
 			<div class="space-y-1.5">
-				<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-accent-primary">
+				<span class="text-[11px] font-medium capitalize text-accent-primary">
 					{currentContent.type}
 				</span>
 				<h3 class="font-semibold text-fg-main">{summary.primary}</h3>
@@ -407,7 +409,7 @@
 				e.preventDefault();
 				applyEdit();
 			}}
-			class="space-y-3 rounded-xl border border-card-border bg-card-bg p-3.5 text-xs"
+			class="space-y-3 rounded-card border border-card-border bg-card-bg p-3.5 text-xs"
 		>
 			<label class="block text-fg-light">
 				<span class="font-medium text-fg-main">Primary Title</span>
@@ -429,13 +431,13 @@
 				<button
 					type="button"
 					onclick={() => (mode = 'view')}
-					class="rounded-lg border border-card-border bg-canvas-secondary px-3 py-1 font-medium text-fg-main"
+					class={buttonClass('secondary', 'sm')}
 				>
 					Cancel
 				</button>
 				<button
 					type="submit"
-					class="rounded-lg bg-fg-main px-3 py-1 font-medium text-fg-inverse"
+					class={buttonClass('primary', 'sm')}
 				>
 					Apply changes
 				</button>
@@ -444,13 +446,13 @@
 	{/if}
 
 	{#if mode === 'comparing'}
-		<div class="grid gap-3 rounded-xl border border-card-border bg-card-bg p-3.5 text-xs sm:grid-cols-2">
+		<div class="grid gap-3 rounded-card border border-card-border bg-card-bg p-3.5 text-xs sm:grid-cols-2">
 			<div>
-				<span class="font-mono text-[11px] font-semibold uppercase text-fg-light">Original</span>
+				<span class="text-[11px] font-medium capitalize text-fg-light">Original</span>
 				<pre class="mt-1.5 whitespace-pre-wrap font-sans text-fg-main">{serializeHumanText(content)}</pre>
 			</div>
 			<div class="border-t border-canvas-border pt-2 sm:border-l sm:border-t-0 sm:pl-3 sm:pt-0">
-				<span class="font-mono text-[11px] font-semibold uppercase text-accent-primary">Current</span>
+				<span class="text-[11px] font-medium capitalize text-accent-primary">Current</span>
 				<pre class="mt-1.5 whitespace-pre-wrap font-sans text-fg-main">{serializeHumanText(currentContent)}</pre>
 			</div>
 		</div>

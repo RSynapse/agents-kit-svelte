@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	export interface SelectionAction {
 		id: string;
 		label: string;
@@ -63,7 +64,7 @@
 </script>
 
 <section
-	class="rounded-xl border border-card-border bg-card-bg p-4 text-fg-main shadow-xs {className}"
+	class="rounded-card border border-card-border bg-card-bg p-4 text-fg-main shadow-xs {className}"
 >
 	<div class="flex flex-wrap items-center justify-between gap-2">
 		<div class="flex items-center gap-2">
@@ -82,7 +83,7 @@
 
 	{#if selectedText}
 		<blockquote
-			class="mt-2.5 border-l-2 border-accent-primary bg-canvas-secondary py-1.5 pr-3 pl-3 text-xs leading-5 text-fg-light"
+			class="mt-2.5 rounded-r-control border-l-2 border-card-border bg-canvas-secondary/70 py-1.5 pr-3 pl-3 text-xs leading-5 text-fg-light"
 		>
 			{selectedText}
 		</blockquote>
@@ -94,12 +95,10 @@
 				type="button"
 				disabled={isWorking}
 				onclick={() => triggerAction(action.id)}
-				class="rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50 {action.tone ===
-				'accent'
-					? 'border-transparent bg-accent-primary text-fg-inverse hover:opacity-90'
-					: action.tone === 'danger'
-						? 'border-card-border bg-canvas-primary text-status-danger hover:bg-status-danger-subtle'
-						: 'border-card-border bg-canvas-secondary text-fg-main hover:bg-accent-subtle hover:text-accent-primary'}"
+				class={buttonClass(
+					action.tone === 'accent' ? 'primary' : action.tone === 'danger' ? 'danger' : 'secondary',
+					'md'
+				)}
 			>
 				{action.label}
 			</button>
@@ -116,7 +115,7 @@
 			<button
 				type="button"
 				onclick={() => onReplace?.(localResult ?? '')}
-				class="rounded-lg bg-accent-primary px-2.5 py-1 text-xs font-semibold text-fg-inverse transition-opacity hover:opacity-90"
+				class={buttonClass('primary', 'sm')}
 			>
 				Apply result
 			</button>

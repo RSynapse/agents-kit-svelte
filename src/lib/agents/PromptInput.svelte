@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { pillClass, SOFT } from '../ui/styles';
+	import { fade } from 'svelte/transition';
+	import { rise } from '../state/motion.svelte';
+	import { ArrowUp, AtSign, ChevronDown, FileIcon, GitBranch, Plus, Shield, Sparkles, Square, X } from '@lucide/svelte';
 	import { isImeComposing } from '../state/chat-helpers';
 	import type { SupportedAgentId, SupportedAgentOption } from '../types';
 
@@ -31,6 +35,33 @@
 	}: Props = $props();
 
 	let menuOpen = $state(false);
+	let canSend = $derived(value.trim().length > 0);
+	let selectedAgent = $derived(agents.find((agentOpt) => agentOpt.id === selectedAgentId));
+
+	/**
+	 * Picks a Lucide icon for a context chip based on its `kind:` prefix.
+	 *
+	 * @param chip - Chip tag such as `worktree:…` or `file:…`.
+	 * @returns Icon component.
+	 */
+	function chipIcon(chip: string) {
+		if (chip.startsWith('worktree:')) return GitBranch;
+		if (chip.startsWith('skill:')) return Sparkles;
+		if (chip.startsWith('gate:')) return Shield;
+		if (chip.startsWith('file:')) return FileIcon;
+		return AtSign;
+	}
+
+	/**
+	 * Strips the `kind:` prefix for display.
+	 *
+	 * @param chip - Chip tag.
+	 * @returns Human-readable label.
+	 */
+	function chipLabel(chip: string): string {
+		const idx = chip.indexOf(':');
+		return idx >= 0 ? chip.slice(idx + 1) : chip;
+	}
 	let attachedChips = $state<string[]>(['worktree:trailside/1210-auth-redirect']);
 	let ready = $state(false);
 
@@ -92,48 +123,22 @@
 		e.preventDefault();
 		submitPrompt();
 	}}
-	class="w-full rounded-xl border border-card-border bg-card-bg p-2.5 transition-colors focus-within:border-fg-light/50 {className}"
+	data-busy={busy}
+	class="ak-soft-focus w-full rounded-composer border border-chat-border bg-card-bg px-3 pt-3 pb-2.5 focus-within:border-fg-light/35 {className}"
 >
 	{#if attachedChips.length > 0}
-		<div class="mb-2 flex flex-wrap items-center gap-1.5 px-1">
+		<div class="mb-1.5 flex flex-wrap items-center gap-1.5 px-1">
 			{#each attachedChips as chip (chip)}
-				<span
-					class="inline-flex items-center gap-1.5 rounded-md border border-card-border bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-main"
-				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3 text-fg-light"
-					>
-						<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-						<path d="M14 2v4a2 2 0 0 0 2 2h4" />
-					</svg>
-					<span>@{chip}</span>
+				{@const ChipIcon = chipIcon(chip)}
+				<span in:rise={{ y: 2 }} class="{SOFT.chip} max-w-full pr-1">
+					<ChipIcon aria-hidden="true" class="text-fg-light" />
+					<span class="truncate font-mono text-[11px]">{chipLabel(chip)}</span>
 					<button
 						type="button"
 						aria-label="Remove {chip}"
 						onclick={() => removeContextChip(chip)}
-						class="inline-flex size-3.5 items-center justify-center rounded text-fg-light hover:text-fg-main"
-					>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3"
-						>
-							<path d="M18 6 6 18" />
-							<path d="m6 6 12 12" />
-						</svg>
-					</button>
+						class="inline-flex size-4 items-center justify-center rounded-full text-fg-light transition-colors hover:bg-fg-main/10 hover:text-fg-main"
+					><X aria-hidden="true" class="size-3" /></button>
 				</span>
 			{/each}
 		</div>
@@ -148,106 +153,68 @@
 			disabled={!ready}
 			aria-label={placeholder}
 			onkeydown={handleKeyDown}
-			class="w-full resize-none bg-transparent px-1.5 py-1 text-sm leading-6 text-fg-main placeholder:text-fg-light focus:outline-none disabled:opacity-50"
+			class="field-sizing-content max-h-60 min-h-12 w-full resize-none bg-transparent px-1.5 py-1 text-[15px] leading-6 text-fg-main placeholder:text-fg-light/80 focus:outline-none disabled:opacity-50"
 		></textarea>
 	</label>
 
-	<div class="mt-2 flex flex-wrap items-center justify-between gap-2 pt-1">
-		<div class="relative flex flex-wrap items-center gap-1.5">
+	<div class="mt-1 flex items-center justify-between gap-2">
+		<div class="relative flex min-w-0 items-center gap-1">
 			<button
 				type="button"
 				aria-label="Add context or skill"
 				aria-expanded={menuOpen}
 				onclick={() => (menuOpen = !menuOpen)}
-				class="inline-flex size-8 items-center justify-center rounded-lg text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+				class={pillClass('secondary', 'icon')}
 			>
-				<svg
-					aria-hidden="true"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.8"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="size-4"
-				>
-					<path d="M5 12h14" />
-					<path d="M12 5v14" />
-				</svg>
+				<Plus aria-hidden="true" class="transition-transform duration-200 {menuOpen ? 'rotate-45' : ''}" />
 			</button>
 
 			{#if menuOpen}
 				<div
 					role="menu"
 					aria-label="Context attachments"
-					class="absolute bottom-10 left-0 z-20 w-60 rounded-lg border border-card-border bg-card-bg p-1.5 shadow-lg"
+					transition:rise={{ y: 4, duration: 140 }}
+					class="absolute bottom-11 left-0 z-20 w-64 rounded-soft border border-chat-border bg-card-bg p-1.5 ak-shadow-soft"
 				>
+					<p class="px-2.5 pt-1 pb-1.5 text-[11px] font-medium text-fg-light">Add to context</p>
 					<button
 						type="button"
 						role="menuitem"
 						onclick={() => addContextChip('file:apps/web/src/routes/auth/callback/+server.ts')}
-						class="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
+						class="flex w-full items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-left text-[13px] text-fg-main transition-colors hover:bg-chat-surface"
 					>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.75"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3.5 text-fg-light"
-						>
-							<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-							<path d="M14 2v4a2 2 0 0 0 2 2h4" />
-						</svg>
+						<FileIcon aria-hidden="true" class="size-4 text-fg-light" />
 						<span>Attach callback/+server.ts</span>
 					</button>
 					<button
 						type="button"
 						role="menuitem"
 						onclick={() => addContextChip(`skill:${activeSkill}`)}
-						class="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
+						class="flex w-full items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-left text-[13px] text-fg-main transition-colors hover:bg-chat-surface"
 					>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.75"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3.5 text-fg-light"
-						>
-							<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
-						</svg>
+						<Sparkles aria-hidden="true" class="size-4 text-fg-light" />
 						<span>Pin skill: {activeSkill}</span>
 					</button>
 					<button
 						type="button"
 						role="menuitem"
 						onclick={() => addContextChip('gate:check-boundaries')}
-						class="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
+						class="flex w-full items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-left text-[13px] text-fg-main transition-colors hover:bg-chat-surface"
 					>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.75"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3.5 text-fg-light"
-						>
-							<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-						</svg>
+						<Shield aria-hidden="true" class="size-4 text-fg-light" />
 						<span>Include boundary gate check</span>
 					</button>
 				</div>
 			{/if}
 
-			<label class="inline-flex items-center gap-1.5 text-xs text-fg-light">
-				<span class="sr-only">Supported Agent</span>
+			<label
+				class="relative inline-flex h-8 min-w-0 items-center gap-1 rounded-full pr-2.5 pl-3 text-[13px] text-fg-light transition-colors hover:bg-chat-user/70 hover:text-fg-main"
+			>
+				<span class="truncate">{selectedAgent?.label ?? 'Agent'}</span>
+				{#if selectedAgent?.version}
+					<span class="hidden text-fg-light/70 sm:inline">{selectedAgent.version}</span>
+				{/if}
+				<ChevronDown aria-hidden="true" class="size-3.5" />
 				<select
 					aria-label="Supported Agent"
 					value={selectedAgentId}
@@ -255,7 +222,7 @@
 						const target = e.currentTarget as HTMLSelectElement;
 						onAgentChange?.(target.value as SupportedAgentId);
 					}}
-					class="h-8 rounded-lg px-2 text-xs font-medium text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main focus:outline-none"
+					class="absolute inset-0 cursor-pointer opacity-0"
 				>
 					{#each agents as agentOpt (agentOpt.id)}
 						<option value={agentOpt.id}>
@@ -265,50 +232,33 @@
 				</select>
 			</label>
 
-			<span
-				class="hidden rounded-lg bg-canvas-secondary px-2.5 py-1 text-xs font-medium text-fg-light sm:inline-block"
-			>
-				Skill: {activeSkill}
+			<span class="hidden h-7 items-center gap-1.5 rounded-full px-2.5 text-xs text-fg-light sm:inline-flex">
+				<Sparkles aria-hidden="true" class="size-3.5 text-chat-accent" />
+				{activeSkill}
 			</span>
 		</div>
 
-		<div class="flex items-center gap-2">
+		<div class="flex shrink-0 items-center gap-2">
 			{#if busy}
 				<button
+					in:fade={{ duration: 120 }}
 					type="button"
 					onclick={onStop}
 					aria-label="Stop run"
-					class="inline-flex size-8 items-center justify-center rounded-lg bg-fg-main text-fg-inverse transition-opacity hover:opacity-90"
+					class={pillClass('primary', 'icon')}
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="currentColor"
-						class="size-3"
-					>
-						<rect width="14" height="14" x="5" y="5" rx="2" />
-					</svg>
+					<Square aria-hidden="true" class="size-3 fill-current" />
 				</button>
 			{:else}
 				<button
 					type="submit"
-					disabled={!value.trim()}
+					disabled={!canSend}
 					aria-label="Send prompt"
-					class="inline-flex size-8 items-center justify-center rounded-lg bg-fg-main text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-35"
+					class="inline-flex size-8 items-center justify-center rounded-full transition-colors duration-200 {canSend
+						? 'bg-chat-accent text-white hover:bg-chat-accent/90'
+						: 'bg-chat-user text-fg-light'}"
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<path d="m5 12 7-7 7 7" />
-						<path d="M12 19V5" />
-					</svg>
+					<ArrowUp aria-hidden="true" class="size-4" strokeWidth={2.25} />
 				</button>
 			{/if}
 		</div>

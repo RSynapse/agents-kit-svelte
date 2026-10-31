@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Share2, Check, Copy, Download, LoaderCircle, Pencil, RefreshCw } from '@lucide/svelte';
+	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	export type ArtifactType = 'document' | 'code' | 'table' | 'chart';
 
 	export interface ArtifactVersion {
@@ -150,7 +152,7 @@
 
 <section
 	aria-label="Rich agent artifact viewer"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border p-4"
@@ -158,7 +160,7 @@
 		<div class="min-w-0">
 			<div class="flex flex-wrap items-center gap-2">
 				<span
-					class="rounded bg-accent-subtle px-2 py-0.5 font-mono text-[11px] font-semibold uppercase text-accent-primary"
+					class="rounded bg-accent-subtle px-2 py-0.5 text-[11px] font-medium capitalize text-accent-primary"
 				>
 					{artifactType}
 				</span>
@@ -175,23 +177,25 @@
 			<button
 				type="button"
 				onclick={handleCopy}
-				class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'sm')}
 			>
-				{copied ? '✓ Copied' : '⎘ Copy'}
+				{#if copied}<Check aria-hidden="true" />Copied{:else}<Copy aria-hidden="true" />Copy{/if}
 			</button>
 			<button
 				type="button"
 				onclick={() => onDownload?.(resolvedContent)}
-				class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'sm')}
 			>
-				↓ Export
+				<Download aria-hidden="true" />
+				Export
 			</button>
 			<button
 				type="button"
 				onclick={() => onRegenerate?.()}
-				class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-light hover:bg-canvas-secondary hover:text-fg-main"
+				class={buttonClass('secondary', 'sm')}
 			>
-				↻ Regenerate
+				<RefreshCw aria-hidden="true" />
+				Regenerate
 			</button>
 		</div>
 	</header>
@@ -200,24 +204,22 @@
 		<div
 			class="border-b border-canvas-border bg-accent-subtle px-4 py-2 font-mono text-xs text-accent-primary"
 		>
-			◎ Streaming updated artifact revision…
+			<LoaderCircle aria-hidden="true" class="animate-spin" />
+			Streaming updated artifact revision…
 		</div>
 	{/if}
 
 	<div
 		role="tablist"
 		aria-label="Artifact views"
-		class="flex flex-wrap gap-1 border-b border-canvas-border bg-canvas-primary px-4 pt-2"
+		class="{SEGMENT_GROUP_CLASS} mx-4 mt-3 flex-wrap"
 	>
 		<button
 			type="button"
 			role="tab"
 			aria-selected={activeTab === 'preview'}
 			onclick={() => (activeTab = 'preview')}
-			class="rounded-t-lg border-b-2 px-3 py-2 text-xs font-medium transition-colors {activeTab ===
-			'preview'
-				? 'border-accent-primary bg-card-bg text-fg-main'
-				: 'border-transparent text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'preview')}"
 		>
 			Preview
 		</button>
@@ -226,10 +228,7 @@
 			role="tab"
 			aria-selected={activeTab === 'source'}
 			onclick={() => (activeTab = 'source')}
-			class="rounded-t-lg border-b-2 px-3 py-2 text-xs font-medium transition-colors {activeTab ===
-			'source'
-				? 'border-accent-primary bg-card-bg text-fg-main'
-				: 'border-transparent text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'source')}"
 		>
 			Markdown Source
 		</button>
@@ -238,10 +237,7 @@
 			role="tab"
 			aria-selected={activeTab === 'schema'}
 			onclick={() => (activeTab = 'schema')}
-			class="rounded-t-lg border-b-2 px-3 py-2 text-xs font-medium transition-colors {activeTab ===
-			'schema'
-				? 'border-accent-primary bg-card-bg text-fg-main'
-				: 'border-transparent text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'schema')}"
 		>
 			JSON Schema
 		</button>
@@ -250,10 +246,7 @@
 			role="tab"
 			aria-selected={activeTab === 'versions'}
 			onclick={() => (activeTab = 'versions')}
-			class="rounded-t-lg border-b-2 px-3 py-2 text-xs font-medium transition-colors {activeTab ===
-			'versions'
-				? 'border-accent-primary bg-card-bg text-fg-main'
-				: 'border-transparent text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'versions')}"
 		>
 			Version History ({versions.length})
 		</button>
@@ -261,30 +254,30 @@
 
 	<div class="p-4">
 		{#if activeTab === 'preview'}
-			<div class="space-y-2 rounded-lg border border-canvas-border bg-canvas-primary p-4">
+			<div class="space-y-2 rounded-control border border-canvas-border px-5 py-4">
 				{#each parsedLines as line, idx (`line-${idx}`)}
 					{#if line.startsWith('Title: ')}
-						<h3 class="text-base font-semibold text-fg-main">{line.slice(7)}</h3>
+						<h3 class="text-lg font-semibold tracking-[-0.015em] text-fg-main">{line.slice(7)}</h3>
 					{:else if line.startsWith('Section: ')}
-						<h4 class="pt-2 font-mono text-xs font-semibold uppercase tracking-wide text-accent-primary">
+						<h4 class="pt-2 text-sm font-semibold text-fg-main">
 							{line.slice(9)}
 						</h4>
 					{:else if line.startsWith('- ')}
-						<p class="flex items-start gap-2 pl-2 text-xs leading-relaxed text-fg-main">
-							<span class="text-accent-primary">•</span>
+						<p class="flex items-start gap-2.5 pl-1 text-sm leading-6 text-fg-main">
+							<span aria-hidden="true" class="mt-2.5 size-1 shrink-0 rounded-full bg-fg-light"></span>
 							<span>{line.slice(2)}</span>
 						</p>
 					{:else if line.trim().length > 0}
-						<p class="text-xs leading-relaxed text-fg-light">{line}</p>
+						<p class="text-sm leading-6 text-fg-light">{line}</p>
 					{/if}
 				{/each}
 			</div>
 		{:else if activeTab === 'source'}
 			<pre
-				class="max-h-80 overflow-auto rounded-lg border border-canvas-border bg-canvas-primary p-4 font-mono text-xs leading-6 text-fg-main"><code data-language={language}>{resolvedContent}</code></pre>
+				class="max-h-80 overflow-auto rounded-control bg-canvas-secondary/70 p-4 font-mono text-xs leading-6 text-fg-main"><code data-language={language}>{resolvedContent}</code></pre>
 		{:else if activeTab === 'schema'}
 			<pre
-				class="max-h-80 overflow-auto rounded-lg border border-canvas-border bg-canvas-primary p-4 font-mono text-xs leading-6 text-fg-main"><code>{metadata.schemaJson ?? defaultSchemaJson}</code></pre>
+				class="max-h-80 overflow-auto rounded-control bg-canvas-secondary/70 p-4 font-mono text-xs leading-6 text-fg-main"><code>{metadata.schemaJson ?? defaultSchemaJson}</code></pre>
 		{:else if activeTab === 'versions'}
 			<div class="divide-y divide-canvas-border rounded-lg border border-canvas-border">
 				{#each versions as version (version.id)}
@@ -319,7 +312,7 @@
 	</div>
 
 	<footer
-		class="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-border bg-canvas-primary px-4 py-2.5 font-mono text-xs text-fg-light"
+		class="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-border px-4 py-2.5 text-xs text-fg-light"
 	>
 		<span>
 			{metadata.size ?? '2.4 KB'}
@@ -333,15 +326,17 @@
 			<button
 				type="button"
 				onclick={() => onEdit?.(resolvedContent)}
-				class="font-sans text-xs font-medium text-accent-primary hover:underline"
+				class={buttonClass('ghost', 'xs')}
 			>
-				✎ Edit in Worktree
+				<Pencil aria-hidden="true" />
+				Edit
 			</button>
 			<button
 				type="button"
 				onclick={() => onShare?.()}
-				class="font-sans text-xs font-medium text-fg-light hover:text-fg-main"
+				class={buttonClass('ghost', 'xs')}
 			>
+				<Share2 aria-hidden="true" />
 				Share
 			</button>
 		</div>

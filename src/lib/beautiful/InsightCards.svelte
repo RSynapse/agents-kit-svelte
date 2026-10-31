@@ -129,12 +129,12 @@
 		>
 			<div>
 				<div class="flex items-center justify-between gap-2">
-					<span class="font-mono text-[10px] font-medium tracking-wider text-fg-light uppercase">
+					<span class="text-[11px] font-medium text-fg-light capitalize">
 						{item.kind}
 					</span>
 					{#if item.delta}
 						<span
-							class="rounded-full px-2 py-0.5 font-mono text-[11px] font-medium tabular-nums {item.kind ===
+							class="rounded-chip px-1.5 py-px font-mono text-[11px] font-medium tabular-nums {item.kind ===
 							'anomaly'
 								? 'bg-status-danger-subtle text-status-danger'
 								: 'bg-status-success-subtle text-status-success'}"
