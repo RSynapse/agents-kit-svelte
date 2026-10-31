@@ -236,6 +236,126 @@ export interface GitHubReviewThreadData {
 	comments: GitHubReviewComment[];
 }
 
+// --- GitHub Lifecycle Types (intake → release → incident) ---
+
+export type GitHubLifecycleStageId =
+	| 'issue'
+	| 'triage'
+	| 'branch'
+	| 'commits'
+	| 'pull-request'
+	| 'review'
+	| 'checks'
+	| 'merge'
+	| 'deploy'
+	| 'release';
+
+export interface GitHubLifecycleStage {
+	id: GitHubLifecycleStageId;
+	label: string;
+	actor: string;
+	detail: string;
+	timestamp: string;
+}
+
+export interface GitHubTriageSuggestion {
+	id: string;
+	kind: 'type' | 'priority' | 'area' | 'assignee' | 'milestone';
+	label: string;
+	value: string;
+	confidence: number;
+	tone: 'neutral' | 'accent' | 'success' | 'warning' | 'danger';
+}
+
+export interface GitHubTriageIssue {
+	number: number;
+	title: string;
+	author: string;
+	openedAt: string;
+	body: string;
+	suggestions: GitHubTriageSuggestion[];
+	duplicate?: { number: number; title: string; similarity: number };
+}
+
+export interface GitHubBranchCommit {
+	sha: string;
+	message: string;
+	author: string;
+}
+
+export interface GitHubBranchData {
+	name: string;
+	base: string;
+	baseSha: string;
+	linkedIssueNumber?: number;
+	behind: number;
+	commits: GitHubBranchCommit[];
+	protections: { id: string; label: string; satisfied: boolean }[];
+}
+
+export interface GitHubDiffLine {
+	kind: 'context' | 'add' | 'del' | 'hunk';
+	oldLine?: number;
+	newLine?: number;
+	text: string;
+}
+
+export interface GitHubReviewFile {
+	path: string;
+	additions: number;
+	deletions: number;
+	lines: GitHubDiffLine[];
+	comment?: { afterLine: number; author: string; body: string };
+}
+
+export type GitHubReviewVerdict = 'approve' | 'comment' | 'request-changes';
+
+export interface GitHubMergeQueueEntry {
+	number: number;
+	title: string;
+	author: string;
+	checksTotal: number;
+}
+
+export type GitHubDeploymentStatus = 'queued' | 'in-progress' | 'awaiting-approval' | 'active' | 'failed';
+
+export interface GitHubDeploymentEnvironment {
+	id: string;
+	name: string;
+	url: string;
+	requiresApproval?: boolean;
+	reviewers?: string[];
+}
+
+export interface GitHubReleaseNoteGroup {
+	id: string;
+	title: string;
+	items: { text: string; pr: number; author: string }[];
+}
+
+export interface GitHubReleaseData {
+	tag: string;
+	previousTag: string;
+	name: string;
+	target: string;
+	groups: GitHubReleaseNoteGroup[];
+	assets: { name: string; size: string }[];
+}
+
+export type GitHubIncidentStatus = 'investigating' | 'identified' | 'mitigated' | 'resolved';
+
+export interface GitHubIncidentData {
+	id: string;
+	title: string;
+	severity: 'SEV1' | 'SEV2' | 'SEV3';
+	service: string;
+	metricLabel: string;
+	series: number[];
+	threshold: number;
+	suspect: { sha: string; message: string; pr: number; deployedAt: string };
+	steps: { status: GitHubIncidentStatus; label: string; detail: string }[];
+}
+
 // --- Intelligent UI / Generative Surface Types ---
 
 export type ResultActionState = 'view' | 'expanded' | 'editing' | 'comparing';

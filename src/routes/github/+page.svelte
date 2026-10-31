@@ -6,16 +6,47 @@
 	import GitHubKanbanBoard from '$lib/github/GitHubKanbanBoard.svelte';
 	import GitHubPullRequestCard from '$lib/github/GitHubPullRequestCard.svelte';
 	import GitHubReviewThreadCard from '$lib/github/GitHubReviewThreadCard.svelte';
-	import { SEGMENT_GROUP_CLASS, segmentClass } from '$lib/ui/styles';
-	import { Columns3, LayoutGrid, SquareStack } from '@lucide/svelte';
+	import GitHubBranchCard from '$lib/github/GitHubBranchCard.svelte';
+	import GitHubDeploymentPipeline from '$lib/github/GitHubDeploymentPipeline.svelte';
+	import GitHubIncidentCard from '$lib/github/GitHubIncidentCard.svelte';
+	import GitHubIssueTriage from '$lib/github/GitHubIssueTriage.svelte';
+	import GitHubLifecycleTimeline from '$lib/github/GitHubLifecycleTimeline.svelte';
+	import GitHubMergeQueue from '$lib/github/GitHubMergeQueue.svelte';
+	import GitHubPullRequestReview from '$lib/github/GitHubPullRequestReview.svelte';
+	import GitHubReleaseCard from '$lib/github/GitHubReleaseCard.svelte';
+	import { buttonClass, SEGMENT_GROUP_CLASS, segmentClass } from '$lib/ui/styles';
+	import { Columns3, LayoutGrid, RotateCcw, Route, SquareStack } from '@lucide/svelte';
 
 	const VIEWS = [
+		{ id: 'lifecycle', label: 'Lifecycle', icon: Route },
 		{ id: 'kanban', label: 'Kanban board', icon: Columns3 },
 		{ id: 'bento', label: 'Repository pulse', icon: LayoutGrid },
 		{ id: 'cards', label: 'Card primitives', icon: SquareStack }
 	] as const;
 
-	let activeView = $state<'kanban' | 'bento' | 'cards'>('kanban');
+	type ViewId = (typeof VIEWS)[number]['id'];
+
+	/** The lifecycle view walks through the phases of shipping a change, in order. */
+	const PHASES = [
+		{ id: 'plan', step: '01', title: 'Plan', blurb: 'An issue arrives, gets triaged, and lands on someone’s plate.' },
+		{ id: 'build', step: '02', title: 'Build', blurb: 'A branch is cut from the issue and commits start landing.' },
+		{ id: 'review', step: '03', title: 'Review', blurb: 'The pull request is read file by file, with comments inline.' },
+		{ id: 'verify', step: '04', title: 'Verify & merge', blurb: 'Required checks run, then the merge queue lands changes in order.' },
+		{ id: 'ship', step: '05', title: 'Ship', blurb: 'The merge promotes through environments and becomes a release.' },
+		{ id: 'operate', step: '06', title: 'Operate', blurb: 'When production misbehaves, the suspect change is found and reverted.' }
+	] as const;
+
+	let activeView = $state<ViewId>('lifecycle');
+	let replays = $state<Record<string, number>>({});
+
+	/**
+	 * Restarts the live demos in one lifecycle phase.
+	 *
+	 * @param id - Phase (or `timeline`) to replay.
+	 */
+	function replay(id: string): void {
+		replays = { ...replays, [id]: (replays[id] ?? 0) + 1 };
+	}
 	let ready = $state(false);
 	let eventLog = $state<string[]>([
 		'Connected to RSynapse/trailside (read-only installation token in memory)'
@@ -41,15 +72,15 @@
 		<div class="max-w-2xl">
 			<p class="text-xs font-medium text-accent-primary">GitHub suite</p>
 			<h1 class="mt-2 font-display text-[2.25rem] leading-tight font-normal tracking-[-0.02em] text-fg-main">
-				Issues, pull requests and checks, all in one calm board.
+				The whole dev lifecycle, from first issue to the 2am incident.
 			</h1>
 			<p class="mt-3 text-sm leading-6 text-fg-light">
-				Portable Svelte 5 components for GitHub triage, worktree agent runs, referee reviews and CI
-				check suites.
+				Portable Svelte 5 components for triage, branches, reviews, CI checks, merge queues,
+				deployments, releases and incidents. Every one plays itself, and takes over when you click.
 			</p>
 		</div>
 
-		<div role="tablist" aria-label="GitHub layout views" class={SEGMENT_GROUP_CLASS}>
+		<div role="tablist" aria-label="GitHub layout views" class="{SEGMENT_GROUP_CLASS} max-w-full overflow-x-auto">
 			{#each VIEWS as view (view.id)}
 				<button
 					type="button"
@@ -57,7 +88,7 @@
 					disabled={!ready}
 					aria-selected={activeView === view.id}
 					onclick={() => (activeView = view.id)}
-					class={segmentClass(activeView === view.id)}
+					class="{segmentClass(activeView === view.id)} shrink-0 whitespace-nowrap"
 				>
 					<view.icon aria-hidden="true" />
 					{view.label}
@@ -73,7 +104,97 @@
 		<span class="text-fg-light">{eventLog.length} events</span>
 	</div>
 
-	{#if activeView === 'kanban'}
+	{#if activeView === 'lifecycle'}
+		<div class="space-y-10">
+			<div class="relative">
+				{#key replays.timeline ?? 0}
+					<GitHubLifecycleTimeline onSelectStage={(stage) => recordEvent(`Inspected lifecycle stage: ${stage.label}`)} />
+				{/key}
+			</div>
+
+			{#each PHASES as phase (phase.id)}
+				<section aria-labelledby="phase-{phase.id}" class="space-y-4">
+					<div class="flex flex-wrap items-end justify-between gap-3 px-1">
+						<div>
+							<p class="font-mono text-[11px] text-accent-primary">{phase.step}</p>
+							<h2 id="phase-{phase.id}" class="mt-0.5 text-base font-semibold tracking-[-0.01em] text-fg-main">{phase.title}</h2>
+							<p class="mt-0.5 text-[13px] text-fg-light">{phase.blurb}</p>
+						</div>
+						<button type="button" disabled={!ready} onclick={() => replay(phase.id)} class={buttonClass('ghost', 'sm')}>
+							<RotateCcw aria-hidden="true" />Replay
+						</button>
+					</div>
+
+					{#key replays[phase.id] ?? 0}
+						{#if phase.id === 'plan'}
+							<div class="grid items-start gap-4 [&>*]:min-w-0 lg:grid-cols-2">
+								<GitHubIssueTriage
+									onApply={(n, applied) => recordEvent(`Applied triage to Issue ${n}: ${applied.join(', ')}`)}
+									onMarkDuplicate={(n, d) => recordEvent(`Linked Issue ${n} to Issue ${d}`)}
+								/>
+								<GitHubIssueCard
+									onDispatchRun={(n) => recordEvent(`Dispatched Claude Code worktree run on Issue ${n}`)}
+									onClaimToggle={(n, c) => recordEvent(`${c ? 'Claimed' : 'Released'} Issue ${n}`)}
+								/>
+							</div>
+						{:else if phase.id === 'build'}
+							<div class="grid items-start gap-4 [&>*]:min-w-0 lg:grid-cols-2">
+								<GitHubBranchCard
+									onOpenWorktree={(b) => recordEvent(`Opened worktree for ${b}`)}
+									onCompare={(b, base) => recordEvent(`Comparing ${base}...${b}`)}
+								/>
+								<GitHubCommitCard onRestore={(sha) => recordEvent(`Restored worktree to commit ${sha}`)} />
+							</div>
+						{:else if phase.id === 'review'}
+							<div class="grid items-start gap-4 [&>*]:min-w-0 xl:grid-cols-[3fr_2fr]">
+								<GitHubPullRequestReview onSubmitReview={(n, v) => recordEvent(`Submitted review on PR ${n}: ${v}`)} />
+								<div class="space-y-4">
+									<GitHubPullRequestCard
+										onApproveMerge={(n) => recordEvent(`Queued PR ${n} for referee merge`)}
+										onRequestChanges={(n) => recordEvent(`Sent back PR ${n} for agent revision`)}
+									/>
+									<GitHubReviewThreadCard
+										onApplySuggestion={(id) => recordEvent(`Applied suggested patch on thread ${id}`)}
+										onReply={(id, text) => recordEvent(`Replied on ${id}: "${text}"`)}
+									/>
+								</div>
+							</div>
+						{:else if phase.id === 'verify'}
+							<div class="grid items-start gap-4 [&>*]:min-w-0 lg:grid-cols-2">
+								<GitHubChecksPanel
+									onFixWithAgent={(id) => recordEvent(`Launched Claude Code to fix check ${id}`)}
+									onRerunCheck={(id) => recordEvent(`Re-running check ${id}`)}
+								/>
+								<GitHubMergeQueue onRemove={(n) => recordEvent(`Removed PR ${n} from the merge queue`)} />
+							</div>
+						{:else if phase.id === 'ship'}
+							<div class="grid items-start gap-4 [&>*]:min-w-0 lg:grid-cols-2">
+								<GitHubDeploymentPipeline
+									onApprove={(env) => recordEvent(`Approved deployment to ${env}`)}
+									onRollback={(env) => recordEvent(`Rolled back ${env}`)}
+								/>
+								<GitHubReleaseCard onPublish={(tag, pre) => recordEvent(`Published ${tag}${pre ? ' as a pre-release' : ''}`)} />
+							</div>
+						{:else}
+							<div class="grid items-start gap-4 [&>*]:min-w-0 lg:grid-cols-2">
+								<GitHubIncidentCard onRevert={(pr, sha) => recordEvent(`Opened revert of PR ${pr} (${sha})`)} />
+								<div class="rounded-card border border-dashed border-card-border p-5 text-[13px] leading-6 text-fg-light">
+									<p class="font-medium text-fg-main">Closing the loop</p>
+									<p class="mt-1">
+										The incident’s follow-up issue goes straight back to Plan, where triage picks it up
+										and the cycle starts again. Hit Replay on the timeline above to watch it from the top.
+									</p>
+									<button type="button" disabled={!ready} onclick={() => replay('timeline')} class="{buttonClass('secondary', 'sm')} mt-3">
+										<RotateCcw aria-hidden="true" />Replay timeline
+									</button>
+								</div>
+							</div>
+						{/if}
+					{/key}
+				</section>
+			{/each}
+		</div>
+	{:else if activeView === 'kanban'}
 		<GitHubKanbanBoard
 			onSelectIssue={(issue) => recordEvent(`Opened card inspector for Issue ${issue.number}`)}
 		/>
