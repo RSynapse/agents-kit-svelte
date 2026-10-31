@@ -33,46 +33,10 @@
 		class?: string;
 	}
 
-	const DEFAULT_ITEMS: SidebarResource[] = [
-		{
-			id: 'wt-184',
-			label: 'feat/issue-184-worktree',
-			kind: 'worktree',
-			pinned: true,
-			badge: 'T2',
-			children: [
-				{
-					id: 'src-agents',
-					label: 'src/lib/agents',
-					kind: 'folder',
-					children: [
-						{ id: 'file-sidebar', label: 'AISidebar.svelte', kind: 'file', badge: '+142' },
-						{ id: 'file-approval', label: 'ApprovalCard.svelte', kind: 'file', badge: 'clean' }
-					]
-				},
-				{
-					id: 'file-spec',
-					label: 'docs/specs/run-dispatch.md',
-					kind: 'bookmark',
-					pinned: true
-				}
-			]
-		},
-		{
-			id: 'proj-contracts',
-			label: 'contracts/g0',
-			kind: 'project',
-			children: [
-				{ id: 'file-schema', label: 'schema/envelope.json', kind: 'file' },
-				{ id: 'file-validator', label: 'src/validate.ts', kind: 'file' }
-			]
-		}
-	];
-
 	let {
-		items = DEFAULT_ITEMS,
+		items = [],
 		activeId = undefined,
-		defaultExpandedIds = ['wt-184', 'src-agents', 'proj-contracts'],
+		defaultExpandedIds = [],
 		ariaLabel = 'Workspace resources',
 		searchable = true,
 		onSelect,

@@ -40,7 +40,7 @@
 	let {
 		status = 'refining',
 		label,
-		prompt = 'Architectural isometric diagram of an isolated Git worktree pipeline, warm editorial technical illustration',
+		prompt,
 		resolution = '1024 × 1024',
 		aspectRatio = '16 / 10',
 		size = 'fluid',

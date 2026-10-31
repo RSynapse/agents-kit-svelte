@@ -11,7 +11,7 @@
 	const COPY_FEEDBACK_MS = 1600;
 
 	let {
-		title = 'studio-mac · zsh (worktree: trailside/1210-auth-redirect)',
+		title = 'Terminal',
 		output,
 		streaming = false,
 		onClear,

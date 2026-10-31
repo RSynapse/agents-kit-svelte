@@ -25,9 +25,6 @@
 		class?: string;
 	}
 
-	const DEFAULT_TEXT =
-		'Completed verification on the isolated worktree branch. All 19 unit and contract suites pass with zero regressions. Expanded logs include full unified diff hunks, schema validation traces, and referee sign-off details.';
-
 	let {
 		id,
 		author = 'AK-S Agent',
@@ -36,7 +33,7 @@
 		status = 'delivered',
 		variant = 'soft',
 		align = 'start',
-		text = DEFAULT_TEXT,
+		text,
 		collapsible = true,
 		collapsedLines = 3,
 		defaultOpen = false,

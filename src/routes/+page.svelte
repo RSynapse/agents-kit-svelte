@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SAMPLE_CHAIN_OF_THOUGHT, SAMPLE_ENV_VARIABLES, SAMPLE_PACKAGE_DEPENDENCIES, SAMPLE_PACKAGE_SCRIPTS, SAMPLE_PLAN_MILESTONES, SAMPLE_PREVIEW_LOGS, SAMPLE_PROMPT_SUGGESTIONS, SAMPLE_SCHEMA_PARAMETERS, SAMPLE_SCHEMA_REQUEST_BODY, SAMPLE_SCHEMA_RESPONSE_BODY, SAMPLE_SIDEBAR_RESOURCES, SAMPLE_STACK_SNIPPET, SAMPLE_STACK_TRACE, SAMPLE_VOICE_DEVICES, SAMPLE_VOICE_PERSONAS } from '$lib/fixtures/chat';
 	import {
 		SAMPLE_BENTO_STATS,
 		SAMPLE_BOARD_ISSUES,
@@ -1388,9 +1389,9 @@
 							{:else if item.slug === 'citations'}
 								<Citations citations={sampleCitations} defaultOpen={true} />
 							{:else if item.slug === 'image-generation'}
-								<ImageGeneration />
+								<ImageGeneration prompt="Architectural isometric diagram of an isolated Git worktree pipeline, warm editorial technical illustration" />
 							{:else if item.slug === 'ai-sidebar'}
-								<AISidebar />
+								<AISidebar items={SAMPLE_SIDEBAR_RESOURCES} defaultExpandedIds={['wt-184', 'src-agents', 'proj-contracts']} />
 							{:else if item.slug === 'thinking-shimmer'}
 								<ThinkingShimmer spark label="Analyzing repository structure..." />
 							{:else if item.slug === 'agent-progress'}
@@ -1498,21 +1499,21 @@
 							{:else if item.slug === 'agent-checkpoint'}
 								<AgentCheckpoint checkpoint={sampleCheckpoint} />
 							{:else if item.slug === 'chain-of-thought'}
-								<ChainOfThought />
+								<ChainOfThought steps={SAMPLE_CHAIN_OF_THOUGHT} />
 							{:else if item.slug === 'stack-trace'}
-								<StackTrace />
+								<StackTrace trace={SAMPLE_STACK_TRACE} sourceSnippet={SAMPLE_STACK_SNIPPET} />
 							{:else if item.slug === 'schema-display'}
-								<SchemaDisplay />
+								<SchemaDisplay parameters={SAMPLE_SCHEMA_PARAMETERS} requestBody={SAMPLE_SCHEMA_REQUEST_BODY} responseBody={SAMPLE_SCHEMA_RESPONSE_BODY} path={'/api/v1/workspaces/{workspaceId}/runs'} description="Dispatches an isolated agent workflow run on a paired computer with idempotency verification." />
 							{:else if item.slug === 'environment-variables'}
-								<EnvironmentVariables />
+								<EnvironmentVariables variables={SAMPLE_ENV_VARIABLES} />
 							{:else if item.slug === 'package-info'}
-								<PackageInfo />
+								<PackageInfo scripts={SAMPLE_PACKAGE_SCRIPTS} dependencies={SAMPLE_PACKAGE_DEPENDENCIES} name="@trailside/agents-kit-svelte" description="Svelte 5 Runes agentic UI primitives, GitHub workflow cards, and generative surfaces." />
 							{:else if item.slug === 'web-preview'}
-								<WebPreview />
+								<WebPreview logs={SAMPLE_PREVIEW_LOGS} defaultUrl="http://localhost:5173/w/board" />
 							{:else if item.slug === 'plan-card'}
-								<PlanCard />
+								<PlanCard milestones={SAMPLE_PLAN_MILESTONES} title="Implementation Plan: Svelte 5 Agent Kit Unification" description="Three-milestone execution plan scoped to isolated worktree with automated referee checks." />
 							{:else if item.slug === 'prompt-suggestions'}
-								<PromptSuggestions />
+								<PromptSuggestions suggestions={SAMPLE_PROMPT_SUGGESTIONS} />
 							{:else if item.slug === 'test-results'}
 								<TestResults suites={sampleTestSuites} />
 							{:else if item.slug === 'terminal'}
@@ -1556,7 +1557,7 @@
 									<SkillProposalCard />
 								</div>
 							{:else if item.slug === 'voice-wave-visualizer'}
-								<VoiceWaveVisualizer />
+								<VoiceWaveVisualizer devices={SAMPLE_VOICE_DEVICES} personas={SAMPLE_VOICE_PERSONAS} defaultPersonaId="sol" defaultMicId="mic-macbook-pro" transcript="Check the failing unit test in chat-helpers and explain why the token ratio threshold triggered a warning." />
 							{:else if item.slug === 'border-beam'}
 								<BorderBeam />
 							{:else if item.slug === 'svelte5-motion-lab'}

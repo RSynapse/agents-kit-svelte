@@ -15,7 +15,7 @@
 	}
 
 	interface Props {
-		name?: string;
+		name: string;
 		currentVersion?: string;
 		newVersion?: string;
 		changeType?: PackageChangeType;
@@ -27,29 +27,16 @@
 		class?: string;
 	}
 
-	const DEFAULT_SCRIPTS: PackageScriptItem[] = [
-		{ name: 'dev', command: 'vite dev' },
-		{ name: 'check', command: 'svelte-kit sync && svelte-check --tsconfig ./tsconfig.json' },
-		{ name: 'test', command: 'node --experimental-strip-types --test tests/*.test.ts' }
-	];
-
-	const DEFAULT_DEPENDENCIES: PackageDependencyItem[] = [
-		{ name: 'svelte', version: '^5.55.1' },
-		{ name: '@sveltejs/kit', version: '^2.57.0' },
-		{ name: 'tailwindcss', version: '^4.2.2', dev: true },
-		{ name: 'typescript', version: '^6.0.2', dev: true }
-	];
-
 	let {
-		name = '@trailside/agents-kit-svelte',
+		name,
 		currentVersion = '0.4.2',
 		newVersion = '0.5.0',
 		changeType = 'minor',
 		license = 'MIT',
-		description = 'Svelte 5 Runes agentic UI primitives, GitHub workflow cards, and generative surfaces.',
+		description,
 		verified = true,
-		scripts = DEFAULT_SCRIPTS,
-		dependencies = DEFAULT_DEPENDENCIES,
+		scripts = [],
+		dependencies = [],
 		class: className = ''
 	}: Props = $props();
 

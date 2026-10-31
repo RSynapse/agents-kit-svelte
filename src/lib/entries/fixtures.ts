@@ -5,3 +5,4 @@
 
 export * from '../skills/fixtures';
 export * from '../fixtures/github';
+export * from '../fixtures/chat';

@@ -14,7 +14,7 @@
 	}
 
 	interface Props {
-		defaultUrl?: string;
+		defaultUrl: string;
 		defaultViewport?: PreviewViewport;
 		logs?: PreviewConsoleLog[];
 		defaultConsoleOpen?: boolean;
@@ -23,27 +23,6 @@
 		class?: string;
 	}
 
-	const DEFAULT_LOGS: PreviewConsoleLog[] = [
-		{
-			id: 'log-1',
-			level: 'log',
-			message: '[HMR] Svelte 5 Runes boundary connected (localhost:5173/w/board)',
-			timestamp: '14:22:08'
-		},
-		{
-			id: 'log-2',
-			level: 'warn',
-			message: '[SSR] Restored workspace filter state before client hydration completed',
-			timestamp: '14:22:09'
-		},
-		{
-			id: 'log-3',
-			level: 'log',
-			message: '[Stream] Connected to G0 read contract event source (revision 18)',
-			timestamp: '14:22:11'
-		}
-	];
-
 	const VIEWPORTS: { id: PreviewViewport; label: string }[] = [
 		{ id: '390px', label: '390px' },
 		{ id: '768px', label: '768px' },
@@ -51,17 +30,17 @@
 	];
 
 	let {
-		defaultUrl = 'http://localhost:5173/w/board',
+		defaultUrl,
 		defaultViewport = '1440px',
-		logs = DEFAULT_LOGS,
+		logs = [],
 		defaultConsoleOpen = true,
 		onUrlChange,
 		children,
 		class: className = ''
 	}: Props = $props();
 
-	let currentUrl = $state('http://localhost:5173/w/board');
-	let urlInput = $state('http://localhost:5173/w/board');
+	let currentUrl = $state('');
+	let urlInput = $state('');
 	let viewport = $state<PreviewViewport>('1440px');
 	let consoleOpen = $state(true);
 	let refreshTick = $state(1);

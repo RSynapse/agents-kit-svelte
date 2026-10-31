@@ -23,7 +23,7 @@
 
 	interface Props {
 		method?: HttpMethod;
-		path?: string;
+		path: string;
 		description?: string;
 		parameters?: SchemaParameterItem[];
 		requestBody?: SchemaPropertyItem[];
@@ -31,74 +31,13 @@
 		class?: string;
 	}
 
-	const DEFAULT_PARAMETERS: SchemaParameterItem[] = [
-		{
-			name: 'workspaceId',
-			type: 'string',
-			location: 'path',
-			required: true,
-			description: 'Unique identifier of the connected workspace.'
-		},
-		{
-			name: 'includeJournal',
-			type: 'boolean',
-			location: 'query',
-			required: false,
-			description: 'Include atomic outbox and journal replay entries.'
-		}
-	];
-
-	const DEFAULT_REQUEST_BODY: SchemaPropertyItem[] = [
-		{
-			name: 'cardId',
-			type: 'string',
-			required: true,
-			description: 'Target board card identifier for the dispatched workflow.'
-		},
-		{
-			name: 'worktreeConfig',
-			type: 'object',
-			required: true,
-			description: 'Isolated git worktree settings for the run.',
-			properties: [
-				{
-					name: 'baseBranch',
-					type: 'string',
-					required: true,
-					description: 'Base branch to fork the worktree from (e.g., main).'
-				},
-				{
-					name: 'agentId',
-					type: 'enum(claude-code | codex)',
-					required: true,
-					description: 'Qualified local agent binary to execute.'
-				}
-			]
-		}
-	];
-
-	const DEFAULT_RESPONSE_BODY: SchemaPropertyItem[] = [
-		{
-			name: 'runId',
-			type: 'string',
-			required: true,
-			description: 'Idempotent run session identifier.'
-		},
-		{
-			name: 'status',
-			type: 'enum(queued | running | complete)',
-			required: true,
-			description: 'Initial execution status.'
-		}
-	];
-
 	let {
 		method = 'POST',
-		path = '/api/v1/workspaces/{workspaceId}/runs',
-		description = 'Dispatches an isolated agent workflow run on a paired computer with idempotency verification.',
-		parameters = DEFAULT_PARAMETERS,
-		requestBody = DEFAULT_REQUEST_BODY,
-		responseBody = DEFAULT_RESPONSE_BODY,
+		path,
+		description,
+		parameters = [],
+		requestBody = [],
+		responseBody = [],
 		class: className = ''
 	}: Props = $props();
 

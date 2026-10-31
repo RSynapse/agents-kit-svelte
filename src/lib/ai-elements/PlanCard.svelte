@@ -25,36 +25,12 @@
 		class?: string;
 	}
 
-	const DEFAULT_MILESTONES: PlanMilestone[] = [
-		{
-			id: 'ms-1',
-			title: 'Extract pure domain validators and diff line parser',
-			detail: 'Ensure zero database IO inside pure validation helpers and add unit test coverage.',
-			files: ['src/lib/state/chat-helpers.ts', 'tests/chat-helpers.test.ts'],
-			status: 'completed'
-		},
-		{
-			id: 'ms-2',
-			title: 'Port AI Elements and Prompt Kit surfaces to Svelte 5 Runes',
-			detail: 'Convert React context providers into typed $props() and $state() primitives.',
-			files: ['src/lib/ai-elements/PlanCard.svelte', 'src/lib/ai-elements/ChainOfThought.svelte'],
-			status: 'in-progress'
-		},
-		{
-			id: 'ms-3',
-			title: 'Verify semantic OKLCH design tokens across light and dark modes',
-			detail: 'Run static audit test suite and confirm zero hardcoded hex color literals.',
-			files: ['src/app.css', 'tests/svelte5-audit.test.ts'],
-			status: 'pending'
-		}
-	];
-
 	let {
-		title = 'Implementation Plan: Svelte 5 Agent Kit Unification',
-		description = 'Three-milestone execution plan scoped to isolated worktree with automated referee checks.',
+		title = 'Plan',
+		description,
 		riskTier = 'T2',
 		isStreaming = false,
-		milestones = DEFAULT_MILESTONES,
+		milestones = [],
 		defaultOpen = true,
 		onApprove,
 		onRevise,

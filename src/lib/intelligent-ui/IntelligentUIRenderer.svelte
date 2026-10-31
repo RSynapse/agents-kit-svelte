@@ -180,9 +180,17 @@
 			{:else if node.component === 'agent-evaluator'}
 				<AgentEvaluator />
 			{:else if node.component === 'stack-trace'}
-				<StackTrace />
+				{#if typeof node.props.trace === 'string'}
+					<StackTrace trace={node.props.trace} />
+				{:else}
+					{@render missingProp('trace')}
+				{/if}
 			{:else if node.component === 'schema-display'}
-				<SchemaDisplay />
+				{#if typeof node.props.path === 'string'}
+					<SchemaDisplay path={node.props.path} />
+				{:else}
+					{@render missingProp('path')}
+				{/if}
 			{:else}
 				<AgentGenerativeSurface
 					content={node.props.content as GeneratedSurfaceContent | undefined}

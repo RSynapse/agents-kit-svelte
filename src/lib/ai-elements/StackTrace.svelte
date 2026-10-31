@@ -20,7 +20,7 @@
 	}
 
 	interface Props {
-		trace?: string;
+		trace: string;
 		sourceSnippet?: {
 			filePath: string;
 			startLine: number;
@@ -49,32 +49,9 @@
 	 */
 	const ERROR_TYPE_REGEX = /^(\w+Error|Error):\s*(.*)$/;
 
-	const DEFAULT_TRACE = [
-		'TypeError: Cannot read properties of undefined (reading "worktreeBranch")',
-		'    at resolveRunContext (src/lib/runtime/worktree-dispatcher.ts:48:23)',
-		'    at dispatchWorkflowRun (src/lib/runtime/runner.ts:112:15)',
-		'    at async MessagePort.handleIncomingCommand (src/lib/server/gateway.ts:84:9)',
-		'    at async Promise.all (index 0)',
-		'    at async processTicksAndRejections (node:internal/process/task_queues:95:5)',
-		'    at async ViteNodeRunner.executeFile (node_modules/vite-node/dist/client.mjs:362:11)'
-	].join('\n');
-
-	const DEFAULT_SNIPPET = {
-		filePath: 'src/lib/runtime/worktree-dispatcher.ts',
-		startLine: 45,
-		highlightLine: 48,
-		lines: [
-			'export function resolveRunContext(session: WorkspaceSession) {',
-			'  const activeComputer = session.connectedComputer;',
-			'  const branch = activeComputer.worktreeBranch.trim();',
-			'  return { branch, computerId: activeComputer.id };',
-			'}'
-		]
-	};
-
 	let {
-		trace = DEFAULT_TRACE,
-		sourceSnippet = DEFAULT_SNIPPET,
+		trace,
+		sourceSnippet,
 		defaultOpen = true,
 		defaultShowInternal = false,
 		onFilePathClick,

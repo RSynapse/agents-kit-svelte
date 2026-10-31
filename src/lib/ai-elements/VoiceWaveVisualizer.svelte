@@ -26,18 +26,6 @@
 		class?: string;
 	}
 
-	const DEFAULT_DEVICES: VoiceDeviceOption[] = [
-		{ id: 'mic-macbook-pro', label: 'MacBook Pro Studio Mic' },
-		{ id: 'mic-shure-mv7', label: 'Shure MV7 USB Podcast Mic' },
-		{ id: 'mic-airpods', label: 'AirPods Pro Hands-Free' }
-	];
-
-	const DEFAULT_PERSONAS: VoicePersonaOption[] = [
-		{ id: 'sol', name: 'Sol', accent: 'American', tone: 'Calm & direct' },
-		{ id: 'vale', name: 'Vale', accent: 'British', tone: 'Crisp & analytical' },
-		{ id: 'ember', name: 'Ember', accent: 'Canadian', tone: 'Warm & collaborative' }
-	];
-
 	/**
 	 * 24 deterministic normalized bar heights (between 0.18 and 0.96) for the audio waveform display.
 	 */
@@ -48,24 +36,24 @@
 
 	let {
 		defaultState = 'listening',
-		defaultMicId = 'mic-macbook-pro',
-		defaultPersonaId = 'sol',
-		devices = DEFAULT_DEVICES,
-		personas = DEFAULT_PERSONAS,
-		transcript = 'Check the failing unit test in chat-helpers and explain why the token ratio threshold triggered a warning.',
+		defaultMicId,
+		defaultPersonaId,
+		devices = [],
+		personas = [],
+		transcript = '',
 		onStateChange,
 		class: className = ''
 	}: Props = $props();
 
 	let sessionState = $state<VoiceSessionState>('listening');
-	let selectedMicId = $state('mic-macbook-pro');
-	let selectedPersonaId = $state('sol');
+	let selectedMicId = $state('');
+	let selectedPersonaId = $state('');
 	let muted = $state(false);
 
 	$effect(() => {
 		sessionState = defaultState;
-		selectedMicId = defaultMicId;
-		selectedPersonaId = defaultPersonaId;
+		selectedMicId = defaultMicId ?? devices[0]?.id ?? '';
+		selectedPersonaId = defaultPersonaId ?? personas[0]?.id ?? '';
 	});
 
 	let activePersona = $derived(

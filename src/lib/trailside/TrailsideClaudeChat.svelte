@@ -762,7 +762,7 @@
 				<div class="flex-1 overflow-y-auto p-4 sm:p-6">
 					<div class="mx-auto max-w-3xl space-y-4">
 						<TestResults suites={TEST_SUITES} durationMs={193} />
-						<Terminal output={terminalOutput} onClear={() => (terminalOutput = '$ # Terminal cleared')} />
+						<Terminal title="studio-mac · zsh (worktree: trailside/1210-auth-redirect)" output={terminalOutput} onClear={() => (terminalOutput = '$ # Terminal cleared')} />
 					</div>
 				</div>
 			{/if}
