@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import {
 		AISidebar,
 		AgentActivity,
@@ -653,19 +654,19 @@ svelte-check found 0 errors and 0 warnings
 				<span aria-hidden="true">→</span>
 			</a>
 			<a
-				href="/claude-code"
+				href="{base}/claude-code/"
 				class="inline-flex h-9 items-center gap-2 rounded-lg border border-card-border bg-card-bg px-4 text-sm font-medium text-fg-main no-underline transition-colors hover:bg-canvas-secondary"
 			>
 				Open AK-S Chat
 			</a>
 			<a
-				href="/github"
+				href="{base}/github/"
 				class="inline-flex h-9 items-center gap-2 rounded-lg border border-card-border bg-card-bg px-4 text-sm font-medium text-fg-main no-underline transition-colors hover:bg-canvas-secondary"
 			>
 				Explore GitHub Suite
 			</a>
 			<a
-				href="/intelligent-ui"
+				href="{base}/intelligent-ui/"
 				class="inline-flex h-9 items-center gap-2 rounded-lg border border-card-border bg-card-bg px-4 text-sm font-medium text-fg-main no-underline transition-colors hover:bg-canvas-secondary"
 			>
 				Intelligent UI Playground
@@ -686,7 +687,7 @@ svelte-check found 0 errors and 0 warnings
 				</h2>
 			</div>
 			<a
-				href="/claude-code"
+				href="{base}/claude-code/"
 				class="text-sm text-fg-light no-underline transition-colors hover:text-fg-main"
 			>
 				Explore interactive workbenches →
@@ -695,7 +696,7 @@ svelte-check found 0 errors and 0 warnings
 
 		<div class="grid gap-4 sm:grid-cols-3">
 			<a
-				href="/claude-code"
+				href="{base}/claude-code/"
 				class="group flex flex-col justify-between rounded-[10px] border border-canvas-border bg-card-bg p-4 no-underline transition-colors hover:bg-canvas-secondary"
 			>
 				<div>
@@ -712,7 +713,7 @@ svelte-check found 0 errors and 0 warnings
 			</a>
 
 			<a
-				href="/github"
+				href="{base}/github/"
 				class="group flex flex-col justify-between rounded-[10px] border border-canvas-border bg-card-bg p-4 no-underline transition-colors hover:bg-canvas-secondary"
 			>
 				<div>
@@ -729,7 +730,7 @@ svelte-check found 0 errors and 0 warnings
 			</a>
 
 			<a
-				href="/intelligent-ui"
+				href="{base}/intelligent-ui/"
 				class="group flex flex-col justify-between rounded-[10px] border border-canvas-border bg-card-bg p-4 no-underline transition-colors hover:bg-canvas-secondary"
 			>
 				<div>

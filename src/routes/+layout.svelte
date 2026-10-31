@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import '../app.css';
 
@@ -13,10 +14,10 @@
 	let ready = $state(false);
 
 	const NAV_LINKS = [
-		{ href: '/', label: 'Components' },
-		{ href: '/claude-code', label: 'AK-S Chat' },
-		{ href: '/github', label: 'GitHub Suite' },
-		{ href: '/intelligent-ui', label: 'Playground' }
+		{ href: `${base}/`, match: `${base}/`, label: 'Components' },
+		{ href: `${base}/claude-code/`, match: `${base}/claude-code`, label: 'AK-S Chat' },
+		{ href: `${base}/github/`, match: `${base}/github`, label: 'GitHub Suite' },
+		{ href: `${base}/intelligent-ui/`, match: `${base}/intelligent-ui`, label: 'Playground' }
 	];
 
 	$effect(() => {
@@ -33,7 +34,7 @@
 		<div class="mx-auto flex min-h-16 max-w-[1440px] flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 py-2 sm:h-16 sm:flex-nowrap sm:px-6 sm:py-0">
 			<div class="flex items-center gap-2.5 sm:gap-3">
 				<a
-					href="/"
+					href="{base}/"
 					class="flex items-center gap-2 text-sm font-semibold whitespace-nowrap text-fg-main no-underline"
 				>
 					<span
@@ -57,7 +58,9 @@
 				class="order-last flex w-full items-center justify-between text-xs sm:order-none sm:ml-auto sm:w-auto sm:justify-start sm:gap-1 sm:text-sm"
 			>
 				{#each NAV_LINKS as item (item.href)}
-					{@const active = page.url.pathname === item.href}
+					{@const normalizedPath = page.url.pathname.replace(/\/+$/, '') || '/'}
+					{@const normalizedMatch = item.match.replace(/\/+$/, '') || '/'}
+					{@const active = normalizedPath === normalizedMatch}
 					<a
 						href={item.href}
 						aria-current={active ? 'page' : undefined}
@@ -69,7 +72,7 @@
 					</a>
 				{/each}
 				<a
-					href="/#svelte5-motion-lab"
+					href="{base}/#svelte5-motion-lab"
 					class="rounded-lg px-2.5 py-2 font-medium text-fg-light no-underline transition-colors hover:bg-canvas-secondary hover:text-fg-main sm:px-3"
 				>
 					Motion Lab
