@@ -128,7 +128,7 @@
 				<span class="flex items-center gap-1.5">
 					<span class="flex -space-x-1.5">
 						{#each contributors as person (person)}
-							<span title={person} class="inline-flex size-5 items-center justify-center rounded-full border-2 border-canvas-secondary bg-accent-subtle text-[9px] font-semibold text-accent-primary uppercase">
+							<span title={person} class="inline-flex size-5 items-center justify-center rounded-full border-2 border-canvas-secondary bg-card-bg text-[9px] font-semibold text-accent-primary ak-shadow-btn uppercase">
 								{person.slice(0, 1)}
 							</span>
 						{/each}
