@@ -121,7 +121,7 @@
 		ToolApproval,
 		ToolChips,
 		ToolResult,
-		TrailsideClaudeChat,
+		ChatWorkbench,
 		VoiceWaveVisualizer,
 		WebPreview
 	} from '$lib';
@@ -1223,8 +1223,8 @@
 									language="svelte"
 									code={data.componentSources?.[item.slug] ?? item.usageSnippet}
 								/>
-							{:else if item.slug === 'trailside-claude-chat'}
-								<TrailsideClaudeChat
+							{:else if item.slug === 'chat-workbench'}
+								<ChatWorkbench
 									embedded={true}
 									class="rounded-xl border border-card-border"
 								/>

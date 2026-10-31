@@ -21,21 +21,21 @@ export interface CatalogItemMeta {
 export const CATALOG_ITEMS: CatalogItemMeta[] = [
 	// 1. beUI Agents (20 components)
 	{
-		slug: 'trailside-claude-chat',
-		name: 'AK-S Chat (TrailsideClaudeChat)',
+		slug: 'chat-workbench',
+		name: 'ChatWorkbench',
 		category: 'beUI Agents',
-		sveltePath: 'src/lib/trailside/TrailsideClaudeChat.svelte',
+		sveltePath: 'src/lib/workbench/ChatWorkbench.svelte',
 		upstreamSource: 'AK-S Dynamic Agentic Workbench · components/beui/components/agents/*',
 		description:
 			'Full multi-turn AK-S Chat workbench combining AgentActivity, TodoList, FileDiff, ToolApproval, ApprovalCard, StreamingResponse, AgentContextMeter, and PromptInput.',
 		usageSnippet: `<script lang="ts">
-  import { TrailsideClaudeChat } from 'agents-kit-svelte';
+  import { ChatWorkbench } from 'agents-kit-svelte';
 
   let darkTheme = $state(false);
 </script>
 
 <div class="h-[720px] overflow-hidden rounded-[14px] border border-card-border">
-  <TrailsideClaudeChat initialDark={darkTheme} />
+  <ChatWorkbench initialDark={darkTheme} />
 </div>`
 	},
 	{

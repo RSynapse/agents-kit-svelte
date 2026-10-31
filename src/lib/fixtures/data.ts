@@ -262,7 +262,7 @@ export const SAMPLE_SEARCH_ITEMS: SearchListItem[] = [
 	},
 	{
 		id: 'sl-file-chat',
-		label: 'src/lib/trailside/TrailsideClaudeChat.svelte',
+		label: 'src/lib/workbench/ChatWorkbench.svelte',
 		description: 'Interactive workbench shell with context meter and checkpoints',
 		category: 'file'
 	},
