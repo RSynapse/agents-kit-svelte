@@ -55,6 +55,14 @@
 		FineTuneCard,
 		Flowchart,
 		GitHubBentoLayout,
+		GitHubLifecycleTimeline,
+		GitHubIssueTriage,
+		GitHubBranchCard,
+		GitHubPullRequestReview,
+		GitHubMergeQueue,
+		GitHubDeploymentPipeline,
+		GitHubReleaseCard,
+		GitHubIncidentCard,
 		GitHubChecksPanel,
 		GitHubCommitCard,
 		GitHubIssueCard,
@@ -471,7 +479,7 @@
 
 	const sampleCommit: GitHubCommitData = {
 		sha: '9f8e7d6c5b4a3210fedcba9876543210abcdef12',
-		message: 'feat(agents-kit): port 68 agent & GitHub UI components to Svelte 5 Runes',
+		message: 'feat(agents-kit): port 82 agent & GitHub UI components to Svelte 5 Runes',
 		author: 'AK-S Agent',
 		branch: 'trailside/2151-drawer-hydration',
 		timestamp: '2m ago',
@@ -554,7 +562,7 @@
 
 	const sampleCheckpoint: CheckpointEntry = {
 		id: 'cp-1',
-		title: 'Verified 68 Svelte 5 components + unit suite',
+		title: 'Verified 82 Svelte 5 components + unit suite',
 		description: 'All static and unit checks green',
 		commitSha: '456f3b4',
 		worktreeBranch: 'trailside/2151-drawer-hydration',
@@ -571,7 +579,7 @@
 			tests: [
 				{
 					id: 'tc-1',
-					name: 'all 68 Svelte components comply with Svelte 5 Runes and semantic tokens',
+					name: 'all 82 Svelte components comply with Svelte 5 Runes and semantic tokens',
 					status: 'passed' as const,
 					durationMs: 6
 				}
@@ -588,7 +596,7 @@
 			children: [
 				{ path: 'src/lib/agents', name: 'agents/ (19 components)', kind: 'file' as const, additions: 19 },
 				{ path: 'src/lib/beautiful', name: 'beautiful/ (11 components)', kind: 'file' as const, additions: 11 },
-				{ path: 'src/lib/github', name: 'github/ (7 components)', kind: 'file' as const, additions: 7 },
+				{ path: 'src/lib/github', name: 'github/ (15 components)', kind: 'file' as const, additions: 15 },
 				{ path: 'src/lib/intelligent-ui', name: 'intelligent-ui/ (3 components)', kind: 'file' as const, additions: 3 },
 				{ path: 'src/lib/agents-ui', name: 'agents-ui/ (11 components)', kind: 'file' as const, additions: 11 },
 				{ path: 'src/lib/ai-elements', name: 'ai-elements/ & runtime/ (14 components)', kind: 'file' as const, additions: 14 }
@@ -677,7 +685,7 @@
 	}
 
 	const STREAM_TEXT =
-		'All 68 Svelte 5 components verified with svelte-check (0 errors, 0 warnings), and every preview on this page is live.';
+		'All 82 Svelte 5 components verified with svelte-check (0 errors, 0 warnings), and every preview on this page is live.';
 
 	function liveStream(): { text: string; done: boolean } {
 		const words = STREAM_TEXT.split(' ');
@@ -698,7 +706,7 @@
 		'▶ svelte5 audit',
 		'  ✔ every component uses Runes (41ms)',
 		'  ✔ no hex colors in components (12ms)',
-		'✔ all 68 Svelte components pass audit (105ms)'
+		'✔ all 82 Svelte components pass audit (105ms)'
 	];
 
 	/**
@@ -1227,7 +1235,7 @@
 									summary="corepack pnpm test"
 									status="success"
 									meta="96ms · 9 passed"
-									output="✔ all 68 Svelte components in src/ comply with Svelte 5 Runes, Props typing, and semantic token rules"
+									output="✔ all 82 Svelte components in src/ comply with Svelte 5 Runes, Props typing, and semantic token rules"
 									defaultOpen={true}
 								/>
 							{:else if item.slug === 'file-diff'}
@@ -1277,7 +1285,7 @@
 										author="AK-S Agent"
 										timestamp="21:16"
 										collapsible={true}
-										text="All 68 Svelte 5 components are live with strict TypeScript Props, OKLCH dark/light tokens, and interactive showcases."
+										text="All 82 Svelte 5 components are live with strict TypeScript Props, OKLCH dark/light tokens, and interactive showcases."
 									/>
 								</div>
 							{:else if item.slug === 'message-scroller'}
@@ -1394,6 +1402,22 @@
 								<GitHubKanbanBoard />
 							{:else if item.slug === 'github-bento-layout'}
 								<GitHubBentoLayout />
+							{:else if item.slug === 'github-lifecycle-timeline'}
+								<GitHubLifecycleTimeline />
+							{:else if item.slug === 'github-issue-triage'}
+								<GitHubIssueTriage />
+							{:else if item.slug === 'github-branch-card'}
+								<GitHubBranchCard />
+							{:else if item.slug === 'github-pr-review'}
+								<GitHubPullRequestReview />
+							{:else if item.slug === 'github-merge-queue'}
+								<GitHubMergeQueue />
+							{:else if item.slug === 'github-deployment-pipeline'}
+								<GitHubDeploymentPipeline />
+							{:else if item.slug === 'github-release-card'}
+								<GitHubReleaseCard />
+							{:else if item.slug === 'github-incident-card'}
+								<GitHubIncidentCard />
 							{:else if item.slug === 'agent-generative-surface'}
 								<AgentGenerativeSurface content={sampleSurfaceContent} />
 							{:else if item.slug === 'result-actions'}

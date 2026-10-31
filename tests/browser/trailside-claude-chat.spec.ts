@@ -28,8 +28,8 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		await expect(page.getByRole('tab', { name: /AI Elements & Coding/i })).toBeVisible();
 		await expect(page.getByRole('tab', { name: /Voice & Effects/i })).toBeVisible();
 
-		// Verify all 74 individual component showcase cards are rendered on /
-		await expect(page.locator('article[data-component-slug]')).toHaveCount(74);
+		// Verify all 82 individual component showcase cards are rendered on /
+		await expect(page.locator('article[data-component-slug]')).toHaveCount(82);
 
 		// Toggle the Usage code view on the first component card
 		const firstUsageToggle = page.getByRole('button', { name: /^Usage$/ }).first();
@@ -145,11 +145,22 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 
 		await expect(
 			page.getByRole('heading', {
-				name: /Issues, pull requests and checks/i
+				name: /The whole dev lifecycle/i
 			})
 		).toBeVisible();
 
-		// Verify 4 Kanban columns are rendered
+		// Lifecycle view is the default: timeline plus one section per phase
+		await expect(page.getByRole('region', { name: 'From issue to release' })).toBeVisible();
+		for (const phase of ['Plan', 'Build', 'Review', 'Verify & merge', 'Ship', 'Operate']) {
+			await expect(page.getByRole('heading', { name: phase, exact: true })).toBeVisible();
+		}
+		// Wait for hydration before interacting with the live demos
+		await expect(page.getByRole('tab', { name: /Kanban board/i })).toBeEnabled();
+		await page.getByRole('button', { name: 'Hold queue' }).click();
+		await expect(page.getByRole('button', { name: 'Resume queue' })).toBeVisible();
+
+		// Switch to the Kanban board and verify its 4 columns
+		await page.getByRole('tab', { name: /Kanban board/i }).click();
 		await expect(page.getByRole('heading', { name: 'Triage & Ready', exact: true })).toBeVisible();
 		await expect(page.getByRole('heading', { name: 'In Progress (Runs)', exact: true })).toBeVisible();
 		await expect(page.getByRole('heading', { name: 'Ready for You', exact: true })).toBeVisible();
