@@ -4,6 +4,7 @@
 	import { SEGMENT_GROUP_CLASS, badgeClass, buttonClass, segmentClass } from '$lib/ui/styles';
 	import {
 		ArrowRight,
+		ArrowUpRight,
 		Check,
 		ChevronDown,
 		Code,
@@ -14,6 +15,7 @@
 		LayoutTemplate,
 		MessagesSquare,
 		RotateCcw,
+		Scale,
 		Search,
 		Sparkle
 	} from '@lucide/svelte';
@@ -680,6 +682,33 @@
 		}, 1500);
 	}
 
+	const CREDITS = [
+		{
+			name: 'Agents Kit for React',
+			role: 'Original library',
+			href: 'https://github.com/agents-ui/agents-kit',
+			note: 'By Emiliano, MIT licensed. This project is a Svelte 5 port of its components and design.'
+		},
+		{
+			name: 'Claude Code',
+			role: 'Visual inspiration',
+			href: 'https://www.anthropic.com/claude-code',
+			note: 'The warm, soft look is inspired by Claude Code. Not affiliated with or endorsed by Anthropic.'
+		},
+		{
+			name: 'Lucide',
+			role: 'Icons',
+			href: 'https://lucide.dev',
+			note: 'Every icon in the kit comes from Lucide, ISC licensed.'
+		},
+		{
+			name: 'Svelte',
+			role: 'Framework',
+			href: 'https://svelte.dev',
+			note: 'Built with Svelte 5 Runes, transitions and motion.'
+		}
+	];
+
 	const APP_EXAMPLES = [
 		{
 			href: `${base}/claude-code/`,
@@ -760,6 +789,19 @@
 					Open AK-S Chat
 				</a>
 			</div>
+
+			<p class="mt-6 text-xs leading-5 text-fg-light">
+				A Svelte 5 port of
+				<a
+					href="https://github.com/agents-ui/agents-kit"
+					class="font-medium text-fg-main underline decoration-card-border underline-offset-4 hover:decoration-fg-light"
+					>Agents Kit for React</a
+				>
+				by Emiliano, with a look inspired by Claude Code.
+				<a href="#credits" class="text-fg-light underline decoration-card-border underline-offset-4 hover:text-fg-main"
+					>Credits</a
+				>
+			</p>
 		</div>
 	</section>
 
@@ -806,6 +848,56 @@
 					</span>
 				</a>
 			{/each}
+		</div>
+	</section>
+
+	<!-- Credits & license -->
+	<section id="credits" class="mx-auto max-w-[1160px] scroll-mt-20 px-5 pb-16 sm:px-8">
+		<div class="rounded-window border border-card-border bg-chat-surface p-6 ak-shadow-soft-sm sm:p-8">
+			<div class="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+				<div>
+					<p class="text-xs font-medium text-accent-primary">Credits</p>
+					<h2 class="mt-2 font-display text-[1.75rem] leading-tight font-normal tracking-[-0.015em] text-fg-main">
+						Built on other people’s good work.
+					</h2>
+					<p class="mt-3 text-sm leading-6 text-fg-light">
+						Agents Kit Svelte is free to use under the Apache License 2.0. If you ship it, or something
+						built from it, keep the license and the NOTICE file so the credit travels with the code.
+					</p>
+					<div class="mt-5 flex flex-wrap gap-2">
+						<a
+							href="https://github.com/rsynapse/agents-kit-svelte/blob/main/LICENSE"
+							class="{buttonClass('secondary', 'md')} no-underline"
+						>
+							<Scale aria-hidden="true" />
+							Apache 2.0 license
+						</a>
+						<a
+							href="https://github.com/rsynapse/agents-kit-svelte/blob/main/NOTICE"
+							class="{buttonClass('ghost', 'md')} no-underline"
+						>
+							Read the NOTICE
+							<ArrowRight aria-hidden="true" />
+						</a>
+					</div>
+				</div>
+
+				<ul class="grid gap-3 sm:grid-cols-2">
+					{#each CREDITS as credit (credit.name)}
+						<li class="rounded-[18px] border border-card-border bg-card-bg p-4">
+							<p class="text-xs text-fg-light">{credit.role}</p>
+							<a
+								href={credit.href}
+								class="mt-1 inline-flex items-center gap-1 text-[15px] font-semibold text-fg-main no-underline hover:text-accent-primary"
+							>
+								{credit.name}
+								<ArrowUpRight aria-hidden="true" class="size-3.5 text-fg-light" />
+							</a>
+							<p class="mt-1.5 text-[13px] leading-5 text-fg-light">{credit.note}</p>
+						</li>
+					{/each}
+				</ul>
+			</div>
 		</div>
 	</section>
 

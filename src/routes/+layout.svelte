@@ -97,4 +97,20 @@
 	</header>
 
 	{@render children()}
+
+	<footer class="border-t border-canvas-border/70">
+		<div
+			class="mx-auto flex max-w-[1440px] flex-col gap-2 px-4 py-6 text-xs leading-5 text-fg-light sm:flex-row sm:items-center sm:justify-between sm:px-6"
+		>
+			<p>
+				Agents Kit Svelte, a Svelte 5 port of
+				<a href="https://github.com/agents-ui/agents-kit" class="text-fg-main underline decoration-card-border underline-offset-4 hover:decoration-fg-light">Agents Kit for React</a>
+				by Emiliano. Look inspired by Claude Code; not affiliated with Anthropic.
+			</p>
+			<p class="flex items-center gap-3">
+				<a href="{base}/#credits" class="hover:text-fg-main">Credits</a>
+				<a href="https://github.com/rsynapse/agents-kit-svelte/blob/main/LICENSE" class="hover:text-fg-main">Apache 2.0</a>
+			</p>
+		</div>
+	</footer>
 </div>
