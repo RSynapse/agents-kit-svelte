@@ -13,6 +13,7 @@
 		FileCode,
 		GitPullRequest,
 		LayoutTemplate,
+		BookOpenText,
 		MessagesSquare,
 		RotateCcw,
 		Scale,
@@ -74,9 +75,17 @@
 		RecommendationCard,
 		RecordsTable,
 		ResultActions,
+		SAMPLE_SKILLS,
+		SAMPLE_SKILL_STEPS,
 		SchemaDisplay,
 		SearchList,
 		SelectionActions,
+		SkillCard,
+		SkillEditor,
+		SkillInvocation,
+		SkillLibrary,
+		SkillProposalCard,
+		SkillRouter,
 		StackTrace,
 		StreamingResponse,
 		Svelte5MotionLab,
@@ -105,6 +114,7 @@
 		GitHubPullRequestData,
 		GitHubReviewThreadData,
 		ResultActionState,
+		SkillInvocationStep,
 		SupportedAgentId,
 		SupportedAgentOption,
 		ContextSourceItem,
@@ -120,6 +130,7 @@
 		'Intelligent UI & Generative',
 		'Agents UI Orchestration',
 		'AI Elements & Coding',
+		'Agentic Skills',
 		'Voice & Effects'
 	];
 
@@ -631,6 +642,40 @@
 		}));
 	}
 
+	const ROUTER_PROMPTS = [
+		'Write the release notes for everything that shipped this week',
+		'Chart weekly signups by region for the board deck',
+		'Fill out the vendor PDF form with our billing details'
+	];
+	const ROUTER_TICKS_PER_PROMPT = 8;
+
+	/** Types each sample request in a few chunks, then holds so the ranking can settle. */
+	function liveRouterPrompt(): string {
+		const total = ROUTER_PROMPTS.length * ROUTER_TICKS_PER_PROMPT;
+		const step = Math.min(total - 1, liveStep('skill-router', total, 0));
+		const prompt = ROUTER_PROMPTS[Math.floor(step / ROUTER_TICKS_PER_PROMPT)];
+		if (prefersReducedMotion.current) return prompt;
+		const typed = Math.min(1, ((step % ROUTER_TICKS_PER_PROMPT) + 1) / 4);
+		return prompt.slice(0, Math.ceil(prompt.length * typed));
+	}
+
+	function liveSkillRun(): { steps: SkillInvocationStep[]; done: boolean } {
+		const step = liveStep('skill-invocation', SAMPLE_SKILL_STEPS.length + 1);
+		return {
+			steps: SAMPLE_SKILL_STEPS.map((s, i) => ({
+				...s,
+				status: i < step - 1 ? 'complete' : i === step - 1 ? 'running' : 'pending'
+			})),
+			done: step > SAMPLE_SKILL_STEPS.length
+		};
+	}
+
+	function liveActiveSkill(): string {
+		const enabled = SAMPLE_SKILLS.filter((s) => s.enabled !== false);
+		const step = liveStep('skill-library', enabled.length - 1, 1);
+		return enabled[step].id;
+	}
+
 	const STREAM_TEXT =
 		'All 68 Svelte 5 components verified with svelte-check (0 errors, 0 warnings), and every preview on this page is live.';
 
@@ -738,6 +783,15 @@
 			cta: 'Try the GitHub suite'
 		},
 		{
+			href: `${base}/skills/`,
+			icon: BookOpenText,
+			eyebrow: 'Agentic Skills',
+			title: 'Skills studio',
+			description:
+				'Route a request to a skill, watch it run step by step, then edit it or save the improvement it suggests.',
+			cta: 'Try the skills studio'
+		},
+		{
 			href: `${base}/intelligent-ui/`,
 			icon: LayoutTemplate,
 			eyebrow: 'Generative surfaces',
@@ -750,7 +804,7 @@
 </script>
 
 <svelte:head>
-	<title>Agents Kit Svelte · 68 Svelte 5 Agent, GitHub & Intelligent UI Components</title>
+	<title>Agents Kit Svelte · {CATALOG_ITEMS.length} Svelte 5 Agent, Skill, GitHub & Intelligent UI Components</title>
 </svelte:head>
 
 <main>
@@ -766,7 +820,7 @@
 				class="inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg py-1 pr-3 pl-1 text-xs text-fg-light no-underline ak-shadow-btn transition-colors hover:text-fg-main"
 			>
 				<span class={badgeClass('accent')}>v0.1</span>
-				<span>68 Svelte 5 components, AK-S Chat &amp; GitHub suite</span>
+				<span>{CATALOG_ITEMS.length} Svelte 5 components, now with Agentic Skills</span>
 				<ArrowRight aria-hidden="true" class="size-3.5" />
 			</a>
 
@@ -790,7 +844,7 @@
 
 			<div class="mt-8 flex flex-wrap justify-center gap-2.5">
 				<a href="#components" class="{buttonClass('primary', 'lg')} no-underline">
-					Browse 68 components
+					Browse {CATALOG_ITEMS.length} components
 					<ArrowRight aria-hidden="true" />
 				</a>
 				<a href="{base}/claude-code/" class="{buttonClass('secondary', 'lg')} no-underline">
@@ -832,7 +886,7 @@
 			</a>
 		</div>
 
-		<div class="grid gap-4 sm:grid-cols-3">
+		<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
 			{#each APP_EXAMPLES as example (example.href)}
 				<a
 					href={example.href}
@@ -927,7 +981,7 @@
 				<input
 					type="search"
 					aria-label="Search components"
-					placeholder="Search 68 components"
+					placeholder="Search {CATALOG_ITEMS.length} components"
 					bind:value={searchQuery}
 					class="min-w-0 flex-1 bg-transparent text-[13px] text-fg-main outline-none placeholder:text-fg-light"
 				/>
@@ -1015,7 +1069,7 @@
 				{/each}
 			</div>
 
-			<!-- 68 Component Sections (upstream dashed-border FamilyPreview layout) -->
+			<!-- Component Sections (upstream dashed-border FamilyPreview layout) -->
 			<div class="space-y-6">
 				{#each filteredCatalog as item (item.slug)}
 					{@const tabMode = getTabMode(item.slug)}
@@ -1405,6 +1459,41 @@
 								<Terminal output={term.output} streaming={!term.done} title="~/agents-kit-svelte · zsh" />
 							{:else if item.slug === 'file-tree'}
 								<FileTree nodes={sampleFileTree} />
+							{:else if item.slug === 'skill-library'}
+								<SkillLibrary activeSkillId={liveActiveSkill()} />
+							{:else if item.slug === 'skill-card'}
+								<div class="mx-auto max-w-md">
+									<SkillCard
+										skill={{ ...SAMPLE_SKILLS[0], invocations: (SAMPLE_SKILLS[0].invocations ?? 0) + liveStep('skill-card', 3, 3) }}
+										defaultFilesOpen={true}
+									/>
+								</div>
+							{:else if item.slug === 'skill-router'}
+								<div class="mx-auto max-w-xl">
+									<SkillRouter skills={SAMPLE_SKILLS} prompt={liveRouterPrompt()} readonly={true} />
+								</div>
+							{:else if item.slug === 'skill-invocation'}
+								{@const run = liveSkillRun()}
+								<div class="mx-auto max-w-xl">
+									<SkillInvocation
+										skill={SAMPLE_SKILLS[0]}
+										steps={run.steps}
+										status={run.done ? 'complete' : 'running'}
+										durationSeconds={8}
+									>
+										{#snippet result()}
+											<p class="font-mono text-xs text-fg-light">
+												{run.done ? 'Wrote RELEASE_NOTES.md · 42 lines, 14 linked PRs' : 'Writing RELEASE_NOTES.md…'}
+											</p>
+										{/snippet}
+									</SkillInvocation>
+								</div>
+							{:else if item.slug === 'skill-editor'}
+								<SkillEditor />
+							{:else if item.slug === 'skill-proposal-card'}
+								<div class="mx-auto max-w-xl">
+									<SkillProposalCard />
+								</div>
 							{:else if item.slug === 'voice-wave-visualizer'}
 								<VoiceWaveVisualizer />
 							{:else if item.slug === 'border-beam'}

@@ -4,7 +4,7 @@ import type {
 	DiffLine,
 	ParsedDiff,
 	TodoItem
-} from '../types.ts';
+} from '../types';
 
 /**
  * Matches unified diff hunk headers of the form `@@ -oldStart,oldCount +newStart,newCount @@`
