@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { fly } from 'svelte/transition';
@@ -44,13 +46,13 @@
 		activityItems?: ActivityItem[];
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'initialDark' | 'embedded'> {
 		initialDark?: boolean;
 		embedded?: boolean;
 		class?: string;
 	}
 
-	let { initialDark = false, embedded = false, class: className = '' }: Props = $props();
+	let { initialDark = false, embedded = false, class: className = '', ...rest }: Props = $props();
 
 	const SUPPORTED_AGENTS: SupportedAgentOption[] = [
 		{ id: 'claude-code', label: 'AK-S Agent', version: 'v0.3.0', signedIn: true },
@@ -469,11 +471,9 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	bind:this={root}
-	class="flex {embedded
-		? 'h-[760px]'
-		: 'h-[calc(100dvh-5.375rem)] min-h-[520px] lg:h-[calc(100dvh-4.0625rem)]'} flex-col overflow-hidden bg-chat-surface text-fg-main {className}"
+	class={cn(`flex ${embedded ? 'h-[760px]' : 'h-[calc(100dvh-5.375rem)] min-h-[520px] lg:h-[calc(100dvh-4.0625rem)]'} flex-col overflow-hidden bg-chat-surface text-fg-main`, className)}
 >
 	<!-- Top bar -->
 	<header class="border-b border-chat-border/70 bg-chat-surface px-4 pt-3 sm:px-6">
@@ -762,7 +762,7 @@
 				<div class="flex-1 overflow-y-auto p-4 sm:p-6">
 					<div class="mx-auto max-w-3xl space-y-4">
 						<TestResults suites={TEST_SUITES} durationMs={193} />
-						<Terminal output={terminalOutput} onClear={() => (terminalOutput = '$ # Terminal cleared')} />
+						<Terminal title="studio-mac · zsh (worktree: trailside/1210-auth-redirect)" output={terminalOutput} onClear={() => (terminalOutput = '$ # Terminal cleared')} />
 					</div>
 				</div>
 			{/if}

@@ -1,44 +1,26 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import type { GitHubReviewThreadData } from '../types';
 
-	interface Props {
-		thread?: GitHubReviewThreadData;
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'thread' | 'currentUser' | 'onApplySuggestion' | 'onReply'> {
+		thread: GitHubReviewThreadData;
+		/** Author name shown on replies typed into the card. */
+		currentUser?: string;
 		onApplySuggestion?: (threadId: string) => void;
 		onReply?: (threadId: string, body: string) => void;
 		class?: string;
 	}
 
-	const DEFAULT_THREAD: GitHubReviewThreadData = {
-		id: 'thread-2153-1',
-		filePath: 'apps/web/src/lib/home/trail.css',
-		lineRange: 'L187-L194',
-		diffHunk: [
-			'@@ -187,4 +187,4 @@',
-			' .pick-dim {',
-			'-  color: var(--faint);',
-			'+  color: var(--muted);',
-			' }'
-		].join('\n'),
-		resolved: false,
-		comments: [
-			{
-				id: 'c-1',
-				author: 'claude-referee',
-				role: 'Referee · T1 Lens',
-				timestamp: '6m ago',
-				body: 'Verified that switching `.pick-dim` and `.gate` from `--faint` to `--muted` brings the contrast ratio from 2.91:1 to 5.42:1 on warm paper.',
-				suggestedPatch: '.pick-dim, .gate {\n  color: var(--muted);\n}'
-			}
-		]
-	};
-
 	let {
-		thread = DEFAULT_THREAD,
+		thread,
+		currentUser = 'You',
 		onApplySuggestion,
 		onReply,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isResolved = $state(false);
@@ -58,14 +40,14 @@
 		if (!trimmed) return;
 		extraReplies = [
 			...extraReplies,
-			{ id: `rep-${Date.now()}`, author: 'argon-agent', body: trimmed }
+			{ id: `rep-${Date.now()}`, author: currentUser, body: trimmed }
 		];
 		replyText = '';
 		onReply?.(thread.id, trimmed);
 	}
 </script>
 
-<div class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary px-3.5 py-2 text-xs">
 		<div class="flex items-center gap-2 font-mono">
 			<code class="font-semibold text-fg-main">{thread.filePath}</code>

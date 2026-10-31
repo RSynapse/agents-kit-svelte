@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { AudioWaveform, Ellipsis, Infinity as InfinityIcon, LoaderCircle, Pause, Play, Sparkles } from '@lucide/svelte';
 	import type { Component } from 'svelte';
 	import { buttonClass, SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
@@ -15,7 +17,7 @@
 		| 'breathing'
 		| 'shaping';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'variant' | 'state' | 'label' | 'detail' | 'paused' | 'showControls' | 'onVariantChange'> {
 		variant?: ThinkingVariant;
 		state?: ThinkingState;
 		label?: string;
@@ -50,11 +52,12 @@
 		variant = 'orbs',
 		state: thinkingState = 'working',
 		label,
-		detail = 'Claude Code 1.0 · Card 191 Attempt 1 · 18.4k tokens',
+		detail,
 		paused = false,
 		showControls = true,
 		onVariantChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeVariant = $state<ThinkingVariant>('orbs');
@@ -78,11 +81,11 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	role="status"
 	aria-live="polite"
 	data-paused={isPaused}
-	class="ak-thinking w-full rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('ak-thinking w-full rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<div class="flex items-center gap-3 px-4 py-3">
 		<div

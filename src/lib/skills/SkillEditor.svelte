@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLFormAttributes } from 'svelte/elements';
 	import { Check, CircleAlert, ScrollText, TriangleAlert } from '@lucide/svelte';
 	import { fade } from 'svelte/transition';
 	import { motionDuration } from '../state/motion.svelte';
@@ -9,10 +11,9 @@
 		validateSkillManifest
 	} from '../state/skill-helpers';
 	import { INPUT_CLASS, pillClass } from '../ui/styles';
-	import { SAMPLE_SKILLS, SAMPLE_SKILL_BODY } from './fixtures';
 	import type { SkillManifest } from './types';
 
-	interface Props {
+	interface Props extends Omit<HTMLFormAttributes, 'class' | 'children' | 'manifest' | 'title' | 'saveLabel' | 'onSave' | 'onCancel'> {
 		manifest?: SkillManifest;
 		title?: string;
 		saveLabel?: string;
@@ -21,20 +22,16 @@
 		class?: string;
 	}
 
-	const DEFAULT_MANIFEST: SkillManifest = {
-		name: SAMPLE_SKILLS[0].name,
-		description: SAMPLE_SKILLS[0].description,
-		allowedTools: SAMPLE_SKILLS[0].allowedTools,
-		body: SAMPLE_SKILL_BODY
-	};
+	const EMPTY_MANIFEST: SkillManifest = { name: '', description: '', allowedTools: [], body: '' };
 
 	let {
-		manifest = DEFAULT_MANIFEST,
+		manifest = EMPTY_MANIFEST,
 		title = 'Edit skill',
 		saveLabel = 'Save skill',
 		onSave,
 		onCancel,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let name = $state('');
@@ -84,10 +81,10 @@
 	});
 </script>
 
-<form
+<form {...rest}
 	aria-label={title}
 	onsubmit={save}
-	class="@container w-full overflow-hidden rounded-window border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm {className}"
+	class={cn('@container w-full overflow-hidden rounded-window border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm', className)}
 >
 	<header class="flex flex-wrap items-center justify-between gap-2 px-4 pt-3.5 pb-3">
 		<div>

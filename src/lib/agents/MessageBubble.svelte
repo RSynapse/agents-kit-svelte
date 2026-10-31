@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { ChevronDown } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
@@ -6,7 +8,7 @@
 	export type MessageBubbleVariant = 'solid' | 'soft' | 'tint' | 'outline' | 'ghost' | 'danger';
 	export type MessageBubbleAlign = 'start' | 'end';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'id' | 'author' | 'avatar' | 'timestamp' | 'status' | 'variant' | 'align' | 'text' | 'collapsible' | 'collapsedLines' | 'defaultOpen' | 'moreLabel' | 'lessLabel' | 'onOpenChange' | 'children'> {
 		id?: string;
 		author?: string;
 		avatar?: string;
@@ -25,9 +27,6 @@
 		class?: string;
 	}
 
-	const DEFAULT_TEXT =
-		'Completed verification on the isolated worktree branch. All 19 unit and contract suites pass with zero regressions. Expanded logs include full unified diff hunks, schema validation traces, and referee sign-off details.';
-
 	let {
 		id,
 		author = 'AK-S Agent',
@@ -36,7 +35,7 @@
 		status = 'delivered',
 		variant = 'soft',
 		align = 'start',
-		text = DEFAULT_TEXT,
+		text,
 		collapsible = true,
 		collapsedLines = 3,
 		defaultOpen = false,
@@ -44,7 +43,8 @@
 		lessLabel = 'Show less',
 		onOpenChange,
 		children,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isExpanded = $state(false);
@@ -104,13 +104,13 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	{id}
 	data-slot="message"
 	data-from={align === 'end' ? 'user' : 'assistant'}
 	data-align={align}
 	data-variant={variant}
-	class="flex w-full gap-2.5 {align === 'end' ? 'flex-row-reverse' : 'flex-row'} {className}"
+	class={cn(`flex w-full gap-2.5 ${align === 'end' ? 'flex-row-reverse' : 'flex-row'}`, className)}
 >
 	<div
 		aria-hidden="true"

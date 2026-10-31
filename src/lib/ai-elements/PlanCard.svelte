@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronDown, LoaderCircle } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
@@ -13,7 +15,7 @@
 		status: 'completed' | 'in-progress' | 'pending';
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'title' | 'description' | 'riskTier' | 'isStreaming' | 'milestones' | 'defaultOpen' | 'onApprove' | 'onRevise'> {
 		title?: string;
 		description?: string;
 		riskTier?: RiskTier;
@@ -25,40 +27,17 @@
 		class?: string;
 	}
 
-	const DEFAULT_MILESTONES: PlanMilestone[] = [
-		{
-			id: 'ms-1',
-			title: 'Extract pure domain validators and diff line parser',
-			detail: 'Ensure zero database IO inside pure validation helpers and add unit test coverage.',
-			files: ['src/lib/state/chat-helpers.ts', 'tests/chat-helpers.test.ts'],
-			status: 'completed'
-		},
-		{
-			id: 'ms-2',
-			title: 'Port AI Elements and Prompt Kit surfaces to Svelte 5 Runes',
-			detail: 'Convert React context providers into typed $props() and $state() primitives.',
-			files: ['src/lib/ai-elements/PlanCard.svelte', 'src/lib/ai-elements/ChainOfThought.svelte'],
-			status: 'in-progress'
-		},
-		{
-			id: 'ms-3',
-			title: 'Verify semantic OKLCH design tokens across light and dark modes',
-			detail: 'Run static audit test suite and confirm zero hardcoded hex color literals.',
-			files: ['src/app.css', 'tests/svelte5-audit.test.ts'],
-			status: 'pending'
-		}
-	];
-
 	let {
-		title = 'Implementation Plan: Svelte 5 Agent Kit Unification',
-		description = 'Three-milestone execution plan scoped to isolated worktree with automated referee checks.',
+		title = 'Plan',
+		description,
 		riskTier = 'T2',
 		isStreaming = false,
-		milestones = DEFAULT_MILESTONES,
+		milestones = [],
 		defaultOpen = true,
 		onApprove,
 		onRevise,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isOpen = $state(true);
@@ -109,7 +88,7 @@
 	}
 </script>
 
-<div class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<div class="flex flex-wrap items-start justify-between gap-3 border-b border-canvas-border px-4 py-3.5">
 		<div class="min-w-0 flex-1 space-y-1">
 			<div class="flex flex-wrap items-center gap-2">

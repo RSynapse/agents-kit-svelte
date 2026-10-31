@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { Check, CircleAlert, ImageIcon } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 
 	export type ImageGenerationStatus = 'queued' | 'generating' | 'refining' | 'complete' | 'error';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'status' | 'label' | 'prompt' | 'resolution' | 'aspectRatio' | 'size' | 'progress' | 'statusText' | 'showStatus' | 'onRetry' | 'onRegenerate' | 'children'> {
 		status?: ImageGenerationStatus;
 		label?: string;
 		prompt?: string;
@@ -40,7 +42,7 @@
 	let {
 		status = 'refining',
 		label,
-		prompt = 'Architectural isometric diagram of an isolated Git worktree pipeline, warm editorial technical illustration',
+		prompt,
 		resolution = '1024 × 1024',
 		aspectRatio = '16 / 10',
 		size = 'fluid',
@@ -50,7 +52,8 @@
 		onRetry,
 		onRegenerate,
 		children,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let currentStatus = $state<ImageGenerationStatus>('refining');
@@ -83,13 +86,11 @@
 	);
 </script>
 
-<div
+<div {...rest}
 	data-slot="image-generation"
 	data-state={currentStatus}
 	aria-busy={isActive}
-	class="w-full rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm p-3.5 text-fg-main {size === 'compact'
-		? 'max-w-xs'
-		: ''} {className}"
+	class={cn(`w-full rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm p-3.5 text-fg-main ${size === 'compact' ? 'max-w-xs' : ''}`, className)}
 >
 	<div
 		role="img"

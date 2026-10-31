@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, RefreshCw, X, Zap } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import type { GitHubCheckItem } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'title' | 'checks' | 'onFixWithAgent' | 'onRerunCheck'> {
 		title?: string;
 		checks?: GitHubCheckItem[];
 		onFixWithAgent?: (checkId: string) => void;
@@ -11,47 +13,13 @@
 		class?: string;
 	}
 
-	const DEFAULT_CHECKS: GitHubCheckItem[] = [
-		{
-			id: 'ci-1',
-			name: 'corepack pnpm check (svelte-check & tsc)',
-			workflow: 'check-and-test',
-			status: 'passed',
-			duration: '18.4s',
-			summary: '0 errors, 0 warnings across 6 packages'
-		},
-		{
-			id: 'ci-2',
-			name: 'node scripts/check-boundaries.ts',
-			workflow: 'check-and-test',
-			status: 'passed',
-			duration: '2.1s',
-			summary: 'All service, domain, and UI boundary rules satisfied'
-		},
-		{
-			id: 'ci-3',
-			name: 'Playwright mobile viewport tap-target gate (390x844)',
-			workflow: 'browser-parity',
-			status: 'failed',
-			duration: '14.2s',
-			summary: 'Expected action pill height >= 36px, measured 30px on /w/settings'
-		},
-		{
-			id: 'ci-4',
-			name: 'CSS growth ratchet & a11y baseline',
-			workflow: 'static-review',
-			status: 'passed',
-			duration: '3.6s',
-			summary: '32 static checks passed'
-		}
-	];
-
 	let {
 		title = 'GitHub Actions & Check Suites',
-		checks = DEFAULT_CHECKS,
+		checks = [],
 		onFixWithAgent,
 		onRerunCheck,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let fixingIds = $state<Record<string, boolean>>({});
@@ -78,9 +46,9 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label={title}
-	class="rounded-card border border-card-border bg-card-bg p-4 text-sm {className}"
+	class={cn('rounded-card border border-card-border bg-card-bg p-4 text-sm', className)}
 >
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border pb-3">
 		<div>

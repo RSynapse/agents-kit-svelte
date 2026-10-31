@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, badgeClass, segmentClass } from '../ui/styles';
 	import { ArrowRight, BadgeCheck, Check, Package } from '@lucide/svelte';
 	export type PackageChangeType = 'major' | 'minor' | 'patch' | 'added' | 'removed';
@@ -14,8 +16,8 @@
 		command: string;
 	}
 
-	interface Props {
-		name?: string;
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'name' | 'currentVersion' | 'newVersion' | 'changeType' | 'license' | 'description' | 'verified' | 'scripts' | 'dependencies'> {
+		name: string;
 		currentVersion?: string;
 		newVersion?: string;
 		changeType?: PackageChangeType;
@@ -27,30 +29,18 @@
 		class?: string;
 	}
 
-	const DEFAULT_SCRIPTS: PackageScriptItem[] = [
-		{ name: 'dev', command: 'vite dev' },
-		{ name: 'check', command: 'svelte-kit sync && svelte-check --tsconfig ./tsconfig.json' },
-		{ name: 'test', command: 'node --experimental-strip-types --test tests/*.test.ts' }
-	];
-
-	const DEFAULT_DEPENDENCIES: PackageDependencyItem[] = [
-		{ name: 'svelte', version: '^5.55.1' },
-		{ name: '@sveltejs/kit', version: '^2.57.0' },
-		{ name: 'tailwindcss', version: '^4.2.2', dev: true },
-		{ name: 'typescript', version: '^6.0.2', dev: true }
-	];
-
 	let {
-		name = '@trailside/agents-kit-svelte',
+		name,
 		currentVersion = '0.4.2',
 		newVersion = '0.5.0',
 		changeType = 'minor',
 		license = 'MIT',
-		description = 'Svelte 5 Runes agentic UI primitives, GitHub workflow cards, and generative surfaces.',
+		description,
 		verified = true,
-		scripts = DEFAULT_SCRIPTS,
-		dependencies = DEFAULT_DEPENDENCIES,
-		class: className = ''
+		scripts = [],
+		dependencies = [],
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeTab = $state<'dependencies' | 'scripts'>('dependencies');
@@ -77,7 +67,7 @@
 	}
 </script>
 
-<div class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
+<div {...rest} class={cn('w-full rounded-card border border-card-border bg-card-bg p-4 text-sm', className)}>
 	<div class="flex flex-wrap items-start justify-between gap-3">
 		<div class="space-y-1">
 			<div class="flex flex-wrap items-center gap-2">

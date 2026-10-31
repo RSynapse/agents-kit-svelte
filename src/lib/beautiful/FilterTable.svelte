@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	export type FilterStatus = 'todo' | 'progress' | 'done';
 
@@ -11,7 +13,7 @@
 		tag?: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'rows' | 'filter' | 'onFilterChange'> {
 		rows?: FilterTableRow[];
 		filter?: FilterStatus | 'all';
 		onFilterChange?: (value: FilterStatus | 'all') => void;
@@ -20,38 +22,12 @@
 
 	const FILTER_TABS: (FilterStatus | 'all')[] = ['all', 'todo', 'progress', 'done'];
 
-	const DEFAULT_ROWS: FilterTableRow[] = [
-		{
-			id: 'ft-1',
-			task: 'Verify idempotency lookup order on retry dispatch',
-			date: 'Oct 30',
-			status: 'done',
-			owner: 'Claude Code · T2',
-			tag: 'contracts'
-		},
-		{
-			id: 'ft-2',
-			task: 'Stream worktree unified diff hunks into review drawer',
-			date: 'Oct 30',
-			status: 'progress',
-			owner: 'Codex · T2',
-			tag: 'ui'
-		},
-		{
-			id: 'ft-3',
-			task: 'Audit companion probe argument arrays against allowlist',
-			date: 'Oct 31',
-			status: 'todo',
-			owner: 'Referee · T1',
-			tag: 'security'
-		}
-	];
-
 	let {
-		rows = DEFAULT_ROWS,
+		rows = [],
 		filter = undefined,
 		onFilterChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeFilter = $state<FilterStatus | 'all'>('all');
@@ -99,8 +75,8 @@
 	);
 </script>
 
-<section
-	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
+<section {...rest}
+	class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main', className)}
 >
 	<div
 		class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary p-2.5"

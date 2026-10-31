@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronDown, X } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 
@@ -17,13 +19,13 @@
 		tests: SuiteTestItem[];
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'suites' | 'durationMs'> {
 		suites: SuiteGroup[];
 		durationMs?: number;
 		class?: string;
 	}
 
-	let { suites, durationMs = 1420, class: className = '' }: Props = $props();
+	let { suites, durationMs = 1420, class: className = '', ...rest }: Props = $props();
 
 	let openSuiteIds = $state<Record<string, boolean>>({});
 
@@ -66,7 +68,7 @@
 	}
 </script>
 
-<div class="w-full rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('w-full rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<div class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border px-4 py-3">
 		<div class="flex flex-wrap items-center gap-2">
 			<span

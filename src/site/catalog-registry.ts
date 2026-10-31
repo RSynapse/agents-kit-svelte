@@ -956,14 +956,12 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 			'4-column reactive GitHub board layout with Svelte 5 crossfade (send/receive) and animate:flip transitions.',
 		usageSnippet: `<script lang="ts">
   import { GitHubKanbanBoard, type GitHubIssueData } from 'agents-kit-svelte';
+  import { SAMPLE_BOARD_ISSUES } from 'agents-kit-svelte/fixtures';
 
-  let lastDispatched = $state<number | null>(null);
+  let selected = $state<GitHubIssueData | null>(null);
 </script>
 
-<GitHubKanbanBoard
-  repo="RSynapse/trailside"
-  onDispatchIssue={(issueNumber) => (lastDispatched = issueNumber)}
-/>`
+<GitHubKanbanBoard issues={SAMPLE_BOARD_ISSUES} onSelectIssue={(issue) => (selected = issue)} />`
 	},
 	{
 		slug: 'github-bento-layout',
@@ -974,17 +972,26 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Repository pulse bento layout combining active PR, issue dispatch card, CI checks panel, verified commit, and inline review thread.',
 		usageSnippet: `<script lang="ts">
+  import { GitHubBentoLayout } from 'agents-kit-svelte';
   import {
-    GitHubBentoLayout,
-    type GitHubIssueData,
-    type GitHubPullRequestData
-  } from 'agents-kit-svelte';
-
-  let activeRepo = $state('RSynapse/trailside');
+    SAMPLE_BENTO_STATS,
+    SAMPLE_CHECKS,
+    SAMPLE_COMMIT,
+    SAMPLE_ISSUE,
+    SAMPLE_PULL_REQUEST,
+    SAMPLE_REVIEW_THREAD
+  } from 'agents-kit-svelte/fixtures';
 </script>
 
 <GitHubBentoLayout
-  repo={activeRepo}
+  repoName="RSynapse/trailside"
+  repoDetail="GitHub App installation active"
+  stats={SAMPLE_BENTO_STATS}
+  pullRequest={SAMPLE_PULL_REQUEST}
+  checks={SAMPLE_CHECKS}
+  issue={SAMPLE_ISSUE}
+  commit={SAMPLE_COMMIT}
+  thread={SAMPLE_REVIEW_THREAD}
 />`
 	},
 	{
@@ -997,11 +1004,14 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 			'Ten-stage lifecycle stepper (issue, triage, branch, commits, PR, review, checks, merge, deploy, release) that plays itself and lets you pin any stage for details.',
 		usageSnippet: `<script lang="ts">
   import { GitHubLifecycleTimeline, type GitHubLifecycleStage } from 'agents-kit-svelte';
+  import { SAMPLE_LIFECYCLE_STAGES } from 'agents-kit-svelte/fixtures';
 
   let pinned = $state<GitHubLifecycleStage | null>(null);
 </script>
 
+<!-- live plays a demo loop; leave it off for real data -->
 <GitHubLifecycleTimeline
+  stages={SAMPLE_LIFECYCLE_STAGES}
   live
   onSelectStage={(stage) => (pinned = stage)}
 />`
@@ -1016,11 +1026,13 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 			'Issue intake card where an agent proposes type, priority, area, assignee and milestone with confidence bars, flags likely duplicates, and lets you drop suggestions before applying.',
 		usageSnippet: `<script lang="ts">
   import { GitHubIssueTriage } from 'agents-kit-svelte';
+  import { SAMPLE_TRIAGE_ISSUE } from 'agents-kit-svelte/fixtures';
 
   let appliedLabels = $state<string[]>([]);
 </script>
 
 <GitHubIssueTriage
+  issue={SAMPLE_TRIAGE_ISSUE}
   live
   onApply={(issueNumber, labels) => (appliedLabels = labels)}
   onMarkDuplicate={(issueNumber, duplicateOf) => console.log(issueNumber, duplicateOf)}
@@ -1036,11 +1048,13 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 			'Feature branch card with ahead/behind counts, a commit rail that fills as commits land, branch protection rules, and worktree / compare actions.',
 		usageSnippet: `<script lang="ts">
   import { GitHubBranchCard } from 'agents-kit-svelte';
+  import { SAMPLE_BRANCH } from 'agents-kit-svelte/fixtures';
 
   let worktree = $state<string | null>(null);
 </script>
 
 <GitHubBranchCard
+  branch={SAMPLE_BRANCH}
   live
   onOpenWorktree={(branch) => (worktree = branch)}
   onCompare={(branch, base) => console.log(base, branch)}
@@ -1056,13 +1070,17 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 			'Files-changed review surface: file list with viewed checkboxes, a unified diff with inline comments, and an Approve / Comment / Request changes verdict.',
 		usageSnippet: `<script lang="ts">
   import { GitHubPullRequestReview, type GitHubReviewVerdict } from 'agents-kit-svelte';
+  import { SAMPLE_REVIEW_FILES } from 'agents-kit-svelte/fixtures';
 
   let verdict = $state<GitHubReviewVerdict | null>(null);
 </script>
 
 <GitHubPullRequestReview
-  live
   prNumber={2210}
+  title="fix(export): quote CSV fields per RFC 4180"
+  reviewer="mira-chen"
+  files={SAMPLE_REVIEW_FILES}
+  live
   onSubmitReview={(prNumber, v) => (verdict = v)}
 />`
 	},
@@ -1076,13 +1094,15 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 			'Merge queue for a protected branch: the head group runs checks, the next is tested speculatively, merged PRs slide out with flip animations, and you can hold the queue or pull an entry.',
 		usageSnippet: `<script lang="ts">
   import { GitHubMergeQueue } from 'agents-kit-svelte';
+  import { SAMPLE_MERGE_QUEUE } from 'agents-kit-svelte/fixtures';
 
   let removed = $state<number[]>([]);
 </script>
 
 <GitHubMergeQueue
-  live
+  entries={SAMPLE_MERGE_QUEUE}
   baseBranch="main"
+  live
   onRemove={(prNumber) => (removed = [...removed, prNumber])}
 />`
 	},
@@ -1096,13 +1116,15 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 			'Environment promotion from Preview to Staging to Production, with a protected-environment approval gate, staged traffic rollout and one-click rollback.',
 		usageSnippet: `<script lang="ts">
   import { GitHubDeploymentPipeline } from 'agents-kit-svelte';
+  import { SAMPLE_ENVIRONMENTS } from 'agents-kit-svelte/fixtures';
 
   let lastAction = $state('');
 </script>
 
 <GitHubDeploymentPipeline
-  live
+  environments={SAMPLE_ENVIRONMENTS}
   sha="9b07d3e"
+  live
   onApprove={(env) => (lastAction = \`approved \${env}\`)}
   onRollback={(env) => (lastAction = \`rolled back \${env}\`)}
 />`
@@ -1117,11 +1139,13 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 			'Draft release whose notes are written from merged PRs and grouped by type, with contributors, assets, and a Latest / Pre-release publish control.',
 		usageSnippet: `<script lang="ts">
   import { GitHubReleaseCard } from 'agents-kit-svelte';
+  import { SAMPLE_RELEASE } from 'agents-kit-svelte/fixtures';
 
   let publishedTag = $state<string | null>(null);
 </script>
 
 <GitHubReleaseCard
+  release={SAMPLE_RELEASE}
   live
   onPublish={(tag, prerelease) => (publishedTag = tag)}
 />`
@@ -1136,11 +1160,13 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 			'Production incident card: a live error-rate sparkline crosses its threshold, the suspect deploy is identified, and a revert walks the incident to resolved.',
 		usageSnippet: `<script lang="ts">
   import { GitHubIncidentCard } from 'agents-kit-svelte';
+  import { SAMPLE_INCIDENT } from 'agents-kit-svelte/fixtures';
 
   let reverted = $state<number | null>(null);
 </script>
 
 <GitHubIncidentCard
+  incident={SAMPLE_INCIDENT}
   live
   onRevert={(prNumber, sha) => (reverted = prNumber)}
 />`

@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Sparkle } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import { SOFT } from '../ui/styles';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'id' | 'role' | 'author' | 'badge' | 'timestamp' | 'children'> {
 		id?: string;
 		role: 'user' | 'assistant' | 'system';
 		author: string;
@@ -20,16 +22,17 @@
 		badge,
 		timestamp,
 		class: className = '',
-		children
+		children,
+		...rest
 	}: Props = $props();
 </script>
 
-<article
+<article {...rest}
 	{id}
 	data-slot="message"
 	data-from={role}
 	data-role={role}
-	class="group/message flex w-full gap-3 {role === 'user' ? 'justify-end' : 'justify-start'} {className}"
+	class={cn(`group/message flex w-full gap-3 ${role === 'user' ? 'justify-end' : 'justify-start'}`, className)}
 >
 	{#if role !== 'user'}
 		<div aria-hidden="true" class="{SOFT.avatar} mt-0.5 max-sm:hidden">

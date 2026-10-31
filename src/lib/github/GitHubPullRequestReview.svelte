@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, CircleCheck, FileCode, MessageSquare, MessageSquareWarning } from '@lucide/svelte';
 	import { SvelteSet } from 'svelte/reactivity';
 	import { slide } from 'svelte/transition';
@@ -7,52 +9,16 @@
 	import type { GitHubReviewFile, GitHubReviewVerdict } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
-		prNumber?: number;
-		title?: string;
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'prNumber' | 'title' | 'reviewer' | 'files' | 'live' | 'onSubmitReview'> {
+		prNumber: number;
+		title: string;
 		reviewer?: string;
 		files?: GitHubReviewFile[];
-		/** Plays a reviewer reading each file, leaving a comment and approving, then loops. */
+		/** Demo mode: plays a reviewer reading each file, leaving a comment and approving, then loops. Off by default. */
 		live?: boolean;
 		onSubmitReview?: (prNumber: number, verdict: GitHubReviewVerdict) => void;
 		class?: string;
 	}
-
-	const DEFAULT_FILES: GitHubReviewFile[] = [
-		{
-			path: 'src/lib/export/csv.ts',
-			additions: 14,
-			deletions: 6,
-			lines: [
-				{ kind: 'hunk', text: '@@ -18,9 +18,17 @@ export function toCsvRow(values: string[])' },
-				{ kind: 'context', oldLine: 18, newLine: 18, text: 'export function toCsvRow(values: string[]): string {' },
-				{ kind: 'del', oldLine: 19, text: "  return values.join(',');" },
-				{ kind: 'add', newLine: 19, text: '  return values.map(quoteField).join(\',\');' },
-				{ kind: 'context', oldLine: 20, newLine: 20, text: '}' },
-				{ kind: 'context', oldLine: 21, newLine: 21, text: '' },
-				{ kind: 'add', newLine: 22, text: 'function quoteField(value: string): string {' },
-				{ kind: 'add', newLine: 23, text: '  if (!/[",\\n]/.test(value)) return value;' },
-				{ kind: 'add', newLine: 24, text: '  return `"${value.replaceAll(\'"\', \'""\')}"`;' },
-				{ kind: 'add', newLine: 25, text: '}' }
-			],
-			comment: {
-				afterLine: 23,
-				author: 'mira-chen',
-				body: 'Carriage returns too, please. Excel on Windows writes \\r\\n inside quoted notes.'
-			}
-		},
-		{
-			path: 'tests/export/csv.test.ts',
-			additions: 32,
-			deletions: 3,
-			lines: [
-				{ kind: 'hunk', text: '@@ -4,6 +4,12 @@' },
-				{ kind: 'add', newLine: 4, text: "test('keeps rows whose notes contain commas', () => {" },
-				{ kind: 'add', newLine: 5, text: "  expect(toCsvRow(['a', 'b, c'])).toBe('a,\"b, c\"');" },
-				{ kind: 'add', newLine: 6, text: '});' }
-			]
-		}
-	];
 
 	const VERDICTS: { id: GitHubReviewVerdict; label: string }[] = [
 		{ id: 'comment', label: 'Comment' },
@@ -61,13 +27,14 @@
 	];
 
 	let {
-		prNumber = 2210,
-		title = 'fix(export): quote CSV fields per RFC 4180',
-		reviewer = 'mira-chen',
-		files = DEFAULT_FILES,
-		live = true,
+		prNumber,
+		title,
+		reviewer,
+		files = [],
+		live = false,
 		onSubmitReview,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	// Steps: read file 1 → comment lands → each file marked viewed in turn → approve.
@@ -113,12 +80,12 @@
 	}
 </script>
 
-<article class="@container overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<article {...rest} class={cn('@container overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="min-w-0">
 			<h3 class="truncate font-semibold text-fg-main">{title} <span class="font-normal text-fg-light">#{prNumber}</span></h3>
 			<p class="text-xs text-fg-light">
-				Files changed · reviewing as <strong class="font-medium text-fg-main">{reviewer}</strong>
+				Files changed{#if reviewer}{' · '}reviewing as <strong class="font-medium text-fg-main">{reviewer}</strong>{/if}
 			</p>
 		</div>
 		<span class="font-mono text-xs text-fg-light tabular-nums">
@@ -207,7 +174,7 @@
 		{#if finalVerdict}
 			<span in:rise class={badgeClass(finalVerdict === 'approve' ? 'success' : finalVerdict === 'request-changes' ? 'danger' : 'neutral')}>
 				{#if finalVerdict === 'approve'}<CircleCheck aria-hidden="true" />Approved{:else if finalVerdict === 'request-changes'}<MessageSquareWarning aria-hidden="true" />Changes requested{:else}<MessageSquare aria-hidden="true" />Commented{/if}
-				by {reviewer}
+				{#if reviewer}by {reviewer}{/if}
 			</span>
 		{:else}
 			<span class="text-xs text-fg-light">1 pending comment</span>

@@ -1,15 +1,16 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ArrowUp, CornerDownRight, Route } from '@lucide/svelte';
 	import { Tween } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { motionDuration } from '../state/motion.svelte';
 	import { rankSkills } from '../state/skill-helpers';
 	import { PROGRESS_TRACK_CLASS, badgeClass, pillClass, progressFillClass } from '../ui/styles';
-	import { SAMPLE_SKILLS } from './fixtures';
 	import { SKILL_SCOPE_META } from './scope';
 	import type { AgentSkill, SkillMatch } from './types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'skills' | 'prompt' | 'threshold' | 'limit' | 'readonly' | 'clearOnRoute' | 'onRoute'> {
 		skills?: AgentSkill[];
 		/** Prompt to route. The field stays editable unless `readonly` is set. */
 		prompt?: string;
@@ -26,14 +27,15 @@
 	}
 
 	let {
-		skills = SAMPLE_SKILLS,
+		skills = [],
 		prompt = 'Write the release notes for everything that shipped this week',
 		threshold = 0.45,
 		limit = 4,
 		readonly = false,
 		clearOnRoute = false,
 		onRoute,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let draft = $state('');
@@ -73,9 +75,9 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Skill router"
-	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm {className}"
+	class={cn('w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm', className)}
 >
 	<header class="flex items-center justify-between gap-3 px-4 pt-3.5 pb-3">
 		<div class="flex items-center gap-2.5">

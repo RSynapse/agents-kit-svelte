@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export interface DiffTableRow {
@@ -9,7 +11,7 @@
 		status?: 'pending' | 'accepted' | 'rejected';
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'rows' | 'title' | 'onAccept' | 'onReject' | 'onApplyAll'> {
 		rows?: DiffTableRow[];
 		title?: string;
 		onAccept?: (id: string) => void;
@@ -18,37 +20,14 @@
 		class?: string;
 	}
 
-	const DEFAULT_ROWS: DiffTableRow[] = [
-		{
-			id: 'row-tier',
-			field: 'riskTier',
-			before: 'T1 (Read-only)',
-			after: 'T2 (Worktree isolated)',
-			status: 'accepted'
-		},
-		{
-			id: 'row-timeout',
-			field: 'maxRunDurationSec',
-			before: '300',
-			after: '900',
-			status: 'pending'
-		},
-		{
-			id: 'row-branch',
-			field: 'worktreeBranch',
-			before: 'main',
-			after: 'worktree/card-184-attempt-1',
-			status: 'pending'
-		}
-	];
-
 	let {
-		rows = DEFAULT_ROWS,
+		rows = [],
 		title = 'Review field changes',
 		onAccept,
 		onReject,
 		onApplyAll,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let internalRows = $state<DiffTableRow[]>([]);
@@ -87,8 +66,8 @@
 	let pendingCount = $derived(internalRows.length - acceptedCount - rejectedCount);
 </script>
 
-<section
-	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
+<section {...rest}
+	class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main', className)}
 >
 	<header
 		class="flex min-h-12 flex-wrap items-center justify-between gap-3 border-b border-canvas-border px-4 py-2.5"

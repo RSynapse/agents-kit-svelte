@@ -54,7 +54,7 @@ A step-by-step guide with live output is on the showcase site under **Install**.
 
 ### Entry points
 
-Import everything from `agents-kit-svelte`, or from one collection to keep editor auto-imports focused. Unused components are tree-shaken either way; a page that imports only `TodoList` builds to about 63 KB of JavaScript, Svelte runtime included.
+Import everything from `agents-kit-svelte`, or from one collection to keep editor auto-imports focused. Unused components are tree-shaken either way; a page that imports only `TodoList` builds to about 91 KB of JavaScript (Svelte runtime and `tailwind-merge` included).
 
 | Import | Contains |
 | --- | --- |
@@ -65,10 +65,49 @@ Import everything from `agents-kit-svelte`, or from one collection to keep edito
 | `agents-kit-svelte/generative` | `IntelligentUIRenderer`, `AgentGenerativeSurface`, `ResultActions` |
 | `agents-kit-svelte/data` | Tables, insight and recommendation cards, flowchart, search list, tool chips |
 | `agents-kit-svelte/effects` | `BorderBeam`, `Svelte5MotionLab` |
-| `agents-kit-svelte/primitives` | Style recipes (`buttonClass`, `SURFACE`, ...), motion helpers, `AgentDisclosure`, `ThinkingShimmer` |
+| `agents-kit-svelte/primitives` | Style recipes (`buttonClass`, `SURFACE`, ...), `cn()`, motion helpers, `AgentDisclosure`, `ThinkingShimmer` |
 | `agents-kit-svelte/core` | Types, diff parsing, skill ranking, agent events, `AgentSession` and the Claude adapters. No components, safe on a server. |
 | `agents-kit-svelte/fixtures` | Sample data for demos and tests. Not exported from the root. |
-| `agents-kit-svelte/theme.css` | Design tokens and light/dark palettes |
+| `agents-kit-svelte/theme.css` | `--ak-*` design tokens and light/dark palettes |
+
+### Customising
+
+**Your data, your markup.** Components render what you pass and nothing else. They have no built-in sample data, and their demo animations are off unless you set `live`. Sample data for prototypes and tests is in `agents-kit-svelte/fixtures`:
+
+```svelte
+<script lang="ts">
+	import { GitHubIssueCard } from 'agents-kit-svelte/github';
+	import { SAMPLE_ISSUE } from 'agents-kit-svelte/fixtures';
+</script>
+
+<GitHubIssueCard issue={SAMPLE_ISSUE} />
+```
+
+**Attributes and classes reach the root.** Every component forwards extra attributes (`id`, `aria-*`, `data-*`, `style`, event handlers) to its root element. Your `class` is merged last with [tailwind-merge](https://github.com/dcastil/tailwind-merge), so it replaces the matching kit utilities instead of fighting them:
+
+```svelte
+<TodoList {items} class="rounded-lg p-2 shadow-none" data-testid="plan" aria-label="Release plan" />
+```
+
+The same merge is exported as `cn()` from `agents-kit-svelte/primitives` for your own wrappers.
+
+**Theme with tokens.** Every colour, radius, font and shadow is an `--ak-*` custom property. Set them on `:root` for the whole app, or on any wrapper to theme one area. They sit in an `agents-kit` cascade layer, so your CSS wins without `!important`:
+
+```css
+:root {
+	--ak-color-accent: oklch(0.6 0.18 255);
+	--ak-radius-card: 10px;
+	--ak-font-sans: "Geist", system-ui, sans-serif;
+}
+
+.support-panel {
+	--ak-color-surface: oklch(0.98 0.01 250);
+}
+```
+
+The main tokens are `--ak-color-canvas`, `-canvas-subtle`, `-surface`, `-fg`, `-fg-muted`, `-fg-inverse`, `-border`, `-border-subtle`, `-accent`, `-accent-subtle`, `-success`, `-warning`, `-danger` and `-info` (each status with a `-subtle` pair), plus `--ak-radius-{chip,control,card,window,bubble,composer}`, `--ak-font-{sans,mono,display}` and `--ak-shadow-{card,btn,soft,soft-sm}`. The chat follows the main accent and canvas; set `--ak-chat-accent` or `--ak-chat-surface` to give it its own. Dark values apply under `.dark` or `[data-theme="dark"]`, or under `[data-theme="system"]` when the OS prefers dark. The Tailwind utility names (`bg-card-bg`, `text-fg-main`, ...) are unchanged.
+
+Themes written for 0.1 against `--color-*-val` variables still work in this release and stop working in the next minor.
 
 ---
 

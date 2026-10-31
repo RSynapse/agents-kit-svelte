@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, FileText } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import GitHubIssueCard from '../github/GitHubIssueCard.svelte';
@@ -6,60 +8,28 @@
 	import ResultActions from './ResultActions.svelte';
 	import type { GeneratedSurfaceContent, ResultActionState } from '../types';
 
-	interface Props {
-		content?: GeneratedSurfaceContent;
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'content' | 'showResultActions' | 'onAction'> {
+		content: GeneratedSurfaceContent;
 		showResultActions?: boolean;
 		onAction?: (action: string, id?: string) => void;
 		class?: string;
 	}
 
-	const DEFAULT_SURFACE: GeneratedSurfaceContent = {
-		type: 'comparison',
-		title: 'Choose the OAuth callback state verification strategy',
-		description: 'Two approaches for preserving deep-link return paths across GitHub App sign-in.',
-		selectedId: 'signed-cookie',
-		options: [
-			{
-				id: 'signed-cookie',
-				title: 'HttpOnly SameSite=Lax cookie',
-				description: 'Stores sanitized relative returnTo path in a short-lived signed cookie.',
-				recommended: true,
-				attributes: [
-					{ label: 'Risk Tier', value: 'T1 / T2' },
-					{ label: 'CSRF resistance', value: 'High (bound to state)' },
-					{ label: 'Query length limit', value: '4 KB' }
-				]
-			},
-			{
-				id: 'state-param',
-				title: 'Encoded OAuth state parameter',
-				description: 'Embeds returnTo inside the HMAC-signed OAuth state query string.',
-				attributes: [
-					{ label: 'Risk Tier', value: 'T2' },
-					{ label: 'CSRF resistance', value: 'High' },
-					{ label: 'Query length limit', value: '512 B' }
-				]
-			}
-		]
-	};
-
 	let {
-		content = DEFAULT_SURFACE,
+		content,
 		showResultActions = true,
 		onAction,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
-	let currentContent = $state<GeneratedSurfaceContent>(DEFAULT_SURFACE);
+	// Follows the content prop; local edits override it until the prop changes.
+	let currentContent = $derived<GeneratedSurfaceContent>(content);
 	let mode = $state<ResultActionState>('view');
 	let saved = $state(false);
 	let editPrimary = $state('');
 	let editSecondary = $state('');
 	let statusNotice = $state('');
-
-	$effect(() => {
-		currentContent = content;
-	});
 
 	/**
 	 * Extracts primary and secondary editable text fields from a generated surface item.
@@ -161,7 +131,7 @@
 	}
 </script>
 
-<div class="w-full space-y-2.5 {className}">
+<div {...rest} class={cn('w-full space-y-2.5', className)}>
 	<div
 		class="overflow-hidden rounded-window border border-card-border bg-card-bg p-4 text-sm shadow-xs transition-all {mode !==
 		'view'

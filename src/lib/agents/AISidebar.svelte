@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Bookmark, FileText, Folder, FolderOpen, GitBranch, Pencil, Pin, PinOff } from '@lucide/svelte';
 	import type { Component } from 'svelte';
 	import { buttonClass } from '../ui/styles';
@@ -20,7 +22,7 @@
 		parentId: string | null;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'items' | 'activeId' | 'defaultExpandedIds' | 'ariaLabel' | 'searchable' | 'onSelect' | 'onActiveChange' | 'onRename' | 'onTogglePin'> {
 		items?: SidebarResource[];
 		activeId?: string | null;
 		defaultExpandedIds?: string[];
@@ -33,53 +35,18 @@
 		class?: string;
 	}
 
-	const DEFAULT_ITEMS: SidebarResource[] = [
-		{
-			id: 'wt-184',
-			label: 'feat/issue-184-worktree',
-			kind: 'worktree',
-			pinned: true,
-			badge: 'T2',
-			children: [
-				{
-					id: 'src-agents',
-					label: 'src/lib/agents',
-					kind: 'folder',
-					children: [
-						{ id: 'file-sidebar', label: 'AISidebar.svelte', kind: 'file', badge: '+142' },
-						{ id: 'file-approval', label: 'ApprovalCard.svelte', kind: 'file', badge: 'clean' }
-					]
-				},
-				{
-					id: 'file-spec',
-					label: 'docs/specs/run-dispatch.md',
-					kind: 'bookmark',
-					pinned: true
-				}
-			]
-		},
-		{
-			id: 'proj-contracts',
-			label: 'contracts/g0',
-			kind: 'project',
-			children: [
-				{ id: 'file-schema', label: 'schema/envelope.json', kind: 'file' },
-				{ id: 'file-validator', label: 'src/validate.ts', kind: 'file' }
-			]
-		}
-	];
-
 	let {
-		items = DEFAULT_ITEMS,
+		items = [],
 		activeId = undefined,
-		defaultExpandedIds = ['wt-184', 'src-agents', 'proj-contracts'],
+		defaultExpandedIds = [],
 		ariaLabel = 'Workspace resources',
 		searchable = true,
 		onSelect,
 		onActiveChange,
 		onRename,
 		onTogglePin,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let internalItems = $state<SidebarResource[]>([]);
@@ -283,9 +250,9 @@
 	let pinnedItems = $derived(collectPinned(internalItems));
 </script>
 
-<aside
+<aside {...rest}
 	aria-label={ariaLabel}
-	class="flex w-full max-w-xs flex-col rounded-card border border-card-border bg-card-bg p-3 text-sm text-fg-main {className}"
+	class={cn('flex w-full max-w-xs flex-col rounded-card border border-card-border bg-card-bg p-3 text-sm text-fg-main', className)}
 >
 	<header class="mb-2 flex items-center justify-between gap-2 px-1">
 		<span class="text-xs font-medium text-fg-light">

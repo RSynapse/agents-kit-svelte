@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	export interface SelectionAction {
 		id: string;
@@ -6,7 +8,7 @@
 		tone?: 'default' | 'accent' | 'danger';
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'selectedText' | 'selectedCount' | 'actions' | 'result' | 'isWorking' | 'onAction' | 'onReplace' | 'onClear'> {
 		selectedText?: string;
 		selectedCount?: number;
 		actions?: SelectionAction[];
@@ -18,23 +20,17 @@
 		class?: string;
 	}
 
-	const DEFAULT_ACTIONS: SelectionAction[] = [
-		{ id: 'approve', label: 'Approve selected', tone: 'accent' },
-		{ id: 'rerun', label: 'Re-run in worktree', tone: 'default' },
-		{ id: 'export', label: 'Export patch', tone: 'default' },
-		{ id: 'clear', label: 'Clear', tone: 'danger' }
-	];
-
 	let {
-		selectedText = 'Retries must reauthorize before the idempotency lookup, and the lookup must precede new-intent revision checks.',
-		selectedCount = 3,
-		actions = DEFAULT_ACTIONS,
+		selectedText,
+		selectedCount = 1,
+		actions = [],
 		result = undefined,
 		isWorking = false,
 		onAction,
 		onReplace,
 		onClear,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeActionId = $state<string | null>(null);
@@ -63,8 +59,8 @@
 	}
 </script>
 
-<section
-	class="rounded-card border border-card-border bg-card-bg p-4 text-fg-main shadow-xs {className}"
+<section {...rest}
+	class={cn('rounded-card border border-card-border bg-card-bg p-4 text-fg-main shadow-xs', className)}
 >
 	<div class="flex flex-wrap items-center justify-between gap-2">
 		<div class="flex items-center gap-2">

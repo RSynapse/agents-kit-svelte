@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import { Check, CircleCheck, CircleDot, GitBranch, Play } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
@@ -7,8 +9,8 @@
 	import { motionDuration, rise } from '../state/motion.svelte';
 	import type { GitHubIssueData } from '../types';
 
-	interface Props {
-		issue?: GitHubIssueData;
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'issue' | 'compact' | 'onDispatchRun' | 'onOpenChat' | 'onClaimToggle' | 'footerActions'> {
+		issue: GitHubIssueData;
 		compact?: boolean;
 		onDispatchRun?: (issueNumber: number) => void;
 		onOpenChat?: (issueNumber: number) => void;
@@ -17,40 +19,15 @@
 		class?: string;
 	}
 
-	const DEFAULT_ISSUE: GitHubIssueData = {
-		number: 2151,
-		title: 'Home: the unpicked agents, skipped gates and other small captions are too faint to read',
-		repo: 'RSynapse/trailside',
-		state: 'in-progress',
-		author: 'grok-bot',
-		createdAt: '28m ago',
-		labels: [
-			{ name: 'area:landing', tone: 'accent' },
-			{ name: 'type:polish', tone: 'neutral' },
-			{ name: 'size:s', tone: 'neutral' },
-			{ name: 'tier:T1', tone: 'warning' },
-			{ name: 'in-progress', tone: 'success' }
-		],
-		riskTier: 'T1',
-		size: 'S',
-		assignedAgent: 'AK-S Agent · Attempt 1',
-		attemptNumber: 1,
-		worktreeBranch: 'argon/2151-home-faint-captions-contrast',
-		linkedPrNumber: 2153,
-		criteriaCompleted: 5,
-		criteriaTotal: 5,
-		summary:
-			'Small secondary captions and unpicked agent rows on the home page fall below 4.5:1 WCAG AA contrast across 320px–1440px viewports.'
-	};
-
 	let {
-		issue = DEFAULT_ISSUE,
+		issue,
 		compact = false,
 		onDispatchRun,
 		onOpenChat,
 		onClaimToggle,
 		footerActions,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let claimed = $state(true);
@@ -115,11 +92,9 @@
 	}
 </script>
 
-<article
+<article {...rest}
 	aria-label="GitHub Issue {issue.number}: {issue.title}"
-	class="ak-micro-lift flex min-w-0 flex-col justify-between overflow-hidden rounded-card border border-card-border bg-card-bg {compact
-		? 'p-3.5'
-		: 'p-4'} text-sm transition-colors {className}"
+	class={cn(`ak-micro-lift flex min-w-0 flex-col justify-between overflow-hidden rounded-card border border-card-border bg-card-bg ${compact ? 'p-3.5' : 'p-4'} text-sm transition-colors`, className)}
 >
 	<div class="min-w-0">
 		<!-- Top Meta Row -->

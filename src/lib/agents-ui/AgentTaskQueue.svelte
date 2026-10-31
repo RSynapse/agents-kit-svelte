@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ArrowUp, ArrowUpDown, ChevronRight, Circle, CircleCheck, LoaderCircle, Pause, Play, Plus, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type AgentTaskStatus =
@@ -32,7 +34,7 @@
 		metrics?: { tokens?: number; cost?: string; confidence?: number };
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'tasks' | 'activeTaskId' | 'autoStart' | 'concurrencyLimit' | 'isProcessing' | 'showTimeline' | 'timestamp' | 'onStartTask' | 'onPauseTask' | 'onResumeTask' | 'onCancelTask' | 'onReorder' | 'onToggleAutoStart' | 'onClearCompleted' | 'onAddTask'> {
 		tasks?: AgentTask[];
 		activeTaskId?: string | null;
 		autoStart?: boolean;
@@ -51,62 +53,14 @@
 		class?: string;
 	}
 
-	const defaultTasks: AgentTask[] = [
-		{
-			id: 'task-191',
-			title: 'Card 191 · Outbox Idempotency Replay Guard',
-			description: 'Verify reauthorization happens prior to idempotency key lookup.',
-			status: 'running',
-			progress: 68,
-			priority: 'high',
-			tool: 'Claude Code · wt/card-191',
-			updatedLabel: 'Updated 1m ago',
-			estimatedDuration: '2m remaining',
-			checkpoints: [
-				{ id: 'cp-1', title: 'Create isolated git worktree', status: 'completed', timestamp: '14:01' },
-				{ id: 'cp-2', title: 'Run domain replay unit suite', status: 'active', timestamp: '14:03' },
-				{ id: 'cp-3', title: 'Export G0 JSON schemas', status: 'pending' }
-			],
-			metrics: { tokens: 18400, cost: '$0.06', confidence: 0.94 }
-		},
-		{
-			id: 'task-194',
-			title: 'Card 194 · SSR Interaction Readiness Audit',
-			description: 'Ensure filter buttons preserve pre-hydration state across /w routes.',
-			status: 'queued',
-			priority: 'high',
-			tool: 'Claude Code · wt/card-194',
-			updatedLabel: 'Next in queue'
-		},
-		{
-			id: 'task-198',
-			title: 'Card 198 · Companion CLI Doctor Repair Check',
-			description: 'Validate reversible repair checklist reporting to service.',
-			status: 'paused',
-			progress: 35,
-			priority: 'medium',
-			tool: 'Codex · wt/card-198',
-			updatedLabel: 'Paused for human approval'
-		},
-		{
-			id: 'task-185',
-			title: 'Card 185 · M2-Lite Read-Only Board Sync',
-			status: 'completed',
-			progress: 100,
-			priority: 'medium',
-			tool: 'Claude Code · wt/card-185',
-			updatedLabel: 'Completed 13:45'
-		}
-	];
-
 	let {
-		tasks = defaultTasks,
+		tasks = [],
 		activeTaskId = null,
 		autoStart = true,
 		concurrencyLimit = 2,
 		isProcessing = false,
 		showTimeline = true,
-		timestamp = 'Updated moments ago',
+		timestamp,
 		onStartTask,
 		onPauseTask,
 		onResumeTask,
@@ -115,7 +69,8 @@
 		onToggleAutoStart,
 		onClearCompleted,
 		onAddTask,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localTasks = $state<AgentTask[]>([]);
@@ -205,9 +160,9 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Prioritized agent task queue"
-	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
@@ -451,7 +406,7 @@
 	<footer
 		class="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-border px-4 py-3 text-xs text-fg-light"
 	>
-		<span>{timestamp} · {localTasks.length} total runs</span>
+		<span>{#if timestamp}{timestamp}{' · '}{/if}{localTasks.length} total runs</span>
 		{#if completedCount > 0}
 			<button
 				type="button"

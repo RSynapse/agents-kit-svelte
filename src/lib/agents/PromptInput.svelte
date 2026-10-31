@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLFormAttributes } from 'svelte/elements';
 	import { pillClass, SOFT } from '../ui/styles';
 	import { fade } from 'svelte/transition';
 	import { rise } from '../state/motion.svelte';
@@ -19,7 +21,7 @@
 	import { isImeComposing } from '../state/chat-helpers';
 	import type { SupportedAgentId, SupportedAgentOption } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLFormAttributes, 'class' | 'children' | 'value' | 'placeholder' | 'busy' | 'agents' | 'selectedAgentId' | 'activeSkill' | 'onAgentChange' | 'onSubmit' | 'onStop' | 'onQuickContext'> {
 		value?: string;
 		placeholder?: string;
 		busy?: boolean;
@@ -44,7 +46,8 @@
 		onSubmit,
 		onStop,
 		onQuickContext,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let menuOpen = $state(false);
@@ -186,14 +189,14 @@
 	}
 </script>
 
-<form
+<form {...rest}
 	bind:this={formEl}
 	onsubmit={(e) => {
 		e.preventDefault();
 		submitPrompt();
 	}}
 	data-busy={busy}
-	class="ak-soft-focus w-full rounded-composer border border-chat-border bg-card-bg px-3 pt-3 pb-2.5 focus-within:border-fg-light/35 {className}"
+	class={cn('ak-soft-focus w-full rounded-composer border border-chat-border bg-card-bg px-3 pt-3 pb-2.5 focus-within:border-fg-light/35', className)}
 >
 	{#if attachedChips.length > 0}
 		<div class="mb-1.5 flex flex-wrap items-center gap-1.5 px-1">

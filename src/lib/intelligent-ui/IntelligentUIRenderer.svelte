@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
+	import type { ComponentProps } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
@@ -28,20 +31,30 @@
 		ApprovalQuestion,
 		DynamicUINode,
 		GeneratedSurfaceContent,
+		GitHubCheckItem,
+		GitHubCommitData,
+		GitHubIssueData,
+		GitHubPullRequestData,
 		TodoItem,
 		ToolApprovalParam
 	} from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'nodes' | 'onIntent'> {
 		nodes: DynamicUINode[];
 		onIntent?: (intent: { nodeId: string; action: string; detail?: string }) => void;
 		class?: string;
 	}
 
-	let { nodes, onIntent, class: className = '' }: Props = $props();
+	let { nodes, onIntent, class: className = '', ...rest }: Props = $props();
 </script>
 
-<div class="space-y-4 {className}">
+{#snippet missingProp(name: string)}
+	<p class="rounded-control border border-dashed border-card-border px-3 py-2 text-xs text-fg-light">
+		This node needs a <code class="font-mono">{name}</code> prop.
+	</p>
+{/snippet}
+
+<div {...rest} class={cn('space-y-4', className)}>
 	{#each nodes as node (node.id)}
 		<div
 			animate:flip={{ duration: motionDuration(240), easing: cubicOut }}
@@ -126,44 +139,77 @@
 						onIntent?.({ nodeId: node.id, action: 'submit', detail: JSON.stringify(answers) })}
 				/>
 			{:else if node.component === 'github-issue-card'}
-				<GitHubIssueCard
-					onDispatchRun={(num) =>
-						onIntent?.({ nodeId: node.id, action: 'dispatch-issue', detail: String(num) })}
-				/>
+				{#if node.props.issue}
+					<GitHubIssueCard
+						issue={node.props.issue as GitHubIssueData}
+						onDispatchRun={(num) =>
+							onIntent?.({ nodeId: node.id, action: 'dispatch-issue', detail: String(num) })}
+					/>
+				{:else}
+					{@render missingProp('issue')}
+				{/if}
 			{:else if node.component === 'github-pr-card'}
-				<GitHubPullRequestCard
-					onApproveMerge={(num) =>
-						onIntent?.({ nodeId: node.id, action: 'approve-pr', detail: String(num) })}
-				/>
+				{#if node.props.pr}
+					<GitHubPullRequestCard
+						pr={node.props.pr as GitHubPullRequestData}
+						onApproveMerge={(num) =>
+							onIntent?.({ nodeId: node.id, action: 'approve-pr', detail: String(num) })}
+					/>
+				{:else}
+					{@render missingProp('pr')}
+				{/if}
 			{:else if node.component === 'github-commit-card'}
-				<GitHubCommitCard />
+				{#if node.props.commit}
+					<GitHubCommitCard commit={node.props.commit as GitHubCommitData} />
+				{:else}
+					{@render missingProp('commit')}
+				{/if}
 			{:else if node.component === 'github-checks-panel'}
 				<GitHubChecksPanel
+					checks={(node.props.checks as GitHubCheckItem[] | undefined) ?? []}
 					onFixWithAgent={(id) =>
 						onIntent?.({ nodeId: node.id, action: 'fix-check', detail: id })}
 				/>
 			{:else if node.component === 'recommendation-card'}
-				<RecommendationCard />
+				{#if typeof node.props.title === 'string'}
+					<RecommendationCard {...node.props as unknown as ComponentProps<typeof RecommendationCard>} />
+				{:else}
+					{@render missingProp('title')}
+				{/if}
 			{:else if node.component === 'diff-table'}
-				<DiffTable />
+				<DiffTable {...node.props as ComponentProps<typeof DiffTable>} />
 			{:else if node.component === 'insight-cards'}
-				<InsightCards />
+				<InsightCards {...node.props as ComponentProps<typeof InsightCards>} />
 			{:else if node.component === 'flowchart'}
-				<Flowchart />
+				<Flowchart {...node.props as ComponentProps<typeof Flowchart>} />
 			{:else if node.component === 'agent-orchestrator'}
-				<AgentOrchestrator />
+				{#if typeof node.props.orchestratorName === 'string'}
+					<AgentOrchestrator {...node.props as unknown as ComponentProps<typeof AgentOrchestrator>} />
+				{:else}
+					{@render missingProp('orchestratorName')}
+				{/if}
 			{:else if node.component === 'agent-evaluator'}
-				<AgentEvaluator />
+				<AgentEvaluator {...node.props as ComponentProps<typeof AgentEvaluator>} />
 			{:else if node.component === 'stack-trace'}
-				<StackTrace />
+				{#if typeof node.props.trace === 'string'}
+					<StackTrace trace={node.props.trace} />
+				{:else}
+					{@render missingProp('trace')}
+				{/if}
 			{:else if node.component === 'schema-display'}
-				<SchemaDisplay />
-			{:else}
+				{#if typeof node.props.path === 'string'}
+					<SchemaDisplay path={node.props.path} />
+				{:else}
+					{@render missingProp('path')}
+				{/if}
+			{:else if node.props.content}
 				<AgentGenerativeSurface
-					content={node.props.content as GeneratedSurfaceContent | undefined}
+					content={node.props.content as GeneratedSurfaceContent}
 					onAction={(act, id) =>
 						onIntent?.({ nodeId: node.id, action: act, detail: id })}
 				/>
+			{:else}
+				{@render missingProp('content')}
 			{/if}
 		</div>
 	{/each}

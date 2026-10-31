@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { SquareTerminal } from '@lucide/svelte';
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'title' | 'output' | 'streaming' | 'onClear'> {
 		title?: string;
 		output: string;
 		streaming?: boolean;
@@ -11,11 +13,12 @@
 	const COPY_FEEDBACK_MS = 1600;
 
 	let {
-		title = 'studio-mac · zsh (worktree: trailside/1210-auth-redirect)',
+		title = 'Terminal',
 		output,
 		streaming = false,
 		onClear,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let copied = $state(false);
@@ -32,8 +35,8 @@
 	}
 </script>
 
-<div
-	class="flex flex-col overflow-hidden rounded-xl border border-card-border bg-terminal-bg text-terminal-fg {className}"
+<div {...rest}
+	class={cn('flex flex-col overflow-hidden rounded-xl border border-card-border bg-terminal-bg text-terminal-fg', className)}
 >
 	<div class="flex h-10 items-center justify-between border-b border-canvas-border px-3.5 text-xs">
 		<div class="flex items-center gap-2 font-mono text-terminal-muted">

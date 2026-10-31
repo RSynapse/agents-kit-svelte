@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { GitMerge, ListOrdered, Pause, Play, X } from '@lucide/svelte';
 	import { flip } from 'svelte/animate';
 	import { fade } from 'svelte/transition';
@@ -7,31 +9,25 @@
 	import type { GitHubMergeQueueEntry } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'baseBranch' | 'entries' | 'ticksPerMerge' | 'live' | 'onRemove'> {
 		baseBranch?: string;
 		entries?: GitHubMergeQueueEntry[];
 		/** Ticks needed to finish one merge group's checks. */
 		ticksPerMerge?: number;
-		/** Plays entries running checks and merging in order, then loops. */
+		/** Demo mode: plays entries running checks and merging in order, then loops. Off by default. */
 		live?: boolean;
 		onRemove?: (prNumber: number) => void;
 		class?: string;
 	}
 
-	const DEFAULT_ENTRIES: GitHubMergeQueueEntry[] = [
-		{ number: 2210, title: 'fix(export): quote CSV fields per RFC 4180', author: 'argon-agent', checksTotal: 6 },
-		{ number: 2207, title: 'feat(settings): appearance row with system theme', author: 'mira-chen', checksTotal: 6 },
-		{ number: 2213, title: 'chore(deps): bump vite to 8.3.1', author: 'renovate', checksTotal: 6 },
-		{ number: 2215, title: 'docs: document the export column order', author: 'tomas-r', checksTotal: 4 }
-	];
-
 	let {
 		baseBranch = 'main',
-		entries = DEFAULT_ENTRIES,
+		entries = [],
 		ticksPerMerge = 3,
-		live = true,
+		live = false,
 		onRemove,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	const loop = new LiveLoop(() => (entries.length - 1) * ticksPerMerge, 4);
@@ -68,7 +64,7 @@
 	}
 </script>
 
-<section aria-label="Merge queue for {baseBranch}" class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<section {...rest} aria-label="Merge queue for {baseBranch}" class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex items-center gap-2">
 			<ListOrdered aria-hidden="true" class="size-4 text-fg-light" />

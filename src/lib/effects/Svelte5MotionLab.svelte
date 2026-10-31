@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ArrowRight, Check, Plus } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
@@ -19,7 +21,7 @@
 		tokens: number;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'initialTarget'> {
 		initialTarget?: number;
 		class?: string;
 	}
@@ -51,7 +53,7 @@
 		'{#snippet}'
 	];
 
-	let { initialTarget = 76, class: className = '' }: Props = $props();
+	let { initialTarget = 76, class: className = '', ...rest }: Props = $props();
 
 	const springMetric = new ReactiveSpringMetric(76, { stiffness: 0.14, damping: 0.58 });
 	const [send, receive] = createBoardCrossfade(260);
@@ -115,9 +117,9 @@
 	</span>
 {/snippet}
 
-<section
+<section {...rest}
 	aria-label="Svelte 5 Motion, Spring Physics, Crossfade & Reactivity Lab"
-	class="space-y-5 rounded-window border border-card-border bg-card-bg p-5 text-sm shadow-xs {className}"
+	class={cn('space-y-5 rounded-window border border-card-border bg-card-bg p-5 text-sm shadow-xs', className)}
 >
 	<header class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border pb-3.5">
 		<div>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronDown } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export interface RecordRow {
@@ -13,7 +15,7 @@
 
 	type SortColumn = 'name' | 'categories' | 'updated' | 'strength' | 'links';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'records' | 'sortKey' | 'sortDirection' | 'selectedIds' | 'onSort' | 'onSelect' | 'onSelectionChange'> {
 		records?: RecordRow[];
 		sortKey?: SortColumn;
 		sortDirection?: 'asc' | 'desc';
@@ -32,45 +34,16 @@
 		{ key: 'links', label: 'Links' }
 	];
 
-	const DEFAULT_RECORDS: RecordRow[] = [
-		{
-			id: 'rec-1',
-			name: 'Card 184 · Worktree Isolation',
-			categories: ['runtime', 'T2'],
-			updated: '2m ago',
-			strength: 'Strong',
-			status: 'verified',
-			links: 14
-		},
-		{
-			id: 'rec-2',
-			name: 'Card 191 · Companion Probe',
-			categories: ['cli', 'T1'],
-			updated: '18m ago',
-			strength: 'Verified',
-			status: 'active',
-			links: 9
-		},
-		{
-			id: 'rec-3',
-			name: 'Card 205 · Referee Checklist',
-			categories: ['review', 'T2'],
-			updated: '1h ago',
-			strength: 'Pending',
-			status: 'queued',
-			links: 6
-		}
-	];
-
 	let {
-		records = DEFAULT_RECORDS,
+		records = [],
 		sortKey = undefined,
 		sortDirection = 'asc',
 		selectedIds = undefined,
 		onSort,
 		onSelect,
 		onSelectionChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let currentSortKey = $state<SortColumn>('links');
@@ -148,8 +121,8 @@
 	let totalLinks = $derived(records.reduce((sum, r) => sum + (r.links ?? 0), 0));
 </script>
 
-<section
-	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
+<section {...rest}
+	class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main', className)}
 >
 	<div role="region" aria-label="Agent records table" class="overflow-x-auto">
 		<table class="w-full min-w-[600px] text-left text-xs">

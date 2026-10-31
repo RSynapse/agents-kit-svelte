@@ -1,4 +1,24 @@
 <script lang="ts">
+	import { SAMPLE_ARTIFACT_METADATA, SAMPLE_ARTIFACT_VERSIONS, SAMPLE_COMM_LOG, SAMPLE_EVAL_ITERATIONS, SAMPLE_FORM_FIELDS, SAMPLE_OPS_INCIDENTS, SAMPLE_OPS_METRICS, SAMPLE_OPS_SIGNALS, SAMPLE_PARALLEL_LANES, SAMPLE_ROUTES, SAMPLE_ROUTE_CLASSIFICATION, SAMPLE_ROUTING_HISTORY, SAMPLE_SUB_AGENTS, SAMPLE_TASKS, SAMPLE_TOOLS, SAMPLE_WORKFLOW_STEPS } from '$lib/fixtures/workflows';
+	import { SAMPLE_CONTEXT_CHUNKS, SAMPLE_DIFF_ROWS, SAMPLE_FILTER_ROWS, SAMPLE_FINE_TUNE_FIELDS, SAMPLE_FLOWCHART_NODES, SAMPLE_INSIGHTS, SAMPLE_RECOMMENDATION_ALTERNATIVES, SAMPLE_RECOMMENDATION_REASONING, SAMPLE_RECORDS, SAMPLE_SEARCH_ITEMS, SAMPLE_SELECTION_ACTIONS, SAMPLE_TOOL_DIFFS, SAMPLE_TOOL_STEPS } from '$lib/fixtures/data';
+	import { SAMPLE_CHAIN_OF_THOUGHT, SAMPLE_ENV_VARIABLES, SAMPLE_PACKAGE_DEPENDENCIES, SAMPLE_PACKAGE_SCRIPTS, SAMPLE_PLAN_MILESTONES, SAMPLE_PREVIEW_LOGS, SAMPLE_PROMPT_SUGGESTIONS, SAMPLE_SCHEMA_PARAMETERS, SAMPLE_SCHEMA_REQUEST_BODY, SAMPLE_SCHEMA_RESPONSE_BODY, SAMPLE_SIDEBAR_RESOURCES, SAMPLE_STACK_SNIPPET, SAMPLE_STACK_TRACE, SAMPLE_VOICE_DEVICES, SAMPLE_VOICE_PERSONAS } from '$lib/fixtures/chat';
+	import {
+		SAMPLE_BENTO_STATS,
+		SAMPLE_BOARD_ISSUES,
+		SAMPLE_BRANCH,
+		SAMPLE_CHECKS,
+		SAMPLE_COMMIT,
+		SAMPLE_ENVIRONMENTS,
+		SAMPLE_INCIDENT,
+		SAMPLE_ISSUE,
+		SAMPLE_LIFECYCLE_STAGES,
+		SAMPLE_MERGE_QUEUE,
+		SAMPLE_PULL_REQUEST,
+		SAMPLE_RELEASE,
+		SAMPLE_REVIEW_FILES,
+		SAMPLE_REVIEW_THREAD,
+		SAMPLE_TRIAGE_ISSUE
+	} from '$lib/fixtures/github';
 	import HeroDemo from './HeroDemo.svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { SEGMENT_GROUP_CLASS, badgeClass, buttonClass, segmentClass } from '$lib/ui/styles';
@@ -105,7 +125,7 @@
 		VoiceWaveVisualizer,
 		WebPreview
 	} from '$lib';
-	import { SAMPLE_SKILLS, SAMPLE_SKILL_STEPS } from '$lib/entries/fixtures';
+	import { SAMPLE_SKILLS, SAMPLE_SKILL_MANIFEST, SAMPLE_SKILL_PROPOSAL, SAMPLE_SKILL_STEPS } from '$lib/entries/fixtures';
 	import { CATALOG_ITEMS, type CatalogCategory } from '$site/catalog-registry';
 	import { holdHeight } from '$site/hold-height';
 	import { SvelteSet } from 'svelte/reactivity';
@@ -1371,9 +1391,9 @@
 							{:else if item.slug === 'citations'}
 								<Citations citations={sampleCitations} defaultOpen={true} />
 							{:else if item.slug === 'image-generation'}
-								<ImageGeneration />
+								<ImageGeneration prompt="Architectural isometric diagram of an isolated Git worktree pipeline, warm editorial technical illustration" />
 							{:else if item.slug === 'ai-sidebar'}
-								<AISidebar />
+								<AISidebar items={SAMPLE_SIDEBAR_RESOURCES} defaultExpandedIds={['wt-184', 'src-agents', 'proj-contracts']} />
 							{:else if item.slug === 'thinking-shimmer'}
 								<ThinkingShimmer spark label="Analyzing repository structure..." />
 							{:else if item.slug === 'agent-progress'}
@@ -1381,33 +1401,33 @@
 							{:else if item.slug === 'reasoning-text'}
 								<ReasoningText />
 							{:else if item.slug === 'tool-chips'}
-								<ToolChips />
+								<ToolChips steps={SAMPLE_TOOL_STEPS} diffs={SAMPLE_TOOL_DIFFS} />
 							{:else if item.slug === 'recommendation-card'}
-								<RecommendationCard />
+								<RecommendationCard title="Use atomic outbox + journal transaction for Run dispatch" summary="Ensures every dispatched workflow card records its state transition and companion payload atomically before notifying the worker stream." confidence={0.94} reasoning={SAMPLE_RECOMMENDATION_REASONING} alternatives={SAMPLE_RECOMMENDATION_ALTERNATIVES} />
 							{:else if item.slug === 'context-cards'}
-								<ContextCards />
+								<ContextCards chunks={SAMPLE_CONTEXT_CHUNKS} />
 							{:else if item.slug === 'diff-table'}
-								<DiffTable />
+								<DiffTable rows={SAMPLE_DIFF_ROWS} />
 							{:else if item.slug === 'records-table'}
-								<RecordsTable
+								<RecordsTable records={SAMPLE_RECORDS}
 									selectedIds={selectedRecordIds}
 									onSelectionChange={(ids) => (selectedRecordIds = ids)}
 								/>
 							{:else if item.slug === 'selection-actions'}
-								<SelectionActions
+								<SelectionActions selectedText="Retries must reauthorize before the idempotency lookup, and the lookup must precede new-intent revision checks." actions={SAMPLE_SELECTION_ACTIONS}
 									selectedCount={selectedRecordIds.length || 2}
 									onClear={() => (selectedRecordIds = [])}
 								/>
 							{:else if item.slug === 'filter-table'}
-								<FilterTable />
+								<FilterTable rows={SAMPLE_FILTER_ROWS} />
 							{:else if item.slug === 'flowchart'}
-								<Flowchart />
+								<Flowchart nodes={SAMPLE_FLOWCHART_NODES} />
 							{:else if item.slug === 'insight-cards'}
-								<InsightCards />
+								<InsightCards insights={SAMPLE_INSIGHTS} />
 							{:else if item.slug === 'fine-tune-card'}
-								<FineTuneCard />
+								<FineTuneCard title="Agent Runtime Parameters" fields={SAMPLE_FINE_TUNE_FIELDS} />
 							{:else if item.slug === 'search-list'}
-								<SearchList />
+								<SearchList items={SAMPLE_SEARCH_ITEMS} placeholder="Search issues, files, runs, and ADRs…" />
 							{:else if item.slug === 'github-issue-card'}
 								<GitHubIssueCard issue={sampleIssue} />
 							{:else if item.slug === 'github-pr-card'}
@@ -1417,27 +1437,27 @@
 							{:else if item.slug === 'github-checks-panel'}
 								<GitHubChecksPanel checks={sampleChecks} />
 							{:else if item.slug === 'github-review-thread'}
-								<GitHubReviewThreadCard thread={sampleThread} />
+								<GitHubReviewThreadCard currentUser="argon-agent" thread={sampleThread} />
 							{:else if item.slug === 'github-kanban-board'}
-								<GitHubKanbanBoard />
+								<GitHubKanbanBoard title="RSynapse/trailside · Reactive Board" badge="GitHub App Read-Only Sync" description="What's in motion across Triage, Active Worktree Runs, Referee Review, and Merged cards" issues={SAMPLE_BOARD_ISSUES} />
 							{:else if item.slug === 'github-bento-layout'}
-								<GitHubBentoLayout />
+								<GitHubBentoLayout repoName="RSynapse/trailside" repoDetail="GitHub App installation active" branchDetail="Protected · Referee merge queue" stats={SAMPLE_BENTO_STATS} pullRequest={SAMPLE_PULL_REQUEST} checks={SAMPLE_CHECKS} issue={SAMPLE_ISSUE} commit={SAMPLE_COMMIT} thread={SAMPLE_REVIEW_THREAD} />
 							{:else if item.slug === 'github-lifecycle-timeline'}
-								<GitHubLifecycleTimeline live={visibleSlugs.has(item.slug)} />
+								<GitHubLifecycleTimeline stages={SAMPLE_LIFECYCLE_STAGES} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-issue-triage'}
-								<GitHubIssueTriage live={visibleSlugs.has(item.slug)} />
+								<GitHubIssueTriage issue={SAMPLE_TRIAGE_ISSUE} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-branch-card'}
-								<GitHubBranchCard live={visibleSlugs.has(item.slug)} />
+								<GitHubBranchCard branch={SAMPLE_BRANCH} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-pr-review'}
-								<GitHubPullRequestReview live={visibleSlugs.has(item.slug)} />
+								<GitHubPullRequestReview prNumber={2210} title="fix(export): quote CSV fields per RFC 4180" reviewer="mira-chen" files={SAMPLE_REVIEW_FILES} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-merge-queue'}
-								<GitHubMergeQueue live={visibleSlugs.has(item.slug)} />
+								<GitHubMergeQueue entries={SAMPLE_MERGE_QUEUE} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-deployment-pipeline'}
-								<GitHubDeploymentPipeline live={visibleSlugs.has(item.slug)} />
+								<GitHubDeploymentPipeline sha="9b07d3e" environments={SAMPLE_ENVIRONMENTS} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-release-card'}
-								<GitHubReleaseCard live={visibleSlugs.has(item.slug)} />
+								<GitHubReleaseCard release={SAMPLE_RELEASE} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-incident-card'}
-								<GitHubIncidentCard live={visibleSlugs.has(item.slug)} />
+								<GitHubIncidentCard incident={SAMPLE_INCIDENT} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'agent-generative-surface'}
 								<AgentGenerativeSurface content={sampleSurfaceContent} />
 							{:else if item.slug === 'result-actions'}
@@ -1455,47 +1475,47 @@
 							{:else if item.slug === 'intelligent-ui-renderer'}
 								<IntelligentUIRenderer nodes={sampleDynamicNodes} />
 							{:else if item.slug === 'agent-orchestrator'}
-								<AgentOrchestrator />
+								<AgentOrchestrator subAgents={SAMPLE_SUB_AGENTS} communicationLog={SAMPLE_COMM_LOG} orchestratorName="Supervisor Delegation Graph · Card 191" supervisorModel="Claude Opus 4 Supervisor" description="Coordinates repository discovery, isolated worktree implementation, and referee verification as one accountable run." aggregatedResult="Discovery complete. Worktree Builder is validating idempotency replay semantics before Referee verification." timestamp="Updated moments ago" isProcessing={true} />
 							{:else if item.slug === 'agent-parallel-processor'}
-								<AgentParallelProcessor />
+								<AgentParallelProcessor lanes={SAMPLE_PARALLEL_LANES} taskDescription="Execute concurrent worktree verification lanes and merge into a unified referee report." mergedOutput="1 of 4 lanes complete · Aggregating contract and domain test artifacts." mergeStatus="merging" />
 							{:else if item.slug === 'agent-sequential-workflow'}
-								<AgentSequentialWorkflow />
+								<AgentSequentialWorkflow steps={SAMPLE_WORKFLOW_STEPS} workflowName="Sequential Stage-Gate Pipeline" description="Each stage validates its gate dependency before handing structured output to the next stage." currentStepId="contract-export" totalDuration="3m 36s" totalTokens={15380} isRunning={true} />
 							{:else if item.slug === 'agent-routing-hub'}
-								<AgentRoutingHub />
+								<AgentRoutingHub routes={SAMPLE_ROUTES} routingHistory={SAMPLE_ROUTING_HISTORY} inputQuery="Implement idempotent retry reauthorization before revision check in outbox handler" classification={SAMPLE_ROUTE_CLASSIFICATION} />
 							{:else if item.slug === 'agent-evaluator'}
-								<AgentEvaluator />
+								<AgentEvaluator iterations={SAMPLE_EVAL_ITERATIONS} taskDescription="Rubric-based Referee & Red-Team Scorecard for Card 191 (Risk Tier T2)" />
 							{:else if item.slug === 'agent-ops-monitor'}
-								<AgentOpsMonitor />
+								<AgentOpsMonitor signals={SAMPLE_OPS_SIGNALS} metrics={SAMPLE_OPS_METRICS} incidents={SAMPLE_OPS_INCIDENTS} environment="Companion + Service Telemetry" uptime="99.98%" />
 							{:else if item.slug === 'agent-task-queue'}
-								<AgentTaskQueue />
+								<AgentTaskQueue tasks={SAMPLE_TASKS} timestamp="Updated moments ago" />
 							{:else if item.slug === 'agent-artifact'}
-								<AgentArtifact />
+								<AgentArtifact versions={SAMPLE_ARTIFACT_VERSIONS} metadata={SAMPLE_ARTIFACT_METADATA} title="G0 Browser Read Contract · Design Artifact" currentVersion="v2" />
 							{:else if item.slug === 'agent-form-generator'}
-								<AgentFormGenerator />
+								<AgentFormGenerator fields={SAMPLE_FORM_FIELDS} formTitle="Dispatch Worktree Run Tool Schema" formDescription="Dynamic schema-to-form generator for structured agent tool inputs with live validation and JSON payload preview." />
 							{:else if item.slug === 'agent-tool-palette'}
-								<AgentToolPalette />
+								<AgentToolPalette tools={SAMPLE_TOOLS} defaultSelectedId="mcp-verify-svelte5" />
 							{:else if item.slug === 'agent-thinking-indicator'}
-								<AgentThinkingIndicator />
+								<AgentThinkingIndicator detail="Claude Code 1.0 · Card 191 Attempt 1 · 18.4k tokens" />
 							{:else if item.slug === 'agent-context-meter'}
 								<div class="min-h-56"><AgentContextMeter usedTokens={64200} maxTokens={200000} sources={sampleContextSources} /></div>
 							{:else if item.slug === 'agent-checkpoint'}
 								<AgentCheckpoint checkpoint={sampleCheckpoint} />
 							{:else if item.slug === 'chain-of-thought'}
-								<ChainOfThought />
+								<ChainOfThought steps={SAMPLE_CHAIN_OF_THOUGHT} />
 							{:else if item.slug === 'stack-trace'}
-								<StackTrace />
+								<StackTrace trace={SAMPLE_STACK_TRACE} sourceSnippet={SAMPLE_STACK_SNIPPET} />
 							{:else if item.slug === 'schema-display'}
-								<SchemaDisplay />
+								<SchemaDisplay parameters={SAMPLE_SCHEMA_PARAMETERS} requestBody={SAMPLE_SCHEMA_REQUEST_BODY} responseBody={SAMPLE_SCHEMA_RESPONSE_BODY} path={'/api/v1/workspaces/{workspaceId}/runs'} description="Dispatches an isolated agent workflow run on a paired computer with idempotency verification." />
 							{:else if item.slug === 'environment-variables'}
-								<EnvironmentVariables />
+								<EnvironmentVariables variables={SAMPLE_ENV_VARIABLES} />
 							{:else if item.slug === 'package-info'}
-								<PackageInfo />
+								<PackageInfo scripts={SAMPLE_PACKAGE_SCRIPTS} dependencies={SAMPLE_PACKAGE_DEPENDENCIES} name="@trailside/agents-kit-svelte" description="Svelte 5 Runes agentic UI primitives, GitHub workflow cards, and generative surfaces." />
 							{:else if item.slug === 'web-preview'}
-								<WebPreview />
+								<WebPreview logs={SAMPLE_PREVIEW_LOGS} defaultUrl="http://localhost:5173/w/board" />
 							{:else if item.slug === 'plan-card'}
-								<PlanCard />
+								<PlanCard milestones={SAMPLE_PLAN_MILESTONES} title="Implementation Plan: Svelte 5 Agent Kit Unification" description="Three-milestone execution plan scoped to isolated worktree with automated referee checks." />
 							{:else if item.slug === 'prompt-suggestions'}
-								<PromptSuggestions />
+								<PromptSuggestions suggestions={SAMPLE_PROMPT_SUGGESTIONS} />
 							{:else if item.slug === 'test-results'}
 								<TestResults suites={sampleTestSuites} />
 							{:else if item.slug === 'terminal'}
@@ -1504,7 +1524,7 @@
 							{:else if item.slug === 'file-tree'}
 								<FileTree nodes={sampleFileTree} />
 							{:else if item.slug === 'skill-library'}
-								<SkillLibrary activeSkillId={liveActiveSkill()} />
+								<SkillLibrary skills={SAMPLE_SKILLS} activeSkillId={liveActiveSkill()} />
 							{:else if item.slug === 'skill-card'}
 								<div class="mx-auto max-w-md">
 									<SkillCard
@@ -1533,13 +1553,13 @@
 									</SkillInvocation>
 								</div>
 							{:else if item.slug === 'skill-editor'}
-								<SkillEditor />
+								<SkillEditor manifest={SAMPLE_SKILL_MANIFEST} />
 							{:else if item.slug === 'skill-proposal-card'}
 								<div class="mx-auto max-w-xl">
-									<SkillProposalCard />
+									<SkillProposalCard proposal={SAMPLE_SKILL_PROPOSAL} />
 								</div>
 							{:else if item.slug === 'voice-wave-visualizer'}
-								<VoiceWaveVisualizer />
+								<VoiceWaveVisualizer devices={SAMPLE_VOICE_DEVICES} personas={SAMPLE_VOICE_PERSONAS} defaultPersonaId="sol" defaultMicId="mic-macbook-pro" transcript="Check the failing unit test in chat-helpers and explain why the token ratio threshold triggered a warning." />
 							{:else if item.slug === 'border-beam'}
 								<BorderBeam />
 							{:else if item.slug === 'svelte5-motion-lab'}

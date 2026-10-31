@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronDown, FileIcon, PenLine, Terminal } from '@lucide/svelte';
 	export interface ToolStep {
 		id: string;
@@ -17,7 +19,7 @@
 		lines?: string[];
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'steps' | 'diffs' | 'expandedId' | 'visibleStepCount' | 'onToggle' | 'onDiffToggle'> {
 		steps?: ToolStep[];
 		diffs?: ToolDiff[];
 		expandedId?: string;
@@ -27,66 +29,15 @@
 		class?: string;
 	}
 
-	const DEFAULT_STEPS: ToolStep[] = [
-		{
-			id: 'step-read',
-			label: 'Read contract schema',
-			chip: 'contracts/g0/schema/envelope.json',
-			status: 'complete',
-			detail: 'Validated 14 envelope fields against draft-2020-12 JSON Schema.'
-		},
-		{
-			id: 'step-edit',
-			label: 'Patch worktree dispatcher',
-			chip: 'src/lib/runtime/dispatcher.ts',
-			additions: 28,
-			deletions: 6,
-			status: 'complete',
-			detail: 'Added idempotency lookup prior to revision check in dispatchRun().'
-		},
-		{
-			id: 'step-test',
-			label: 'Execute unit suite',
-			chip: 'pnpm test',
-			status: 'running',
-			detail: 'Running 6 test files in isolated worker pool…'
-		}
-	];
-
-	const DEFAULT_DIFFS: ToolDiff[] = [
-		{
-			file: 'src/lib/runtime/dispatcher.ts',
-			additions: 28,
-			deletions: 6,
-			lines: [
-				'@@ -41,4 +41,6 @@ export async function dispatchRun(ctx) {',
-				'-  await assertRevision(ctx.revision);',
-				'+  const existing = await findIdempotentResult(ctx.requestId);',
-				'+  if (existing) return existing;',
-				'+  await assertRevision(ctx.revision);'
-			]
-		},
-		{
-			file: 'tests/dispatcher.test.ts',
-			additions: 19,
-			deletions: 0,
-			lines: [
-				'@@ -1,3 +1,8 @@',
-				'+test("reauthorizes before idempotency lookup", async () => {',
-				'+  assert.equal(result.status, "accepted");',
-				'+});'
-			]
-		}
-	];
-
 	let {
-		steps = DEFAULT_STEPS,
-		diffs = DEFAULT_DIFFS,
+		steps = [],
+		diffs = [],
 		expandedId,
 		visibleStepCount,
 		onToggle,
 		onDiffToggle,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localExpanded = $state<string | undefined>('step-edit');
@@ -123,8 +74,8 @@
 	);
 </script>
 
-<div
-	class="divide-y divide-canvas-border overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
+<div {...rest}
+	class={cn('divide-y divide-canvas-border overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main', className)}
 >
 	<div class="flex items-center justify-between bg-canvas-secondary/40 px-3.5 py-2 text-xs">
 		<span class="font-medium text-fg-main">{steps.length} tool calls · {diffs.length} files modified</span>

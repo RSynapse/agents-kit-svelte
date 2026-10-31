@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronRight } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 
@@ -21,9 +23,9 @@
 		items?: SchemaPropertyItem;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'method' | 'path' | 'description' | 'parameters' | 'requestBody' | 'responseBody'> {
 		method?: HttpMethod;
-		path?: string;
+		path: string;
 		description?: string;
 		parameters?: SchemaParameterItem[];
 		requestBody?: SchemaPropertyItem[];
@@ -31,75 +33,15 @@
 		class?: string;
 	}
 
-	const DEFAULT_PARAMETERS: SchemaParameterItem[] = [
-		{
-			name: 'workspaceId',
-			type: 'string',
-			location: 'path',
-			required: true,
-			description: 'Unique identifier of the connected workspace.'
-		},
-		{
-			name: 'includeJournal',
-			type: 'boolean',
-			location: 'query',
-			required: false,
-			description: 'Include atomic outbox and journal replay entries.'
-		}
-	];
-
-	const DEFAULT_REQUEST_BODY: SchemaPropertyItem[] = [
-		{
-			name: 'cardId',
-			type: 'string',
-			required: true,
-			description: 'Target board card identifier for the dispatched workflow.'
-		},
-		{
-			name: 'worktreeConfig',
-			type: 'object',
-			required: true,
-			description: 'Isolated git worktree settings for the run.',
-			properties: [
-				{
-					name: 'baseBranch',
-					type: 'string',
-					required: true,
-					description: 'Base branch to fork the worktree from (e.g., main).'
-				},
-				{
-					name: 'agentId',
-					type: 'enum(claude-code | codex)',
-					required: true,
-					description: 'Qualified local agent binary to execute.'
-				}
-			]
-		}
-	];
-
-	const DEFAULT_RESPONSE_BODY: SchemaPropertyItem[] = [
-		{
-			name: 'runId',
-			type: 'string',
-			required: true,
-			description: 'Idempotent run session identifier.'
-		},
-		{
-			name: 'status',
-			type: 'enum(queued | running | complete)',
-			required: true,
-			description: 'Initial execution status.'
-		}
-	];
-
 	let {
 		method = 'POST',
-		path = '/api/v1/workspaces/{workspaceId}/runs',
-		description = 'Dispatches an isolated agent workflow run on a paired computer with idempotency verification.',
-		parameters = DEFAULT_PARAMETERS,
-		requestBody = DEFAULT_REQUEST_BODY,
-		responseBody = DEFAULT_RESPONSE_BODY,
-		class: className = ''
+		path,
+		description,
+		parameters = [],
+		requestBody = [],
+		responseBody = [],
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let paramsOpen = $state(true);
@@ -216,7 +158,7 @@
 	</div>
 {/snippet}
 
-<div class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<div class="flex flex-wrap items-center gap-3 border-b border-canvas-border px-4 py-3">
 		<span
 			class="rounded-md px-2.5 py-0.5 font-mono text-xs font-bold {getMethodBadgeStyle(method)}"

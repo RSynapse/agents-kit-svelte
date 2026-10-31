@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronRight, Download, MoveRight, TrendingDown, TrendingUp, TriangleAlert } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export interface OpsSignal {
@@ -25,7 +27,7 @@
 		actionNeeded?: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'environment' | 'daemonStatus' | 'uptime' | 'signals' | 'metrics' | 'incidents' | 'onAcknowledge' | 'onEscalate' | 'onExportReport'> {
 		environment?: string;
 		daemonStatus?: 'Connected' | 'Degraded' | 'Offline';
 		uptime?: string;
@@ -38,86 +40,18 @@
 		class?: string;
 	}
 
-	const defaultMetrics: OpsServiceMetric[] = [
-		{
-			label: 'P95 Stream Latency',
-			value: '340 ms',
-			threshold: '< 550 ms',
-			trend: 'down'
-		},
-		{
-			label: 'Token Throughput',
-			value: '148 tok/s',
-			threshold: '> 90 tok/s',
-			trend: 'up'
-		},
-		{
-			label: 'Tool Success Rate',
-			value: '99.4%',
-			threshold: '> 98.5%',
-			trend: 'stable'
-		},
-		{
-			label: 'Companion Heartbeat',
-			value: '12 ms RTT',
-			threshold: 'Bun 1.4.2',
-			trend: 'stable'
-		}
-	];
-
-	const defaultSignals: OpsSignal[] = [
-		{
-			id: 'sig-daemon',
-			title: 'Companion Daemon · MacBook-Pro-M3',
-			status: 'healthy',
-			detail: 'Local WebSocket tunnel healthy; 2 isolated worktrees mounted under Connect consent.',
-			owner: 'trailside up',
-			lastUpdated: 'Just now'
-		},
-		{
-			id: 'sig-context',
-			title: 'Worktree B Context Window Pressure',
-			status: 'warning',
-			detail: 'Card 191 attempt 1 reached 78% of 200k context window during contract schema diff.',
-			owner: 'Claude Code 1.0',
-			lastUpdated: '2 min ago'
-		},
-		{
-			id: 'sig-probe',
-			title: 'Agent CLI Metadata Probe Gate',
-			status: 'healthy',
-			detail: 'Direct argv probe completed in 84 ms with zero credential reads.',
-			owner: 'agents/probe.ts',
-			lastUpdated: '5 min ago'
-		}
-	];
-
-	const defaultIncidents: IncidentEvent[] = [
-		{
-			id: 'inc-1',
-			timestamp: '13:58',
-			summary: 'Auto-compacted conversation transcript on Card 188 worktree',
-			actionNeeded: 'Resolved'
-		},
-		{
-			id: 'inc-2',
-			timestamp: '14:04',
-			summary: 'Rate-limit backoff (1.2s) on secondary search subagent',
-			actionNeeded: 'Monitoring'
-		}
-	];
-
 	let {
-		environment = 'Companion + Service Telemetry',
+		environment,
 		daemonStatus = 'Connected',
-		uptime = '99.98%',
-		signals = defaultSignals,
-		metrics = defaultMetrics,
-		incidents = defaultIncidents,
+		uptime,
+		signals = [],
+		metrics = [],
+		incidents = [],
 		onAcknowledge,
 		onEscalate,
 		onExportReport,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localSignals = $state<OpsSignal[]>([]);
@@ -157,16 +91,16 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Operations and Companion daemon monitor"
-	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
 	>
 		<div>
 			<div class="flex flex-wrap items-center gap-2">
-				<span class="font-mono text-xs text-fg-light">{environment}</span>
+				{#if environment}<span class="font-mono text-xs text-fg-light">{environment}</span>{/if}
 				<span
 					class="inline-flex items-center gap-1 rounded-chip px-1.5 py-px text-[11px] font-medium {daemonStatus ===
 					'Connected'
@@ -181,7 +115,7 @@
 			</div>
 			<h2 class="mt-1 text-base font-semibold text-fg-main">Live Agent & Daemon Health</h2>
 			<p class="mt-0.5 text-xs text-fg-light">
-				Uptime {uptime} · {localSignals.length} active telemetry signals
+				{#if uptime}Uptime {uptime}{' · '}{/if}{localSignals.length} active telemetry signals
 			</p>
 		</div>
 

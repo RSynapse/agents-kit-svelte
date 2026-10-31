@@ -1,16 +1,17 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, Lightbulb, Sparkles, X } from '@lucide/svelte';
 	import { scale } from 'svelte/transition';
 	import { motionDuration } from '../state/motion.svelte';
 	import { diffSkillLines } from '../state/skill-helpers';
 	import { SEGMENT_GROUP_CLASS, badgeClass, pillClass, segmentClass } from '../ui/styles';
-	import { SAMPLE_SKILL_PROPOSAL } from './fixtures';
 	import type { SkillProposal, SkillProposalStatus } from './types';
 
 	type View = 'changes' | 'file';
 
-	interface Props {
-		proposal?: SkillProposal;
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'proposal' | 'status' | 'onSave' | 'onDismiss'> {
+		proposal: SkillProposal;
 		status?: SkillProposalStatus;
 		onSave?: (proposal: SkillProposal) => void;
 		onDismiss?: (proposal: SkillProposal) => void;
@@ -18,11 +19,12 @@
 	}
 
 	let {
-		proposal = SAMPLE_SKILL_PROPOSAL,
+		proposal,
 		status = 'pending',
 		onSave,
 		onDismiss,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localStatus = $state<SkillProposalStatus>('pending');
@@ -59,10 +61,10 @@
 	}
 </script>
 
-<article
+<article {...rest}
 	aria-label="Skill proposal: {proposal.name}"
 	data-state={localStatus}
-	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft {className}"
+	class={cn('w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft', className)}
 >
 	<header class="flex items-start gap-3 p-4">
 		<span aria-hidden="true" class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-chat-accent-subtle text-chat-accent [&_svg]:size-4">

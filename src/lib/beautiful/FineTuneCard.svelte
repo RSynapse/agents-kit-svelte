@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	export interface FineTuneField {
 		id: string;
@@ -11,7 +13,7 @@
 		suffix?: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'title' | 'fields' | 'onChange' | 'onApply' | 'onReset'> {
 		title?: string;
 		fields?: FineTuneField[];
 		onChange?: (id: string, value: string | number) => void;
@@ -20,49 +22,14 @@
 		class?: string;
 	}
 
-	const DEFAULT_FIELDS: FineTuneField[] = [
-		{
-			id: 'risk-tier',
-			label: 'Risk Tier Policy',
-			value: 'T2 · Worktree Isolated',
-			options: ['T0 · Docs Only', 'T1 · Read-Only Probe', 'T2 · Worktree Isolated', 'T3 · Human Co-sign']
-		},
-		{
-			id: 'thinking-budget',
-			label: 'Thinking Token Budget',
-			value: 16000,
-			min: 2000,
-			max: 64000,
-			step: 2000,
-			suffix: 'tokens per attempt'
-		},
-		{
-			id: 'max-turns',
-			label: 'Max Autonomous Tool Turns',
-			value: 24,
-			min: 4,
-			max: 60,
-			step: 2,
-			suffix: 'turns before checkpoint'
-		},
-		{
-			id: 'temperature',
-			label: 'Sampling Temperature',
-			value: 0.2,
-			min: 0,
-			max: 1,
-			step: 0.05,
-			suffix: 'deterministic bias'
-		}
-	];
-
 	let {
-		title = 'Agent Runtime Parameters',
-		fields = DEFAULT_FIELDS,
+		title = 'Parameters',
+		fields = [],
 		onChange,
 		onApply,
 		onReset,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let internalFields = $state<FineTuneField[]>([]);
@@ -104,8 +71,8 @@
 	}
 </script>
 
-<section
-	class="w-full max-w-md rounded-card border border-card-border bg-card-bg p-4 text-fg-main {className}"
+<section {...rest}
+	class={cn('w-full max-w-md rounded-card border border-card-border bg-card-bg p-4 text-fg-main', className)}
 >
 	<div class="flex items-center justify-between gap-2">
 		<h3 class="text-sm font-semibold text-fg-main">{title}</h3>

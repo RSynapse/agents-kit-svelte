@@ -1,13 +1,14 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronDown, MessageSquareQuote, Pencil, Play, Wrench } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import { badgeClass, pillClass } from '../ui/styles';
 	import { SKILL_FILE_ICON, SKILL_SCOPE_META, switchThumbClass, switchTrackClass } from './scope';
-	import { SAMPLE_SKILLS } from './fixtures';
 	import type { AgentSkill } from './types';
 
-	interface Props {
-		skill?: AgentSkill;
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'skill' | 'compact' | 'defaultFilesOpen' | 'active' | 'onToggle' | 'onInvoke' | 'onEdit'> {
+		skill: AgentSkill;
 		/** Hides triggers, tools and files for dense grids. */
 		compact?: boolean;
 		/** Opens the bundled files list on first render. */
@@ -21,14 +22,15 @@
 	}
 
 	let {
-		skill = SAMPLE_SKILLS[0],
+		skill,
 		compact = false,
 		defaultFilesOpen = false,
 		active = false,
 		onToggle,
 		onInvoke,
 		onEdit,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let enabled = $state(true);
@@ -57,12 +59,10 @@
 	}
 </script>
 
-<article
+<article {...rest}
 	aria-label="{skill.name} skill"
 	data-enabled={enabled}
-	class="flex w-full flex-col overflow-hidden rounded-[20px] border bg-card-bg text-sm transition-[border-color,box-shadow,opacity] duration-200 {active
-		? 'border-chat-accent/60 ak-shadow-soft'
-		: 'border-chat-border ak-shadow-soft-sm'} {className}"
+	class={cn(`flex w-full flex-col overflow-hidden rounded-[20px] border bg-card-bg text-sm transition-[border-color,box-shadow,opacity] duration-200 ${active ? 'border-chat-accent/60 ak-shadow-soft' : 'border-chat-border ak-shadow-soft-sm'}`, className)}
 >
 	<div class="flex items-start gap-3 p-4 {enabled ? '' : 'opacity-60'}">
 		<span

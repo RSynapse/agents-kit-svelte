@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Plus, Search } from '@lucide/svelte';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
@@ -6,13 +8,12 @@
 	import { motionDuration } from '../state/motion.svelte';
 	import { SEGMENT_GROUP_CLASS, pillClass, segmentClass } from '../ui/styles';
 	import SkillCard from './SkillCard.svelte';
-	import { SAMPLE_SKILLS } from './fixtures';
 	import { SKILL_SCOPE_META } from './scope';
 	import type { AgentSkill, SkillScope } from './types';
 
 	type ScopeFilter = 'all' | SkillScope;
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'skills' | 'title' | 'activeSkillId' | 'detailed' | 'onToggle' | 'onInvoke' | 'onEdit' | 'onCreate'> {
 		skills?: AgentSkill[];
 		title?: string;
 		/** Skill to highlight, e.g. the one the router just picked. */
@@ -27,7 +28,7 @@
 	}
 
 	let {
-		skills = SAMPLE_SKILLS,
+		skills = [],
 		title = 'Skills',
 		activeSkillId = null,
 		detailed = false,
@@ -35,7 +36,8 @@
 		onInvoke,
 		onEdit,
 		onCreate,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	const SCOPE_ORDER: ScopeFilter[] = ['all', 'personal', 'project', 'plugin', 'built-in'];
@@ -77,9 +79,9 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="{title} library"
-	class="w-full overflow-hidden rounded-window border border-chat-border bg-chat-surface text-sm ak-shadow-soft-sm {className}"
+	class={cn('w-full overflow-hidden rounded-window border border-chat-border bg-chat-surface text-sm ak-shadow-soft-sm', className)}
 >
 	<header class="flex flex-col gap-3 px-4 pt-4 pb-3 sm:flex-row sm:items-center sm:justify-between">
 		<div>

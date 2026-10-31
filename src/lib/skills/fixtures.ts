@@ -1,6 +1,6 @@
-import type { AgentSkill, SkillInvocationStep, SkillProposal } from './types';
+import type { AgentSkill, SkillInvocationStep, SkillManifest, SkillProposal } from './types';
 
-/** Sample installed skills used as component defaults and in the showcase. */
+/** Sample installed skills for the showcase, docs and tests. */
 export const SAMPLE_SKILLS: AgentSkill[] = [
 	{
 		id: 'release-notes',
@@ -159,4 +159,12 @@ description: Drafts release notes from pull requests merged since the last tag. 
 4. Save the result to RELEASE_NOTES.md and link each line to its PR.
 `,
 	evidence: ['Asked for release notes 3 times this month', 'You regrouped the list by area each time']
+};
+
+/** Sample manifest for `SkillEditor`, built from the first sample skill. */
+export const SAMPLE_SKILL_MANIFEST: SkillManifest = {
+	name: SAMPLE_SKILLS[0].name,
+	description: SAMPLE_SKILLS[0].description,
+	allowedTools: SAMPLE_SKILLS[0].allowedTools,
+	body: SAMPLE_SKILL_BODY
 };

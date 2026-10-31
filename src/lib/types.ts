@@ -187,6 +187,14 @@ export interface GitHubCheckItem {
 	summary?: string;
 }
 
+/** A stat tile in `GitHubBentoLayout`. */
+export interface GitHubBentoStat {
+	label: string;
+	value: string;
+	detail?: string;
+	tone?: 'neutral' | 'success';
+}
+
 export interface GitHubPullRequestData {
 	number: number;
 	title: string;

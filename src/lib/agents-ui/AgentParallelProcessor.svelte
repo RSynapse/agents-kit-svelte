@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronRight, Play, RefreshCw, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type ParallelLaneStatus = 'waiting' | 'processing' | 'done' | 'error';
@@ -14,7 +16,7 @@
 		tokens?: number;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'taskDescription' | 'lanes' | 'mergeStatus' | 'mergedOutput' | 'totalTokens' | 'totalCost' | 'onStartAll' | 'onCancelAll' | 'onRetryFailed' | 'onRetryLane'> {
 		taskDescription?: string;
 		lanes?: ParallelLane[];
 		mergeStatus?: 'idle' | 'merging' | 'complete';
@@ -28,60 +30,19 @@
 		class?: string;
 	}
 
-	const defaultLanes: ParallelLane[] = [
-		{
-			id: 'lane-contracts',
-			label: 'Contract Schema Export & Diff',
-			agentName: 'Claude Code Worker A',
-			worktree: 'wt/contracts-check',
-			status: 'done',
-			progress: 100,
-			output: 'Exported 14 JSON schemas with zero breaking wire changes.',
-			tokens: 3420
-		},
-		{
-			id: 'lane-domain',
-			label: 'Domain Idempotency Unit Suite',
-			agentName: 'Claude Code Worker B',
-			worktree: 'wt/domain-tests',
-			status: 'processing',
-			progress: 72,
-			output: 'Running 48 domain replay assertions across SQLite fixture states…',
-			tokens: 5180
-		},
-		{
-			id: 'lane-companion',
-			label: 'Companion Bun Daemon Probe',
-			agentName: 'Codex Worker C',
-			worktree: 'wt/companion-probe',
-			status: 'processing',
-			progress: 45,
-			output: 'Verifying direct argv probe bounds and timeout enforcement.',
-			tokens: 2890
-		},
-		{
-			id: 'lane-ui-audit',
-			label: 'Svelte 5 Runes & Token Audit',
-			agentName: 'Gemini Flash Worker D',
-			worktree: 'wt/svelte5-audit',
-			status: 'waiting',
-			progress: 0,
-			tokens: 0
-		}
-	];
-
 	let {
-		taskDescription = 'Execute concurrent worktree verification lanes and merge into a unified referee report.',
-		lanes = defaultLanes,
-		mergeStatus = 'merging',
-		mergedOutput = '1 of 4 lanes complete · Aggregating contract and domain test artifacts.',
+		taskDescription,
+		lanes = [],
+		mergeStatus = 'idle',
+		mergedOutput,
 		totalTokens,
 		totalCost,
 		onStartAll,
 		onCancelAll,
 		onRetryFailed,
 		onRetryLane,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localLanes = $state<ParallelLane[]>([]);
@@ -194,9 +155,9 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Parallel worker pool monitor"
-	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
@@ -204,7 +165,7 @@
 		<div>
 			<p class="text-xs font-medium text-fg-light">Parallel Worker Pool</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">Concurrent Worktree Lanes</h2>
-			<p class="mt-0.5 max-w-2xl text-xs text-fg-light">{taskDescription}</p>
+			{#if taskDescription}<p class="mt-0.5 max-w-2xl text-xs text-fg-light">{taskDescription}</p>{/if}
 		</div>
 
 		<div class="flex flex-wrap items-center gap-2">

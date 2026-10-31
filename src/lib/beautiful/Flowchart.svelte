@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check } from '@lucide/svelte';
 	export interface FlowchartNode {
 		id: string;
@@ -16,7 +18,7 @@
 		to: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'nodes' | 'edges' | 'selectedNodeId' | 'onSelect' | 'onNodeMove' | 'onConditionChange'> {
 		nodes?: FlowchartNode[];
 		edges?: FlowchartEdge[];
 		selectedNodeId?: string;
@@ -26,49 +28,14 @@
 		class?: string;
 	}
 
-	const DEFAULT_NODES: FlowchartNode[] = [
-		{
-			id: 'node-auth',
-			kind: 'Gate',
-			label: 'Reauthorize Session',
-			detail: 'Verify human session & companion consent',
-			status: 'complete',
-			x: 24,
-			y: 28
-		},
-		{
-			id: 'node-idem',
-			kind: 'Lookup',
-			label: 'Idempotency Check',
-			detail: 'Check prior request outcome before revision guard',
-			status: 'complete',
-			x: 230,
-			y: 28,
-			condition: { field: 'tier', operator: '<=', value: 'T2' }
-		},
-		{
-			id: 'node-run',
-			kind: 'Worktree',
-			label: 'Execute Agent Run',
-			detail: 'Isolated git worktree + atomic journal write',
-			status: 'running',
-			x: 436,
-			y: 28
-		}
-	];
-
-	const DEFAULT_EDGES: FlowchartEdge[] = [
-		{ from: 'node-auth', to: 'node-idem' },
-		{ from: 'node-idem', to: 'node-run' }
-	];
-
 	let {
-		nodes = DEFAULT_NODES,
+		nodes = [],
 		edges = undefined,
 		selectedNodeId = undefined,
 		onSelect,
 		onConditionChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeNodeId = $state<string>('node-run');
@@ -117,8 +84,8 @@
 	let activeNode = $derived(nodes.find((n) => n.id === activeNodeId) ?? nodes[0]);
 </script>
 
-<div
-	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
+<div {...rest}
+	class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main', className)}
 >
 	<div class="overflow-x-auto bg-canvas-secondary/60 p-4">
 		<div class="relative h-48 min-w-[640px]">

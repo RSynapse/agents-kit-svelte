@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, Eye, EyeOff, Settings } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export interface EnvVariableEntry {
@@ -9,7 +11,7 @@
 		description?: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'title' | 'variables' | 'defaultShowValues' | 'onShowValuesChange'> {
 		title?: string;
 		variables?: EnvVariableEntry[];
 		defaultShowValues?: boolean;
@@ -17,43 +19,13 @@
 		class?: string;
 	}
 
-	const DEFAULT_VARIABLES: EnvVariableEntry[] = [
-		{
-			name: 'TRAILSIDE_GATEWAY_URL',
-			value: 'wss://gateway.trailside.dev/v1/stream',
-			required: true,
-			scope: 'runtime',
-			description: 'WebSocket endpoint for Companion heartbeat and run events.'
-		},
-		{
-			name: 'DATABASE_URL',
-			value: 'postgres://neondb_owner:ep_fixture_token@ep-cool-meadow.us-east-2.aws.neon.tech/trailside',
-			required: true,
-			scope: 'secret',
-			description: 'Disposable fixture Postgres connection string.'
-		},
-		{
-			name: 'GITHUB_APP_ID',
-			value: '948210',
-			required: true,
-			scope: 'runtime',
-			description: 'Read-only GitHub App identifier for board synchronization.'
-		},
-		{
-			name: 'TRAILSIDE_WORKTREE_ROOT',
-			value: '/Users/shared/.trailside/worktrees',
-			required: false,
-			scope: 'build',
-			description: 'Local directory where isolated run worktrees are checked out.'
-		}
-	];
-
 	let {
 		title = 'Environment Variables',
-		variables = DEFAULT_VARIABLES,
+		variables = [],
 		defaultShowValues = false,
 		onShowValuesChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let showAllValues = $state(false);
@@ -125,7 +97,7 @@
 	}
 </script>
 
-<div class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex items-center gap-2">
 			<span

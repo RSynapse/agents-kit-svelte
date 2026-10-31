@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { ChevronDown, Globe } from '@lucide/svelte';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import type { CitationItem } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'citations' | 'title' | 'defaultOpen'> {
 		citations: CitationItem[];
 		title?: string;
 		defaultOpen?: boolean;
@@ -15,7 +17,8 @@
 		citations,
 		title = 'Sources',
 		defaultOpen = false,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isOpen = $state(false);
@@ -27,7 +30,7 @@
 	let panelId = $derived(`citations-${citations[0]?.id ?? 'panel'}`);
 </script>
 
-<div class="w-full text-xs {className}">
+<div {...rest} class={cn('w-full text-xs', className)}>
 	<button
 		type="button"
 		aria-expanded={isOpen}

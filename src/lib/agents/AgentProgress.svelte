@@ -1,5 +1,7 @@
 <script lang="ts">
-	interface Props {
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
+	interface Props extends Omit<HTMLAttributes<HTMLSpanElement>, 'class' | 'children' | 'label' | 'elapsedSeconds' | 'initialSeconds' | 'running'> {
 		label?: string;
 		elapsedSeconds?: number;
 		initialSeconds?: number;
@@ -12,7 +14,8 @@
 		elapsedSeconds,
 		initialSeconds = 0,
 		running = true,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	const GRID_DELAYS = [0, 140, 280, 420, 560, 700, 840, 980, 1120];
@@ -49,10 +52,10 @@
 	let displayedElapsed = $derived(elapsedSeconds ?? internalSeconds);
 </script>
 
-<span
+<span {...rest}
 	role="status"
 	aria-label="{label}, in progress"
-	class="inline-flex items-center gap-2.5 rounded-full bg-chat-surface py-1 pr-3 pl-2 text-xs text-fg-light {className}"
+	class={cn('inline-flex items-center gap-2.5 rounded-full bg-chat-surface py-1 pr-3 pl-2 text-xs text-fg-light', className)}
 >
 	<span aria-hidden="true" class="grid size-4 shrink-0 grid-cols-3 gap-[2px]">
 		{#each GRID_DELAYS as delay (delay)}

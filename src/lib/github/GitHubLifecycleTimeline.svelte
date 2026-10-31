@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import {
 		CircleDot,
 		Eye,
@@ -18,10 +20,10 @@
 	import type { GitHubLifecycleStage, GitHubLifecycleStageId } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'title' | 'stages' | 'live' | 'current' | 'onSelectStage'> {
 		title?: string;
 		stages?: GitHubLifecycleStage[];
-		/** Plays the lifecycle stage by stage, then loops. */
+		/** Demo mode: plays the lifecycle stage by stage, then loops. Off by default. */
 		live?: boolean;
 		/** Index of the current stage when not live. Defaults to the last stage (shipped). */
 		current?: number;
@@ -42,26 +44,14 @@
 		release: Tag
 	};
 
-	const DEFAULT_STAGES: GitHubLifecycleStage[] = [
-		{ id: 'issue', label: 'Issue opened', actor: 'mira-chen', detail: 'Issue 2204 · Export to CSV drops rows with commas in the notes field', timestamp: '09:02' },
-		{ id: 'triage', label: 'Triaged', actor: 'claude-triage', detail: 'Labelled bug, P1, area/export · assigned to argon-agent', timestamp: '09:03' },
-		{ id: 'branch', label: 'Branch', actor: 'argon-agent', detail: 'argon/2204-csv-quoting from main @ 4e1c9a2', timestamp: '09:04' },
-		{ id: 'commits', label: 'Commits', actor: 'argon-agent', detail: '3 commits · quote fields per RFC 4180, add round-trip test', timestamp: '09:11' },
-		{ id: 'pull-request', label: 'Pull request', actor: 'argon-agent', detail: 'PR 2210 opened against main · +46 -9 across 3 files', timestamp: '09:12' },
-		{ id: 'review', label: 'Review', actor: 'mira-chen', detail: 'Approved after one suggestion on the escaping helper', timestamp: '09:24' },
-		{ id: 'checks', label: 'Checks', actor: 'GitHub Actions', detail: '6 of 6 required checks passing in 3m 12s', timestamp: '09:28' },
-		{ id: 'merge', label: 'Merged', actor: 'merge queue', detail: 'Squashed into main as 9b07d3e', timestamp: '09:31' },
-		{ id: 'deploy', label: 'Deployed', actor: 'deploy bot', detail: 'Rolled out to production · 100% healthy', timestamp: '09:44' },
-		{ id: 'release', label: 'Released', actor: 'release bot', detail: 'v2.8.1 published with generated notes', timestamp: '10:00' }
-	];
-
 	let {
 		title = 'From issue to release',
-		stages = DEFAULT_STAGES,
-		live = true,
+		stages = [],
+		live = false,
 		current,
 		onSelectStage,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	const loop = new LiveLoop(() => stages.length - 1, 4);
@@ -90,9 +80,9 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label={title}
-	class="@container overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('@container overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div>

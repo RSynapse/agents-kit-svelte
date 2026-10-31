@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { FileIcon, FolderOpen } from '@lucide/svelte';
 	export interface WorktreeFileNode {
 		path: string;
@@ -9,20 +11,20 @@
 		children?: WorktreeFileNode[];
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'nodes' | 'selectedPath' | 'onSelect'> {
 		nodes: WorktreeFileNode[];
 		selectedPath?: string;
 		onSelect?: (path: string) => void;
 		class?: string;
 	}
 
-	let { nodes, selectedPath, onSelect, class: className = '' }: Props = $props();
+	let { nodes, selectedPath, onSelect, class: className = '', ...rest }: Props = $props();
 </script>
 
-<div
+<div {...rest}
 	role="tree"
 	aria-label="Worktree changed files"
-	class="rounded-card border border-card-border bg-card-bg p-2 font-mono text-xs {className}"
+	class={cn('rounded-card border border-card-border bg-card-bg p-2 font-mono text-xs', className)}
 >
 	{#each nodes as node (node.path)}
 		{#if node.kind === 'folder'}

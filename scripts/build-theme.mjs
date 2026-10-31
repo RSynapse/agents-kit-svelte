@@ -18,7 +18,7 @@ if (/@import\s+["']tailwindcss["']/.test(body)) {
 }
 
 const banner = `/*
- * agents-kit-svelte theme: OKLCH design tokens, light/dark variables and helper classes.
+ * agents-kit-svelte theme: --ak-* design tokens (in the agents-kit cascade layer), light/dark palettes and helper classes.
  * Usage (Tailwind v4), in your app's main CSS file:
  *   @import "tailwindcss";
  *   @import "agents-kit-svelte/theme.css";

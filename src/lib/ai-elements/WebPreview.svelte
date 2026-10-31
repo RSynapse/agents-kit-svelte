@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronDown, LoaderCircle, RefreshCw } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	import type { Snippet } from 'svelte';
@@ -13,8 +15,8 @@
 		timestamp: string;
 	}
 
-	interface Props {
-		defaultUrl?: string;
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'defaultUrl' | 'defaultViewport' | 'logs' | 'defaultConsoleOpen' | 'onUrlChange' | 'children'> {
+		defaultUrl: string;
 		defaultViewport?: PreviewViewport;
 		logs?: PreviewConsoleLog[];
 		defaultConsoleOpen?: boolean;
@@ -23,27 +25,6 @@
 		class?: string;
 	}
 
-	const DEFAULT_LOGS: PreviewConsoleLog[] = [
-		{
-			id: 'log-1',
-			level: 'log',
-			message: '[HMR] Svelte 5 Runes boundary connected (localhost:5173/w/board)',
-			timestamp: '14:22:08'
-		},
-		{
-			id: 'log-2',
-			level: 'warn',
-			message: '[SSR] Restored workspace filter state before client hydration completed',
-			timestamp: '14:22:09'
-		},
-		{
-			id: 'log-3',
-			level: 'log',
-			message: '[Stream] Connected to G0 read contract event source (revision 18)',
-			timestamp: '14:22:11'
-		}
-	];
-
 	const VIEWPORTS: { id: PreviewViewport; label: string }[] = [
 		{ id: '390px', label: '390px' },
 		{ id: '768px', label: '768px' },
@@ -51,17 +32,18 @@
 	];
 
 	let {
-		defaultUrl = 'http://localhost:5173/w/board',
+		defaultUrl,
 		defaultViewport = '1440px',
-		logs = DEFAULT_LOGS,
+		logs = [],
 		defaultConsoleOpen = true,
 		onUrlChange,
 		children,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
-	let currentUrl = $state('http://localhost:5173/w/board');
-	let urlInput = $state('http://localhost:5173/w/board');
+	let currentUrl = $state('');
+	let urlInput = $state('');
 	let viewport = $state<PreviewViewport>('1440px');
 	let consoleOpen = $state(true);
 	let refreshTick = $state(1);
@@ -106,7 +88,7 @@
 	let warnLogCount = $derived(logs.filter((l) => l.level === 'warn').length);
 </script>
 
-<div class="flex w-full flex-col overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('flex w-full flex-col overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary px-3 py-2">
 		<div class="flex items-center gap-1.5">
 			<button

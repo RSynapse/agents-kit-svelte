@@ -1,54 +1,26 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, Copy, GitCommitHorizontal, RotateCcw } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import type { GitHubCommitData } from '../types';
 
-	interface Props {
-		commit?: GitHubCommitData;
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'commit' | 'defaultOpen' | 'onRestore'> {
+		commit: GitHubCommitData;
 		defaultOpen?: boolean;
 		onRestore?: (sha: string) => void;
 		class?: string;
 	}
 
-	const DEFAULT_COMMIT: GitHubCommitData = {
-		sha: 'cdb5ea5',
-		message: 'fix(home): raise contrast of unpicked agents, skipped gates and secondary captions',
-		author: 'argon-agent',
-		timestamp: '12m ago',
-		branch: 'argon/2151-home-faint-captions-contrast',
-		verified: true,
-		additions: 68,
-		deletions: 14,
-		files: [
-			{
-				path: 'apps/web/src/lib/home/trail.css',
-				status: 'modified',
-				additions: 12,
-				deletions: 11
-			},
-			{
-				path: 'apps/web/src/lib/home/route-map.css',
-				status: 'modified',
-				additions: 2,
-				deletions: 3
-			},
-			{
-				path: 'tests/browser/home.spec.ts',
-				status: 'modified',
-				additions: 54,
-				deletions: 0
-			}
-		]
-	};
-
 	const COPY_FEEDBACK_MS = 1500;
 
 	let {
-		commit = DEFAULT_COMMIT,
+		commit,
 		defaultOpen = true,
 		onRestore,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isOpen = $state(true);
@@ -71,7 +43,7 @@
 	}
 </script>
 
-<div class="rounded-card border border-card-border bg-card-bg p-3.5 text-sm {className}">
+<div {...rest} class={cn('rounded-card border border-card-border bg-card-bg p-3.5 text-sm', className)}>
 	<div class="flex flex-wrap items-center justify-between gap-2">
 		<div class="flex min-w-0 flex-1 items-center gap-2">
 			<button

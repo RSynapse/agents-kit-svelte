@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Share2, Check, Copy, Download, LoaderCircle, Pencil, RefreshCw } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	export type ArtifactType = 'document' | 'code' | 'table' | 'chart';
@@ -19,8 +21,8 @@
 		schemaJson?: string;
 	}
 
-	interface Props {
-		title?: string;
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'title' | 'artifactType' | 'content' | 'language' | 'versions' | 'currentVersion' | 'isGenerating' | 'metadata' | 'onCopy' | 'onDownload' | 'onEdit' | 'onRegenerate' | 'onShare' | 'onVersionChange'> {
+		title: string;
 		artifactType?: ArtifactType;
 		content?: string;
 		language?: string;
@@ -37,84 +39,33 @@
 		class?: string;
 	}
 
-	const defaultVersions: ArtifactVersion[] = [
-		{
-			id: 'v1',
-			label: 'v1 · Initial Spec Draft',
-			timestamp: '13:40',
-			summary: 'Initial G0 browser read contract outline',
-			content: [
-				'Title: G0 Browser Read Contract',
-				'Section: Scope & Provenance',
-				'- Isolate /w sample routes from paired device authority',
-				'- Require explicit provenance badge on every stream card',
-				'- Keep installation tokens strictly in server memory'
-			].join('\n')
-		},
-		{
-			id: 'v2',
-			label: 'v2 · Revision 3 Aligned',
-			timestamp: '14:05',
-			summary: 'Added WorkspaceSource stream invariants and referee checks',
-			content: [
-				'Title: G0 Browser Read Contract (Revision 3)',
-				'Section: WorkspaceSource & Stream Invariants',
-				'- Isolate /w sample routes from paired Companion authority',
-				'- Require explicit provenance label on every board and run card',
-				'- Verify reauthorization before idempotency lookup on all retries',
-				'- Keep installation tokens in server memory with zero webhook writes'
-			].join('\n')
-		}
-	];
-
-	const defaultSchemaJson = JSON.stringify(
-		{
-			$schema: 'https://json-schema.org/draft/2020-12/schema',
-			title: 'WorkspaceReadArtifact',
-			type: 'object',
-			required: ['versionId', 'provenance', 'invariants'],
-			properties: {
-				versionId: { type: 'string', enum: ['v1', 'v2'] },
-				provenance: { type: 'string', const: 'sample-isolated' },
-				invariants: { type: 'array', items: { type: 'string' } }
-			}
-		},
-		null,
-		2
-	);
-
 	let {
-		title = 'G0 Browser Read Contract · Design Artifact',
+		title,
 		artifactType = 'document',
 		content,
 		language = 'markdown',
-		versions = defaultVersions,
-		currentVersion = 'v2',
+		versions = [],
+		currentVersion,
 		isGenerating = false,
-		metadata = {
-			model: 'Claude Code 1.0',
-			generationTime: '1.8s',
-			tokens: 1420,
-			size: '2.4 KB',
-			schemaJson: defaultSchemaJson
-		},
+		metadata = {},
 		onCopy,
 		onDownload,
 		onEdit,
 		onRegenerate,
 		onShare,
 		onVersionChange,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	type ActiveTab = 'preview' | 'source' | 'schema' | 'versions';
 
 	let activeTab = $state<ActiveTab>('preview');
-	let selectedVersionId = $state('v2');
+	let selectedVersionId = $state('');
 	let copied = $state(false);
 
 	$effect(() => {
-		selectedVersionId = currentVersion;
+		selectedVersionId = currentVersion ?? versions.at(-1)?.id ?? '';
 	});
 
 	let activeVersion = $derived(
@@ -150,9 +101,9 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Rich agent artifact viewer"
-	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<header
 		class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border p-4"
@@ -232,15 +183,17 @@
 		>
 			Markdown Source
 		</button>
-		<button
-			type="button"
-			role="tab"
-			aria-selected={activeTab === 'schema'}
-			onclick={() => (activeTab = 'schema')}
-			class="{segmentClass(activeTab === 'schema')}"
-		>
-			JSON Schema
-		</button>
+		{#if metadata.schemaJson}
+			<button
+				type="button"
+				role="tab"
+				aria-selected={activeTab === 'schema'}
+				onclick={() => (activeTab = 'schema')}
+				class="{segmentClass(activeTab === 'schema')}"
+			>
+				JSON Schema
+			</button>
+		{/if}
 		<button
 			type="button"
 			role="tab"
@@ -277,7 +230,7 @@
 				class="max-h-80 overflow-auto rounded-control bg-canvas-secondary/70 p-4 font-mono text-xs leading-6 text-fg-main"><code data-language={language}>{resolvedContent}</code></pre>
 		{:else if activeTab === 'schema'}
 			<pre
-				class="max-h-80 overflow-auto rounded-control bg-canvas-secondary/70 p-4 font-mono text-xs leading-6 text-fg-main"><code>{metadata.schemaJson ?? defaultSchemaJson}</code></pre>
+				class="max-h-80 overflow-auto rounded-control bg-canvas-secondary/70 p-4 font-mono text-xs leading-6 text-fg-main"><code>{metadata.schemaJson ?? ''}</code></pre>
 		{:else if activeTab === 'versions'}
 			<div class="divide-y divide-canvas-border rounded-lg border border-canvas-border">
 				{#each versions as version (version.id)}
@@ -315,9 +268,7 @@
 		class="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-border px-4 py-2.5 text-xs text-fg-light"
 	>
 		<span>
-			{metadata.size ?? '2.4 KB'}
-			{metadata.model ? ` · ${metadata.model}` : ''}
-			{metadata.generationTime ? ` · ${metadata.generationTime}` : ''}
+			{[metadata.size, metadata.model, metadata.generationTime].filter(Boolean).join(' · ')}
 		</span>
 		<div class="flex items-center gap-3">
 			{#if metadata.tokens !== undefined}

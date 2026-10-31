@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronDown, FileText, LoaderCircle, Settings, Sparkles } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import ThinkingShimmer from '../agents/ThinkingShimmer.svelte';
@@ -16,7 +18,7 @@
 		status: ChainStepStatus;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'title' | 'steps' | 'defaultOpen' | 'isStreaming' | 'totalDurationMs'> {
 		title?: string;
 		steps?: ChainOfThoughtStepItem[];
 		defaultOpen?: boolean;
@@ -25,45 +27,14 @@
 		class?: string;
 	}
 
-	const DEFAULT_STEPS: ChainOfThoughtStepItem[] = [
-		{
-			id: 'cot-1',
-			label: 'Inspecting workspace contract and route boundaries',
-			description: 'Verified read-only repository session rules and G0 stream schema.',
-			durationMs: 420,
-			confidence: 0.98,
-			tools: ['read_file', 'grep_search'],
-			sources: ['contracts/g0/schema', 'src/lib/types.ts'],
-			status: 'complete'
-		},
-		{
-			id: 'cot-2',
-			label: 'Synthesizing Svelte 5 Runes state transition graph',
-			description: 'Mapped controllable disclosure state and derived token counters.',
-			durationMs: 890,
-			confidence: 0.94,
-			tools: ['ast_check', 'svelte_compile'],
-			sources: ['src/lib/state/chat-helpers.ts'],
-			status: 'complete'
-		},
-		{
-			id: 'cot-3',
-			label: 'Validating semantic CSS token contrast in dark and light themes',
-			description: 'Checking OKLCH surface contrast ratios and reduced-motion fallbacks.',
-			durationMs: 310,
-			confidence: 0.91,
-			tools: ['audit_tokens'],
-			status: 'active'
-		}
-	];
-
 	let {
 		title = 'Chain of Thought Reasoning',
-		steps = DEFAULT_STEPS,
+		steps = [],
 		defaultOpen = true,
 		isStreaming = false,
 		totalDurationMs,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isOpen = $state(true);
@@ -137,7 +108,7 @@
 	}
 </script>
 
-<div class="w-full rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('w-full rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<button
 		type="button"
 		aria-expanded={isOpen}

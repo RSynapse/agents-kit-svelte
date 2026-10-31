@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { History, RefreshCw } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type RouteStatus = 'selected' | 'available' | 'unavailable';
@@ -26,9 +28,9 @@
 		timestamp: string;
 	}
 
-	interface Props {
-		inputQuery?: string;
-		classification?: RouteClassification;
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'inputQuery' | 'classification' | 'routes' | 'selectedRouteId' | 'routingHistory' | 'isClassifying' | 'onReclassify' | 'onOverrideRoute' | 'onViewHistory'> {
+		inputQuery: string;
+		classification: RouteClassification;
 		routes?: AgentRoute[];
 		selectedRouteId?: string;
 		routingHistory?: RoutingHistoryEntry[];
@@ -39,79 +41,26 @@
 		class?: string;
 	}
 
-	const defaultRoutes: AgentRoute[] = [
-		{
-			id: 'claude-code',
-			agentName: 'Claude Code 1.0',
-			specialty: 'Multi-file TDD & Worktree Refactoring',
-			matchScore: 96,
-			status: 'selected',
-			description:
-				'Deep repository context, atomic database/outbox edits, and Svelte 5 Runes migration.'
-		},
-		{
-			id: 'codex',
-			agentName: 'Codex 0.42',
-			specialty: 'Referee Verification & Contract Audits',
-			matchScore: 78,
-			status: 'available',
-			description:
-				'Fast deterministic static analysis, schema validation, and adversarial diff review.'
-		},
-		{
-			id: 'gemini',
-			agentName: 'Gemini 2.5 Pro',
-			specialty: 'Long-Context Architecture & Spec Synthesis',
-			matchScore: 64,
-			status: 'available',
-			description:
-				'Cross-document ADR synthesis, large transcript analysis, and visual layout comparison.'
-		}
-	];
-
-	const defaultClassification: RouteClassification = {
-		intent: 'Multi-file TDD Implementation (Risk Tier T2)',
-		confidence: 96,
-		reasoning:
-			'Task requires editing domain handlers and adding unit tests inside an isolated git worktree, matching Claude Code 1.0 capabilities.'
-	};
-
-	const defaultHistory: RoutingHistoryEntry[] = [
-		{
-			id: 'hist-1',
-			query: 'Audit PR 204 against ENG-0001 boundary constraints',
-			intent: 'Referee Review',
-			agentName: 'Codex 0.42',
-			timestamp: '3 min ago'
-		},
-		{
-			id: 'hist-2',
-			query: 'Compare G0 spec with M3 onboarding amendments',
-			intent: 'Spec Synthesis',
-			agentName: 'Gemini 2.5 Pro',
-			timestamp: '14 min ago'
-		}
-	];
-
 	let {
-		inputQuery = 'Implement idempotent retry reauthorization before revision check in outbox handler',
-		classification = defaultClassification,
-		routes = defaultRoutes,
+		inputQuery,
+		classification,
+		routes = [],
 		selectedRouteId,
-		routingHistory = defaultHistory,
+		routingHistory = [],
 		isClassifying = false,
 		onReclassify,
 		onOverrideRoute,
 		onViewHistory,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
-	let activeRouteId = $state('claude-code');
+	let activeRouteId = $state('');
 	let showHistory = $state(false);
 
 	$effect(() => {
 		activeRouteId =
-			selectedRouteId ?? routes.find((route) => route.status === 'selected')?.id ?? 'claude-code';
+			selectedRouteId ?? routes.find((route) => route.status === 'selected')?.id ?? '';
 	});
 
 	/**
@@ -133,9 +82,9 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Intent classifier and agent router"
-	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"

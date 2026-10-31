@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { Check, ChevronDown, Copy, FileCode } from '@lucide/svelte';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import { parseUnifiedDiff } from '../state/chat-helpers';
 	import type { FileDiffStatus } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'filename' | 'patch' | 'status' | 'additions' | 'deletions' | 'defaultOpen' | 'maxHeight'> {
 		filename: string;
 		patch: string;
 		status?: FileDiffStatus;
@@ -26,7 +28,8 @@
 		deletions,
 		defaultOpen = true,
 		maxHeight = 280,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isOpen = $state(true);
@@ -53,10 +56,10 @@
 	}
 </script>
 
-<div
+<div {...rest}
 	data-state={status}
 	aria-busy={status === 'streaming'}
-	class="w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm', className)}
 >
 	<div class="flex h-10 items-center gap-2 px-3">
 		<button

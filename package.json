@@ -133,7 +133,8 @@
     "**/*.css"
   ],
   "dependencies": {
-    "@lucide/svelte": "^1.66.0"
+    "@lucide/svelte": "^1.66.0",
+    "tailwind-merge": "^3.7.0"
   },
   "peerDependencies": {
     "svelte": "^5.0.0",

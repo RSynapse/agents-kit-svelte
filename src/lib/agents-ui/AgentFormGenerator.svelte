@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { ArrowDown, ArrowUp, Check, LoaderCircle, RefreshCw, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type FormFieldType = 'text' | 'email' | 'select' | 'textarea' | 'number' | 'checkbox';
@@ -22,8 +24,8 @@
 		validation?: FormFieldValidation;
 	}
 
-	interface Props {
-		formTitle?: string;
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'formTitle' | 'formDescription' | 'fields' | 'isGenerating' | 'showPreview' | 'onAddField' | 'onRemoveField' | 'onRegenerate' | 'onExportSchema' | 'onFieldReorder' | 'onSubmitPayload'> {
+		formTitle: string;
 		formDescription?: string;
 		fields?: FormField[];
 		isGenerating?: boolean;
@@ -37,61 +39,10 @@
 		class?: string;
 	}
 
-	const defaultFields: FormField[] = [
-		{
-			id: 'worktreeBranch',
-			label: 'Worktree Branch Name',
-			type: 'text',
-			placeholder: 'trailside/card-191-attempt-1',
-			required: true,
-			defaultValue: 'trailside/card-191-attempt-1',
-			validation: { minLength: 5, maxLength: 80 }
-		},
-		{
-			id: 'agentId',
-			label: 'Target Supported Agent',
-			type: 'select',
-			required: true,
-			options: ['claude-code', 'codex', 'gemini'],
-			defaultValue: 'claude-code'
-		},
-		{
-			id: 'riskTier',
-			label: 'Risk Tier Gate',
-			type: 'select',
-			required: true,
-			options: ['T0', 'T1', 'T2', 'T3', 'T4'],
-			defaultValue: 'T2'
-		},
-		{
-			id: 'tokenBudget',
-			label: 'Max Token Budget',
-			type: 'number',
-			required: true,
-			defaultValue: 40000,
-			validation: { min: 1000, max: 200000 }
-		},
-		{
-			id: 'verificationPrompt',
-			label: 'Verification Acceptance Instructions',
-			type: 'textarea',
-			placeholder: 'Describe the test suite and contract checks required…',
-			required: true,
-			defaultValue: 'Run corepack pnpm test and verify zero uncommitted schema diffs.',
-			validation: { minLength: 10, maxLength: 500 }
-		},
-		{
-			id: 'isolatedDb',
-			label: 'Use disposable SQLite fixture database',
-			type: 'checkbox',
-			defaultValue: true
-		}
-	];
-
 	let {
-		formTitle = 'Dispatch Worktree Run Tool Schema',
-		formDescription = 'Dynamic schema-to-form generator for structured agent tool inputs with live validation and JSON payload preview.',
-		fields = defaultFields,
+		formTitle,
+		formDescription,
+		fields = [],
 		isGenerating = false,
 		showPreview = true,
 		onAddField,
@@ -100,7 +51,8 @@
 		onExportSchema,
 		onFieldReorder,
 		onSubmitPayload,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let localFields = $state<FormField[]>([]);
@@ -239,9 +191,9 @@
 	}
 </script>
 
-<section
+<section {...rest}
 	aria-label="Dynamic schema-to-form generator"
-	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
@@ -249,7 +201,7 @@
 		<div>
 			<p class="text-xs font-medium text-fg-light">Structured Tool Input Builder</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">{formTitle}</h2>
-			<p class="mt-0.5 text-xs text-fg-light">{formDescription}</p>
+			{#if formDescription}<p class="mt-0.5 text-xs text-fg-light">{formDescription}</p>{/if}
 		</div>
 
 		<div class="flex flex-wrap items-center gap-2">

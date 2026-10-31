@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import type { Snippet } from 'svelte';
 
 	export type BorderBeamTone = 'accent' | 'success' | 'warning' | 'danger';
 	export type BorderBeamSize = 'sm' | 'md' | 'line' | 'pulse';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'active' | 'tone' | 'size' | 'durationSeconds' | 'label' | 'children'> {
 		active?: boolean;
 		tone?: BorderBeamTone;
 		size?: BorderBeamSize;
@@ -22,7 +24,8 @@
 		durationSeconds = 6,
 		label = 'Active Worktree Run · Claude Code',
 		children,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isActive = $state(true);
@@ -40,25 +43,25 @@
 	function resolveBeamColorVar(currentTone: BorderBeamTone): string {
 		switch (currentTone) {
 			case 'accent':
-				return 'var(--color-accent-primary-val)';
+				return 'var(--ak-color-accent)';
 			case 'success':
-				return 'var(--color-status-success-val)';
+				return 'var(--ak-color-success)';
 			case 'warning':
-				return 'var(--color-status-warning-val)';
+				return 'var(--ak-color-warning)';
 			case 'danger':
-				return 'var(--color-status-danger-val)';
+				return 'var(--ak-color-danger)';
 		}
 	}
 
 	let beamColor = $derived(resolveBeamColorVar(tone));
 </script>
 
-<div
+<div {...rest}
 	style:--ak-beam-color={beamColor}
 	style:--ak-beam-duration="{durationSeconds}s"
 	data-active={isActive}
 	data-size={size}
-	class="ak-border-beam relative overflow-hidden rounded-card bg-card-border p-px {className}"
+	class={cn('ak-border-beam relative overflow-hidden rounded-card bg-card-border p-px', className)}
 >
 	{#if isActive}
 		<div aria-hidden="true" class="ak-border-beam-glow pointer-events-none absolute"></div>

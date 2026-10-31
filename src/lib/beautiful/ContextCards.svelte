@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import { AlignLeft, ArrowUpRight, X } from '@lucide/svelte';
 	import { formatCompactTokens } from '../state/chat-helpers';
@@ -15,7 +17,7 @@
 		score?: number;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'chunks' | 'selectedId' | 'onSelect' | 'onRemove'> {
 		chunks?: ContextChunk[];
 		selectedId?: string;
 		onSelect?: (id: string) => void;
@@ -23,42 +25,13 @@
 		class?: string;
 	}
 
-	const DEFAULT_CHUNKS: ContextChunk[] = [
-		{
-			id: 'ctx-spec',
-			title: 'G0 Browser Read Contract',
-			source: 'docs/specs/browser-read-contract.md',
-			kind: 'file',
-			tokens: 4200,
-			score: 0.96,
-			content: 'Defines sample workspace isolation, provenance badges, and client stream recovery.'
-		},
-		{
-			id: 'ctx-issue',
-			title: 'Issue 184: Worktree isolation guard',
-			source: 'RSynapse/trailside · Issue 184',
-			kind: 'issue',
-			tokens: 1450,
-			score: 0.91,
-			content: 'Each dispatched workflow run executes in a dedicated git worktree with clean status.'
-		},
-		{
-			id: 'ctx-schema',
-			title: 'RunEnvelope JSON Schema',
-			source: 'contracts/g0/schema/run-envelope.json',
-			kind: 'schema',
-			tokens: 980,
-			score: 0.88,
-			content: 'Strict protocol shape validation separated from pure domain decisions.'
-		}
-	];
-
 	let {
-		chunks = DEFAULT_CHUNKS,
+		chunks = [],
 		selectedId = undefined,
 		onSelect,
 		onRemove,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let internalChunks = $state<ContextChunk[]>([]);
@@ -121,7 +94,7 @@
 	);
 </script>
 
-<div class="flex w-full flex-col gap-2.5 text-fg-main {className}">
+<div {...rest} class={cn('flex w-full flex-col gap-2.5 text-fg-main', className)}>
 	<header class="flex items-center justify-between gap-2 px-0.5 text-xs">
 		<div class="flex items-center gap-2">
 			<span class="text-[13px] font-semibold text-fg-main">Retrieved chunks</span>

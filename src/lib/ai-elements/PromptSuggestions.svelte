@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	export interface PromptSuggestionItem {
 		id: string;
@@ -7,40 +9,13 @@
 		prompt: string;
 	}
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'suggestions' | 'highlightQuery' | 'selectedCategory' | 'onSelect'> {
 		suggestions?: PromptSuggestionItem[];
 		highlightQuery?: string;
 		selectedCategory?: 'all' | 'inspect' | 'implement' | 'verify' | 'review';
 		onSelect?: (item: PromptSuggestionItem) => void;
 		class?: string;
 	}
-
-	const DEFAULT_SUGGESTIONS: PromptSuggestionItem[] = [
-		{
-			id: 'sug-1',
-			category: 'inspect',
-			label: 'Audit Svelte 5 Runes compliance',
-			prompt: 'Scan all components in src/lib/ and verify zero legacy Svelte 4 prop declarations or reactive statements.'
-		},
-		{
-			id: 'sug-2',
-			category: 'implement',
-			label: 'Generate isolated worktree plan',
-			prompt: 'Draft a T2 execution plan with file targets and test verification gates.'
-		},
-		{
-			id: 'sug-3',
-			category: 'verify',
-			label: 'Run referee contract check',
-			prompt: 'Execute the unit test suite and validate OKLCH semantic token contrast.'
-		},
-		{
-			id: 'sug-4',
-			category: 'review',
-			label: 'Summarize pull request diff',
-			prompt: 'Inspect changed hunks and highlight potential SSR hydration risks.'
-		}
-	];
 
 	const CATEGORIES: { id: 'all' | 'inspect' | 'implement' | 'verify' | 'review'; label: string }[] =
 		[
@@ -52,11 +27,12 @@
 		];
 
 	let {
-		suggestions = DEFAULT_SUGGESTIONS,
+		suggestions = [],
 		highlightQuery = '',
 		selectedCategory = 'all',
 		onSelect,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let activeCategory = $state<'all' | 'inspect' | 'implement' | 'verify' | 'review'>('all');
@@ -119,7 +95,7 @@
 	}
 </script>
 
-<div class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
+<div {...rest} class={cn('w-full rounded-card border border-card-border bg-card-bg p-4 text-sm', className)}>
 	<div class="flex flex-wrap items-center justify-between gap-2 pb-3">
 		<div class="{SEGMENT_GROUP_CLASS} flex-wrap">
 			{#each CATEGORIES as cat (cat.id)}

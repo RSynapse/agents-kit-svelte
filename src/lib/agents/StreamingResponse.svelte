@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass, togglePillClass } from '../ui/styles';
 	import { Check, Copy, RefreshCw, ThumbsDown, ThumbsUp } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import Citations from './Citations.svelte';
 	import type { CitationItem } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'status' | 'copyText' | 'sources' | 'showActions' | 'onRetry' | 'children'> {
 		status?: 'streaming' | 'complete' | 'error';
 		copyText?: string;
 		sources?: CitationItem[];
@@ -24,7 +26,8 @@
 		showActions = true,
 		onRetry,
 		class: className = '',
-		children
+		children,
+		...rest
 	}: Props = $props();
 
 	let copied = $state(false);
@@ -43,7 +46,7 @@
 	}
 </script>
 
-<div data-state={status} aria-busy={status === 'streaming'} class="w-full {className}">
+<div {...rest} data-state={status} aria-busy={status === 'streaming'} class={cn('w-full', className)}>
 	<div aria-live="polite" class="space-y-2.5 text-sm leading-6 text-fg-main">
 		{@render children()}
 	</div>

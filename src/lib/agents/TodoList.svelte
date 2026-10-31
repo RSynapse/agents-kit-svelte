@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
 	import { ChevronDown, CircleCheck, ListTodo } from '@lucide/svelte';
@@ -10,7 +12,7 @@
 	import { motionDuration, rise } from '../state/motion.svelte';
 	import type { TodoItem } from '../types';
 
-	interface Props {
+	interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class' | 'children' | 'title' | 'items' | 'defaultOpen'> {
 		title?: string;
 		items: TodoItem[];
 		defaultOpen?: boolean;
@@ -21,7 +23,8 @@
 		title = 'Implementation plan',
 		items,
 		defaultOpen = true,
-		class: className = ''
+		class: className = '',
+		...rest
 	}: Props = $props();
 
 	let isOpen = $state(true);
@@ -45,7 +48,7 @@
 	});
 </script>
 
-<div class="w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm {className}">
+<div {...rest} class={cn('w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm', className)}>
 	<button
 		type="button"
 		aria-expanded={isOpen}

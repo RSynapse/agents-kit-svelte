@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { Activity, Check, GitCommitHorizontal, RotateCcw, Siren } from '@lucide/svelte';
 	import { Tween } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
@@ -7,35 +9,13 @@
 	import type { GitHubIncidentData, GitHubIncidentStatus } from '../types';
 	import { LiveLoop } from './live-loop.svelte';
 
-	interface Props {
-		incident?: GitHubIncidentData;
-		/** Plays the alert firing, the suspect deploy being found and reverted, then loops. */
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'incident' | 'live' | 'onRevert'> {
+		incident: GitHubIncidentData;
+		/** Demo mode: plays the alert firing, the suspect deploy being found and reverted, then loops. Off by default. */
 		live?: boolean;
 		onRevert?: (prNumber: number, sha: string) => void;
 		class?: string;
 	}
-
-	const DEFAULT_INCIDENT: GitHubIncidentData = {
-		id: 'INC-418',
-		title: 'Export API returning 500s',
-		severity: 'SEV2',
-		service: 'export-api',
-		metricLabel: 'Error rate (%)',
-		series: [0.4, 0.5, 0.4, 0.6, 0.5, 0.4, 4.2, 6.8, 7.4, 7.1, 1.2, 0.6, 0.5, 0.4],
-		threshold: 2,
-		suspect: {
-			sha: '9b07d3e',
-			message: 'fix(export): quote CSV fields per RFC 4180',
-			pr: 2210,
-			deployedAt: '09:44'
-		},
-		steps: [
-			{ status: 'investigating', label: 'Alert fired', detail: 'Error rate crossed 2% for 2 minutes · paged ops-oncall' },
-			{ status: 'identified', label: 'Suspect found', detail: 'Errors started 40s after deploy 9b07d3e · stack points at quoteField()' },
-			{ status: 'mitigated', label: 'Reverted', detail: 'Revert PR 2219 merged and deployed · error rate falling' },
-			{ status: 'resolved', label: 'Resolved', detail: 'Healthy for 10 minutes · follow-up issue 2220 opened with a failing test' }
-		]
-	};
 
 	const STATUS_TONE: Record<GitHubIncidentStatus, UiTone> = {
 		investigating: 'danger',
@@ -48,7 +28,7 @@
 	const HEIGHT = 64;
 	const FIRST_VISIBLE = 4;
 
-	let { incident = DEFAULT_INCIDENT, live = true, onRevert, class: className = '' }: Props = $props();
+	let { incident, live = false, onRevert, class: className = '', ...rest }: Props = $props();
 
 	const loop = new LiveLoop(() => incident.series.length - FIRST_VISIBLE, 5);
 	const readout = new Tween(0, { duration: 300, easing: cubicOut });
@@ -97,7 +77,7 @@
 	}
 </script>
 
-<article class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<article {...rest} class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex min-w-0 items-center gap-2">
 			<span class="inline-flex size-7 shrink-0 items-center justify-center rounded-full {level === -1 || level === 3 ? 'bg-canvas-secondary text-fg-light' : 'bg-status-danger-subtle text-status-danger'}">
