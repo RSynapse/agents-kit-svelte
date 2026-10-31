@@ -18,12 +18,12 @@
 	}: Props = $props();
 </script>
 
-<section aria-label="GitHub Repository Bento Dashboard" class="space-y-4 {className}">
+<section aria-label="GitHub Repository Bento Dashboard" class="@container space-y-4 {className}">
 	<!-- Top Repository Status Strip -->
-	<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+	<div class="grid gap-3 @sm:grid-cols-2 @3xl:grid-cols-4">
 		<div class="rounded-xl border border-card-border bg-card-bg p-3.5">
 			<span class="font-mono text-[11px] uppercase text-fg-light">Linked Repository</span>
-			<p class="mt-1 font-mono text-sm font-bold text-fg-main">{repoName}</p>
+			<p class="mt-1 truncate font-mono text-sm font-bold text-fg-main">{repoName}</p>
 			<p class="mt-0.5 text-xs text-status-success">● GitHub App Installation Active</p>
 		</div>
 		<div class="rounded-xl border border-card-border bg-card-bg p-3.5">
@@ -44,12 +44,12 @@
 	</div>
 
 	<!-- Bento Grid of GitHub Cards -->
-	<div class="grid gap-4 lg:grid-cols-12">
-		<div class="space-y-4 lg:col-span-7">
+	<div class="grid gap-4 @3xl:grid-cols-12">
+		<div class="min-w-0 space-y-4 @3xl:col-span-7">
 			<GitHubPullRequestCard />
 			<GitHubChecksPanel />
 		</div>
-		<div class="space-y-4 lg:col-span-5">
+		<div class="min-w-0 space-y-4 @3xl:col-span-5">
 			<GitHubIssueCard />
 			<GitHubCommitCard />
 			<GitHubReviewThreadCard />

@@ -117,16 +117,18 @@
 <article
 	use:magneticHover={1.5}
 	aria-label="GitHub Issue {issue.number}: {issue.title}"
-	class="ak-micro-lift flex flex-col justify-between rounded-xl border border-card-border bg-card-bg p-4 text-sm transition-colors {className}"
+	class="ak-micro-lift flex min-w-0 flex-col justify-between overflow-hidden rounded-xl border border-card-border bg-card-bg {compact
+		? 'p-3.5'
+		: 'p-4'} text-sm transition-colors {className}"
 >
-	<div>
+	<div class="min-w-0">
 		<!-- Top Meta Row -->
-		<div class="flex flex-wrap items-center justify-between gap-2 text-xs">
-			<div class="flex items-center gap-2">
+		<div class="flex flex-wrap items-center justify-between gap-1.5 text-xs">
+			<div class="flex min-w-0 items-center gap-1.5">
 				{#key issue.state}
 					<span
 						in:scale={{ start: 0.85, duration: motionDuration(180), easing: backOut }}
-						class="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-medium {issue.state ===
+						class="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-medium {issue.state ===
 						'closed'
 							? 'bg-canvas-secondary text-fg-light'
 							: issue.state === 'ready-for-human'
@@ -142,7 +144,7 @@
 								stroke-width="2"
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								class="size-3"
+								class="size-3 shrink-0"
 							>
 								<circle cx="12" cy="12" r="10" />
 								<path d="m9 12 2 2 4-4" />
@@ -157,7 +159,7 @@
 								stroke-width="2"
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								class="size-3"
+								class="size-3 shrink-0"
 							>
 								<circle cx="12" cy="12" r="10" />
 								<circle cx="12" cy="12" r="2" fill="currentColor" />
@@ -166,25 +168,32 @@
 								{issue.state === 'in-progress'
 									? 'In Progress'
 									: issue.state === 'ready-for-human'
-										? 'Ready for Human'
+										? 'Ready for Review'
 										: 'Open'}
 							</span>
 						{/if}
 					</span>
 				{/key}
-				<span class="font-mono text-xs text-fg-light">
-					{issue.repo} · #{issue.number}
-				</span>
+
+				{#if compact}
+					<span class="shrink-0 whitespace-nowrap font-mono text-xs font-medium text-fg-light">
+						#{issue.number}
+					</span>
+				{:else}
+					<span class="min-w-0 truncate font-mono text-xs text-fg-light">
+						{issue.repo} · #{issue.number}
+					</span>
+				{/if}
 			</div>
 
-			<div class="flex items-center gap-1.5 font-mono text-[11px] text-fg-light">
+			<div class="flex shrink-0 items-center gap-1 font-mono text-[11px] text-fg-light">
 				{#if issue.riskTier}
-					<span class="rounded border border-card-border bg-canvas-secondary px-1.5 py-0.5 text-fg-main">
+					<span class="whitespace-nowrap rounded border border-card-border bg-canvas-secondary px-1.5 py-0.5 text-fg-main">
 						{issue.riskTier}
 					</span>
 				{/if}
-				{#if issue.size}
-					<span class="rounded border border-card-border bg-canvas-secondary px-1.5 py-0.5">
+				{#if issue.size && !compact}
+					<span class="whitespace-nowrap rounded border border-card-border bg-canvas-secondary px-1.5 py-0.5">
 						Size {issue.size}
 					</span>
 				{/if}
@@ -203,10 +212,10 @@
 		{/if}
 
 		<!-- Labels -->
-		<div class="mt-2.5 flex flex-wrap gap-1.5">
+		<div class="mt-2.5 flex flex-wrap gap-1">
 			{#each issue.labels as label (label.name)}
 				<span
-					class="rounded-full border px-2 py-0.5 font-mono text-[10px] font-medium {labelClasses(
+					class="whitespace-nowrap rounded-full border px-2 py-0.5 font-mono text-[10px] font-medium {labelClasses(
 						label.tone
 					)}"
 				>
@@ -226,7 +235,7 @@
 					<span class="font-medium text-fg-main">{issue.assignedAgent ?? 'Unassigned'}</span>
 				</div>
 				{#if issue.worktreeBranch}
-					<code class="inline-flex items-center gap-1 truncate rounded bg-card-bg px-1.5 py-0.5 font-mono text-[11px] text-fg-light">
+					<code class="inline-flex min-w-0 items-center gap-1 truncate rounded bg-card-bg px-1.5 py-0.5 font-mono text-[11px] text-fg-light">
 						<svg
 							aria-hidden="true"
 							viewBox="0 0 24 24"
@@ -242,7 +251,7 @@
 							<circle cx="6" cy="18" r="3" />
 							<path d="M18 9a9 9 0 0 1-9 9" />
 						</svg>
-						{issue.worktreeBranch}
+						<span class="truncate">{issue.worktreeBranch}</span>
 					</code>
 				{/if}
 			</div>
@@ -251,9 +260,9 @@
 		<!-- Acceptance Criteria Progress Bar (Svelte 5 Spring) -->
 		{#if issue.criteriaTotal && issue.criteriaTotal > 0}
 			<div class="mt-3 space-y-1">
-				<div class="flex items-center justify-between font-mono text-[11px] text-fg-light">
-					<span>Acceptance criteria</span>
-					<span class="tabular-nums text-fg-main">
+				<div class="flex items-center justify-between gap-2 font-mono text-[11px] text-fg-light">
+					<span class="whitespace-nowrap">{compact ? 'Criteria' : 'Acceptance criteria'}</span>
+					<span class="whitespace-nowrap tabular-nums text-fg-main">
 						{issue.criteriaCompleted ?? 0}/{issue.criteriaTotal} ({Math.round(criteriaSpring.current)}%)
 					</span>
 				</div>
@@ -268,24 +277,32 @@
 	</div>
 
 	<!-- Card Footer Actions -->
-	<div class="mt-3.5 flex flex-wrap items-center justify-between gap-2 border-t border-canvas-border pt-2.5 text-xs">
-		<span class="font-mono text-[11px] text-fg-light">
-			Filed by {issue.author} · {issue.createdAt}
+	<div
+		class="mt-3 border-t border-canvas-border pt-2.5 text-xs {compact
+			? 'space-y-2'
+			: 'flex flex-wrap items-center justify-between gap-2'}"
+	>
+		<div class="flex flex-wrap items-center justify-between gap-1 font-mono text-[11px] text-fg-light">
+			<span class="truncate">
+				{compact ? issue.author : `Filed by ${issue.author}`} · {issue.createdAt}
+			</span>
 			{#if issue.linkedPrNumber}
-				· <strong class="font-medium text-accent-primary">PR #{issue.linkedPrNumber}</strong>
+				<strong class="shrink-0 whitespace-nowrap font-medium text-accent-primary">
+					PR #{issue.linkedPrNumber}
+				</strong>
 			{/if}
-		</span>
+		</div>
 
 		{#if footerActions}
 			{@render footerActions(issue)}
 		{:else}
-			<div class="flex items-center gap-1.5">
+			<div class="flex flex-wrap items-center gap-1.5">
 				<button
 					type="button"
 					use:pressScale
 					disabled={!ready}
 					onclick={handleClaim}
-					class="inline-flex h-7 items-center gap-1 rounded-md border border-card-border bg-card-bg px-2.5 font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
+					class="inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-md border border-card-border bg-card-bg px-2 font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
 				>
 					{#if claimed}
 						<svg
@@ -296,13 +313,13 @@
 							stroke-width="2"
 							stroke-linecap="round"
 							stroke-linejoin="round"
-							class="size-3 text-status-success"
+							class="size-3 shrink-0 text-status-success"
 						>
 							<path d="M20 6 9 17l-5-5" />
 						</svg>
 						<span>Claimed</span>
 					{:else}
-						<span>Claim issue</span>
+						<span>{compact ? 'Claim' : 'Claim issue'}</span>
 					{/if}
 				</button>
 				<button
@@ -310,17 +327,25 @@
 					use:pressScale
 					disabled={!ready}
 					onclick={handleDispatch}
-					class="inline-flex h-7 items-center gap-1.5 rounded-md bg-fg-main px-2.5 font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
+					class="inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-md bg-fg-main px-2.5 font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
 				>
 					<svg
 						aria-hidden="true"
 						viewBox="0 0 24 24"
 						fill="currentColor"
-						class="size-2.5"
+						class="size-2.5 shrink-0"
 					>
 						<polygon points="6 3 20 12 6 21 6 3" />
 					</svg>
-					<span>{dispatched ? 'Run Dispatched' : 'Dispatch Agent'}</span>
+					<span>
+						{dispatched
+							? compact
+								? 'Dispatched'
+								: 'Run Dispatched'
+							: compact
+								? 'Dispatch'
+								: 'Dispatch Agent'}
+					</span>
 				</button>
 				{#if onOpenChat}
 					<button
@@ -328,7 +353,7 @@
 						use:pressScale
 						disabled={!ready}
 						onclick={() => onOpenChat(issue.number)}
-						class="inline-flex h-7 items-center rounded-md border border-card-border bg-card-bg px-2 font-mono text-[11px] text-accent-primary hover:bg-accent-subtle"
+						class="inline-flex h-7 items-center whitespace-nowrap rounded-md border border-card-border bg-card-bg px-2 font-mono text-[11px] text-accent-primary hover:bg-accent-subtle"
 					>
 						Chat
 					</button>

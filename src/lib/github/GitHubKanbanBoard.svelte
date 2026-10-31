@@ -60,7 +60,7 @@
 			],
 			riskTier: 'T1',
 			size: 'S',
-			assignedAgent: 'Claude Code · Attempt 1',
+			assignedAgent: 'AK-S Agent · Attempt 1',
 			worktreeBranch: 'argon/2151-home-faint-captions-contrast',
 			linkedPrNumber: 2153,
 			criteriaCompleted: 5,
@@ -79,7 +79,7 @@
 			],
 			riskTier: 'T1',
 			size: 'S',
-			assignedAgent: 'Claude Code · Attempt 1',
+			assignedAgent: 'AK-S Agent · Attempt 1',
 			worktreeBranch: 'argon/2148-repo-dialog-status-contrast',
 			linkedPrNumber: 2150,
 			criteriaCompleted: 4,
@@ -127,7 +127,7 @@
 		{
 			id: 'ready-for-human',
 			label: 'Ready for You',
-			description: 'CI green & awaiting referee/human review'
+			description: 'CI green & awaiting referee review'
 		},
 		{ id: 'closed', label: 'Merged & Verified', description: 'Landed on main & verified live' }
 	];
@@ -171,7 +171,7 @@
 			...dispatchedOverrides,
 			[issueNumber]: {
 				state: 'in-progress',
-				assignedAgent: 'Claude Code · Attempt 1 (Dispatched)',
+				assignedAgent: 'AK-S Agent · Attempt 1 (Dispatched)',
 				worktreeBranch: `trailside/${issueNumber}-auto-run`
 			}
 		};
@@ -180,20 +180,20 @@
 
 <section
 	aria-label="GitHub Reactive Board Layout"
-	class="space-y-4 rounded-2xl border border-card-border bg-canvas-secondary p-4 sm:p-5 {className}"
+	class="@container space-y-4 rounded-2xl border border-card-border bg-canvas-secondary p-4 sm:p-5 {className}"
 >
 	<!-- Board Toolbar -->
 	<div class="flex flex-wrap items-center justify-between gap-3">
 		<div>
-			<div class="flex items-center gap-2">
+			<div class="flex flex-wrap items-center gap-2">
 				<h2 class="text-base font-bold text-fg-main">RSynapse/trailside · Reactive Board</h2>
 				<span
-					class="rounded-full bg-status-success-subtle px-2 py-0.5 font-mono text-[11px] font-medium text-status-success"
+					class="whitespace-nowrap rounded-full bg-status-success-subtle px-2 py-0.5 font-mono text-[11px] font-medium text-status-success"
 				>
 					GitHub App Read-Only Sync
 				</span>
 			</div>
-			<p class="text-xs text-fg-light">
+			<p class="mt-0.5 text-xs text-fg-light">
 				What's in motion across Triage, Active Worktree Runs, Referee Review, and Merged cards
 			</p>
 		</div>
@@ -204,7 +204,7 @@
 				placeholder="Filter cards by title or number…"
 				bind:value={searchQuery}
 				aria-label="Filter board cards"
-				class="rounded-lg border border-card-border bg-card-bg px-3 py-1.5 text-xs text-fg-main placeholder:text-fg-light focus:border-accent-primary focus:outline-none"
+				class="h-8 w-56 rounded-lg border border-card-border bg-card-bg px-3 text-xs text-fg-main placeholder:text-fg-light focus:border-accent-primary focus:outline-none"
 			/>
 
 			<div role="group" aria-label="Filter by area" class="flex rounded-lg border border-card-border bg-card-bg p-0.5 text-xs">
@@ -212,7 +212,7 @@
 					type="button"
 					use:pressScale
 					onclick={() => (selectedArea = 'all')}
-					class="rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'all'
+					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'all'
 						? 'bg-canvas-secondary text-fg-main'
 						: 'text-fg-light hover:text-fg-main'}"
 				>
@@ -222,7 +222,7 @@
 					type="button"
 					use:pressScale
 					onclick={() => (selectedArea = 'area:landing')}
-					class="rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:landing'
+					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:landing'
 						? 'bg-canvas-secondary text-fg-main'
 						: 'text-fg-light hover:text-fg-main'}"
 				>
@@ -232,7 +232,7 @@
 					type="button"
 					use:pressScale
 					onclick={() => (selectedArea = 'area:app')}
-					class="rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:app'
+					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:app'
 						? 'bg-canvas-secondary text-fg-main'
 						: 'text-fg-light hover:text-fg-main'}"
 				>
@@ -242,17 +242,17 @@
 		</div>
 	</div>
 
-	<!-- 4-Column Kanban Grid with Svelte 5 crossfade (send/receive) & animate:flip -->
-	<div class="grid gap-3.5 md:grid-cols-2 xl:grid-cols-4">
+	<!-- Container-Responsive Kanban Grid (2-col in medium containers, 4-col in wide >= 1024px containers) -->
+	<div class="grid gap-3.5 @xl:grid-cols-2 @5xl:grid-cols-4">
 		{#each COLUMNS as col (col.id)}
 			{@const colItems = filteredIssues.filter((item) => item.state === col.id)}
-			<div class="flex flex-col rounded-xl border border-card-border bg-canvas-primary p-3">
-				<header class="mb-3 flex items-center justify-between gap-2 border-b border-canvas-border pb-2">
-					<div>
-						<h3 class="text-xs font-bold uppercase tracking-wider text-fg-main">{col.label}</h3>
-						<p class="text-[11px] text-fg-light">{col.description}</p>
+			<div class="flex min-w-0 flex-col rounded-xl border border-card-border bg-canvas-primary p-3">
+				<header class="mb-3 flex min-h-10 items-start justify-between gap-2 border-b border-canvas-border pb-2.5">
+					<div class="min-w-0">
+						<h3 class="truncate text-xs font-bold uppercase tracking-wider text-fg-main">{col.label}</h3>
+						<p class="mt-0.5 truncate text-[11px] text-fg-light">{col.description}</p>
 					</div>
-					<span class="rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-xs font-semibold tabular-nums text-fg-main">
+					<span class="shrink-0 rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-xs font-semibold tabular-nums text-fg-main">
 						{colItems.length}
 					</span>
 				</header>
@@ -263,6 +263,7 @@
 							in:receive={{ key: item.number }}
 							out:send={{ key: item.number }}
 							animate:flip={{ duration: motionDuration(250), easing: cubicOut }}
+							class="min-w-0"
 						>
 							<GitHubIssueCard
 								issue={item}

@@ -605,7 +605,7 @@ svelte-check found 0 errors and 0 warnings
 	<!-- 3. Upstream Two-Column Sticky Sidebar + Main Component Catalogue -->
 	<div
 		id="components"
-		class="mx-auto grid max-w-[1160px] scroll-mt-16 border-t border-canvas-border lg:grid-cols-[224px_minmax(0,1fr)]"
+		class="mx-auto grid max-w-7xl scroll-mt-16 border-t border-canvas-border lg:grid-cols-[224px_minmax(0,1fr)]"
 	>
 		<!-- Left Sticky Sidebar (matches components/gallery/catalogue.tsx) -->
 		<aside
