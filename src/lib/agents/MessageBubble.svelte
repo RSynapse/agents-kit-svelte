@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { ChevronDown } from '@lucide/svelte';
@@ -109,7 +110,7 @@
 	data-from={align === 'end' ? 'user' : 'assistant'}
 	data-align={align}
 	data-variant={variant}
-	class="flex w-full gap-2.5 {align === 'end' ? 'flex-row-reverse' : 'flex-row'} {className}"
+	class={cn(`flex w-full gap-2.5 ${align === 'end' ? 'flex-row-reverse' : 'flex-row'}`, className)}
 >
 	<div
 		aria-hidden="true"

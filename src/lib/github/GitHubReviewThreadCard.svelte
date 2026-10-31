@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
@@ -46,7 +47,7 @@
 	}
 </script>
 
-<div {...rest} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary px-3.5 py-2 text-xs">
 		<div class="flex items-center gap-2 font-mono">
 			<code class="font-semibold text-fg-main">{thread.filePath}</code>

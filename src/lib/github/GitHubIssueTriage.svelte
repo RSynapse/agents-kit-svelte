@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, CircleDot, Copy, Sparkles, X } from '@lucide/svelte';
 	import { SvelteSet } from 'svelte/reactivity';
@@ -52,7 +53,7 @@
 	}
 </script>
 
-<article {...rest} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<article {...rest} class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<header class="border-b border-canvas-border px-4 py-3">
 		<div class="flex items-start gap-2.5">
 			<CircleDot aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-status-success" />

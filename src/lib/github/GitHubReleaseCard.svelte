@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, Package, Sparkles, Tag } from '@lucide/svelte';
 	import { rise } from '../state/motion.svelte';
@@ -45,7 +46,7 @@
 	}
 </script>
 
-<article {...rest} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<article {...rest} class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<header class="flex flex-wrap items-start justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="min-w-0">
 			<p class="flex flex-wrap items-center gap-2">

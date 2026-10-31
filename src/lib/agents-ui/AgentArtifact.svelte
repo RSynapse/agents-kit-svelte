@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Share2, Check, Copy, Download, LoaderCircle, Pencil, RefreshCw } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
@@ -102,7 +103,7 @@
 
 <section {...rest}
 	aria-label="Rich agent artifact viewer"
-	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<header
 		class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border p-4"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Sparkle } from '@lucide/svelte';
 
@@ -12,7 +13,7 @@
 	let { label = 'Thinking…', spark = false, class: className = '', ...rest }: Props = $props();
 </script>
 
-<span {...rest} class="inline-flex items-center gap-2 {className}">
+<span {...rest} class={cn('inline-flex items-center gap-2', className)}>
 	{#if spark}
 		<Sparkle aria-hidden="true" class="ak-spark size-3.5 fill-current text-chat-accent" />
 	{/if}

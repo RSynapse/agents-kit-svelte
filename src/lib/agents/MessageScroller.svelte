@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { rise } from '../state/motion.svelte';
 	import { pillClass } from '../ui/styles';
@@ -528,7 +529,7 @@
 
 <div {...rest}
 	data-slot="message-scroller"
-	class="relative flex min-h-0 flex-1 overflow-hidden {className}"
+	class={cn('relative flex min-h-0 flex-1 overflow-hidden', className)}
 >
 	<section
 		bind:this={viewportEl}

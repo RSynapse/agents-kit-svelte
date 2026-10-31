@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { GitMerge, ListOrdered, Pause, Play, X } from '@lucide/svelte';
 	import { flip } from 'svelte/animate';
@@ -63,7 +64,7 @@
 	}
 </script>
 
-<section {...rest} aria-label="Merge queue for {baseBranch}" class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<section {...rest} aria-label="Merge queue for {baseBranch}" class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex items-center gap-2">
 			<ListOrdered aria-hidden="true" class="size-4 text-fg-light" />

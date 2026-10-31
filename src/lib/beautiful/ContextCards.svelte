@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import { AlignLeft, ArrowUpRight, X } from '@lucide/svelte';
@@ -93,7 +94,7 @@
 	);
 </script>
 
-<div {...rest} class="flex w-full flex-col gap-2.5 text-fg-main {className}">
+<div {...rest} class={cn('flex w-full flex-col gap-2.5 text-fg-main', className)}>
 	<header class="flex items-center justify-between gap-2 px-0.5 text-xs">
 		<div class="flex items-center gap-2">
 			<span class="text-[13px] font-semibold text-fg-main">Retrieved chunks</span>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, Lightbulb, Sparkles, X } from '@lucide/svelte';
 	import { scale } from 'svelte/transition';
@@ -63,7 +64,7 @@
 <article {...rest}
 	aria-label="Skill proposal: {proposal.name}"
 	data-state={localStatus}
-	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft {className}"
+	class={cn('w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft', className)}
 >
 	<header class="flex items-start gap-3 p-4">
 		<span aria-hidden="true" class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-chat-accent-subtle text-chat-accent [&_svg]:size-4">

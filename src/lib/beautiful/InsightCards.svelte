@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	export type InsightKind = 'compare' | 'anomaly' | 'allocation';
 
@@ -87,7 +88,7 @@
 	}
 </script>
 
-<div {...rest} class="grid gap-3 md:grid-cols-3 {className}">
+<div {...rest} class={cn('grid gap-3 md:grid-cols-3', className)}>
 	{#each insights as item (item.id)}
 		{@const isSelected = selectedId === item.id}
 		{@const spark = buildSparkline(item.series)}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import GitHubChecksPanel from './GitHubChecksPanel.svelte';
 	import GitHubCommitCard from './GitHubCommitCard.svelte';
@@ -47,7 +48,7 @@
 	}: Props = $props();
 </script>
 
-<section {...rest} aria-label="GitHub Repository Bento Dashboard" class="@container space-y-4 {className}">
+<section {...rest} aria-label="GitHub Repository Bento Dashboard" class={cn('@container space-y-4', className)}>
 	<!-- Top Repository Status Strip -->
 	<div class="grid gap-3 @sm:grid-cols-2 @3xl:grid-cols-4">
 		<div class="rounded-card border border-card-border bg-card-bg p-3.5">

@@ -5,7 +5,8 @@ import test from 'node:test';
 
 /**
  * The component contract (see the README's "Customising" notes):
- * - every component forwards extra attributes (aria-*, data-*, id, style, handlers) to its root;
+ * - every component forwards extra attributes (aria-*, data-*, id, style, handlers) to its root,
+ *   and merges your `class` last through cn(), so your utilities win;
  * - components never fall back to demo data; samples live in src/lib/fixtures.
  */
 
@@ -34,6 +35,7 @@ test('every component forwards rest props to its root element', () => {
 		assert.match(source, /\.\.\.rest\s*\n?\s*\}: Props = \$props\(\)/, `${rel} does not collect ...rest`);
 		assert.match(source, /<[a-z]+ \{\.\.\.rest\}/, `${rel} does not spread {...rest} on its root`);
 		assert.match(source, /interface Props extends Omit<HTML\w*Attributes/, `${rel} Props do not extend HTML attributes`);
+		assert.match(source, /class=\{cn\([\s\S]*?, className\)\}/, `${rel} does not merge its class prop with cn()`);
 	}
 });
 

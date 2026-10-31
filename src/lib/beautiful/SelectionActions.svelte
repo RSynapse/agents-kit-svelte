@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	export interface SelectionAction {
@@ -59,7 +60,7 @@
 </script>
 
 <section {...rest}
-	class="rounded-card border border-card-border bg-card-bg p-4 text-fg-main shadow-xs {className}"
+	class={cn('rounded-card border border-card-border bg-card-bg p-4 text-fg-main shadow-xs', className)}
 >
 	<div class="flex flex-wrap items-center justify-between gap-2">
 		<div class="flex items-center gap-2">

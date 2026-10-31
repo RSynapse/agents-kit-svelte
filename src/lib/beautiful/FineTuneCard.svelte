@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	export interface FineTuneField {
@@ -71,7 +72,7 @@
 </script>
 
 <section {...rest}
-	class="w-full max-w-md rounded-card border border-card-border bg-card-bg p-4 text-fg-main {className}"
+	class={cn('w-full max-w-md rounded-card border border-card-border bg-card-bg p-4 text-fg-main', className)}
 >
 	<div class="flex items-center justify-between gap-2">
 		<h3 class="text-sm font-semibold text-fg-main">{title}</h3>

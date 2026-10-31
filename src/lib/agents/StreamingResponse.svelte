@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass, togglePillClass } from '../ui/styles';
 	import { Check, Copy, RefreshCw, ThumbsDown, ThumbsUp } from '@lucide/svelte';
@@ -45,7 +46,7 @@
 	}
 </script>
 
-<div {...rest} data-state={status} aria-busy={status === 'streaming'} class="w-full {className}">
+<div {...rest} data-state={status} aria-busy={status === 'streaming'} class={cn('w-full', className)}>
 	<div aria-live="polite" class="space-y-2.5 text-sm leading-6 text-fg-main">
 		{@render children()}
 	</div>

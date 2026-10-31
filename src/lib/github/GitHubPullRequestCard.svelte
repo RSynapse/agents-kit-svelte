@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import { ArrowRight, Check, ChevronDown, GitPullRequest, ShieldCheck } from '@lucide/svelte';
@@ -41,7 +42,7 @@
 
 <article {...rest}
 	aria-label="GitHub Pull Request {pr.number}: {pr.title}"
-	class="rounded-card border border-card-border bg-card-bg p-4 text-sm {className}"
+	class={cn('rounded-card border border-card-border bg-card-bg p-4 text-sm', className)}
 >
 	<!-- Header Row -->
 	<div class="flex flex-wrap items-center justify-between gap-2 text-xs">

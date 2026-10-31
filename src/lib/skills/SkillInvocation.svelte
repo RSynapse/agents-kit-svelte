@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { BookOpenText, Check, ChevronDown, CircleDashed, LoaderCircle, X } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
@@ -73,7 +74,7 @@
 	aria-label="{title} {skill.name}"
 	aria-busy={busy}
 	data-state={status}
-	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm {className}"
+	class={cn('w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm', className)}
 >
 	<button
 		type="button"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import {
 		CircleDot,
@@ -81,7 +82,7 @@
 
 <section {...rest}
 	aria-label={title}
-	class="@container overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('@container overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div>

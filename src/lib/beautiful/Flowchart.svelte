@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check } from '@lucide/svelte';
 	export interface FlowchartNode {
@@ -84,7 +85,7 @@
 </script>
 
 <div {...rest}
-	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
+	class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main', className)}
 >
 	<div class="overflow-x-auto bg-canvas-secondary/60 p-4">
 		<div class="relative h-48 min-w-[640px]">

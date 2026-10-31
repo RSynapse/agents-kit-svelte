@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, RefreshCw, X, Zap } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
@@ -47,7 +48,7 @@
 
 <section {...rest}
 	aria-label={title}
-	class="rounded-card border border-card-border bg-card-bg p-4 text-sm {className}"
+	class={cn('rounded-card border border-card-border bg-card-bg p-4 text-sm', className)}
 >
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border pb-3">
 		<div>

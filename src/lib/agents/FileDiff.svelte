@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { Check, ChevronDown, Copy, FileCode } from '@lucide/svelte';
@@ -58,7 +59,7 @@
 <div {...rest}
 	data-state={status}
 	aria-busy={status === 'streaming'}
-	class="w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm text-sm', className)}
 >
 	<div class="flex h-10 items-center gap-2 px-3">
 		<button

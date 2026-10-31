@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, Copy, GitCommitHorizontal, RotateCcw } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
@@ -42,7 +43,7 @@
 	}
 </script>
 
-<div {...rest} class="rounded-card border border-card-border bg-card-bg p-3.5 text-sm {className}">
+<div {...rest} class={cn('rounded-card border border-card-border bg-card-bg p-3.5 text-sm', className)}>
 	<div class="flex flex-wrap items-center justify-between gap-2">
 		<div class="flex min-w-0 flex-1 items-center gap-2">
 			<button

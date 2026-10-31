@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
@@ -66,7 +67,7 @@
 </script>
 
 <section {...rest}
-	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
+	class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main', className)}
 >
 	<header
 		class="flex min-h-12 flex-wrap items-center justify-between gap-3 border-b border-canvas-border px-4 py-2.5"

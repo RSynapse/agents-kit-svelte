@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronDown, FileText, LoaderCircle, Settings, Sparkles } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
@@ -107,7 +108,7 @@
 	}
 </script>
 
-<div {...rest} class="w-full rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('w-full rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<button
 		type="button"
 		aria-expanded={isOpen}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLFormAttributes } from 'svelte/elements';
 	import { Check, CircleAlert, ScrollText, TriangleAlert } from '@lucide/svelte';
 	import { fade } from 'svelte/transition';
@@ -83,7 +84,7 @@
 <form {...rest}
 	aria-label={title}
 	onsubmit={save}
-	class="@container w-full overflow-hidden rounded-window border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm {className}"
+	class={cn('@container w-full overflow-hidden rounded-window border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm', className)}
 >
 	<header class="flex flex-wrap items-center justify-between gap-2 px-4 pt-3.5 pb-3">
 		<div>

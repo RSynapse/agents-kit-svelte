@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { ChevronDown, Globe } from '@lucide/svelte';
@@ -29,7 +30,7 @@
 	let panelId = $derived(`citations-${citations[0]?.id ?? 'panel'}`);
 </script>
 
-<div {...rest} class="w-full text-xs {className}">
+<div {...rest} class={cn('w-full text-xs', className)}>
 	<button
 		type="button"
 		aria-expanded={isOpen}

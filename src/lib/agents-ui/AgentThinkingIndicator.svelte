@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { AudioWaveform, Ellipsis, Infinity as InfinityIcon, LoaderCircle, Pause, Play, Sparkles } from '@lucide/svelte';
 	import type { Component } from 'svelte';
@@ -84,7 +85,7 @@
 	role="status"
 	aria-live="polite"
 	data-paused={isPaused}
-	class="ak-thinking w-full rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('ak-thinking w-full rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<div class="flex items-center gap-3 px-4 py-3">
 		<div

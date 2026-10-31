@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import { Check, CircleCheck, CircleDot, GitBranch, Play } from '@lucide/svelte';
@@ -93,9 +94,7 @@
 
 <article {...rest}
 	aria-label="GitHub Issue {issue.number}: {issue.title}"
-	class="ak-micro-lift flex min-w-0 flex-col justify-between overflow-hidden rounded-card border border-card-border bg-card-bg {compact
-		? 'p-3.5'
-		: 'p-4'} text-sm transition-colors {className}"
+	class={cn(`ak-micro-lift flex min-w-0 flex-col justify-between overflow-hidden rounded-card border border-card-border bg-card-bg ${compact ? 'p-3.5' : 'p-4'} text-sm transition-colors`, className)}
 >
 	<div class="min-w-0">
 		<!-- Top Meta Row -->

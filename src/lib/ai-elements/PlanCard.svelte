@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronDown, LoaderCircle } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
@@ -87,7 +88,7 @@
 	}
 </script>
 
-<div {...rest} class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<div class="flex flex-wrap items-start justify-between gap-3 border-b border-canvas-border px-4 py-3.5">
 		<div class="min-w-0 flex-1 space-y-1">
 			<div class="flex flex-wrap items-center gap-2">

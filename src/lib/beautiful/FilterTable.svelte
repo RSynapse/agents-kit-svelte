@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	export type FilterStatus = 'todo' | 'progress' | 'done';
@@ -75,7 +76,7 @@
 </script>
 
 <section {...rest}
-	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
+	class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main', className)}
 >
 	<div
 		class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary p-2.5"

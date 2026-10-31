@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronRight, Play, RefreshCw, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
@@ -156,7 +157,7 @@
 
 <section {...rest}
 	aria-label="Parallel worker pool monitor"
-	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"

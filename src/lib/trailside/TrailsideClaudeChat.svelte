@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { prefersReducedMotion } from 'svelte/motion';
@@ -472,9 +473,7 @@
 
 <div {...rest}
 	bind:this={root}
-	class="flex {embedded
-		? 'h-[760px]'
-		: 'h-[calc(100dvh-5.375rem)] min-h-[520px] lg:h-[calc(100dvh-4.0625rem)]'} flex-col overflow-hidden bg-chat-surface text-fg-main {className}"
+	class={cn(`flex ${embedded ? 'h-[760px]' : 'h-[calc(100dvh-5.375rem)] min-h-[520px] lg:h-[calc(100dvh-4.0625rem)]'} flex-col overflow-hidden bg-chat-surface text-fg-main`, className)}
 >
 	<!-- Top bar -->
 	<header class="border-b border-chat-border/70 bg-chat-surface px-4 pt-3 sm:px-6">

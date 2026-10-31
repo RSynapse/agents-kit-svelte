@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronDown } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
@@ -121,7 +122,7 @@
 </script>
 
 <section {...rest}
-	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
+	class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main', className)}
 >
 	<div role="region" aria-label="Agent records table" class="overflow-x-auto">
 		<table class="w-full min-w-[600px] text-left text-xs">

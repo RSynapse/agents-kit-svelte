@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
@@ -85,7 +86,7 @@
 
 <section {...rest}
 	aria-label="GitHub Reactive Board Layout"
-	class="@container space-y-4 rounded-2xl border border-card-border bg-canvas-secondary p-4 sm:p-5 {className}"
+	class={cn('@container space-y-4 rounded-2xl border border-card-border bg-canvas-secondary p-4 sm:p-5', className)}
 >
 	<!-- Board Toolbar -->
 	<div class="flex flex-wrap items-center justify-between gap-3">

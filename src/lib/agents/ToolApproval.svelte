@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { Check, ChevronDown, ShieldCheck, X } from '@lucide/svelte';
@@ -99,7 +100,7 @@
 	aria-label="{tool} tool approval"
 	data-state={activeStatus}
 	aria-busy={isBusy}
-	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg ak-shadow-soft text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg ak-shadow-soft text-sm', className)}
 >
 	<div class="flex items-start gap-3 p-4">
 		{#key activeStatus}

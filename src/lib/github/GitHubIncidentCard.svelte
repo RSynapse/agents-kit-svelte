@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Activity, Check, GitCommitHorizontal, RotateCcw, Siren } from '@lucide/svelte';
 	import { Tween } from 'svelte/motion';
@@ -76,7 +77,7 @@
 	}
 </script>
 
-<article {...rest} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<article {...rest} class={cn('overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex min-w-0 items-center gap-2">
 			<span class="inline-flex size-7 shrink-0 items-center justify-center rounded-full {level === -1 || level === 3 ? 'bg-canvas-secondary text-fg-light' : 'bg-status-danger-subtle text-status-danger'}">

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	/** A tool category id, or 'all'. Categories come from the tools you pass. */
@@ -111,7 +112,7 @@
 
 <section {...rest}
 	aria-label="Interactive command and MCP tool palette"
-	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-center sm:justify-between"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Sparkle } from '@lucide/svelte';
 	interface Props extends Omit<HTMLAttributes<HTMLSpanElement>, 'class' | 'children' | 'phrases' | 'interval'> {
@@ -41,7 +42,7 @@
 <span {...rest}
 	role="status"
 	aria-live="polite"
-	class="inline-flex items-center gap-2 text-[15px] font-medium text-fg-light {className}"
+	class={cn('inline-flex items-center gap-2 text-[15px] font-medium text-fg-light', className)}
 >
 	<Sparkle aria-hidden="true" class="ak-spark size-3.5 fill-current text-chat-accent" />
 	<span class="ak-shimmer-text">{activePhrase}…</span>

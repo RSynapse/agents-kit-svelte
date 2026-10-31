@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, CircleCheck, FileCode, MessageSquare, MessageSquareWarning } from '@lucide/svelte';
 	import { SvelteSet } from 'svelte/reactivity';
@@ -79,7 +80,7 @@
 	}
 </script>
 
-<article {...rest} class="@container overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<article {...rest} class={cn('@container overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="min-w-0">
 			<h3 class="truncate font-semibold text-fg-main">{title} <span class="font-normal text-fg-light">#{prNumber}</span></h3>

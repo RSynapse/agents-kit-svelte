@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronRight } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
@@ -157,7 +158,7 @@
 	</div>
 {/snippet}
 
-<div {...rest} class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<div class="flex flex-wrap items-center gap-3 border-b border-canvas-border px-4 py-3">
 		<span
 			class="rounded-md px-2.5 py-0.5 font-mono text-xs font-bold {getMethodBadgeStyle(method)}"

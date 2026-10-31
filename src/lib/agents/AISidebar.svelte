@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Bookmark, FileText, Folder, FolderOpen, GitBranch, Pencil, Pin, PinOff } from '@lucide/svelte';
 	import type { Component } from 'svelte';
@@ -251,7 +252,7 @@
 
 <aside {...rest}
 	aria-label={ariaLabel}
-	class="flex w-full max-w-xs flex-col rounded-card border border-card-border bg-card-bg p-3 text-sm text-fg-main {className}"
+	class={cn('flex w-full max-w-xs flex-col rounded-card border border-card-border bg-card-bg p-3 text-sm text-fg-main', className)}
 >
 	<header class="mb-2 flex items-center justify-between gap-2 px-1">
 		<span class="text-xs font-medium text-fg-light">

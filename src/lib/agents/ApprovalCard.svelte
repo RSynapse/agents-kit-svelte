@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { MessageCircleQuestion, Check } from '@lucide/svelte';
@@ -93,7 +94,7 @@
 <div {...rest}
 	role="region"
 	aria-label={title}
-	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg ak-shadow-soft p-5 text-sm {className}"
+	class={cn('w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg ak-shadow-soft p-5 text-sm', className)}
 >
 	<div class="flex items-start justify-between gap-2">
 		<div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Bookmark, Check, Columns2, Copy, Download, Maximize2, Minimize2, Pencil } from '@lucide/svelte';
 	import { buttonClass, toggleButtonClass } from '../ui/styles';
@@ -46,7 +47,7 @@
 <div {...rest}
 	role="toolbar"
 	aria-label="Generated result actions"
-	class="inline-flex flex-wrap items-center gap-0.5 rounded-control border border-card-border bg-card-bg p-0.5 ak-shadow-btn {className}"
+	class={cn('inline-flex flex-wrap items-center gap-0.5 rounded-control border border-card-border bg-card-bg p-0.5 ak-shadow-btn', className)}
 >
 	<button
 		type="button"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { buttonClass } from '../ui/styles';
 	import { Check, GitCommitHorizontal, RotateCcw } from '@lucide/svelte';
@@ -26,7 +27,7 @@
 <div {...rest}
 	role="region"
 	aria-label="Worktree checkpoint {checkpoint.commitSha}"
-	class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-card-border bg-card-bg px-3.5 py-2.5 text-xs {className}"
+	class={cn('flex flex-wrap items-center justify-between gap-2 rounded-lg border border-card-border bg-card-bg px-3.5 py-2.5 text-xs', className)}
 >
 	<div class="flex min-w-0 flex-wrap items-center gap-2">
 		<span

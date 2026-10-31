@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, badgeClass, segmentClass } from '../ui/styles';
 	import { ArrowRight, BadgeCheck, Check, Package } from '@lucide/svelte';
@@ -66,7 +67,7 @@
 	}
 </script>
 
-<div {...rest} class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
+<div {...rest} class={cn('w-full rounded-card border border-card-border bg-card-bg p-4 text-sm', className)}>
 	<div class="flex flex-wrap items-start justify-between gap-3">
 		<div class="space-y-1">
 			<div class="flex flex-wrap items-center gap-2">

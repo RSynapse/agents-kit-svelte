@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { ArrowUp, CornerDownRight, Route } from '@lucide/svelte';
 	import { Tween } from 'svelte/motion';
@@ -76,7 +77,7 @@
 
 <section {...rest}
 	aria-label="Skill router"
-	class="w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm {className}"
+	class={cn('w-full overflow-hidden rounded-[20px] border border-chat-border bg-card-bg text-sm ak-shadow-soft-sm', className)}
 >
 	<header class="flex items-center justify-between gap-3 px-4 pt-3.5 pb-3">
 		<div class="flex items-center gap-2.5">

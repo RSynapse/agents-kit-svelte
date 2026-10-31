@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, ChevronDown, LoaderCircle, RefreshCw } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
@@ -87,7 +88,7 @@
 	let warnLogCount = $derived(logs.filter((l) => l.level === 'warn').length);
 </script>
 
-<div {...rest} class="flex w-full flex-col overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<div {...rest} class={cn('flex w-full flex-col overflow-hidden rounded-card border border-card-border bg-card-bg text-sm', className)}>
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary px-3 py-2">
 		<div class="flex items-center gap-1.5">
 			<button

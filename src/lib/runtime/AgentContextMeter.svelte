@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { Spring, prefersReducedMotion } from 'svelte/motion';
@@ -76,7 +77,7 @@
 	});
 </script>
 
-<div {...rest} bind:this={rootEl} class="relative inline-block text-xs {className}">
+<div {...rest} bind:this={rootEl} class={cn('relative inline-block text-xs', className)}>
 	<button
 		type="button"
 		aria-label="Context window {meter.formattedUsed} of {meter.formattedMax} tokens ({meter.percent}%)"

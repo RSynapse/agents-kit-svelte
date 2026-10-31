@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { FileIcon, FolderOpen } from '@lucide/svelte';
 	export interface WorktreeFileNode {
@@ -23,7 +24,7 @@
 <div {...rest}
 	role="tree"
 	aria-label="Worktree changed files"
-	class="rounded-card border border-card-border bg-card-bg p-2 font-mono text-xs {className}"
+	class={cn('rounded-card border border-card-border bg-card-bg p-2 font-mono text-xs', className)}
 >
 	{#each nodes as node (node.path)}
 		{#if node.kind === 'folder'}

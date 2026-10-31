@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import type { ComponentProps } from 'svelte';
 	import { flip } from 'svelte/animate';
@@ -53,7 +54,7 @@
 	</p>
 {/snippet}
 
-<div {...rest} class="space-y-4 {className}">
+<div {...rest} class={cn('space-y-4', className)}>
 	{#each nodes as node (node.id)}
 		<div
 			animate:flip={{ duration: motionDuration(240), easing: cubicOut }}

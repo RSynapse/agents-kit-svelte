@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Plus, Search } from '@lucide/svelte';
 	import { flip } from 'svelte/animate';
@@ -80,7 +81,7 @@
 
 <section {...rest}
 	aria-label="{title} library"
-	class="w-full overflow-hidden rounded-window border border-chat-border bg-chat-surface text-sm ak-shadow-soft-sm {className}"
+	class={cn('w-full overflow-hidden rounded-window border border-chat-border bg-chat-surface text-sm ak-shadow-soft-sm', className)}
 >
 	<header class="flex flex-col gap-3 px-4 pt-4 pb-3 sm:flex-row sm:items-center sm:justify-between">
 		<div>

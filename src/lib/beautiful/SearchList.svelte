@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Search } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
@@ -80,7 +81,7 @@
 </script>
 
 <section {...rest}
-	class="w-full max-w-xl rounded-card border border-card-border bg-card-bg p-3 text-fg-main {className}"
+	class={cn('w-full max-w-xl rounded-card border border-card-border bg-card-bg p-3 text-fg-main', className)}
 >
 	<div class="flex items-center gap-2 border-b border-canvas-border pb-2.5">
 		<Search aria-hidden="true" class="ml-1.5 size-3.5 text-fg-light" />

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Check, FileText } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
@@ -130,7 +131,7 @@
 	}
 </script>
 
-<div {...rest} class="w-full space-y-2.5 {className}">
+<div {...rest} class={cn('w-full space-y-2.5', className)}>
 	<div
 		class="overflow-hidden rounded-window border border-card-border bg-card-bg p-4 text-sm shadow-xs transition-all {mode !==
 		'view'

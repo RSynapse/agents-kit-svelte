@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { Check, CircleAlert, ImageIcon } from '@lucide/svelte';
@@ -89,9 +90,7 @@
 	data-slot="image-generation"
 	data-state={currentStatus}
 	aria-busy={isActive}
-	class="w-full rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm p-3.5 text-fg-main {size === 'compact'
-		? 'max-w-xs'
-		: ''} {className}"
+	class={cn(`w-full rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm p-3.5 text-fg-main ${size === 'compact' ? 'max-w-xs' : ''}`, className)}
 >
 	<div
 		role="img"

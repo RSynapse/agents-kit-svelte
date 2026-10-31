@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '../ui/cn';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { pillClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
@@ -72,7 +73,7 @@
 <div {...rest}
 	data-state={status}
 	aria-busy={status === 'working'}
-	class="w-full text-sm {className}"
+	class={cn('w-full text-sm', className)}
 >
 	<button
 		type="button"
