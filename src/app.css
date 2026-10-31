@@ -92,6 +92,12 @@
 	--font-sans: var(--font-sans);
 	--font-mono: var(--font-mono);
 
+	/* Shape scale from upstream agents-kit DESIGN.md */
+	--radius-chip: 6px;
+	--radius-control: 8px;
+	--radius-card: 10px;
+	--radius-window: 14px;
+
 	--color-canvas-primary: var(--color-canvas-primary-val);
 	--color-canvas-secondary: var(--color-canvas-secondary-val);
 	--color-card-bg: var(--color-card-bg-val);
@@ -127,10 +133,29 @@
 		font-family: var(--font-sans);
 		font-size: 14px;
 		line-height: 1.5;
-		letter-spacing: -0.011em;
-		font-feature-settings: "cv11", "ss01", "cv02", "cv03", "cv04";
+		letter-spacing: -0.01em;
+		font-feature-settings: "cv11", "ss01";
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+	}
+
+	:where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
+		outline: 2px solid var(--color-fg-main-val);
+		outline-offset: 2px;
+	}
+
+	button:not(:disabled),
+	[role="button"]:not([aria-disabled="true"]),
+	summary {
+		cursor: pointer;
+	}
+
+	@media (max-width: 639px) {
+		input,
+		select,
+		textarea {
+			font-size: 16px;
+		}
 	}
 
 	code,
@@ -141,8 +166,8 @@
 		font-feature-settings: "liga" 0, "calt" 0;
 	}
 
-	/* Give bordered card surfaces the delicate Beautiful UI layered elevation automatically */
-	:where(article, section, div).bg-card-bg.border-card-border {
+	/* Give top-level bordered card surfaces the delicate layered elevation; nested cards stay flat */
+	:where(article, section, div).bg-card-bg.border-card-border:not(.bg-card-bg *) {
 		box-shadow: var(--shadow-card);
 	}
 
@@ -169,60 +194,66 @@
 	}
 }
 
+/* Text shimmer for "thinking" labels: a soft sweep, no blur or glow. */
 .ak-shimmer-text {
 	background-image: linear-gradient(
 		90deg,
 		var(--color-fg-light-val) 0%,
+		var(--color-fg-light-val) 35%,
 		var(--color-fg-main-val) 50%,
+		var(--color-fg-light-val) 65%,
 		var(--color-fg-light-val) 100%
 	);
-	background-size: 220% 100%;
+	background-size: 250% 100%;
 	-webkit-background-clip: text;
 	background-clip: text;
 	color: transparent;
-	animation: ak-shimmer 1.8s linear infinite;
+	animation: ak-shimmer 2.2s linear infinite;
+}
+
+/* Calm status pulse for live dots: opacity only, no scale or ping halo. */
+@keyframes ak-breathe {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.35;
+	}
+}
+
+.ak-breathe {
+	animation: ak-breathe 1.6s ease-in-out infinite;
+}
+
+/* Interactive surfaces only animate color, border and shadow, so text stays crisp. */
+.ak-micro-press,
+.ak-micro-lift {
+	transition:
+		background-color 150ms ease,
+		border-color 150ms ease,
+		box-shadow 150ms ease,
+		color 150ms ease,
+		opacity 150ms ease;
+}
+
+.ak-micro-lift:hover {
+	border-color: var(--color-fg-light-val);
+	border-color: color-mix(in oklch, var(--color-fg-light-val) 45%, var(--color-card-border-val));
 }
 
 @media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+
 	.ak-shimmer-text {
-		animation: none;
 		color: var(--color-fg-light-val);
 		background: none;
-	}
-}
-
-.ak-micro-press {
-	transition:
-		scale 140ms cubic-bezier(0.22, 1, 0.36, 1),
-		translate 140ms cubic-bezier(0.22, 1, 0.36, 1),
-		background-color 140ms ease,
-		border-color 140ms ease,
-		color 140ms ease,
-		opacity 140ms ease;
-	&:active:not(:disabled) {
-		scale: 0.97;
-	}
-	@media (prefers-reduced-motion: reduce) {
-		transition: none;
-		&:active:not(:disabled) {
-			scale: 1;
-		}
-	}
-}
-
-.ak-micro-lift {
-	transition:
-		translate 180ms cubic-bezier(0.22, 1, 0.36, 1),
-		scale 180ms cubic-bezier(0.22, 1, 0.36, 1),
-		border-color 180ms ease,
-		box-shadow 180ms ease;
-	&:hover {
-		translate: 0 -1px;
-	}
-	@media (prefers-reduced-motion: reduce) {
-		transition: none;
-		&:hover {
-			translate: none;
-		}
 	}
 }

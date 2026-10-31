@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { FileCode, LayoutGrid, MessageCircle, Moon, SquareTerminal, Sun } from '@lucide/svelte';
 	import AgentActivity from '../agents/AgentActivity.svelte';
 	import AgentProgress from '../agents/AgentProgress.svelte';
 	import ApprovalCard from '../agents/ApprovalCard.svelte';
@@ -500,33 +501,10 @@
 				class="inline-flex h-7 items-center gap-1.5 rounded-lg border border-card-border bg-card-bg px-2.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
 			>
 				{#if isDark}
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.75"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3.5 text-fg-light"
-					>
-						<circle cx="12" cy="12" r="4" />
-						<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-					</svg>
+					<Sun aria-hidden="true" class="size-3.5 text-fg-light" />
 					<span>Light</span>
 				{:else}
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.75"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3.5 text-fg-light"
-					>
-						<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-					</svg>
+					<Moon aria-hidden="true" class="size-3.5 text-fg-light" />
 					<span>Dark</span>
 				{/if}
 			</button>
@@ -549,18 +527,7 @@
 				? 'border border-card-border bg-card-bg text-fg-main'
 				: 'text-fg-light hover:text-fg-main'}"
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="1.75"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-3.5"
-			>
-				<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-			</svg>
+			<MessageCircle aria-hidden="true" class="size-3.5" />
 			<span>AK-S Chat</span>
 		</button>
 		<button
@@ -573,21 +540,7 @@
 				? 'border border-card-border bg-card-bg text-fg-main'
 				: 'text-fg-light hover:text-fg-main'}"
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="1.75"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-3.5"
-			>
-				<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-				<path d="M14 2v4a2 2 0 0 0 2 2h4" />
-				<path d="m10 13-2 2 2 2" />
-				<path d="m14 17 2-2-2-2" />
-			</svg>
+			<FileCode aria-hidden="true" class="size-3.5" />
 			<span>Changes (2)</span>
 		</button>
 		<button
@@ -600,20 +553,7 @@
 				? 'border border-card-border bg-card-bg text-fg-main'
 				: 'text-fg-light hover:text-fg-main'}"
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="1.75"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-3.5"
-			>
-				<path d="m7 11 2-2-2-2" />
-				<path d="M11 13h4" />
-				<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-			</svg>
+			<SquareTerminal aria-hidden="true" class="size-3.5" />
 			<span>Checks & Terminal</span>
 		</button>
 		<button
@@ -626,21 +566,7 @@
 				? 'border border-card-border bg-card-bg text-fg-main'
 				: 'text-fg-light hover:text-fg-main'}"
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="1.75"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-3.5"
-			>
-				<rect width="7" height="7" x="3" y="3" rx="1" />
-				<rect width="7" height="7" x="14" y="3" rx="1" />
-				<rect width="7" height="7" x="14" y="14" rx="1" />
-				<rect width="7" height="7" x="3" y="14" rx="1" />
-			</svg>
+			<LayoutGrid aria-hidden="true" class="size-3.5" />
 			<span>Component Catalog & Evaluation</span>
 		</button>
 	</div>

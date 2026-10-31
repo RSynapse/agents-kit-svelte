@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Check, ChevronDown, Copy, SquareTerminal } from '@lucide/svelte';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import type { ToolResultStatus } from '../types';
 
@@ -68,19 +69,7 @@
 						? 'text-accent-primary'
 						: 'text-fg-light'}"
 			>
-				<svg
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.75"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="size-4"
-				>
-					<path d="m7 11 2-2-2-2" />
-					<path d="M11 13h4" />
-					<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-				</svg>
+				<SquareTerminal class="size-4" />
 			</span>
 
 			<span class="font-medium text-fg-main">{tool}</span>
@@ -95,20 +84,9 @@
 				<span class="ml-auto shrink-0 font-mono text-xs tabular-nums text-fg-light">{meta}</span>
 			{/if}
 
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="1.8"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-4 shrink-0 text-fg-light transition-transform duration-150 group-hover:text-fg-main {isOpen
+			<ChevronDown aria-hidden="true" class="size-4 shrink-0 text-fg-light transition-transform duration-150 group-hover:text-fg-main {isOpen
 					? 'rotate-180'
-					: ''}"
-			>
-				<path d="m6 9 6 6 6-6" />
-			</svg>
+					: ''}" />
 		</button>
 
 		<div class="flex items-center gap-1">
@@ -128,32 +106,9 @@
 				class="inline-flex size-7 items-center justify-center rounded-md text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
 			>
 				{#if copied}
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3.5 text-status-success"
-					>
-						<path d="M20 6 9 17l-5-5" />
-					</svg>
+					<Check aria-hidden="true" class="size-3.5 text-status-success" />
 				{:else}
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.75"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3.5"
-					>
-						<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-						<path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-					</svg>
+					<Copy aria-hidden="true" class="size-3.5" />
 				{/if}
 			</button>
 		</div>

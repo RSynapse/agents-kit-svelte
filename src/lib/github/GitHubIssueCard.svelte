@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { Check, CircleCheck, CircleDot, GitBranch, Play } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import { backOut, cubicOut } from 'svelte/easing';
 	import { Spring, prefersReducedMotion } from 'svelte/motion';
 	import { fly, scale } from 'svelte/transition';
-	import { magneticHover, motionDuration, pressScale } from '../state/motion.svelte';
+	import { motionDuration } from '../state/motion.svelte';
 	import type { GitHubIssueData } from '../types';
 
 	interface Props {
@@ -115,7 +116,6 @@
 </script>
 
 <article
-	use:magneticHover={1.5}
 	aria-label="GitHub Issue {issue.number}: {issue.title}"
 	class="ak-micro-lift flex min-w-0 flex-col justify-between overflow-hidden rounded-xl border border-card-border bg-card-bg {compact
 		? 'p-3.5'
@@ -136,34 +136,10 @@
 								: 'bg-status-success-subtle text-status-success'}"
 					>
 						{#if issue.state === 'closed'}
-							<svg
-								aria-hidden="true"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								class="size-3 shrink-0"
-							>
-								<circle cx="12" cy="12" r="10" />
-								<path d="m9 12 2 2 4-4" />
-							</svg>
+							<CircleCheck aria-hidden="true" class="size-3 shrink-0" />
 							<span>Closed</span>
 						{:else}
-							<svg
-								aria-hidden="true"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								class="size-3 shrink-0"
-							>
-								<circle cx="12" cy="12" r="10" />
-								<circle cx="12" cy="12" r="2" fill="currentColor" />
-							</svg>
+							<CircleDot aria-hidden="true" class="size-3 shrink-0" />
 							<span>
 								{issue.state === 'in-progress'
 									? 'In Progress'
@@ -236,21 +212,7 @@
 				</div>
 				{#if issue.worktreeBranch}
 					<code class="inline-flex min-w-0 items-center gap-1 truncate rounded bg-card-bg px-1.5 py-0.5 font-mono text-[11px] text-fg-light">
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.8"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3 shrink-0"
-						>
-							<line x1="6" x2="6" y1="3" y2="15" />
-							<circle cx="18" cy="6" r="3" />
-							<circle cx="6" cy="18" r="3" />
-							<path d="M18 9a9 9 0 0 1-9 9" />
-						</svg>
+						<GitBranch aria-hidden="true" class="size-3 shrink-0" />
 						<span class="truncate">{issue.worktreeBranch}</span>
 					</code>
 				{/if}
@@ -299,24 +261,12 @@
 			<div class="flex flex-wrap items-center gap-1.5">
 				<button
 					type="button"
-					use:pressScale
 					disabled={!ready}
 					onclick={handleClaim}
 					class="inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-md border border-card-border bg-card-bg px-2 font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
 				>
 					{#if claimed}
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3 shrink-0 text-status-success"
-						>
-							<path d="M20 6 9 17l-5-5" />
-						</svg>
+						<Check aria-hidden="true" class="size-3 shrink-0 text-status-success" />
 						<span>Claimed</span>
 					{:else}
 						<span>{compact ? 'Claim' : 'Claim issue'}</span>
@@ -324,19 +274,11 @@
 				</button>
 				<button
 					type="button"
-					use:pressScale
 					disabled={!ready}
 					onclick={handleDispatch}
 					class="inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-md bg-fg-main px-2.5 font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="currentColor"
-						class="size-2.5 shrink-0"
-					>
-						<polygon points="6 3 20 12 6 21 6 3" />
-					</svg>
+					<Play aria-hidden="true" class="size-2.5 shrink-0" />
 					<span>
 						{dispatched
 							? compact
@@ -350,7 +292,6 @@
 				{#if onOpenChat}
 					<button
 						type="button"
-						use:pressScale
 						disabled={!ready}
 						onclick={() => onOpenChat(issue.number)}
 						class="inline-flex h-7 items-center whitespace-nowrap rounded-md border border-card-border bg-card-bg px-2 font-mono text-[11px] text-accent-primary hover:bg-accent-subtle"

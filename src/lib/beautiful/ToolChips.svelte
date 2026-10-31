@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ChevronDown, FileIcon, PenLine, Terminal } from '@lucide/svelte';
 	export interface ToolStep {
 		id: string;
 		label: string;
@@ -148,44 +149,11 @@
 							: 'text-fg-light'}"
 				>
 					{#if step.label.toLowerCase().includes('read')}
-						<svg
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.75"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-4"
-						>
-							<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-							<path d="M14 2v4a2 2 0 0 0 2 2h4" />
-						</svg>
+						<FileIcon class="size-4" />
 					{:else if step.label.toLowerCase().includes('patch') || step.label.toLowerCase().includes('write')}
-						<svg
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.75"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-4"
-						>
-							<path d="M12 20h9" />
-							<path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z" />
-						</svg>
+						<PenLine class="size-4" />
 					{:else}
-						<svg
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.75"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-4"
-						>
-							<path d="m4 17 6-5-6-5" />
-							<path d="M12 19h8" />
-						</svg>
+						<Terminal class="size-4" />
 					{/if}
 				</span>
 
@@ -207,20 +175,9 @@
 						</span>
 					{/if}
 
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3.5 text-fg-light transition-transform duration-150 {isOpen
+					<ChevronDown aria-hidden="true" class="size-3.5 text-fg-light transition-transform duration-150 {isOpen
 							? 'rotate-180'
-							: ''}"
-					>
-						<path d="m6 9 6 6 6-6" />
-					</svg>
+							: ''}" />
 				</span>
 			</button>
 
@@ -243,19 +200,7 @@
 						onclick={() => handleDiffChipToggle(diff.file)}
 						class="flex items-center gap-1.5 font-mono text-xs text-fg-main"
 					>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.75"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3.5 text-fg-light"
-						>
-							<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-							<path d="M14 2v4a2 2 0 0 0 2 2h4" />
-						</svg>
+						<FileIcon aria-hidden="true" class="size-3.5 text-fg-light" />
 						<span>{diff.file}</span>
 						<span class="font-sans font-medium text-diff-add-fg">+{diff.additions}</span>
 						<span class="font-sans font-medium text-diff-del-fg">−{diff.deletions}</span>

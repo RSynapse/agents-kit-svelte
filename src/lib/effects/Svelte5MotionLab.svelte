@@ -7,9 +7,7 @@
 	import {
 		ReactiveSpringMetric,
 		createBoardCrossfade,
-		magneticHover,
-		motionDuration,
-		pressScale
+		motionDuration
 	} from '../state/motion.svelte';
 
 	export interface MotionCardItem {
@@ -138,7 +136,6 @@
 			{#each [24, 52, 76, 98] as preset (preset)}
 				<button
 					type="button"
-					use:pressScale
 					disabled={!ready}
 					onclick={() => springMetric.set(preset)}
 					class="rounded-lg border px-2.5 py-1 font-mono text-xs font-medium transition-colors {springMetric.targetValue ===
@@ -222,7 +219,6 @@
 						{@const clicks = tagClickCounts.get(tag) ?? 0}
 						<button
 							type="button"
-							use:pressScale
 							disabled={!ready}
 							aria-pressed={isSelected}
 							onclick={() => toggleReactiveTag(tag)}
@@ -273,8 +269,6 @@
 							{#each laneCards as card (card.id)}
 								<button
 									type="button"
-									use:pressScale
-									use:magneticHover={2}
 									disabled={!ready}
 									in:receive={{ key: card.id }}
 									out:send={{ key: card.id }}

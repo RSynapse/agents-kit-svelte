@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Check, Code, Copy } from '@lucide/svelte';
 	interface Props {
 		code: string;
 		language?: string;
@@ -45,19 +46,7 @@
 	class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg text-sm {className}"
 >
 	<div class="flex h-10 items-center gap-2 px-3">
-		<svg
-			aria-hidden="true"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="1.75"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			class="size-4 shrink-0 text-fg-light"
-		>
-			<polyline points="16 18 22 12 16 6" />
-			<polyline points="8 6 2 12 8 18" />
-		</svg>
+		<Code aria-hidden="true" class="size-4 shrink-0 text-fg-light" />
 
 		{#if filename}
 			<code class="min-w-0 truncate font-mono text-xs text-fg-main">{filename}</code>
@@ -80,32 +69,9 @@
 				class="inline-flex size-7 items-center justify-center rounded-md text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
 			>
 				{#if copied}
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3.5 text-status-success"
-					>
-						<path d="M20 6 9 17l-5-5" />
-					</svg>
+					<Check aria-hidden="true" class="size-3.5 text-status-success" />
 				{:else}
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.75"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3.5"
-					>
-						<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-						<path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-					</svg>
+					<Copy aria-hidden="true" class="size-3.5" />
 				{/if}
 			</button>
 		</div>

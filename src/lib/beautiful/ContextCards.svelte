@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { AlignLeft, ArrowUpRight, X } from '@lucide/svelte';
 	import { formatCompactTokens } from '../state/chat-helpers';
 
 	export type ContextCardKind = 'file' | 'url' | 'commit' | 'issue' | 'schema';
@@ -149,17 +150,7 @@
 					onclick={() => handleSelect(chunk.id)}
 					class="flex min-w-0 flex-1 items-center gap-2 text-left text-[13px] font-medium text-fg-main"
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						class="size-3.5 shrink-0 text-fg-light"
-					>
-						<path d="M4 6h16M4 12h16M4 18h10" />
-					</svg>
+					<AlignLeft aria-hidden="true" class="size-3.5 shrink-0 text-fg-light" />
 					<span class="truncate">{chunk.title}</span>
 				</button>
 
@@ -175,19 +166,7 @@
 						onclick={() => handleRemove(chunk.id)}
 						class="inline-flex size-6 items-center justify-center rounded-md text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
 					>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3.5"
-						>
-							<path d="M18 6 6 18" />
-							<path d="m6 6 12 12" />
-						</svg>
+						<X aria-hidden="true" class="size-3.5" />
 					</button>
 				</div>
 			</div>
@@ -211,18 +190,7 @@
 						{getKindBadge(chunk.kind)}
 					</span>
 					<span class="truncate font-mono text-[11px]">{chunk.source}</span>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2.2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-2.5 text-fg-light"
-					>
-						<path d="M7 17L17 7M7 7h10v10" />
-					</svg>
+					<ArrowUpRight aria-hidden="true" class="size-2.5 text-fg-light" />
 				</span>
 
 				{#if chunk.score !== undefined}

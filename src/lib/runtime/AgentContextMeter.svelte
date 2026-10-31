@@ -4,7 +4,7 @@
 	import { fly } from 'svelte/transition';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import { computeContextMeter, formatCompactTokens } from '../state/chat-helpers';
-	import { motionDuration, pressScale } from '../state/motion.svelte';
+	import { motionDuration } from '../state/motion.svelte';
 	import type { ContextSourceItem } from '../types';
 
 	interface Props {
@@ -41,7 +41,6 @@
 <div class="relative inline-block text-xs {className}">
 	<button
 		type="button"
-		use:pressScale
 		aria-label="Context window {meter.formattedUsed} of {meter.formattedMax} tokens ({meter.percent}%)"
 		aria-expanded={isOpen}
 		aria-controls="agent-context-meter-panel"

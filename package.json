@@ -31,5 +31,11 @@
   "sideEffects": [
     "**/*.css",
     "**/*.svelte"
-  ]
+  ],
+  "dependencies": {
+    "@lucide/svelte": "^1.66.0"
+  },
+  "peerDependencies": {
+    "svelte": "^5.0.0"
+  }
 }

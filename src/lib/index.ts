@@ -87,3 +87,4 @@ export * from './types';
 export * from './state/chat-helpers';
 export * from './state/motion.svelte';
 export * from './state/catalog-registry';
+export * from './ui/styles';

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Check } from '@lucide/svelte';
 	import type { ApprovalCardAnswers, ApprovalQuestion } from '../types';
 
 	interface Props {
@@ -118,18 +119,7 @@
 			aria-live="polite"
 			class="mt-3 flex items-center gap-2 rounded-md border border-card-border bg-status-success-subtle px-3 py-2 text-xs text-status-success"
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-4 shrink-0"
-			>
-				<path d="M20 6 9 17l-5-5" />
-			</svg>
+			<Check aria-hidden="true" class="size-4 shrink-0" />
 			<p class="font-medium">
 				Decision recorded: {Object.values(answers)
 					.flat()
@@ -164,17 +154,7 @@
 								: 'border-card-border bg-card-bg text-fg-light'}"
 						>
 							{#if isSelected}
-								<svg
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									class="size-2.5"
-								>
-									<path d="M20 6 9 17l-5-5" />
-								</svg>
+								<Check class="size-2.5" />
 							{:else}
 								{idx + 1}
 							{/if}

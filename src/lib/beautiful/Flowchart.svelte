@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Check } from '@lucide/svelte';
 	export interface FlowchartNode {
 		id: string;
 		label: string;
@@ -169,17 +170,7 @@
 									: 'bg-canvas-secondary text-fg-light'}"
 						>
 							{#if node.status === 'complete'}
-								<svg
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									class="size-2.5"
-								>
-									<path d="M20 6 9 17l-5-5" />
-								</svg>
+								<Check class="size-2.5" />
 							{:else if node.status === 'running'}
 								<span class="size-1.5 animate-pulse rounded-full bg-accent-primary"></span>
 							{:else}

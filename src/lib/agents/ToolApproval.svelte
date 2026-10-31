@@ -1,8 +1,9 @@
 <script lang="ts">
+	import { Check, ChevronDown, ShieldCheck, X } from '@lucide/svelte';
 	import { backOut, cubicOut } from 'svelte/easing';
 	import { fly, scale } from 'svelte/transition';
 	import AgentDisclosure from './AgentDisclosure.svelte';
-	import { motionDuration, pressScale } from '../state/motion.svelte';
+	import { motionDuration } from '../state/motion.svelte';
 	import type { ToolApprovalParam, ToolApprovalStatus } from '../types';
 
 	interface Props {
@@ -111,43 +112,11 @@
 						: 'text-fg-light'}"
 			>
 				{#if activeStatus === 'approved' || activeStatus === 'complete'}
-					<svg
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<path d="M20 6 9 17l-5-5" />
-					</svg>
+					<Check class="size-4" />
 				{:else if activeStatus === 'denied' || activeStatus === 'error'}
-					<svg
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<path d="M18 6 6 18" />
-						<path d="m6 6 12 12" />
-					</svg>
+					<X class="size-4" />
 				{:else}
-					<svg
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.75"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-						<path d="m9 12 2 2 4-4" />
-					</svg>
+					<ShieldCheck class="size-4" />
 				{/if}
 			</span>
 		{/key}
@@ -199,18 +168,7 @@
 						class="group inline-flex items-center gap-1 text-xs font-medium text-fg-light outline-none transition-colors hover:text-fg-main"
 					>
 						<span>{isOpen ? 'Hide details' : 'View details'}</span>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.8"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3.5 transition-transform duration-150 {isOpen ? 'rotate-180' : ''}"
-						>
-							<path d="m6 9 6 6 6-6" />
-						</svg>
+						<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-150 {isOpen ? 'rotate-180' : ''}" />
 					</button>
 
 					<AgentDisclosure id={panelId} open={isOpen}>
@@ -239,7 +197,6 @@
 		>
 			<button
 				type="button"
-				use:pressScale
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleDeny}
 				class="inline-flex h-8 items-center justify-center rounded-md border border-card-border bg-card-bg px-3 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
@@ -248,7 +205,6 @@
 			</button>
 			<button
 				type="button"
-				use:pressScale
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleAlwaysApprove}
 				class="inline-flex h-8 items-center justify-center rounded-md border border-card-border bg-card-bg px-3 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
@@ -257,7 +213,6 @@
 			</button>
 			<button
 				type="button"
-				use:pressScale
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleApprove}
 				class="inline-flex h-8 items-center justify-center rounded-md bg-fg-main px-3 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ArrowDown } from '@lucide/svelte';
 	import { untrack, type Snippet } from 'svelte';
 	import { fly } from 'svelte/transition';
 
@@ -637,19 +638,7 @@
 			onclick={() => scrollToEnd('smooth')}
 			class="absolute bottom-3 left-1/2 z-20 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-card-border bg-card-bg px-3 py-1 text-xs font-medium text-fg-main shadow-[var(--shadow-btn)] transition-colors hover:bg-canvas-secondary"
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-3"
-			>
-				<path d="M12 5v14" />
-				<path d="m19 12-7 7-7-7" />
-			</svg>
+			<ArrowDown aria-hidden="true" class="size-3" />
 			<span>Jump to latest</span>
 		</button>
 	{/if}

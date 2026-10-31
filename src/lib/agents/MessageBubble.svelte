@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ChevronDown } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 
 	export type MessageBubbleVariant = 'solid' | 'soft' | 'tint' | 'outline' | 'ghost' | 'danger';
@@ -154,18 +155,7 @@
 					class="mt-1.5 inline-flex items-center gap-1 rounded-full border border-card-border bg-card-bg px-2.5 py-0.5 text-[11px] font-medium text-fg-light transition-colors hover:text-fg-main"
 				>
 					<span>{isExpanded ? lessLabel : moreLabel}</span>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3 transition-transform {isExpanded ? 'rotate-180' : ''}"
-					>
-						<path d="m6 9 6 6 6-6" />
-					</svg>
+					<ChevronDown aria-hidden="true" class="size-3 transition-transform {isExpanded ? 'rotate-180' : ''}" />
 				</button>
 			{/if}
 		</div>

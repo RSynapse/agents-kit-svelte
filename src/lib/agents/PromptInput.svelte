@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ArrowUp, FileIcon, Plus, Shield, Sparkles, Square, X } from '@lucide/svelte';
 	import { isImeComposing } from '../state/chat-helpers';
 	import type { SupportedAgentId, SupportedAgentOption } from '../types';
 
@@ -100,19 +101,7 @@
 				<span
 					class="inline-flex items-center gap-1.5 rounded-md border border-card-border bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-main"
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3 text-fg-light"
-					>
-						<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-						<path d="M14 2v4a2 2 0 0 0 2 2h4" />
-					</svg>
+					<FileIcon aria-hidden="true" class="size-3 text-fg-light" />
 					<span>@{chip}</span>
 					<button
 						type="button"
@@ -120,19 +109,7 @@
 						onclick={() => removeContextChip(chip)}
 						class="inline-flex size-3.5 items-center justify-center rounded text-fg-light hover:text-fg-main"
 					>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3"
-						>
-							<path d="M18 6 6 18" />
-							<path d="m6 6 12 12" />
-						</svg>
+						<X aria-hidden="true" class="size-3" />
 					</button>
 				</span>
 			{/each}
@@ -161,19 +138,7 @@
 				onclick={() => (menuOpen = !menuOpen)}
 				class="inline-flex size-8 items-center justify-center rounded-lg text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
 			>
-				<svg
-					aria-hidden="true"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.8"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="size-4"
-				>
-					<path d="M5 12h14" />
-					<path d="M12 5v14" />
-				</svg>
+				<Plus aria-hidden="true" class="size-4" />
 			</button>
 
 			{#if menuOpen}
@@ -188,19 +153,7 @@
 						onclick={() => addContextChip('file:apps/web/src/routes/auth/callback/+server.ts')}
 						class="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
 					>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.75"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3.5 text-fg-light"
-						>
-							<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-							<path d="M14 2v4a2 2 0 0 0 2 2h4" />
-						</svg>
+						<FileIcon aria-hidden="true" class="size-3.5 text-fg-light" />
 						<span>Attach callback/+server.ts</span>
 					</button>
 					<button
@@ -209,18 +162,7 @@
 						onclick={() => addContextChip(`skill:${activeSkill}`)}
 						class="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
 					>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.75"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3.5 text-fg-light"
-						>
-							<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
-						</svg>
+						<Sparkles aria-hidden="true" class="size-3.5 text-fg-light" />
 						<span>Pin skill: {activeSkill}</span>
 					</button>
 					<button
@@ -229,18 +171,7 @@
 						onclick={() => addContextChip('gate:check-boundaries')}
 						class="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs text-fg-main hover:bg-canvas-secondary"
 					>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.75"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3.5 text-fg-light"
-						>
-							<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-						</svg>
+						<Shield aria-hidden="true" class="size-3.5 text-fg-light" />
 						<span>Include boundary gate check</span>
 					</button>
 				</div>
@@ -280,14 +211,7 @@
 					aria-label="Stop run"
 					class="inline-flex size-8 items-center justify-center rounded-lg bg-fg-main text-fg-inverse transition-opacity hover:opacity-90"
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="currentColor"
-						class="size-3"
-					>
-						<rect width="14" height="14" x="5" y="5" rx="2" />
-					</svg>
+					<Square aria-hidden="true" class="size-3" />
 				</button>
 			{:else}
 				<button
@@ -296,19 +220,7 @@
 					aria-label="Send prompt"
 					class="inline-flex size-8 items-center justify-center rounded-lg bg-fg-main text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-35"
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<path d="m5 12 7-7 7 7" />
-						<path d="M12 19V5" />
-					</svg>
+					<ArrowUp aria-hidden="true" class="size-4" />
 				</button>
 			{/if}
 		</div>

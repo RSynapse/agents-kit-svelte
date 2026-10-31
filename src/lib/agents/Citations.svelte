@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ChevronDown, Globe } from '@lucide/svelte';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import type { CitationItem } from '../types';
 
@@ -33,36 +34,12 @@
 		onclick={() => (isOpen = !isOpen)}
 		class="group inline-flex h-7 items-center gap-1.5 rounded-md border border-card-border bg-card-bg px-2.5 font-medium text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
 	>
-		<svg
-			aria-hidden="true"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="1.75"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			class="size-3.5 text-fg-light"
-		>
-			<circle cx="12" cy="12" r="10" />
-			<path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-			<path d="M2 12h20" />
-		</svg>
+		<Globe aria-hidden="true" class="size-3.5 text-fg-light" />
 		<span>{title}</span>
 		<span class="rounded-full bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-fg-main">
 			{citations.length}
 		</span>
-		<svg
-			aria-hidden="true"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="1.8"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			class="size-3.5 transition-transform duration-150 {isOpen ? 'rotate-180' : ''}"
-		>
-			<path d="m6 9 6 6 6-6" />
-		</svg>
+		<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-150 {isOpen ? 'rotate-180' : ''}" />
 	</button>
 
 	<AgentDisclosure id={panelId} open={isOpen}>

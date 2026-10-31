@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Check, CircleAlert, ImageIcon } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 
 	export type ImageGenerationStatus = 'queued' | 'generating' | 'refining' | 'complete' | 'error';
@@ -133,58 +134,21 @@
 				<div
 					class="flex size-10 items-center justify-center rounded-lg border border-card-border bg-card-bg text-status-success"
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-5"
-					>
-						<path d="M20 6 9 17l-5-5" />
-					</svg>
+					<Check aria-hidden="true" class="size-5" />
 				</div>
 				<p class="mt-2 text-xs font-medium text-fg-main">Render pass verified</p>
 			{:else if currentStatus === 'error'}
 				<div
 					class="flex size-10 items-center justify-center rounded-lg border border-card-border bg-card-bg text-status-danger"
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.8"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-5"
-					>
-						<circle cx="12" cy="12" r="10" />
-						<line x1="12" x2="12" y1="8" y2="12" />
-						<line x1="12" x2="12.01" y1="16" y2="16" />
-					</svg>
+					<CircleAlert aria-hidden="true" class="size-5" />
 				</div>
 				<p class="mt-2 text-xs text-status-danger">Sampler timeout exceeded</p>
 			{:else}
 				<div
 					class="flex size-10 items-center justify-center rounded-lg border border-card-border bg-card-bg text-fg-light"
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.75"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-5 animate-pulse"
-					>
-						<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-						<circle cx="9" cy="9" r="2" />
-						<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-					</svg>
+					<ImageIcon aria-hidden="true" class="size-5 animate-pulse" />
 				</div>
 				<p class="mt-2 text-xs text-fg-light">{resolvedStatusText}…</p>
 			{/if}

@@ -2,7 +2,7 @@
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
 	import { fade, fly } from 'svelte/transition';
-	import { createBoardCrossfade, motionDuration, pressScale } from '../state/motion.svelte';
+	import { createBoardCrossfade, motionDuration } from '../state/motion.svelte';
 	import GitHubIssueCard from './GitHubIssueCard.svelte';
 	import type { GitHubIssueData, GitHubIssueState } from '../types';
 
@@ -210,7 +210,6 @@
 			<div role="group" aria-label="Filter by area" class="flex rounded-lg border border-card-border bg-card-bg p-0.5 text-xs">
 				<button
 					type="button"
-					use:pressScale
 					onclick={() => (selectedArea = 'all')}
 					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'all'
 						? 'bg-canvas-secondary text-fg-main'
@@ -220,7 +219,6 @@
 				</button>
 				<button
 					type="button"
-					use:pressScale
 					onclick={() => (selectedArea = 'area:landing')}
 					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:landing'
 						? 'bg-canvas-secondary text-fg-main'
@@ -230,7 +228,6 @@
 				</button>
 				<button
 					type="button"
-					use:pressScale
 					onclick={() => (selectedArea = 'area:app')}
 					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:app'
 						? 'bg-canvas-secondary text-fg-main'
@@ -308,7 +305,6 @@
 			</div>
 			<button
 				type="button"
-				use:pressScale
 				onclick={() => (activeDrawerIssue = null)}
 				class="rounded-md bg-card-bg px-2.5 py-1 font-medium text-fg-main hover:bg-canvas-primary"
 			>
