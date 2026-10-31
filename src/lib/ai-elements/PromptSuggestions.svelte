@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
+	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	export interface PromptSuggestionItem {
 		id: string;
 		category: 'inspect' | 'implement' | 'verify' | 'review';
@@ -119,18 +119,15 @@
 	}
 </script>
 
-<div class="w-full rounded-xl border border-card-border bg-card-bg p-4 text-sm {className}">
+<div class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2 pb-3">
-		<div class="flex flex-wrap items-center gap-1.5">
+		<div class="{SEGMENT_GROUP_CLASS} flex-wrap">
 			{#each CATEGORIES as cat (cat.id)}
 				<button
 					type="button"
 					aria-pressed={activeCategory === cat.id}
 					onclick={() => (activeCategory = cat.id)}
-					class="rounded-full px-3 py-1 font-mono text-xs font-medium transition-colors {activeCategory ===
-					cat.id
-						? 'bg-accent-primary text-fg-inverse'
-						: 'bg-canvas-secondary text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(activeCategory === cat.id)}"
 				>
 					{cat.label}
 				</button>
@@ -161,7 +158,7 @@
 					<span class="font-medium text-fg-main">
 						{parts.before}{#if parts.match}<span class="rounded bg-accent-subtle px-0.5 font-semibold text-accent-primary">{parts.match}</span>{/if}{parts.after}
 					</span>
-					<span class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] uppercase text-fg-light">
+					<span class="rounded bg-canvas-secondary px-1.5 py-0.5 text-[11px] capitalize text-fg-light font-medium">
 						{item.category}
 					</span>
 				</div>

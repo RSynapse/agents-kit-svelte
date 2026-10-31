@@ -118,7 +118,7 @@
 </script>
 
 <div
-	class="overflow-hidden rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
+	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<div class="overflow-x-auto bg-canvas-secondary/60 p-4">
 		<div class="relative h-48 min-w-[640px]">
@@ -157,7 +157,7 @@
 						onclick={() => handleSelectNode(node.id)}
 						class="flex min-h-8 w-full items-center justify-between gap-2 border-b border-canvas-border px-3 py-1.5 text-left"
 					>
-						<span class="font-mono text-[10px] font-medium tracking-wider text-fg-light uppercase">
+						<span class="text-[11px] font-medium text-fg-light capitalize">
 							{node.kind ?? 'Step'}
 						</span>
 						<span
@@ -226,7 +226,7 @@
 					<span class="ml-2 text-fg-light">— {activeNode.detail}</span>
 				{/if}
 			</div>
-			<span class="rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-[10px] font-medium text-fg-main uppercase">
+			<span class="rounded-full bg-canvas-secondary px-2 py-0.5 text-[11px] font-medium text-fg-main capitalize">
 				{activeNode.status}
 			</span>
 		</footer>

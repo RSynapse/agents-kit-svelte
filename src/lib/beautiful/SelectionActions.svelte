@@ -64,7 +64,7 @@
 </script>
 
 <section
-	class="rounded-xl border border-card-border bg-card-bg p-4 text-fg-main shadow-xs {className}"
+	class="rounded-card border border-card-border bg-card-bg p-4 text-fg-main shadow-xs {className}"
 >
 	<div class="flex flex-wrap items-center justify-between gap-2">
 		<div class="flex items-center gap-2">

@@ -109,7 +109,7 @@
 	}
 </script>
 
-<div class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-start justify-between gap-3 border-b border-canvas-border px-4 py-3.5">
 		<div class="min-w-0 flex-1 space-y-1">
 			<div class="flex flex-wrap items-center gap-2">
@@ -185,7 +185,7 @@
 			{/each}
 		</ol>
 
-		<div class="flex flex-wrap items-center justify-between gap-2 border-t border-canvas-border bg-canvas-primary px-4 py-3">
+		<div class="flex flex-wrap items-center justify-between gap-2 border-t border-canvas-border px-4 py-3">
 			{#if decision === 'approved'}
 				<span
 					class="inline-flex items-center gap-1.5 rounded-md bg-status-success-subtle px-3 py-1 font-mono text-xs font-medium text-status-success"

@@ -294,7 +294,7 @@
 
 		<div class="border-t border-canvas-border p-3 font-mono text-xs">
 			<div class="mb-2 flex items-center justify-between px-1">
-				<span class="text-[11px] uppercase tracking-wider text-fg-light">
+				<span class="text-[11px] capitalize text-fg-light font-medium">
 					Stack Frames ({visibleFrames.length} shown)
 				</span>
 				{#if internalCount > 0}

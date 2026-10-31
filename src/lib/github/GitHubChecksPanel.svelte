@@ -80,7 +80,7 @@
 
 <section
 	aria-label={title}
-	class="rounded-xl border border-card-border bg-card-bg p-4 text-sm {className}"
+	class="rounded-card border border-card-border bg-card-bg p-4 text-sm {className}"
 >
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border pb-3">
 		<div>

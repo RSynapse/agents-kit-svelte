@@ -71,7 +71,7 @@
 	}
 </script>
 
-<div class="rounded-xl border border-card-border bg-card-bg p-3.5 text-sm {className}">
+<div class="rounded-card border border-card-border bg-card-bg p-3.5 text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2">
 		<div class="flex min-w-0 flex-1 items-center gap-2">
 			<button

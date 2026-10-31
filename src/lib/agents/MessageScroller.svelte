@@ -601,7 +601,7 @@
 			>
 				<div
 					data-slot="preview-rail-card"
-					class="overflow-hidden rounded-2xl border border-card-border bg-card-bg p-3 shadow-[var(--shadow-card)]"
+					class="overflow-hidden rounded-window border border-card-border bg-card-bg p-3 shadow-[var(--shadow-card)]"
 				>
 					<div class="mb-1 flex items-center justify-between gap-2">
 						<span

@@ -162,7 +162,7 @@
 
 <div class="w-full space-y-2.5 {className}">
 	<div
-		class="overflow-hidden rounded-2xl border border-card-border bg-card-bg p-4 text-sm shadow-xs transition-all {mode !==
+		class="overflow-hidden rounded-window border border-card-border bg-card-bg p-4 text-sm shadow-xs transition-all {mode !==
 		'view'
 			? 'ring-1 ring-accent-primary'
 			: ''}"
@@ -170,7 +170,7 @@
 		{#if currentContent.type === 'comparison'}
 			<div class="space-y-3">
 				<div>
-					<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-accent-primary">
+					<span class="text-[11px] font-medium capitalize text-accent-primary">
 						Intelligent UI · Architecture Comparison
 					</span>
 					<h3 class="mt-1 font-semibold text-fg-main">{currentContent.title}</h3>
@@ -224,7 +224,7 @@
 		{:else if currentContent.type === 'recommendation'}
 			<div class="space-y-3">
 				<div class="flex items-center justify-between gap-2">
-					<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-accent-primary">
+					<span class="text-[11px] font-medium capitalize text-accent-primary">
 						Agent Recommendation
 					</span>
 					<span class="rounded-full bg-status-success-subtle px-2 py-0.5 font-mono text-xs font-semibold text-status-success">
@@ -315,7 +315,7 @@
 			</div>
 		{:else if currentContent.type === 'source-brief'}
 			<div class="space-y-2.5">
-				<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-accent-primary">
+				<span class="text-[11px] font-medium capitalize text-accent-primary">
 					Grounded Source Brief
 				</span>
 				<h3 class="font-semibold text-fg-main">{currentContent.title}</h3>
@@ -364,7 +364,7 @@
 		{:else}
 			{@const summary = extractEditableFields(currentContent)}
 			<div class="space-y-1.5">
-				<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-accent-primary">
+				<span class="text-[11px] font-medium capitalize text-accent-primary">
 					{currentContent.type}
 				</span>
 				<h3 class="font-semibold text-fg-main">{summary.primary}</h3>
@@ -408,7 +408,7 @@
 				e.preventDefault();
 				applyEdit();
 			}}
-			class="space-y-3 rounded-xl border border-card-border bg-card-bg p-3.5 text-xs"
+			class="space-y-3 rounded-card border border-card-border bg-card-bg p-3.5 text-xs"
 		>
 			<label class="block text-fg-light">
 				<span class="font-medium text-fg-main">Primary Title</span>
@@ -445,13 +445,13 @@
 	{/if}
 
 	{#if mode === 'comparing'}
-		<div class="grid gap-3 rounded-xl border border-card-border bg-card-bg p-3.5 text-xs sm:grid-cols-2">
+		<div class="grid gap-3 rounded-card border border-card-border bg-card-bg p-3.5 text-xs sm:grid-cols-2">
 			<div>
-				<span class="font-mono text-[11px] font-semibold uppercase text-fg-light">Original</span>
+				<span class="text-[11px] font-medium capitalize text-fg-light">Original</span>
 				<pre class="mt-1.5 whitespace-pre-wrap font-sans text-fg-main">{serializeHumanText(content)}</pre>
 			</div>
 			<div class="border-t border-canvas-border pt-2 sm:border-l sm:border-t-0 sm:pl-3 sm:pt-0">
-				<span class="font-mono text-[11px] font-semibold uppercase text-accent-primary">Current</span>
+				<span class="text-[11px] font-medium capitalize text-accent-primary">Current</span>
 				<pre class="mt-1.5 whitespace-pre-wrap font-sans text-fg-main">{serializeHumanText(currentContent)}</pre>
 			</div>
 		</div>

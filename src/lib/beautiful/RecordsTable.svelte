@@ -149,7 +149,7 @@
 </script>
 
 <section
-	class="overflow-hidden rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
+	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<div role="region" aria-label="Agent records table" class="overflow-x-auto">
 		<table class="w-full min-w-[600px] text-left text-xs">
@@ -216,7 +216,7 @@
 						</td>
 						<td class="px-3 py-2.5">
 							<span
-								class="rounded-full px-2 py-0.5 font-mono text-[10px] font-medium {record.status ===
+								class="rounded-chip px-1.5 py-px font-mono text-[10px] font-medium {record.status ===
 								'verified'
 									? 'bg-status-success-subtle text-status-success'
 									: record.status === 'active'

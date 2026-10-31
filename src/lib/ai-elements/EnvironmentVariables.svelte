@@ -125,7 +125,7 @@
 	}
 </script>
 
-<div class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex items-center gap-2">
 			<span

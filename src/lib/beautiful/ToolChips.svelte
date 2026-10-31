@@ -124,7 +124,7 @@
 </script>
 
 <div
-	class="divide-y divide-canvas-border overflow-hidden rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
+	class="divide-y divide-canvas-border overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<div class="flex items-center justify-between bg-canvas-secondary/40 px-3.5 py-2 text-xs">
 		<span class="font-medium text-fg-main">{steps.length} tool calls · {diffs.length} files modified</span>

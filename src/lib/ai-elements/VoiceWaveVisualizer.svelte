@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	import { Mic, VolumeX } from '@lucide/svelte';
 	export type VoiceSessionState = 'idle' | 'listening' | 'speaking' | 'processing';
 
@@ -98,7 +99,7 @@
 	}
 </script>
 
-<div class="w-full rounded-xl border border-card-border bg-card-bg p-4 text-sm {className}">
+<div class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border pb-3">
 		<div class="flex items-center gap-2.5">
 			<span
@@ -173,16 +174,13 @@
 	</div>
 
 	<div class="flex flex-wrap items-center justify-between gap-2">
-		<div class="flex flex-wrap items-center gap-1.5">
+		<div class="{SEGMENT_GROUP_CLASS} flex-wrap">
 			{#each ['idle', 'listening', 'processing', 'speaking'] as const as mode (mode)}
 				<button
 					type="button"
 					aria-pressed={sessionState === mode}
 					onclick={() => setVoiceState(mode)}
-					class="rounded-md px-2.5 py-1 font-mono text-xs capitalize transition-colors {sessionState ===
-					mode
-						? 'bg-accent-subtle font-semibold text-accent-primary'
-						: 'bg-canvas-secondary text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(sessionState === mode)} capitalize"
 				>
 					{mode}
 				</button>

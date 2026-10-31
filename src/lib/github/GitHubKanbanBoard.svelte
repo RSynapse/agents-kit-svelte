@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
 	import { fade, fly } from 'svelte/transition';
@@ -207,31 +208,25 @@
 				class="h-8 w-56 rounded-lg border border-card-border bg-card-bg px-3 text-xs text-fg-main placeholder:text-fg-light focus:border-accent-primary focus:outline-none"
 			/>
 
-			<div role="group" aria-label="Filter by area" class="flex rounded-lg border border-card-border bg-card-bg p-0.5 text-xs">
+			<div role="group" aria-label="Filter by area" class="{SEGMENT_GROUP_CLASS} text-xs">
 				<button
 					type="button"
 					onclick={() => (selectedArea = 'all')}
-					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'all'
-						? 'bg-canvas-secondary text-fg-main'
-						: 'text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(selectedArea === 'all')} whitespace-nowrap"
 				>
 					All ({boardItems.length})
 				</button>
 				<button
 					type="button"
 					onclick={() => (selectedArea = 'area:landing')}
-					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:landing'
-						? 'bg-canvas-secondary text-fg-main'
-						: 'text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(selectedArea === 'area:landing')} whitespace-nowrap"
 				>
 					Landing
 				</button>
 				<button
 					type="button"
 					onclick={() => (selectedArea = 'area:app')}
-					class="whitespace-nowrap rounded-md px-2.5 py-1 font-medium transition-colors {selectedArea === 'area:app'
-						? 'bg-canvas-secondary text-fg-main'
-						: 'text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(selectedArea === 'area:app')} whitespace-nowrap"
 				>
 					App
 				</button>

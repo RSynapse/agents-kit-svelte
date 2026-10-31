@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	import { Check, Package } from '@lucide/svelte';
 	export type PackageChangeType = 'major' | 'minor' | 'patch' | 'added' | 'removed';
 
@@ -76,7 +77,7 @@
 	}
 </script>
 
-<div class="w-full rounded-xl border border-card-border bg-card-bg p-4 text-sm {className}">
+<div class="w-full rounded-card border border-card-border bg-card-bg p-4 text-sm {className}">
 	<div class="flex flex-wrap items-start justify-between gap-3">
 		<div class="space-y-1">
 			<div class="flex flex-wrap items-center gap-2">
@@ -117,7 +118,7 @@
 
 		{#if changeType}
 			<span
-				class="rounded-full px-2.5 py-0.5 font-mono text-xs font-medium capitalize {getChangeBadgeClasses(
+				class="rounded-chip px-1.5 py-px font-mono text-[11px] font-medium capitalize {getChangeBadgeClasses(
 					changeType
 				)}"
 			>
@@ -131,24 +132,18 @@
 	{/if}
 
 	<div class="mt-3 border-t border-canvas-border pt-3">
-		<div class="mb-2.5 flex items-center gap-2">
+		<div class="{SEGMENT_GROUP_CLASS} mb-2.5">
 			<button
 				type="button"
 				onclick={() => (activeTab = 'dependencies')}
-				class="rounded-md px-2.5 py-1 font-mono text-xs font-medium transition-colors {activeTab ===
-				'dependencies'
-					? 'bg-accent-subtle text-accent-primary'
-					: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+				class="{segmentClass(activeTab === 'dependencies')}"
 			>
 				Dependencies ({dependencies.length})
 			</button>
 			<button
 				type="button"
 				onclick={() => (activeTab = 'scripts')}
-				class="rounded-md px-2.5 py-1 font-mono text-xs font-medium transition-colors {activeTab ===
-				'scripts'
-					? 'bg-accent-subtle text-accent-primary'
-					: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+				class="{segmentClass(activeTab === 'scripts')}"
 			>
 				Scripts ({scripts.length})
 			</button>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { RefreshCw } from '@lucide/svelte';
-	import { buttonClass } from '../ui/styles';
+	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	import type { Snippet } from 'svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 
@@ -106,7 +106,7 @@
 	let warnLogCount = $derived(logs.filter((l) => l.level === 'warn').length);
 </script>
 
-<div class="flex w-full flex-col overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="flex w-full flex-col overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary px-3 py-2">
 		<div class="flex items-center gap-1.5">
 			<button
@@ -136,15 +136,13 @@
 			</button>
 		</div>
 
-		<div class="flex items-center gap-1 rounded-lg border border-card-border bg-card-bg p-0.5">
+		<div class="{SEGMENT_GROUP_CLASS}">
 			{#each VIEWPORTS as vp (vp.id)}
 				<button
 					type="button"
 					aria-pressed={viewport === vp.id}
 					onclick={() => (viewport = vp.id)}
-					class="rounded-md px-2 py-0.5 font-mono text-xs transition-colors {viewport === vp.id
-						? 'bg-accent-primary font-semibold text-fg-inverse'
-						: 'text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(viewport === vp.id)}"
 				>
 					{vp.label}
 				</button>

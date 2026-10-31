@@ -200,7 +200,7 @@
 
 <section
 	aria-label="Referee evaluation scorecard"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
@@ -213,7 +213,7 @@
 					Referee Scorecard
 				</span>
 				<span
-					class="rounded-full px-2.5 py-0.5 text-xs font-medium {passed
+					class="rounded-chip px-1.5 py-px text-[11px] font-medium {passed
 						? 'bg-status-success-subtle text-status-success'
 						: 'bg-status-warning-subtle text-status-warning'}"
 				>
@@ -257,7 +257,7 @@
 
 	{#if latest}
 		<div class="grid gap-5 border-b border-canvas-border p-4 lg:grid-cols-[210px_1fr]">
-			<div class="rounded-lg border border-canvas-border bg-canvas-primary p-3.5">
+			<div class="rounded-control bg-canvas-secondary/70 p-3.5">
 				<p class="font-mono text-xs text-fg-light">Weighted Score</p>
 				<p class="mt-1 font-mono text-3xl font-bold tabular-nums text-fg-main">
 					{latest.score}
@@ -289,7 +289,7 @@
 			</div>
 
 			<div>
-				<div class="rounded-lg border border-canvas-border bg-canvas-primary p-3">
+				<div class="rounded-control bg-canvas-secondary/70 p-3">
 					<p class="text-xs font-semibold text-fg-main">Referee Verdict & Notes</p>
 					<p class="mt-1 text-xs leading-relaxed text-fg-light">{latest.feedback}</p>
 				</div>
@@ -301,7 +301,7 @@
 							criterion.maxScore > 0
 								? Math.round((criterion.score / criterion.maxScore) * 100)
 								: 0}
-						<div class="rounded-lg border border-canvas-border bg-canvas-primary p-2.5">
+						<div class="rounded-control bg-canvas-secondary/70 p-2.5">
 							<div class="flex flex-wrap items-center justify-between gap-2 text-xs">
 								<div class="flex items-center gap-2">
 									<span class="font-medium text-fg-main">{criterion.label}</span>
@@ -313,7 +313,7 @@
 								</div>
 								<div class="flex items-center gap-2">
 									<span
-										class="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase {getCriterionBadgeClasses(
+										class="rounded-chip px-1.5 py-px text-[11px] font-medium capitalize {getCriterionBadgeClasses(
 											status
 										)}"
 									>
@@ -359,7 +359,7 @@
 						<span class="w-20 shrink-0 font-mono text-fg-light">Attempt {item.number}</span>
 						<span class="min-w-0 flex-1 truncate text-fg-main">{item.output}</span>
 						<span
-							class="rounded-full px-2 py-0.5 font-mono text-[11px] font-semibold tabular-nums {item.score >=
+							class="rounded-chip px-1.5 py-px font-mono text-[11px] font-semibold tabular-nums {item.score >=
 							localThreshold
 								? 'bg-status-success-subtle text-status-success'
 								: 'bg-status-warning-subtle text-status-warning'}"
@@ -370,7 +370,7 @@
 					</button>
 
 					{#if isOpen}
-						<div class="border-t border-canvas-border bg-canvas-primary px-3 py-2.5 text-xs">
+						<div class="border-t border-canvas-border px-3 py-2.5 text-xs">
 							<p class="font-medium text-fg-main">Summary</p>
 							<p class="mt-0.5 text-fg-light">{item.output}</p>
 							<p class="mt-2 font-medium text-fg-main">Referee Feedback</p>

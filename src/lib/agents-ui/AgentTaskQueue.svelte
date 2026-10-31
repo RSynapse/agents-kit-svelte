@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowUp, ArrowUpDown, ChevronRight, Pause, Play, X } from '@lucide/svelte';
+	import { ArrowUp, ArrowUpDown, ChevronRight, Circle, CircleCheck, LoaderCircle, Pause, Play, Plus, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type AgentTaskStatus =
 		| 'queued'
@@ -207,13 +207,13 @@
 
 <section
 	aria-label="Prioritized agent task queue"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
 	>
 		<div>
-			<p class="font-mono text-xs font-medium text-fg-light">Execution Queue</p>
+			<p class="text-xs font-medium text-fg-light">Execution Queue</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">Prioritized Worktree Runs</h2>
 			<p class="mt-0.5 text-xs text-fg-light">
 				Pause, resume, promote, or cancel queued agent runs across connected computers.
@@ -230,20 +230,21 @@
 				class={buttonClass('secondary', 'md')}
 			>
 				<ArrowUpDown aria-hidden="true" />
-				Optimize Priority
+				Optimize
 			</button>
 			<button
 				type="button"
 				onclick={() => onAddTask?.()}
 				class={buttonClass('primary', 'md')}
 			>
-				+ Enqueue Run
+				<Plus aria-hidden="true" />
+				Enqueue run
 			</button>
 		</div>
 	</header>
 
 	<div
-		class="flex flex-wrap items-center gap-4 border-b border-canvas-border bg-canvas-primary px-4 py-2.5 font-mono text-xs text-fg-light"
+		class="flex flex-wrap items-center gap-4 border-b border-canvas-border px-4 py-2.5 font-mono text-xs text-fg-light"
 	>
 		<span><strong class="text-fg-main">{runningCount}</strong> running</span>
 		<span><strong class="text-fg-main">{queuedCount}</strong> queued</span>
@@ -274,7 +275,7 @@
 							<h3 class="font-medium text-fg-main">{task.title}</h3>
 							{#if task.priority}
 								<span
-									class="rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase {task.priority ===
+									class="rounded px-1.5 py-0.5 text-[11px] font-medium capitalize {task.priority ===
 									'high'
 										? 'bg-status-danger-subtle text-status-danger'
 										: task.priority === 'medium'
@@ -285,7 +286,7 @@
 								</span>
 							{/if}
 							<span
-								class="rounded-full px-2 py-0.5 text-[11px] font-medium capitalize {getTaskStatusClasses(
+								class="rounded-chip px-1.5 py-px text-[11px] font-medium capitalize {getTaskStatusClasses(
 									task.status
 								)}"
 							>
@@ -297,7 +298,7 @@
 							<p class="mt-1 text-xs text-fg-light">{task.description}</p>
 						{/if}
 
-						<div class="mt-1.5 flex flex-wrap gap-3 font-mono text-[11px] text-fg-light">
+						<div class="mt-1.5 flex flex-wrap gap-3 text-xs text-fg-light">
 							{#if task.tool}
 								<span>{task.tool}</span>
 							{/if}
@@ -376,12 +377,11 @@
 						{/if}
 
 						{#if task.status !== 'completed'}
-							<button
+							<button aria-label="Remove"
 								type="button"
 								onclick={() => onCancelTask?.(task.id)}
-								class={buttonClass('secondary', 'sm')}
-							>
-								<X aria-hidden="true" />
+								class={buttonClass('ghost', 'icon-sm')}
+							><X aria-hidden="true" />
 							</button>
 						{/if}
 					</div>
@@ -404,18 +404,20 @@
 
 						{#if isExpanded}
 							<div
-								class="mt-2 grid gap-3 rounded-lg border border-canvas-border bg-canvas-primary p-3 text-xs sm:grid-cols-2"
+								class="mt-2 grid gap-3 rounded-control bg-canvas-secondary/70 p-3 text-xs sm:grid-cols-2"
 							>
 								{#if task.checkpoints}
 									<ol class="space-y-1.5">
 										{#each task.checkpoints as cp (cp.id)}
 											<li class="flex items-center justify-between gap-2">
-												<span class="text-fg-main">
-													{cp.status === 'completed'
-														? '✓'
-														: cp.status === 'active'
-															? '◎'
-															: '○'}
+												<span class="inline-flex items-center gap-1.5 text-fg-main">
+													{#if cp.status === 'completed'}
+														<CircleCheck aria-hidden="true" class="size-3.5 text-status-success" />
+													{:else if cp.status === 'active'}
+														<LoaderCircle aria-hidden="true" class="size-3.5 animate-spin text-accent-primary" />
+													{:else}
+														<Circle aria-hidden="true" class="size-3.5 text-fg-light" />
+													{/if}
 													{cp.title}
 												</span>
 												<span class="font-mono text-[11px] text-fg-light">
@@ -426,7 +428,7 @@
 									</ol>
 								{/if}
 								{#if task.metrics}
-									<div class="space-y-1 font-mono text-[11px] text-fg-light">
+									<div class="space-y-1 text-xs text-fg-light">
 										{#if task.metrics.tokens !== undefined}
 											<p>Tokens: {task.metrics.tokens.toLocaleString()}</p>
 										{/if}
@@ -447,7 +449,7 @@
 	</div>
 
 	<footer
-		class="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-border bg-canvas-primary px-4 py-3 font-mono text-xs text-fg-light"
+		class="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-border px-4 py-3 text-xs text-fg-light"
 	>
 		<span>{timestamp} · {localTasks.length} total runs</span>
 		{#if completedCount > 0}

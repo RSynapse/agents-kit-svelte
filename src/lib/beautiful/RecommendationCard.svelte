@@ -95,7 +95,7 @@
 </script>
 
 <section
-	class="overflow-hidden rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
+	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<div class="flex items-start justify-between gap-3 border-b border-canvas-border px-4 py-3">
 		<div class="space-y-1">
@@ -150,7 +150,7 @@
 	</div>
 
 	<div class="flex items-center justify-between gap-3 border-t border-canvas-border bg-canvas-secondary/40 px-4 py-2.5">
-		<span class="inline-flex items-center gap-1.5 font-mono text-[11px] text-fg-light">
+		<span class="inline-flex items-center gap-1.5 text-xs text-fg-light">
 			{#if accepted}
 				<Check aria-hidden="true" class="size-3.5 text-status-success" />
 				<span>Recommendation accepted</span>

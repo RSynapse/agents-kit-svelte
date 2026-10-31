@@ -196,13 +196,13 @@
 
 <section
 	aria-label="Parallel worker pool monitor"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
 	>
 		<div>
-			<p class="font-mono text-xs font-medium text-fg-light">Parallel Worker Pool</p>
+			<p class="text-xs font-medium text-fg-light">Parallel Worker Pool</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">Concurrent Worktree Lanes</h2>
 			<p class="mt-0.5 max-w-2xl text-xs text-fg-light">{taskDescription}</p>
 		</div>
@@ -258,7 +258,7 @@
 								</code>
 							{/if}
 							<span
-								class="rounded-full px-2 py-0.5 text-[11px] font-medium {getLaneBadgeClasses(
+								class="rounded-chip px-1.5 py-px text-[11px] font-medium {getLaneBadgeClasses(
 									lane.status
 								)}"
 							>
@@ -305,7 +305,7 @@
 								</button>
 								{#if isOutputOpen}
 									<p
-										class="mt-1.5 rounded-lg border border-canvas-border bg-canvas-primary p-2.5 font-mono text-xs text-fg-light"
+										class="mt-1.5 rounded-control bg-canvas-secondary/70 p-2.5 font-mono text-xs text-fg-light"
 									>
 										{lane.output}
 									</p>
@@ -330,11 +330,11 @@
 	</ol>
 
 	<footer class="border-t border-canvas-border p-4">
-		<div class="rounded-lg border border-canvas-border bg-canvas-primary p-3">
+		<div class="rounded-control bg-canvas-secondary/70 p-3">
 			<div class="flex items-center justify-between gap-2 text-xs">
 				<span class="font-semibold text-fg-main">Fan-in Merge Collector</span>
 				<span
-					class="rounded-full px-2 py-0.5 text-[11px] font-medium {mergeStatus === 'complete'
+					class="rounded-chip px-1.5 py-px text-[11px] font-medium {mergeStatus === 'complete'
 						? 'bg-status-success-subtle text-status-success'
 						: mergeStatus === 'merging'
 							? 'bg-accent-subtle text-accent-primary'

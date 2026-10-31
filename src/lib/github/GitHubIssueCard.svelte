@@ -118,7 +118,7 @@
 
 <article
 	aria-label="GitHub Issue {issue.number}: {issue.title}"
-	class="ak-micro-lift flex min-w-0 flex-col justify-between overflow-hidden rounded-xl border border-card-border bg-card-bg {compact
+	class="ak-micro-lift flex min-w-0 flex-col justify-between overflow-hidden rounded-card border border-card-border bg-card-bg {compact
 		? 'p-3.5'
 		: 'p-4'} text-sm transition-colors {className}"
 >
@@ -129,7 +129,7 @@
 				{#key issue.state}
 					<span
 						in:scale={{ start: 0.85, duration: motionDuration(180), easing: backOut }}
-						class="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-medium {issue.state ===
+						class="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-chip px-1.5 py-px text-[11px] font-medium {issue.state ===
 						'closed'
 							? 'bg-canvas-secondary text-fg-light'
 							: issue.state === 'ready-for-human'
@@ -163,7 +163,7 @@
 				{/if}
 			</div>
 
-			<div class="flex shrink-0 items-center gap-1 font-mono text-[11px] text-fg-light">
+			<div class="flex shrink-0 items-center gap-1 text-xs text-fg-light">
 				{#if issue.riskTier}
 					<span class="whitespace-nowrap rounded border border-card-border bg-canvas-secondary px-1.5 py-0.5 text-fg-main">
 						{issue.riskTier}
@@ -212,7 +212,7 @@
 					<span class="font-medium text-fg-main">{issue.assignedAgent ?? 'Unassigned'}</span>
 				</div>
 				{#if issue.worktreeBranch}
-					<code class="inline-flex min-w-0 items-center gap-1 truncate rounded bg-card-bg px-1.5 py-0.5 font-mono text-[11px] text-fg-light">
+					<code class="inline-flex min-w-0 items-center gap-1 truncate rounded bg-card-bg px-1.5 py-0.5 text-xs text-fg-light">
 						<GitBranch aria-hidden="true" class="size-3 shrink-0" />
 						<span class="truncate">{issue.worktreeBranch}</span>
 					</code>
@@ -223,7 +223,7 @@
 		<!-- Acceptance Criteria Progress Bar (Svelte 5 Spring) -->
 		{#if issue.criteriaTotal && issue.criteriaTotal > 0}
 			<div class="mt-3 space-y-1">
-				<div class="flex items-center justify-between gap-2 font-mono text-[11px] text-fg-light">
+				<div class="flex items-center justify-between gap-2 text-xs text-fg-light">
 					<span class="whitespace-nowrap">{compact ? 'Criteria' : 'Acceptance criteria'}</span>
 					<span class="whitespace-nowrap tabular-nums text-fg-main">
 						{issue.criteriaCompleted ?? 0}/{issue.criteriaTotal} ({Math.round(criteriaSpring.current)}%)
@@ -245,7 +245,7 @@
 			? 'space-y-2'
 			: 'flex flex-wrap items-center justify-between gap-2'}"
 	>
-		<div class="flex flex-wrap items-center justify-between gap-1 font-mono text-[11px] text-fg-light">
+		<div class="flex flex-wrap items-center justify-between gap-1 text-xs text-fg-light">
 			<span class="truncate">
 				{compact ? issue.author : `Filed by ${issue.author}`} · {issue.createdAt}
 			</span>

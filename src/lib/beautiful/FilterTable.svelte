@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	export type FilterStatus = 'todo' | 'progress' | 'done';
 
 	export interface FilterTableRow {
@@ -99,20 +100,17 @@
 </script>
 
 <section
-	class="overflow-hidden rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
+	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<div
 		class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary p-2.5"
 	>
-		<div class="flex items-center gap-1">
+		<div class="{SEGMENT_GROUP_CLASS}">
 			{#each FILTER_TABS as tab (tab)}
 				<button
 					type="button"
 					onclick={() => selectFilter(tab)}
-					class="min-h-7 rounded-lg px-2.5 text-xs font-medium capitalize transition-colors {activeFilter ===
-					tab
-						? 'bg-card-bg text-fg-main shadow-xs'
-						: 'text-fg-light hover:text-fg-main'}"
+					class="{segmentClass(activeFilter === tab)} capitalize"
 				>
 					{tab}
 				</button>
@@ -144,7 +142,7 @@
 				</div>
 				<span class="font-mono text-[11px] text-fg-light">{row.date}</span>
 				<span
-					class="rounded-full px-2 py-0.5 font-mono text-[10px] font-medium capitalize {getStatusBadgeClass(
+					class="rounded-chip px-1.5 py-px font-mono text-[10px] font-medium capitalize {getStatusBadgeClass(
 						row.status
 					)}"
 				>

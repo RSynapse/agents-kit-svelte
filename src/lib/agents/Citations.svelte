@@ -55,7 +55,7 @@
 							class="flex items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-fg-main transition-colors hover:bg-canvas-secondary"
 						>
 							<span class="truncate font-medium">{citation.title}</span>
-							<span class="flex shrink-0 items-center gap-1.5 font-mono text-[11px] text-fg-light">
+							<span class="flex shrink-0 items-center gap-1.5 text-xs text-fg-light">
 								{#if citation.domain}
 									<span>{citation.domain}</span>
 								{/if}

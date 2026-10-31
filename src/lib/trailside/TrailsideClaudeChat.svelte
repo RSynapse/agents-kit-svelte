@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
+	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	import { Check, FileCode, LayoutGrid, MessageCircle, Moon, SquareTerminal, Sun } from '@lucide/svelte';
 	import AgentActivity from '../agents/AgentActivity.svelte';
 	import AgentProgress from '../agents/AgentProgress.svelte';
@@ -516,17 +516,14 @@
 	<div
 		role="tablist"
 		aria-label="Trailside workspace views"
-		class="flex flex-wrap items-center gap-1 border-b border-canvas-border bg-canvas-secondary/60 px-4 py-1.5 sm:px-6"
+		class="{SEGMENT_GROUP_CLASS} mx-4 my-2 flex-wrap sm:mx-6"
 	>
 		<button
 			type="button"
 			role="tab"
 			aria-selected={activeTab === 'chat'}
 			onclick={() => (activeTab = 'chat')}
-			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
-			'chat'
-				? 'border border-card-border bg-card-bg text-fg-main'
-				: 'text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'chat')}"
 		>
 			<MessageCircle aria-hidden="true" class="size-3.5" />
 			<span>AK-S Chat</span>
@@ -536,10 +533,7 @@
 			role="tab"
 			aria-selected={activeTab === 'changes'}
 			onclick={() => (activeTab = 'changes')}
-			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
-			'changes'
-				? 'border border-card-border bg-card-bg text-fg-main'
-				: 'text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'changes')}"
 		>
 			<FileCode aria-hidden="true" class="size-3.5" />
 			<span>Changes (2)</span>
@@ -549,10 +543,7 @@
 			role="tab"
 			aria-selected={activeTab === 'checks'}
 			onclick={() => (activeTab = 'checks')}
-			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
-			'checks'
-				? 'border border-card-border bg-card-bg text-fg-main'
-				: 'text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'checks')}"
 		>
 			<SquareTerminal aria-hidden="true" class="size-3.5" />
 			<span>Checks & Terminal</span>
@@ -562,10 +553,7 @@
 			role="tab"
 			aria-selected={activeTab === 'catalog'}
 			onclick={() => (activeTab = 'catalog')}
-			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
-			'catalog'
-				? 'border border-card-border bg-card-bg text-fg-main'
-				: 'text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'catalog')}"
 		>
 			<LayoutGrid aria-hidden="true" class="size-3.5" />
 			<span>Component Catalog & Evaluation</span>
@@ -581,7 +569,7 @@
 		>
 			<div class="space-y-4">
 				<div>
-					<h2 class="px-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-fg-light">
+					<h2 class="px-1 text-[11px] font-medium capitalize text-fg-light">
 						Active Card Runs
 					</h2>
 					<ul class="mt-1.5 space-y-1 text-xs">
@@ -619,7 +607,7 @@
 				</div>
 
 				<div>
-					<h2 class="px-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-fg-light">
+					<h2 class="px-1 text-[11px] font-medium capitalize text-fg-light">
 						Worktree Files (2)
 					</h2>
 					<FileTree
@@ -634,8 +622,8 @@
 				</div>
 			</div>
 
-			<div class="rounded-xl border border-card-border bg-card-bg p-3 text-xs">
-				<div class="flex items-center justify-between font-mono text-[11px] text-fg-light">
+			<div class="rounded-card border border-card-border bg-card-bg p-3 text-xs">
+				<div class="flex items-center justify-between text-xs text-fg-light">
 					<span>Companion Runtime</span>
 					<span class="text-status-success">● Ready</span>
 				</div>
@@ -827,21 +815,21 @@
 					</div>
 
 					<!-- Live Loading & Shimmer Primitives Showcase -->
-					<div class="grid gap-3 rounded-xl border border-card-border bg-card-bg p-4 sm:grid-cols-3">
+					<div class="grid gap-3 rounded-card border border-card-border bg-card-bg p-4 sm:grid-cols-3">
 						<div>
-							<p class="font-mono text-[11px] uppercase text-fg-light">ThinkingShimmer</p>
+							<p class="text-[11px] capitalize text-fg-light font-medium">ThinkingShimmer</p>
 							<div class="mt-2">
 								<ThinkingShimmer label="Analyzing worktree diff…" />
 							</div>
 						</div>
 						<div>
-							<p class="font-mono text-[11px] uppercase text-fg-light">AgentProgress</p>
+							<p class="text-[11px] capitalize text-fg-light font-medium">AgentProgress</p>
 							<div class="mt-2">
 								<AgentProgress label="Running checks" initialSeconds={4.2} />
 							</div>
 						</div>
 						<div>
-							<p class="font-mono text-[11px] uppercase text-fg-light">ReasoningText</p>
+							<p class="text-[11px] capitalize text-fg-light font-medium">ReasoningText</p>
 							<div class="mt-2">
 								<ReasoningText />
 							</div>
@@ -849,7 +837,7 @@
 					</div>
 
 					<!-- Evaluation Table -->
-					<div class="overflow-x-auto rounded-xl border border-card-border bg-card-bg">
+					<div class="overflow-x-auto rounded-card border border-card-border bg-card-bg">
 						<table class="w-full border-collapse text-left text-xs">
 							<thead>
 								<tr class="border-b border-canvas-border bg-canvas-secondary text-fg-light">

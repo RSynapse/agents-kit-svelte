@@ -87,7 +87,7 @@
 	data-slot="image-generation"
 	data-state={currentStatus}
 	aria-busy={isActive}
-	class="w-full rounded-xl border border-card-border bg-card-bg p-3.5 text-fg-main {size === 'compact'
+	class="w-full rounded-card border border-card-border bg-card-bg p-3.5 text-fg-main {size === 'compact'
 		? 'max-w-xs'
 		: ''} {className}"
 >
@@ -156,7 +156,7 @@
 		</div>
 
 		<div class="relative z-10 space-y-1">
-			<div class="flex items-center justify-between font-mono text-[11px] text-fg-light tabular-nums">
+			<div class="flex items-center justify-between text-xs text-fg-light tabular-nums">
 				<span>Pass progress</span>
 				<span>{resolvedProgress}%</span>
 			</div>

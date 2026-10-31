@@ -137,7 +137,7 @@
 	}
 </script>
 
-<div class="w-full rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<button
 		type="button"
 		aria-expanded={isOpen}

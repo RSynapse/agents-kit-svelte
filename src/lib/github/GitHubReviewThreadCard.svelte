@@ -65,7 +65,7 @@
 	}
 </script>
 
-<div class="overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary px-3.5 py-2 text-xs">
 		<div class="flex items-center gap-2 font-mono">
 			<code class="font-semibold text-fg-main">{thread.filePath}</code>

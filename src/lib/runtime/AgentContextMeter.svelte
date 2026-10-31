@@ -69,7 +69,7 @@
 		<div
 			id="agent-context-meter-panel"
 			transition:fly={{ y: -6, duration: motionDuration(180), easing: cubicOut }}
-			class="absolute right-0 top-9 z-30 w-72 rounded-xl border border-card-border bg-card-bg p-3 shadow-lg"
+			class="absolute right-0 top-9 z-30 w-72 rounded-card border border-card-border bg-card-bg p-3 shadow-lg"
 		>
 			<div class="flex items-center justify-between border-b border-canvas-border pb-2">
 				<span class="font-semibold text-fg-main">Context Window Breakdown</span>

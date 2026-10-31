@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
+	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
 	import { backOut, cubicOut } from 'svelte/easing';
 	import { prefersReducedMotion } from 'svelte/motion';
@@ -103,7 +103,7 @@
 
 {#snippet laneBadge(lane: MotionCardItem['lane'])}
 	<span
-		class="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase {lane ===
+		class="rounded-chip px-1.5 py-px text-[11px] font-medium capitalize {lane ===
 		'verified'
 			? 'bg-status-success-subtle text-status-success'
 			: lane === 'running'
@@ -116,7 +116,7 @@
 
 <section
 	aria-label="Svelte 5 Motion, Spring Physics, Crossfade & Reactivity Lab"
-	class="space-y-5 rounded-2xl border border-card-border bg-card-bg p-5 text-sm shadow-xs {className}"
+	class="space-y-5 rounded-window border border-card-border bg-card-bg p-5 text-sm shadow-xs {className}"
 >
 	<header class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border pb-3.5">
 		<div>
@@ -133,16 +133,13 @@
 			</h3>
 		</div>
 
-		<div class="flex flex-wrap items-center gap-1.5">
+		<div class="{SEGMENT_GROUP_CLASS} flex-wrap">
 			{#each [24, 52, 76, 98] as preset (preset)}
 				<button
 					type="button"
 					disabled={!ready}
 					onclick={() => springMetric.set(preset)}
-					class="rounded-lg border px-2.5 py-1 font-mono text-xs font-medium transition-colors {springMetric.targetValue ===
-					preset
-						? 'border-accent-primary bg-accent-subtle text-accent-primary'
-						: 'border-card-border bg-canvas-secondary text-fg-main hover:bg-canvas-primary'}"
+					class="{segmentClass(springMetric.targetValue === preset)}"
 				>
 					Spring → {preset}%
 				</button>
@@ -172,7 +169,7 @@
 
 			<div class="grid grid-cols-2 gap-3 pt-1 text-xs">
 				<label class="space-y-1">
-					<span class="flex justify-between font-mono text-[11px] text-fg-light">
+					<span class="flex justify-between text-xs text-fg-light">
 						<span>Stiffness</span>
 						<span class="tabular-nums text-fg-main">{springMetric.stiffness.toFixed(2)}</span>
 					</span>
@@ -188,7 +185,7 @@
 				</label>
 
 				<label class="space-y-1">
-					<span class="flex justify-between font-mono text-[11px] text-fg-light">
+					<span class="flex justify-between text-xs text-fg-light">
 						<span>Damping</span>
 						<span class="tabular-nums text-fg-main">{springMetric.damping.toFixed(2)}</span>
 					</span>
@@ -258,7 +255,7 @@
 					{@const laneCards = cards.filter((c) => c.lane === lane.id)}
 					<div class="rounded-xl border border-card-border bg-canvas-secondary p-2.5">
 						<div class="mb-2 flex items-center justify-between px-1">
-							<span class="font-mono text-[11px] font-bold uppercase text-fg-main">
+							<span class="text-[11px] font-medium capitalize text-fg-main">
 								{lane.label}
 							</span>
 							<span class="rounded-full bg-card-bg px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-fg-light">

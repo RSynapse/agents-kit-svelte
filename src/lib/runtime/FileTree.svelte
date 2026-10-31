@@ -22,7 +22,7 @@
 <div
 	role="tree"
 	aria-label="Worktree changed files"
-	class="rounded-xl border border-card-border bg-card-bg p-2 font-mono text-xs {className}"
+	class="rounded-card border border-card-border bg-card-bg p-2 font-mono text-xs {className}"
 >
 	{#each nodes as node (node.path)}
 		{#if node.kind === 'folder'}

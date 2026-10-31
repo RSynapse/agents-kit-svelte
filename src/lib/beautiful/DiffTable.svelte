@@ -88,7 +88,7 @@
 </script>
 
 <section
-	class="overflow-hidden rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
+	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<header
 		class="flex min-h-12 flex-wrap items-center justify-between gap-3 border-b border-canvas-border px-4 py-2.5"

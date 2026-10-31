@@ -208,7 +208,7 @@
 		{/if}
 
 		{#if hasNested && open && prop.properties}
-			<div class="mt-2 ml-3 divide-y divide-canvas-border rounded-lg border border-canvas-border bg-canvas-primary">
+			<div class="mt-2 ml-3 divide-y divide-canvas-border rounded-control bg-canvas-secondary/70">
 				{#each prop.properties as childProp (childProp.name)}
 					{@render propertyRow(childProp, key)}
 				{/each}
@@ -217,7 +217,7 @@
 	</div>
 {/snippet}
 
-<div class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center gap-3 border-b border-canvas-border px-4 py-3">
 		<span
 			class="rounded-md px-2.5 py-0.5 font-mono text-xs font-bold {getMethodBadgeStyle(method)}"
@@ -238,7 +238,7 @@
 	</div>
 
 	{#if description}
-		<p class="border-b border-canvas-border bg-canvas-primary px-4 py-2.5 text-xs text-fg-light">
+		<p class="border-b border-canvas-border px-4 py-2.5 text-xs text-fg-light">
 			{description}
 		</p>
 	{/if}

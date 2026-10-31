@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowUp, Check, Download, LoaderCircle, RefreshCw, X } from '@lucide/svelte';
+	import { ArrowDown, ArrowUp, Check, Download, LoaderCircle, RefreshCw, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type FormFieldType = 'text' | 'email' | 'select' | 'textarea' | 'number' | 'checkbox';
 
@@ -241,13 +241,13 @@
 
 <section
 	aria-label="Dynamic schema-to-form generator"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
 	>
 		<div>
-			<p class="font-mono text-xs font-medium text-fg-light">Structured Tool Input Builder</p>
+			<p class="text-xs font-medium text-fg-light">Structured Tool Input Builder</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">{formTitle}</h2>
 			<p class="mt-0.5 text-xs text-fg-light">{formDescription}</p>
 		</div>
@@ -323,26 +323,23 @@
 								disabled={index === 0}
 								aria-label="Move {field.label} up"
 								onclick={() => moveField(index, -1)}
-								class={buttonClass('secondary', 'sm')}
-							>
-								<ArrowUp aria-hidden="true" />
+								class={buttonClass('ghost', 'icon-sm')}
+							><ArrowUp aria-hidden="true" />
 							</button>
 							<button
 								type="button"
 								disabled={index === localFields.length - 1}
 								aria-label="Move {field.label} down"
 								onclick={() => moveField(index, 1)}
-								class={buttonClass('secondary', 'sm')}
-							>
-								<Download aria-hidden="true" />
+								class={buttonClass('ghost', 'icon-sm')}
+							><ArrowDown aria-hidden="true" />
 							</button>
 							<button
 								type="button"
 								aria-label="Remove {field.label}"
 								onclick={() => handleRemoveField(field.id)}
-								class={buttonClass('secondary', 'sm')}
-							>
-								<X aria-hidden="true" />
+								class={buttonClass('ghost', 'icon-sm')}
+							><X aria-hidden="true" />
 							</button>
 						</div>
 					</div>
@@ -353,7 +350,7 @@
 				<div class="flex items-center justify-between text-xs">
 					<span class="font-semibold text-fg-main">Live JSON Payload Preview</span>
 					<span
-						class="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold {isFormValid
+						class="rounded-chip px-1.5 py-px font-mono text-[10px] font-semibold {isFormValid
 							? 'bg-status-success-subtle text-status-success'
 							: 'bg-status-danger-subtle text-status-danger'}"
 					>
@@ -361,12 +358,12 @@
 					</span>
 				</div>
 				<pre
-					class="mt-1.5 max-h-48 overflow-auto rounded-lg border border-canvas-border bg-canvas-primary p-3 font-mono text-xs leading-5 text-fg-main"><code>{jsonPayloadPreview}</code></pre>
+					class="mt-1.5 max-h-48 overflow-auto rounded-control bg-canvas-secondary/70 p-3 font-mono text-xs leading-5 text-fg-main"><code>{jsonPayloadPreview}</code></pre>
 			</div>
 		</div>
 
 		{#if showPreview}
-			<aside class="border-t border-canvas-border bg-canvas-primary p-4 lg:border-t-0 lg:border-l">
+			<aside class="border-t border-canvas-border p-4 lg:border-t-0 lg:border-l">
 				<h3 class="text-xs font-semibold text-fg-main">Interactive Tool Form</h3>
 				<p class="mt-0.5 text-[11px] text-fg-light">
 					Edit values below to test validation and update the JSON payload

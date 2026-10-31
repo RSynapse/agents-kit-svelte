@@ -94,7 +94,7 @@
 		e.preventDefault();
 		submitPrompt();
 	}}
-	class="w-full rounded-xl border border-card-border bg-card-bg p-2.5 transition-colors focus-within:border-fg-light/50 {className}"
+	class="w-full rounded-card border border-card-border bg-card-bg p-2.5 transition-colors focus-within:border-fg-light/50 {className}"
 >
 	{#if attachedChips.length > 0}
 		<div class="mb-2 flex flex-wrap items-center gap-1.5 px-1">
@@ -108,9 +108,8 @@
 						type="button"
 						aria-label="Remove {chip}"
 						onclick={() => removeContextChip(chip)}
-						class={buttonClass('ghost', 'sm')}
-					>
-						<X aria-hidden="true" class="size-3" />
+						class={buttonClass('ghost', 'icon-sm')}
+					><X aria-hidden="true" class="size-3" />
 					</button>
 				</span>
 			{/each}

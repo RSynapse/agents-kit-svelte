@@ -105,7 +105,7 @@
 </script>
 
 <section
-	class="w-full max-w-md rounded-xl border border-card-border bg-card-bg p-4 text-fg-main {className}"
+	class="w-full max-w-md rounded-card border border-card-border bg-card-bg p-4 text-fg-main {className}"
 >
 	<div class="flex items-center justify-between gap-2">
 		<h3 class="text-sm font-semibold text-fg-main">{title}</h3>

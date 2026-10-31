@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Check, Download, GitCompare, Pencil, Star } from '@lucide/svelte';
-	import { buttonClass } from '../ui/styles';
+	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	import type { ResultActionState } from '../types';
 
 	interface Props {
@@ -44,15 +44,13 @@
 <div
 	role="toolbar"
 	aria-label="Generated result actions"
-	class="inline-flex flex-wrap items-center gap-1 rounded-xl border border-card-border bg-canvas-secondary p-1 text-xs {className}"
+	class="{SEGMENT_GROUP_CLASS} flex-wrap text-xs"
 >
 	<button
 		type="button"
 		aria-pressed={actionState === 'expanded'}
 		onclick={onExpand}
-		class="rounded-lg px-2.5 py-1 font-medium transition-colors {actionState === 'expanded'
-			? 'bg-card-bg text-fg-main shadow-xs'
-			: 'text-fg-light hover:text-fg-main'}"
+		class="{segmentClass(actionState === 'expanded')}"
 	>
 		{actionState === 'expanded' ? '↙ Collapse' : '↗ Expand'}
 	</button>
@@ -61,9 +59,7 @@
 		type="button"
 		aria-pressed={actionState === 'editing'}
 		onclick={onEdit}
-		class="rounded-lg px-2.5 py-1 font-medium transition-colors {actionState === 'editing'
-			? 'bg-card-bg text-fg-main shadow-xs'
-			: 'text-fg-light hover:text-fg-main'}"
+		class="{segmentClass(actionState === 'editing')}"
 	>
 		<Pencil aria-hidden="true" />
 		Edit
@@ -73,9 +69,7 @@
 		type="button"
 		aria-pressed={actionState === 'comparing'}
 		onclick={onCompare}
-		class="rounded-lg px-2.5 py-1 font-medium transition-colors {actionState === 'comparing'
-			? 'bg-card-bg text-fg-main shadow-xs'
-			: 'text-fg-light hover:text-fg-main'}"
+		class="{segmentClass(actionState === 'comparing')}"
 	>
 		<GitCompare aria-hidden="true" />
 		Compare

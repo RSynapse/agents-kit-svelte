@@ -199,13 +199,13 @@
 
 <section
 	aria-label="Sequential workflow pipeline"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
 	>
 		<div>
-			<p class="font-mono text-xs font-medium text-fg-light">Sequential Workflow</p>
+			<p class="text-xs font-medium text-fg-light">Sequential Workflow</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">{workflowName}</h2>
 			<p class="mt-0.5 text-xs text-fg-light">{description}</p>
 		</div>
@@ -264,7 +264,7 @@
 							<span class="font-mono text-xs tabular-nums text-fg-light">{step.duration}</span>
 						{/if}
 						<span
-							class="rounded-full px-2 py-0.5 text-[11px] font-medium {getStepStatusClasses(
+							class="rounded-chip px-1.5 py-px text-[11px] font-medium {getStepStatusClasses(
 								step.status
 							)}"
 						>
@@ -276,7 +276,7 @@
 
 				{#if isSelected}
 					<div
-						class="grid gap-3 border-t border-canvas-border bg-canvas-primary px-4 py-3 text-xs sm:grid-cols-2"
+						class="grid gap-3 border-t border-canvas-border px-4 py-3 text-xs sm:grid-cols-2"
 					>
 						<div>
 							<p class="font-semibold text-fg-main">Stage Input</p>
@@ -288,7 +288,7 @@
 								{step.outputSummary || 'Available once this stage completes.'}
 							</p>
 						</div>
-						<div class="flex items-center gap-3 font-mono text-[11px] text-fg-light">
+						<div class="flex items-center gap-3 text-xs text-fg-light">
 							{#if step.duration}
 								<span>Duration: {step.duration}</span>
 							{/if}
@@ -323,7 +323,7 @@
 	</ol>
 
 	<footer
-		class="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-border bg-canvas-primary px-4 py-3 font-mono text-xs text-fg-light"
+		class="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-border px-4 py-3 text-xs text-fg-light"
 	>
 		<span>
 			{completedCount} of {localSteps.length} stages complete

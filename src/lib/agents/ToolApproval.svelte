@@ -132,7 +132,7 @@
 				<span
 					role="status"
 					aria-live="polite"
-					class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium {activeStatus ===
+					class="inline-flex shrink-0 items-center gap-1.5 rounded-chip px-1.5 py-px text-[11px] font-medium {activeStatus ===
 						'approved' || activeStatus === 'complete'
 						? 'bg-status-success-subtle text-status-success'
 						: activeStatus === 'denied' || activeStatus === 'error'

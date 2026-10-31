@@ -83,13 +83,13 @@
 
 <article
 	aria-label="GitHub Pull Request {pr.number}: {pr.title}"
-	class="rounded-xl border border-card-border bg-card-bg p-4 text-sm {className}"
+	class="rounded-card border border-card-border bg-card-bg p-4 text-sm {className}"
 >
 	<!-- Header Row -->
 	<div class="flex flex-wrap items-center justify-between gap-2 text-xs">
 		<div class="flex flex-wrap items-center gap-2">
 			<span
-				class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium {pr.state ===
+				class="inline-flex items-center gap-1.5 rounded-chip px-1.5 py-px text-[11px] font-medium {pr.state ===
 				'merged'
 					? 'bg-accent-subtle text-accent-primary'
 					: pr.state === 'draft'

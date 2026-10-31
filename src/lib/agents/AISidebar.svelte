@@ -284,7 +284,7 @@
 
 <aside
 	aria-label={ariaLabel}
-	class="flex w-full max-w-xs flex-col rounded-xl border border-card-border bg-card-bg p-3 text-sm text-fg-main {className}"
+	class="flex w-full max-w-xs flex-col rounded-card border border-card-border bg-card-bg p-3 text-sm text-fg-main {className}"
 >
 	<header class="mb-2 flex items-center justify-between gap-2 px-1">
 		<span class="font-mono text-xs font-semibold tracking-wider text-fg-light uppercase">
@@ -309,7 +309,7 @@
 
 	{#if pinnedItems.length > 0 && !normalizedQuery}
 		<div class="mb-2.5 border-b border-canvas-border pb-2">
-			<p class="mb-1 px-1.5 font-mono text-[10px] font-semibold tracking-wider text-fg-light uppercase">
+			<p class="mb-1 px-1.5 text-[11px] font-medium text-fg-light capitalize">
 				Pinned
 			</p>
 			<div class="space-y-0.5">
@@ -399,9 +399,8 @@
 							type="button"
 							aria-label="Rename {row.item.label}"
 							onclick={() => startRename(row.item)}
-							class={buttonClass('ghost', 'sm')}
-						>
-							<Pencil aria-hidden="true" />
+							class={buttonClass('ghost', 'icon-sm')}
+						><Pencil aria-hidden="true" />
 						</button>
 					</div>
 				{/if}

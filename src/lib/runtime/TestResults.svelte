@@ -66,7 +66,7 @@
 	}
 </script>
 
-<div class="w-full rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border px-4 py-3">
 		<div class="flex flex-wrap items-center gap-2">
 			<span
@@ -121,7 +121,7 @@
 						</span>
 						<span>{suite.name}</span>
 					</span>
-					<span class="inline-flex items-center gap-1.5 font-mono text-[11px] text-fg-light">
+					<span class="inline-flex items-center gap-1.5 text-xs text-fg-light">
 						<span>{suite.tests.length} {suite.tests.length === 1 ? 'test' : 'tests'}</span>
 						<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-150 {open ? 'rotate-180' : ''}" />
 					</span>

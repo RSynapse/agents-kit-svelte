@@ -202,7 +202,7 @@
 			</div>
 		</div>
 	{:else}
-		<p class="rounded-xl border border-card-border bg-card-bg p-6 text-center text-xs text-fg-light">
+		<p class="rounded-card border border-card-border bg-card-bg p-6 text-center text-xs text-fg-light">
 			No context items attached
 		</p>
 	{/each}
