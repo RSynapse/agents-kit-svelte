@@ -183,7 +183,9 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 			})
 		).toBeVisible();
 
-		// Verify live schema renderer output
+		// Verify the generated interface and the studio inspector
+		await expect(page.getByText(/Generated tradeoff matrix/i).first()).toBeVisible();
+		await page.getByRole('button', { name: /Open in studio/i }).click();
 		await expect(page.getByText(/Valid schema/i)).toBeVisible();
 
 		await page.screenshot({
@@ -192,10 +194,8 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 			animations: 'disabled'
 		});
 
-		// Switch schema presets
-		await page
-			.getByRole('button', { name: /^Architecture Decision Flow$/ })
-			.click();
-		await expect(page.getByText(/1\. Generated Tradeoff Matrix/i).first()).toBeVisible();
+		// Ask for a different interface and watch it build
+		await page.getByRole('button', { name: /^Triage this pull request$/ }).click();
+		await expect(page.getByText(/Candidate pull request/i).first()).toBeVisible();
 	});
 });
