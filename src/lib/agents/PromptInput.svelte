@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { ArrowUp, FileIcon, Plus, Shield, Sparkles, Square, X } from '@lucide/svelte';
 	import { isImeComposing } from '../state/chat-helpers';
 	import type { SupportedAgentId, SupportedAgentOption } from '../types';
@@ -107,7 +108,7 @@
 						type="button"
 						aria-label="Remove {chip}"
 						onclick={() => removeContextChip(chip)}
-						class="inline-flex size-3.5 items-center justify-center rounded text-fg-light hover:text-fg-main"
+						class={buttonClass('ghost', 'sm')}
 					>
 						<X aria-hidden="true" class="size-3" />
 					</button>
@@ -136,7 +137,7 @@
 				aria-label="Add context or skill"
 				aria-expanded={menuOpen}
 				onclick={() => (menuOpen = !menuOpen)}
-				class="inline-flex size-8 items-center justify-center rounded-lg text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+				class={buttonClass('ghost', 'icon')}
 			>
 				<Plus aria-hidden="true" class="size-4" />
 			</button>
@@ -209,7 +210,7 @@
 					type="button"
 					onclick={onStop}
 					aria-label="Stop run"
-					class="inline-flex size-8 items-center justify-center rounded-lg bg-fg-main text-fg-inverse transition-opacity hover:opacity-90"
+					class={buttonClass('primary', 'icon')}
 				>
 					<Square aria-hidden="true" class="size-3" />
 				</button>
@@ -218,7 +219,7 @@
 					type="submit"
 					disabled={!value.trim()}
 					aria-label="Send prompt"
-					class="inline-flex size-8 items-center justify-center rounded-lg bg-fg-main text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-35"
+					class={buttonClass('primary', 'icon')}
 				>
 					<ArrowUp aria-hidden="true" class="size-4" />
 				</button>

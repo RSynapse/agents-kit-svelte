@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { RefreshCw } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import type { Snippet } from 'svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 
@@ -111,9 +113,9 @@
 				type="button"
 				aria-label="Reload preview"
 				onclick={reloadPreview}
-				class="inline-flex size-7 items-center justify-center rounded-md border border-card-border bg-card-bg font-mono text-xs text-fg-main transition-colors hover:bg-canvas-primary"
+				class={buttonClass('secondary', 'icon-sm')}
 			>
-				↻
+				<RefreshCw aria-hidden="true" />
 			</button>
 		</div>
 
@@ -128,7 +130,7 @@
 			<button
 				type="button"
 				onclick={submitUrl}
-				class="rounded-md bg-accent-subtle px-2.5 py-1 font-mono text-xs font-medium text-accent-primary transition-opacity hover:opacity-90"
+				class={buttonClass('secondary', 'sm')}
 			>
 				Go
 			</button>

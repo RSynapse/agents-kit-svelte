@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { Check } from '@lucide/svelte';
 	import type { ApprovalCardAnswers, ApprovalQuestion } from '../types';
 
@@ -193,7 +194,7 @@
 						<button
 							type="button"
 							onclick={() => (currentStep -= 1)}
-							class="inline-flex h-8 items-center rounded-md border border-card-border bg-card-bg px-2.5 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+							class={buttonClass('secondary', 'md')}
 						>
 							Back
 						</button>
@@ -202,7 +203,7 @@
 						<button
 							type="button"
 							onclick={onCancel}
-							class="inline-flex h-8 items-center rounded-md px-2 text-xs font-medium text-fg-light hover:text-fg-main"
+							class={buttonClass('ghost', 'md')}
 						>
 							Skip
 						</button>
@@ -213,7 +214,7 @@
 					type="button"
 					disabled={!canAdvance}
 					onclick={handleNextOrSubmit}
-					class="inline-flex h-8 items-center rounded-md bg-fg-main px-3 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-40"
+					class={buttonClass('primary', 'md')}
 				>
 					{currentStep < questions.length - 1 ? 'Next question' : submitLabel}
 				</button>

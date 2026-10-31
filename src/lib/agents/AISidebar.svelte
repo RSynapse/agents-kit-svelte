@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Pencil } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type SidebarResourceKind = 'folder' | 'project' | 'file' | 'bookmark' | 'worktree';
 
 	export interface SidebarResource {
@@ -389,17 +391,17 @@
 							type="button"
 							aria-label={row.item.pinned ? `Unpin ${row.item.label}` : `Pin ${row.item.label}`}
 							onclick={() => togglePin(row.item)}
-							class="rounded p-1 text-[10px] text-fg-light hover:bg-canvas-primary hover:text-fg-main"
+							class={buttonClass('ghost', 'sm')}
 						>
-							{row.item.pinned ? '★' : '☆'}
+							{#if row.item.pinned}★{:else}☆{/if}
 						</button>
 						<button
 							type="button"
 							aria-label="Rename {row.item.label}"
 							onclick={() => startRename(row.item)}
-							class="rounded p-1 text-[10px] text-fg-light hover:bg-canvas-primary hover:text-fg-main"
+							class={buttonClass('ghost', 'sm')}
 						>
-							✎
+							<Pencil aria-hidden="true" />
 						</button>
 					</div>
 				{/if}

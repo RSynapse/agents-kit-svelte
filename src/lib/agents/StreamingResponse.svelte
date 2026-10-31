@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { Check, Copy, RefreshCw, ThumbsDown, ThumbsUp } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import Citations from './Citations.svelte';
@@ -54,7 +55,7 @@
 					type="button"
 					aria-label={copied ? 'Copied response' : 'Copy response'}
 					onclick={handleCopy}
-					class="inline-flex h-7 items-center gap-1 rounded-md px-2 text-xs text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+					class={buttonClass('ghost', 'sm')}
 				>
 					{#if copied}
 						<Check aria-hidden="true" class="size-3.5 text-status-success" />
@@ -70,7 +71,7 @@
 					type="button"
 					aria-label="Retry response"
 					onclick={onRetry}
-					class="inline-flex h-7 items-center gap-1 rounded-md px-2 text-xs text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+					class={buttonClass('ghost', 'sm')}
 				>
 					<RefreshCw aria-hidden="true" class="size-3.5" />
 					<span>Retry</span>

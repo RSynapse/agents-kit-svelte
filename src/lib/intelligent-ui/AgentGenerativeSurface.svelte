@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import GitHubIssueCard from '../github/GitHubIssueCard.svelte';
 	import GitHubPullRequestCard from '../github/GitHubPullRequestCard.svelte';
 	import ResultActions from './ResultActions.svelte';
@@ -290,7 +291,7 @@
 							<button
 								type="button"
 								onclick={() => toggleChecklistItem(item.id)}
-								class="flex w-full items-start gap-2.5 rounded-lg border border-card-border bg-canvas-primary px-3 py-2 text-left text-xs hover:bg-canvas-secondary"
+								class={buttonClass('secondary', 'md', 'w-full text-left')}
 							>
 								<span
 									class="mt-0.5 inline-flex size-4 shrink-0 items-center justify-center rounded font-mono text-[10px] {item.completed
@@ -429,13 +430,13 @@
 				<button
 					type="button"
 					onclick={() => (mode = 'view')}
-					class="rounded-lg border border-card-border bg-canvas-secondary px-3 py-1 font-medium text-fg-main"
+					class={buttonClass('secondary', 'sm')}
 				>
 					Cancel
 				</button>
 				<button
 					type="submit"
-					class="rounded-lg bg-fg-main px-3 py-1 font-medium text-fg-inverse"
+					class={buttonClass('primary', 'sm')}
 				>
 					Apply changes
 				</button>

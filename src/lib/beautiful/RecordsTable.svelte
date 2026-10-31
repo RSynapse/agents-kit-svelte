@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ChevronDown } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export interface RecordRow {
 		id: string;
 		name: string;
@@ -161,13 +163,11 @@
 							<button
 								type="button"
 								onclick={() => handleSortClick(col.key)}
-								class="inline-flex items-center gap-1 rounded text-fg-light transition-colors hover:text-fg-main"
+								class={buttonClass('ghost', 'sm')}
 							>
 								<span>{col.label}</span>
 								{#if currentSortKey === col.key}
-									<span aria-hidden="true" class="font-mono text-[10px] text-accent-primary">
-										{currentSortDir === 'asc' ? '▲' : '▼'}
-									</span>
+									<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-200 {currentSortDir === 'asc' ? 'rotate-180' : ''}" />
 								{/if}
 							</button>
 						</th>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, ChevronDown, ChevronRight, LoaderCircle, Pause, Play, RefreshCw } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import { formatCompactTokens } from '../state/chat-helpers';
 
 	export type SubAgentStatus = 'idle' | 'running' | 'completed' | 'failed';
@@ -270,7 +272,7 @@
 						? 'bg-accent-subtle text-accent-primary'
 						: 'bg-status-success-subtle text-status-success'}"
 				>
-					{localProcessing ? '◎ Delegation active' : '✓ Run paused / complete'}
+					{#if localProcessing}<LoaderCircle aria-hidden="true" class="animate-spin" />Delegation active{:else}<Check aria-hidden="true" />Run paused / complete{/if}
 				</span>
 			</div>
 			<h2 class="mt-1.5 text-base font-semibold text-fg-main">{orchestratorName}</h2>
@@ -282,23 +284,26 @@
 				type="button"
 				disabled={localProcessing}
 				onclick={handleStart}
-				class="rounded-lg bg-accent-primary px-3 py-1.5 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-40"
+				class={buttonClass('primary', 'md')}
 			>
-				▶ Start
+				<Play aria-hidden="true" />
+				Start
 			</button>
 			<button
 				type="button"
 				onclick={handlePauseAll}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				⏸ Pause all
+				<Pause aria-hidden="true" />
+				Pause all
 			</button>
 			<button
 				type="button"
 				onclick={handleRedistribute}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				↻ Rebalance
+				<RefreshCw aria-hidden="true" />
+				Rebalance
 			</button>
 		</div>
 	</header>
@@ -404,9 +409,10 @@
 							<button
 								type="button"
 								onclick={() => handleRetry(worker.id)}
-								class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+								class={buttonClass('secondary', 'sm')}
 							>
-								↻ Retry
+								<RefreshCw aria-hidden="true" />
+								Retry
 							</button>
 						{/if}
 						{#if worker.logs && worker.logs.length > 0}
@@ -414,9 +420,9 @@
 								type="button"
 								aria-expanded={isExpanded}
 								onclick={() => toggleAgentLogs(worker.id)}
-								class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs text-fg-light hover:bg-canvas-secondary hover:text-fg-main"
+								class={buttonClass('secondary', 'sm')}
 							>
-								Logs ({worker.logs.length}) {isExpanded ? '▴' : '▾'}
+								Logs ({worker.logs.length}) <ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-200 {isExpanded ? 'rotate-180' : ''}" />
 							</button>
 						{/if}
 					</div>
@@ -449,9 +455,9 @@
 				type="button"
 				aria-expanded={showCommLog}
 				onclick={() => (showCommLog = !showCommLog)}
-				class="flex items-center gap-1.5 text-xs font-medium text-fg-light hover:text-fg-main"
+				class={buttonClass('ghost', 'sm')}
 			>
-				<span>{showCommLog ? '▾' : '▸'}</span>
+				<ChevronRight aria-hidden="true" class="size-3.5 transition-transform duration-200 {showCommLog ? 'rotate-90' : ''}" />
 				<span>Handoff communication log ({communicationLog.length})</span>
 			</button>
 

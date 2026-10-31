@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, Copy, Download, LoaderCircle, Pencil, RefreshCw } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type ArtifactType = 'document' | 'code' | 'table' | 'chart';
 
 	export interface ArtifactVersion {
@@ -175,23 +177,25 @@
 			<button
 				type="button"
 				onclick={handleCopy}
-				class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'sm')}
 			>
-				{copied ? '✓ Copied' : '⎘ Copy'}
+				{#if copied}<Check aria-hidden="true" />Copied{:else}<Copy aria-hidden="true" />Copy{/if}
 			</button>
 			<button
 				type="button"
 				onclick={() => onDownload?.(resolvedContent)}
-				class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'sm')}
 			>
-				↓ Export
+				<Download aria-hidden="true" />
+				Export
 			</button>
 			<button
 				type="button"
 				onclick={() => onRegenerate?.()}
-				class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-light hover:bg-canvas-secondary hover:text-fg-main"
+				class={buttonClass('secondary', 'sm')}
 			>
-				↻ Regenerate
+				<RefreshCw aria-hidden="true" />
+				Regenerate
 			</button>
 		</div>
 	</header>
@@ -200,7 +204,8 @@
 		<div
 			class="border-b border-canvas-border bg-accent-subtle px-4 py-2 font-mono text-xs text-accent-primary"
 		>
-			◎ Streaming updated artifact revision…
+			<LoaderCircle aria-hidden="true" class="animate-spin" />
+			Streaming updated artifact revision…
 		</div>
 	{/if}
 
@@ -335,12 +340,13 @@
 				onclick={() => onEdit?.(resolvedContent)}
 				class="font-sans text-xs font-medium text-accent-primary hover:underline"
 			>
-				✎ Edit in Worktree
+				<Pencil aria-hidden="true" />
+				Edit in Worktree
 			</button>
 			<button
 				type="button"
 				onclick={() => onShare?.()}
-				class="font-sans text-xs font-medium text-fg-light hover:text-fg-main"
+				class={buttonClass('ghost', 'sm')}
 			>
 				Share
 			</button>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { Check, ChevronDown, Copy, FileCode } from '@lucide/svelte';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import { parseUnifiedDiff } from '../state/chat-helpers';
@@ -63,7 +64,7 @@
 			aria-expanded={isOpen}
 			aria-controls={panelId}
 			onclick={() => (isOpen = !isOpen)}
-			class="group flex min-w-0 flex-1 items-center gap-2 text-left text-fg-light outline-none transition-colors hover:text-fg-main"
+			class={buttonClass('ghost', 'sm', 'group min-w-0 flex-1 text-left')}
 		>
 			<FileCode aria-hidden="true" class="size-4 shrink-0 text-fg-light" />
 
@@ -87,7 +88,7 @@
 			type="button"
 			aria-label={copied ? 'Copied diff' : 'Copy diff'}
 			onclick={handleCopy}
-			class="inline-flex size-7 items-center justify-center rounded-md text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+			class={buttonClass('ghost', 'icon-sm')}
 		>
 			{#if copied}
 				<Check aria-hidden="true" class="size-3.5 text-status-success" />

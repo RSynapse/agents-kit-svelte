@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { Check, CircleCheck, CircleDot, GitBranch, Play } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import { backOut, cubicOut } from 'svelte/easing';
@@ -263,7 +264,7 @@
 					type="button"
 					disabled={!ready}
 					onclick={handleClaim}
-					class="inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-md border border-card-border bg-card-bg px-2 font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
+					class={buttonClass('secondary', 'sm')}
 				>
 					{#if claimed}
 						<Check aria-hidden="true" class="size-3 shrink-0 text-status-success" />
@@ -276,7 +277,7 @@
 					type="button"
 					disabled={!ready}
 					onclick={handleDispatch}
-					class="inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-md bg-fg-main px-2.5 font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
+					class={buttonClass('primary', 'sm')}
 				>
 					<Play aria-hidden="true" class="size-2.5 shrink-0" />
 					<span>
@@ -294,7 +295,7 @@
 						type="button"
 						disabled={!ready}
 						onclick={() => onOpenChat(issue.number)}
-						class="inline-flex h-7 items-center whitespace-nowrap rounded-md border border-card-border bg-card-bg px-2 font-mono text-[11px] text-accent-primary hover:bg-accent-subtle"
+						class={buttonClass('secondary', 'sm')}
 					>
 						Chat
 					</button>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { Check, GitCommitHorizontal, RotateCcw } from '@lucide/svelte';
 	import type { CheckpointEntry } from '../types';
 
@@ -47,7 +48,7 @@
 		<button
 			type="button"
 			onclick={handleRestore}
-			class="inline-flex h-7 items-center gap-1.5 rounded-md border border-card-border bg-card-bg px-2.5 font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+			class={buttonClass('secondary', 'sm')}
 		>
 			{#if restored}
 				<Check aria-hidden="true" class="size-3.5 text-status-success" />

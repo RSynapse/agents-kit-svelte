@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, ChevronDown, Play, RotateCcw, TriangleAlert } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type EvalCriterionStatus = 'pass' | 'warn' | 'fail';
 
 	export interface EvalCriterion {
@@ -215,7 +217,7 @@
 						? 'bg-status-success-subtle text-status-success'
 						: 'bg-status-warning-subtle text-status-warning'}"
 				>
-					{passed ? '✓ Gate Passed' : '⚠ Send-Back / Below Threshold'}
+					{#if passed}<Check aria-hidden="true" />Gate Passed{:else}<TriangleAlert aria-hidden="true" />Send-Back / Below Threshold{/if}
 				</span>
 			</div>
 			<h2 class="mt-1.5 text-base font-semibold text-fg-main">Rubric & Red-Team Evaluation</h2>
@@ -226,9 +228,10 @@
 			<button
 				type="button"
 				onclick={handleReset}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				↺ Reset
+				<RotateCcw aria-hidden="true" />
+				Reset
 			</button>
 			{#if passed}
 				<button
@@ -236,16 +239,17 @@
 					onclick={handleAccept}
 					class="rounded-lg bg-status-success px-3 py-1.5 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
 				>
-					{accepted ? '✓ Accepted' : '✓ Accept Result'}
+					{#if accepted}<Check aria-hidden="true" />Accepted{:else}<Check aria-hidden="true" />Accept Result{/if}
 				</button>
 			{:else}
 				<button
 					type="button"
 					disabled={isRunning}
 					onclick={() => onRunNext?.()}
-					class="rounded-lg bg-accent-primary px-3 py-1.5 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-40"
+					class={buttonClass('primary', 'md')}
 				>
-					▶ Run Next Attempt
+					<Play aria-hidden="true" />
+					Run Next Attempt
 				</button>
 			{/if}
 		</div>
@@ -362,7 +366,7 @@
 						>
 							{item.score}/100
 						</span>
-						<span class="text-fg-light">{isOpen ? '▴' : '▾'}</span>
+						<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-200 {isOpen ? 'rotate-180' : ''}" />
 					</button>
 
 					{#if isOpen}

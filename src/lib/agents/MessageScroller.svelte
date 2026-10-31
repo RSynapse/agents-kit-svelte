@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { ArrowDown } from '@lucide/svelte';
 	import { untrack, type Snippet } from 'svelte';
 	import { fly } from 'svelte/transition';
@@ -636,7 +637,7 @@
 			type="button"
 			transition:fly={{ y: 8, duration: 150 }}
 			onclick={() => scrollToEnd('smooth')}
-			class="absolute bottom-3 left-1/2 z-20 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-card-border bg-card-bg px-3 py-1 text-xs font-medium text-fg-main shadow-[var(--shadow-btn)] transition-colors hover:bg-canvas-secondary"
+			class={buttonClass('secondary', 'sm', 'absolute bottom-3 left-1/2 z-20')}
 		>
 			<ArrowDown aria-hidden="true" class="size-3" />
 			<span>Jump to latest</span>

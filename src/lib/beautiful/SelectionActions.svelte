@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	export interface SelectionAction {
 		id: string;
 		label: string;
@@ -116,7 +117,7 @@
 			<button
 				type="button"
 				onclick={() => onReplace?.(localResult ?? '')}
-				class="rounded-lg bg-accent-primary px-2.5 py-1 text-xs font-semibold text-fg-inverse transition-opacity hover:opacity-90"
+				class={buttonClass('primary', 'sm')}
 			>
 				Apply result
 			</button>

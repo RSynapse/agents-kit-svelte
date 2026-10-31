@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ArrowUp, ArrowUpDown, ChevronRight, Pause, Play, X } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type AgentTaskStatus =
 		| 'queued'
 		| 'running'
@@ -225,14 +227,15 @@
 					onReorder?.(
 						localTasks.filter((t) => t.status === 'queued').map((t) => t.id)
 					)}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				⇅ Optimize Priority
+				<ArrowUpDown aria-hidden="true" />
+				Optimize Priority
 			</button>
 			<button
 				type="button"
 				onclick={() => onAddTask?.()}
-				class="rounded-lg bg-accent-primary px-3 py-1.5 text-xs font-medium text-fg-inverse hover:opacity-90"
+				class={buttonClass('primary', 'md')}
 			>
 				+ Enqueue Run
 			</button>
@@ -333,26 +336,29 @@
 							<button
 								type="button"
 								onclick={() => handlePromote(task.id)}
-								class="rounded-lg border border-card-border bg-canvas-primary px-2 py-1 text-xs text-fg-light hover:bg-canvas-secondary hover:text-fg-main"
+								class={buttonClass('secondary', 'sm')}
 							>
-								↑ Promote
+								<ArrowUp aria-hidden="true" />
+								Promote
 							</button>
 							<button
 								type="button"
 								disabled={isProcessing}
 								onclick={() => updateTaskStatus(task.id, 'running')}
-								class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+								class={buttonClass('secondary', 'sm')}
 							>
-								▶ Start
+								<Play aria-hidden="true" />
+								Start
 							</button>
 						{:else if task.status === 'running'}
 							<button
 								type="button"
 								disabled={isProcessing}
 								onclick={() => updateTaskStatus(task.id, 'paused')}
-								class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+								class={buttonClass('secondary', 'sm')}
 							>
-								⏸ Pause
+								<Pause aria-hidden="true" />
+								Pause
 							</button>
 						{:else if task.status === 'paused'}
 							<button
@@ -362,9 +368,10 @@
 									updateTaskStatus(task.id, 'running');
 									onResumeTask?.(task.id);
 								}}
-								class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+								class={buttonClass('secondary', 'sm')}
 							>
-								▶ Resume
+								<Play aria-hidden="true" />
+								Resume
 							</button>
 						{/if}
 
@@ -372,9 +379,9 @@
 							<button
 								type="button"
 								onclick={() => onCancelTask?.(task.id)}
-								class="rounded-lg border border-card-border bg-canvas-primary px-2 py-1 text-xs text-fg-light hover:bg-status-danger-subtle hover:text-status-danger"
+								class={buttonClass('secondary', 'sm')}
 							>
-								✕
+								<X aria-hidden="true" />
 							</button>
 						{/if}
 					</div>
@@ -390,9 +397,9 @@
 									...expandedTaskIds,
 									[task.id]: !isExpanded
 								})}
-							class="text-xs text-fg-light hover:text-fg-main"
+							class={buttonClass('ghost', 'sm')}
 						>
-							{isExpanded ? '▾' : '▸'} Checkpoints & telemetry
+							<ChevronRight aria-hidden="true" class="size-3.5 transition-transform duration-200 {isExpanded ? 'rotate-90' : ''}" /> Checkpoints & telemetry
 						</button>
 
 						{#if isExpanded}

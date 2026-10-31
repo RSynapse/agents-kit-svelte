@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { ChevronDown } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 
@@ -152,7 +153,7 @@
 					type="button"
 					aria-expanded={isExpanded}
 					onclick={toggleCollapsible}
-					class="mt-1.5 inline-flex items-center gap-1 rounded-full border border-card-border bg-card-bg px-2.5 py-0.5 text-[11px] font-medium text-fg-light transition-colors hover:text-fg-main"
+					class={buttonClass('secondary', 'sm', 'mt-1.5')}
 				>
 					<span>{isExpanded ? lessLabel : moreLabel}</span>
 					<ChevronDown aria-hidden="true" class="size-3 transition-transform {isExpanded ? 'rotate-180' : ''}" />

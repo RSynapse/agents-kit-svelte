@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { cubicOut } from 'svelte/easing';
 	import { Spring, prefersReducedMotion } from 'svelte/motion';
 	import { fly } from 'svelte/transition';
@@ -45,7 +46,7 @@
 		aria-expanded={isOpen}
 		aria-controls="agent-context-meter-panel"
 		onclick={() => (isOpen = !isOpen)}
-		class="inline-flex items-center gap-2 rounded-lg border border-card-border bg-canvas-secondary px-2.5 py-1 font-mono text-xs text-fg-main transition-colors hover:bg-card-bg"
+		class={buttonClass('secondary', 'sm')}
 	>
 		<span class="text-fg-light">Context</span>
 		<span class="h-1.5 w-14 overflow-hidden rounded-full bg-card-bg">

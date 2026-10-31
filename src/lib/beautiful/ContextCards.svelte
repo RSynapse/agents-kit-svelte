@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { AlignLeft, ArrowUpRight, X } from '@lucide/svelte';
 	import { formatCompactTokens } from '../state/chat-helpers';
 
@@ -164,7 +165,7 @@
 						type="button"
 						aria-label="Remove {chunk.title}"
 						onclick={() => handleRemove(chunk.id)}
-						class="inline-flex size-6 items-center justify-center rounded-md text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+						class={buttonClass('ghost', 'icon-xs')}
 					>
 						<X aria-hidden="true" class="size-3.5" />
 					</button>

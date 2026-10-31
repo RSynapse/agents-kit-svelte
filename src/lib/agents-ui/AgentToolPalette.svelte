@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	export type ToolCategory = 'all' | 'worktree' | 'contracts' | 'companion' | 'verification';
 
 	export interface AgentToolParameter {
@@ -265,7 +266,7 @@
 								<button
 									type="button"
 									onclick={() => handleToggleTool(tool.id)}
-									class="rounded border border-card-border bg-card-bg px-2 py-0.5 text-[11px] text-fg-light hover:text-fg-main"
+									class={buttonClass('secondary', 'sm')}
 								>
 									{isEnabled ? 'Disable' : 'Enable'}
 								</button>
@@ -273,7 +274,7 @@
 									type="button"
 									disabled={!isEnabled}
 									onclick={() => handleInvokeTool(tool)}
-									class="rounded bg-accent-primary px-2.5 py-0.5 text-[11px] font-medium text-fg-inverse hover:opacity-90 disabled:opacity-40"
+									class={buttonClass('primary', 'sm')}
 								>
 									Invoke
 								</button>

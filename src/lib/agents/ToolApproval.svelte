@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { Check, ChevronDown, ShieldCheck, X } from '@lucide/svelte';
 	import { backOut, cubicOut } from 'svelte/easing';
 	import { fly, scale } from 'svelte/transition';
@@ -165,7 +166,7 @@
 						aria-expanded={isOpen}
 						aria-controls={panelId}
 						onclick={() => (isOpen = !isOpen)}
-						class="group inline-flex items-center gap-1 text-xs font-medium text-fg-light outline-none transition-colors hover:text-fg-main"
+						class={buttonClass('ghost', 'sm', 'group')}
 					>
 						<span>{isOpen ? 'Hide details' : 'View details'}</span>
 						<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-150 {isOpen ? 'rotate-180' : ''}" />
@@ -199,7 +200,7 @@
 				type="button"
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleDeny}
-				class="inline-flex h-8 items-center justify-center rounded-md border border-card-border bg-card-bg px-3 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
+				class={buttonClass('secondary', 'md')}
 			>
 				{denyLabel}
 			</button>
@@ -207,7 +208,7 @@
 				type="button"
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleAlwaysApprove}
-				class="inline-flex h-8 items-center justify-center rounded-md border border-card-border bg-card-bg px-3 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
+				class={buttonClass('secondary', 'md')}
 			>
 				{alwaysApproveLabel}
 			</button>
@@ -215,7 +216,7 @@
 				type="button"
 				disabled={!ready || activeStatus === 'approving'}
 				onclick={handleApprove}
-				class="inline-flex h-8 items-center justify-center rounded-md bg-fg-main px-3 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
+				class={buttonClass('primary', 'md')}
 			>
 				{approveLabel}
 			</button>

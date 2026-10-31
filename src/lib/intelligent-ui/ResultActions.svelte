@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, Download, GitCompare, Pencil, Star } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import type { ResultActionState } from '../types';
 
 	interface Props {
@@ -63,7 +65,8 @@
 			? 'bg-card-bg text-fg-main shadow-xs'
 			: 'text-fg-light hover:text-fg-main'}"
 	>
-		✎ Edit
+		<Pencil aria-hidden="true" />
+		Edit
 	</button>
 
 	<button
@@ -74,7 +77,8 @@
 			? 'bg-card-bg text-fg-main shadow-xs'
 			: 'text-fg-light hover:text-fg-main'}"
 	>
-		⇄ Compare
+		<GitCompare aria-hidden="true" />
+		Compare
 	</button>
 
 	<button
@@ -85,24 +89,25 @@
 			? 'bg-accent-subtle text-accent-primary'
 			: 'text-fg-light hover:text-fg-main'}"
 	>
-		{saved ? '★ Saved' : '☆ Save'}
+		{#if saved}<Star aria-hidden="true" />Saved{:else}<Star aria-hidden="true" />Save{/if}
 	</button>
 
 	<button
 		type="button"
 		onclick={handleCopy}
-		class="rounded-lg px-2.5 py-1 font-medium text-fg-light transition-colors hover:text-fg-main"
+		class={buttonClass('ghost', 'sm')}
 	>
-		{copied ? '✓ Copied' : 'Copy'}
+		{#if copied}<Check aria-hidden="true" />Copied{:else}Copy{/if}
 	</button>
 
 	{#if onDownload}
 		<button
 			type="button"
 			onclick={onDownload}
-			class="rounded-lg px-2.5 py-1 font-medium text-fg-light transition-colors hover:text-fg-main"
+			class={buttonClass('ghost', 'sm')}
 		>
-			↓ .md
+			<Download aria-hidden="true" />
+			.md
 		</button>
 	{/if}
 </div>

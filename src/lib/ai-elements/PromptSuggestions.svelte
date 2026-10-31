@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	export interface PromptSuggestionItem {
 		id: string;
 		category: 'inspect' | 'implement' | 'verify' | 'review';
@@ -177,7 +178,7 @@
 			<button
 				type="button"
 				onclick={() => (selectedPrompt = null)}
-				class="shrink-0 font-mono text-fg-light underline hover:text-fg-main"
+				class={buttonClass('ghost', 'sm', 'shrink-0')}
 			>
 				Clear
 			</button>

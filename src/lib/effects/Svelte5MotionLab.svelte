@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
 	import { backOut, cubicOut } from 'svelte/easing';
 	import { prefersReducedMotion } from 'svelte/motion';
@@ -274,7 +275,7 @@
 									out:send={{ key: card.id }}
 									animate:flip={{ duration: motionDuration(240), easing: cubicOut }}
 									onclick={() => cycleCardLane(card.id)}
-									class="flex w-full flex-col items-start gap-1.5 rounded-lg border border-card-border bg-card-bg p-2.5 text-left shadow-xs transition-colors hover:border-accent-primary"
+									class={buttonClass('secondary', 'sm', 'w-full text-left')}
 								>
 									<div class="flex w-full items-center justify-between gap-1">
 										{@render laneBadge(card.lane)}

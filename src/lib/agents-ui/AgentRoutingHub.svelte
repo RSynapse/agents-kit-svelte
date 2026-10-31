@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { History, RefreshCw } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type RouteStatus = 'selected' | 'available' | 'unavailable';
 
 	export interface RouteClassification {
@@ -151,17 +153,19 @@
 				type="button"
 				disabled={isClassifying}
 				onclick={() => onReclassify?.()}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-40"
+				class={buttonClass('secondary', 'md')}
 			>
-				↻ {isClassifying ? 'Classifying…' : 'Reclassify'}
+				<RefreshCw aria-hidden="true" />
+				{isClassifying ? 'Classifying…' : 'Reclassify'}
 			</button>
 			<button
 				type="button"
 				aria-expanded={showHistory}
 				onclick={handleToggleHistory}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				🕒 History ({routingHistory.length})
+				<History aria-hidden="true" />
+				History ({routingHistory.length})
 			</button>
 		</div>
 	</header>
@@ -242,7 +246,7 @@
 					<button
 						type="button"
 						onclick={() => handleSelectRoute(route.id)}
-						class="shrink-0 rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+						class={buttonClass('secondary', 'sm', 'shrink-0')}
 					>
 						Route here
 					</button>

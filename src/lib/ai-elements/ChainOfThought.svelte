@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { FileText, Settings, Sparkles } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import ThinkingShimmer from '../agents/ThinkingShimmer.svelte';
 
@@ -148,7 +149,7 @@
 				aria-hidden="true"
 				class="inline-flex size-6 shrink-0 items-center justify-center rounded-md bg-accent-subtle font-mono text-xs text-accent-primary"
 			>
-				✦
+				<Sparkles aria-hidden="true" />
 			</span>
 			<span class="truncate font-medium text-fg-main">
 				{#if isStreaming}
@@ -248,7 +249,8 @@
 												<span
 													class="inline-flex items-center gap-1 rounded border border-card-border bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-main"
 												>
-													⚙ {tool}
+													<Settings aria-hidden="true" />
+													{tool}
 												</span>
 											{/each}
 										{/if}
@@ -257,7 +259,8 @@
 												<span
 													class="inline-flex items-center gap-1 rounded bg-accent-subtle px-2 py-0.5 font-mono text-[11px] text-accent-primary"
 												>
-													📄 {source}
+													<FileText aria-hidden="true" />
+													{source}
 												</span>
 											{/each}
 										{/if}

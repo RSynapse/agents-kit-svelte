@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, X } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export interface DiffTableRow {
 		id: string;
 		field: string;
@@ -151,7 +153,8 @@
 										? 'border-status-danger bg-status-danger-subtle text-status-danger'
 										: 'border-card-border bg-canvas-primary text-fg-light hover:text-fg-main'}"
 								>
-									✕ Reject
+									<X aria-hidden="true" />
+									Reject
 								</button>
 								<button
 									type="button"
@@ -162,7 +165,8 @@
 										? 'border-status-success bg-status-success-subtle text-status-success'
 										: 'border-card-border bg-canvas-primary text-fg-light hover:text-fg-main'}"
 								>
-									✓ Accept
+									<Check aria-hidden="true" />
+									Accept
 								</button>
 							</div>
 						</td>
@@ -179,7 +183,7 @@
 		<button
 			type="button"
 			onclick={handleApplyAll}
-			class="rounded-lg bg-accent-primary px-3 py-1.5 text-xs font-semibold text-fg-inverse transition-opacity hover:opacity-90"
+			class={buttonClass('primary', 'md')}
 		>
 			Apply all {internalRows.length} changes
 		</button>

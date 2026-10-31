@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Check, Package } from '@lucide/svelte';
 	export type PackageChangeType = 'major' | 'minor' | 'patch' | 'added' | 'removed';
 
 	export interface PackageDependencyItem {
@@ -83,14 +84,15 @@
 					aria-hidden="true"
 					class="inline-flex size-6 items-center justify-center rounded-md bg-accent-subtle font-mono text-xs text-accent-primary"
 				>
-					📦
+					<Package aria-hidden="true" />
 				</span>
 				<span class="font-mono text-sm font-semibold text-fg-main">{name}</span>
 				{#if verified}
 					<span
 						class="rounded-full bg-status-success-subtle px-2 py-0.5 font-mono text-[11px] font-medium text-status-success"
 					>
-						✓ verified
+						<Check aria-hidden="true" />
+						verified
 					</span>
 				{/if}
 			</div>

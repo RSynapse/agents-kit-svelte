@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import type { Snippet } from 'svelte';
 
 	export type BorderBeamTone = 'accent' | 'success' | 'warning' | 'danger';
@@ -88,7 +89,7 @@
 					type="button"
 					aria-pressed={isActive}
 					onclick={() => (isActive = !isActive)}
-					class="rounded-md border border-card-border bg-canvas-primary px-3 py-1 font-mono text-xs text-fg-main transition-colors hover:bg-canvas-secondary"
+					class={buttonClass('secondary', 'sm')}
 				>
 					{isActive ? 'Pause Beam' : 'Resume Beam'}
 				</button>

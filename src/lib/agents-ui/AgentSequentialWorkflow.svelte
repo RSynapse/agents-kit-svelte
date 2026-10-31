@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ChevronDown, Pause, Play, RefreshCw, RotateCcw, SkipForward } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type WorkflowStepStatus = 'waiting' | 'running' | 'completed' | 'failed' | 'skipped';
 
 	export interface WorkflowStep {
@@ -216,14 +218,15 @@
 					? 'border border-card-border bg-canvas-primary text-fg-main hover:bg-canvas-secondary'
 					: 'bg-accent-primary text-fg-inverse'}"
 			>
-				{localRunning ? '⏸ Pause' : '▶ Start'}
+				{#if localRunning}<Pause aria-hidden="true" />Pause{:else}<Play aria-hidden="true" />Start{/if}
 			</button>
 			<button
 				type="button"
 				onclick={handleReset}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				↺ Reset
+				<RotateCcw aria-hidden="true" />
+				Reset
 			</button>
 		</div>
 	</header>
@@ -267,7 +270,7 @@
 						>
 							{getStepStatusLabel(step.status)}
 						</span>
-						<span class="text-xs text-fg-light">{isSelected ? '▴' : '▾'}</span>
+						<ChevronDown aria-hidden="true" class="size-3.5 transition-transform duration-200 {isSelected ? 'rotate-180' : ''}" />
 					</span>
 				</button>
 
@@ -297,17 +300,19 @@
 							<button
 								type="button"
 								onclick={() => handleRetryStep(step.id)}
-								class="rounded-lg border border-card-border bg-card-bg px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+								class={buttonClass('secondary', 'sm')}
 							>
-								↻ Retry stage
+								<RefreshCw aria-hidden="true" />
+								Retry stage
 							</button>
 							{#if step.status === 'waiting' || step.status === 'running'}
 								<button
 									type="button"
 									onclick={() => handleSkipStep(step.id)}
-									class="rounded-lg border border-card-border bg-card-bg px-2.5 py-1 text-xs font-medium text-fg-light hover:bg-canvas-secondary hover:text-fg-main"
+									class={buttonClass('secondary', 'sm')}
 								>
-									⏭ Skip stage
+									<SkipForward aria-hidden="true" />
+									Skip stage
 								</button>
 							{/if}
 						</div>

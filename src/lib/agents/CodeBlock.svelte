@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { Check, Code, Copy } from '@lucide/svelte';
 	interface Props {
 		code: string;
@@ -66,7 +67,7 @@
 				type="button"
 				aria-label={copied ? 'Copied code' : 'Copy code'}
 				onclick={handleCopy}
-				class="inline-flex size-7 items-center justify-center rounded-md text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+				class={buttonClass('ghost', 'icon-sm')}
 			>
 				{#if copied}
 					<Check aria-hidden="true" class="size-3.5 text-status-success" />

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, Sparkles } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 
 	export interface StackFrameItem {
@@ -241,16 +243,16 @@
 			<button
 				type="button"
 				onclick={handleCopy}
-				class="rounded-md border border-card-border bg-card-bg px-2.5 py-1 font-mono text-xs text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'sm')}
 			>
-				{copied ? '✓ Copied' : 'Copy trace'}
+				{#if copied}<Check aria-hidden="true" />Copied{:else}Copy trace{/if}
 			</button>
 			<button
 				type="button"
 				onclick={handleSendToAgent}
-				class="rounded-md bg-accent-primary px-2.5 py-1 font-mono text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
+				class={buttonClass('primary', 'sm')}
 			>
-				{sentToAgent ? '✓ Sent to Agent' : '✦ Send to Agent'}
+				{#if sentToAgent}<Check aria-hidden="true" />Sent to Agent{:else}<Sparkles aria-hidden="true" />Send to Agent{/if}
 			</button>
 			<button
 				type="button"

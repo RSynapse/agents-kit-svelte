@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { RefreshCw, Zap } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import type { GitHubCheckItem } from '../types';
 
 	interface Props {
@@ -127,17 +129,17 @@
 						<button
 							type="button"
 							onclick={() => triggerAgentFix(check.id)}
-							class="rounded-md bg-fg-main px-2.5 py-1 font-medium text-fg-inverse transition-opacity hover:opacity-90"
+							class={buttonClass('primary', 'sm')}
 						>
-							{isFixing ? '↻ Claude Code Fixing…' : '⚡ Fix with Claude Code'}
+							{#if isFixing}<RefreshCw aria-hidden="true" />Claude Code Fixing…{:else}<Zap aria-hidden="true" />Fix with Claude Code{/if}
 						</button>
 					{/if}
 					<button
 						type="button"
 						onclick={() => triggerRerun(check.id)}
-						class="rounded-md border border-card-border bg-canvas-secondary px-2 py-1 font-mono text-[11px] text-fg-main hover:bg-canvas-primary"
+						class={buttonClass('secondary', 'sm')}
 					>
-						{isRerunning ? 'Re-running…' : '↻ Re-run'}
+						{#if isRerunning}Re-running…{:else}<RefreshCw aria-hidden="true" />Re-run{/if}
 					</button>
 				</div>
 			</li>

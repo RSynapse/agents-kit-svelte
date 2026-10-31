@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { ChevronDown, Globe } from '@lucide/svelte';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import type { CitationItem } from '../types';
@@ -32,7 +33,7 @@
 		aria-expanded={isOpen}
 		aria-controls={panelId}
 		onclick={() => (isOpen = !isOpen)}
-		class="group inline-flex h-7 items-center gap-1.5 rounded-md border border-card-border bg-card-bg px-2.5 font-medium text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+		class={buttonClass('secondary', 'sm', 'group')}
 	>
 		<Globe aria-hidden="true" class="size-3.5 text-fg-light" />
 		<span>{title}</span>

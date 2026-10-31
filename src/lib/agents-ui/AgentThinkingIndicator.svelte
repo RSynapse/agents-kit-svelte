@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { AudioWaveform, Ellipsis, Infinity as InfinityIcon, LoaderCircle, Pause, Play, Sparkles } from '@lucide/svelte';
+	import type { Component } from 'svelte';
+	import { buttonClass, SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	export type ThinkingVariant = 'wave' | 'spin' | 'stars' | 'infinity' | 'orbs';
 
 	export type ThinkingState =
@@ -35,12 +38,12 @@
 		shaping: 'Shaping referee response'
 	};
 
-	const variants: { id: ThinkingVariant; label: string; glyph: string }[] = [
-		{ id: 'wave', label: 'Wave', glyph: '∿' },
-		{ id: 'spin', label: 'Spin', glyph: '◐' },
-		{ id: 'stars', label: 'Stars', glyph: '✦' },
-		{ id: 'infinity', label: 'Infinity', glyph: '∞' },
-		{ id: 'orbs', label: 'Orbs', glyph: '◉' }
+	const variants: { id: ThinkingVariant; label: string; icon: Component }[] = [
+		{ id: 'wave', label: 'Wave', icon: AudioWaveform },
+		{ id: 'spin', label: 'Spin', icon: LoaderCircle },
+		{ id: 'stars', label: 'Stars', icon: Sparkles },
+		{ id: 'infinity', label: 'Infinity', icon: InfinityIcon },
+		{ id: 'orbs', label: 'Orbs', icon: Ellipsis }
 	];
 
 	let {
@@ -78,85 +81,111 @@
 <div
 	role="status"
 	aria-live="polite"
-	class="w-full rounded-xl border border-card-border bg-card-bg p-4 text-sm {className}"
+	data-paused={isPaused}
+	class="ak-thinking w-full rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
-	<div class="flex flex-wrap items-center justify-between gap-4">
-		<div class="flex items-center gap-3">
-			<div
-				aria-hidden="true"
-				class="inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-canvas-border bg-accent-subtle text-accent-primary"
-			>
-				{#if activeVariant === 'wave'}
-					<span class="inline-flex items-end gap-0.5">
-						<span
-							class="h-2 w-1 rounded-full bg-accent-primary {isPaused ? '' : 'animate-bounce'}"
-						></span>
-						<span
-							class="h-4 w-1 rounded-full bg-accent-primary {isPaused ? '' : 'animate-pulse'}"
-						></span>
-						<span
-							class="h-3 w-1 rounded-full bg-accent-primary {isPaused ? '' : 'animate-bounce'}"
-						></span>
-					</span>
-				{:else if activeVariant === 'spin'}
-					<span
-						class="inline-block size-5 rounded-full border-2 border-accent-primary border-t-transparent {isPaused
-							? ''
-							: 'animate-spin'}"
-					></span>
-				{:else if activeVariant === 'stars'}
-					<span class="font-mono text-base {isPaused ? '' : 'animate-pulse'}">✦✧✦</span>
-				{:else if activeVariant === 'infinity'}
-					<span class="font-mono text-lg font-bold {isPaused ? '' : 'animate-pulse'}">∞</span>
-				{:else}
-					<span class="relative inline-flex size-4 items-center justify-center">
-						{#if !isPaused}
-							<span
-								class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-primary opacity-60"
-							></span>
-						{/if}
-						<span class="relative inline-flex size-2.5 rounded-full bg-accent-primary"></span>
-					</span>
-				{/if}
-			</div>
+	<div class="flex items-center gap-3 px-4 py-3">
+		<div
+			aria-hidden="true"
+			class="inline-flex size-8 shrink-0 items-center justify-center rounded-control bg-canvas-secondary text-fg-main"
+		>
+			{#if activeVariant === 'wave'}
+				<span class="inline-flex h-4 items-center gap-[3px]">
+					{#each [0, 1, 2, 3] as bar (bar)}
+						<span class="ak-thinking-bar h-full w-[3px] rounded-full bg-current" style="animation-delay: {bar * 120}ms"></span>
+					{/each}
+				</span>
+			{:else if activeVariant === 'spin'}
+				<LoaderCircle class="size-4 {isPaused ? '' : 'animate-spin'}" />
+			{:else if activeVariant === 'stars'}
+				<Sparkles class="size-4 {isPaused ? '' : 'ak-breathe'}" />
+			{:else if activeVariant === 'infinity'}
+				<InfinityIcon class="size-4 {isPaused ? '' : 'ak-breathe'}" />
+			{:else}
+				<span class="inline-flex items-center gap-[3px]">
+					{#each [0, 1, 2] as dot (dot)}
+						<span class="ak-thinking-dot size-1.5 rounded-full bg-current" style="animation-delay: {dot * 160}ms"></span>
+					{/each}
+				</span>
+			{/if}
+		</div>
 
-			<div class="min-w-0">
-				<div class="flex items-center gap-2">
-					<span class="font-semibold text-fg-main">{resolvedLabel}</span>
-					<span
-						class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] uppercase text-fg-light"
-					>
-						{activeVariant}
-					</span>
-				</div>
-				{#if detail}
-					<p class="mt-0.5 font-mono text-xs text-fg-light">{detail}</p>
+		<div class="min-w-0 flex-1">
+			<p class="truncate font-medium text-fg-main">
+				{#if isPaused}
+					{resolvedLabel}
+				{:else}
+					<span class="ak-shimmer-text">{resolvedLabel}</span>
 				{/if}
-			</div>
+			</p>
+			{#if detail}
+				<p class="mt-0.5 truncate text-xs text-fg-light">{detail}</p>
+			{/if}
 		</div>
 
 		{#if showControls}
-			<div class="flex flex-wrap items-center gap-1.5">
-				{#each variants as item (item.id)}
-					<button
-						type="button"
-						onclick={() => selectVariant(item.id)}
-						class="rounded-lg border px-2.5 py-1 font-mono text-xs transition-colors {activeVariant ===
-						item.id
-							? 'border-accent-primary bg-accent-subtle text-accent-primary'
-							: 'border-card-border bg-canvas-primary text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
-					>
-						{item.glyph} {item.label}
-					</button>
-				{/each}
-				<button
-					type="button"
-					onclick={() => (isPaused = !isPaused)}
-					class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs text-fg-light hover:bg-canvas-secondary hover:text-fg-main"
-				>
-					{isPaused ? '▶ Resume' : '⏸ Pause'}
-				</button>
-			</div>
+			<button
+				type="button"
+				aria-label={isPaused ? 'Resume animation' : 'Pause animation'}
+				onclick={() => (isPaused = !isPaused)}
+				class={buttonClass('ghost', 'icon-sm')}
+			>
+				{#if isPaused}<Play />{:else}<Pause />{/if}
+			</button>
 		{/if}
 	</div>
+
+	{#if showControls}
+		<div class="border-t border-canvas-border px-4 py-2.5">
+			<div class={SEGMENT_GROUP_CLASS} role="group" aria-label="Indicator style">
+				{#each variants as item (item.id)}
+					{@const VariantIcon = item.icon}
+					<button
+						type="button"
+						aria-pressed={activeVariant === item.id}
+						onclick={() => selectVariant(item.id)}
+						class={segmentClass(activeVariant === item.id)}
+					>
+						<VariantIcon aria-hidden="true" />
+						<span class="hidden sm:inline">{item.label}</span>
+					</button>
+				{/each}
+			</div>
+		</div>
+	{/if}
 </div>
+
+<style>
+	@keyframes ak-thinking-bar {
+		0%,
+		100% {
+			transform: scaleY(0.35);
+		}
+		50% {
+			transform: scaleY(1);
+		}
+	}
+
+	@keyframes ak-thinking-dot {
+		0%,
+		100% {
+			opacity: 0.25;
+		}
+		40% {
+			opacity: 1;
+		}
+	}
+
+	.ak-thinking-bar {
+		animation: ak-thinking-bar 1s ease-in-out infinite;
+	}
+
+	.ak-thinking-dot {
+		animation: ak-thinking-dot 1.2s ease-in-out infinite;
+	}
+
+	.ak-thinking[data-paused='true'] .ak-thinking-bar,
+	.ak-thinking[data-paused='true'] .ak-thinking-dot {
+		animation-play-state: paused;
+	}
+</style>

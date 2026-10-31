@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Mic, VolumeX } from '@lucide/svelte';
 	export type VoiceSessionState = 'idle' | 'listening' | 'speaking' | 'processing';
 
 	export interface VoiceDeviceOption {
@@ -196,7 +197,7 @@
 				? 'bg-status-danger-subtle text-status-danger'
 				: 'border border-card-border bg-canvas-primary text-fg-main hover:bg-canvas-secondary'}"
 		>
-			{muted ? '🔇 Unmute Mic' : '🎙 Mute Mic'}
+			{#if muted}<VolumeX aria-hidden="true" />Unmute Mic{:else}<Mic aria-hidden="true" />Mute Mic{/if}
 		</button>
 	</div>
 </div>

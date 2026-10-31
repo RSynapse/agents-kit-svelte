@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { Check, ChevronDown, GitPullRequest, ShieldCheck } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import type { GitHubPullRequestData } from '../types';
@@ -217,7 +218,7 @@
 					mergeQueued = false;
 					onRequestChanges?.(pr.number);
 				}}
-				class="inline-flex h-7 items-center rounded-md border border-card-border bg-card-bg px-2.5 font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
+				class={buttonClass('secondary', 'sm')}
 			>
 				Send back
 			</button>
@@ -229,7 +230,7 @@
 					changesRequested = false;
 					onApproveMerge?.(pr.number);
 				}}
-				class="inline-flex h-7 items-center rounded-md bg-fg-main px-3 font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
+				class={buttonClass('primary', 'sm')}
 			>
 				{mergeQueued ? 'Merge Queued' : 'Approve & Queue Merge'}
 			</button>

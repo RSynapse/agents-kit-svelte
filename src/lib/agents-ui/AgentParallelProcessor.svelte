@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ChevronRight, Play, RefreshCw, X } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type ParallelLaneStatus = 'waiting' | 'processing' | 'done' | 'error';
 
 	export interface ParallelLane {
@@ -209,24 +211,27 @@
 			<button
 				type="button"
 				onclick={handleStartAll}
-				class="rounded-lg bg-accent-primary px-3 py-1.5 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
+				class={buttonClass('primary', 'md')}
 			>
-				▶ Start all
+				<Play aria-hidden="true" />
+				Start all
 			</button>
 			<button
 				type="button"
 				onclick={handleCancelAll}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				✕ Cancel
+				<X aria-hidden="true" />
+				Cancel
 			</button>
 			{#if failedCount > 0}
 				<button
 					type="button"
 					onclick={handleRetryFailed}
-					class="rounded-lg bg-status-danger-subtle px-3 py-1.5 text-xs font-medium text-status-danger"
+					class={buttonClass('danger', 'md')}
 				>
-					↻ Retry failed ({failedCount})
+					<RefreshCw aria-hidden="true" />
+					Retry failed ({failedCount})
 				</button>
 			{/if}
 		</div>
@@ -293,9 +298,9 @@
 									type="button"
 									aria-expanded={isOutputOpen}
 									onclick={() => toggleLaneOutput(lane.id)}
-									class="flex items-center gap-1 text-xs text-fg-light hover:text-fg-main"
+									class={buttonClass('ghost', 'sm')}
 								>
-									<span>{isOutputOpen ? '▾' : '▸'}</span>
+									<ChevronRight aria-hidden="true" class="size-3.5 transition-transform duration-200 {isOutputOpen ? 'rotate-90' : ''}" />
 									<span>Lane output</span>
 								</button>
 								{#if isOutputOpen}
@@ -313,9 +318,10 @@
 						<button
 							type="button"
 							onclick={() => handleRetryLane(lane.id)}
-							class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+							class={buttonClass('secondary', 'sm')}
 						>
-							↻ Retry
+							<RefreshCw aria-hidden="true" />
+							Retry
 						</button>
 					{/if}
 				</div>

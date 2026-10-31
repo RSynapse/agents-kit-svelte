@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, ChevronRight, Download, TriangleAlert } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export interface OpsSignal {
 		id: string;
 		title: string;
@@ -185,9 +187,10 @@
 		<button
 			type="button"
 			onclick={() => onExportReport?.()}
-			class="self-start rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+			class={buttonClass('secondary', 'md', 'self-start')}
 		>
-			↓ Export Snapshot
+			<Download aria-hidden="true" />
+			Export Snapshot
 		</button>
 	</header>
 
@@ -238,17 +241,19 @@
 						type="button"
 						disabled={signal.acknowledged}
 						onclick={() => handleAcknowledge(signal)}
-						class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary disabled:opacity-40"
+						class={buttonClass('secondary', 'sm')}
 					>
-						✓ Ack
+						<Check aria-hidden="true" />
+						Ack
 					</button>
 					{#if signal.status !== 'healthy'}
 						<button
 							type="button"
 							onclick={() => onEscalate?.(signal)}
-							class="rounded-lg bg-status-danger-subtle px-2.5 py-1 text-xs font-medium text-status-danger"
+							class={buttonClass('danger', 'sm')}
 						>
-							⚠ Escalate
+							<TriangleAlert aria-hidden="true" />
+							Escalate
 						</button>
 					{/if}
 				</div>
@@ -261,9 +266,9 @@
 			type="button"
 			aria-expanded={showEvents}
 			onclick={() => (showEvents = !showEvents)}
-			class="flex items-center gap-1.5 text-xs font-medium text-fg-light hover:text-fg-main"
+			class={buttonClass('ghost', 'sm')}
 		>
-			<span>{showEvents ? '▾' : '▸'}</span>
+			<ChevronRight aria-hidden="true" class="size-3.5 transition-transform duration-200 {showEvents ? 'rotate-90' : ''}" />
 			<span>Recent Daemon & Journal Events ({incidents.length})</span>
 		</button>
 

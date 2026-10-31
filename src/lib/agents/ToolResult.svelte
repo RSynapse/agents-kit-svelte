@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { Check, ChevronDown, Copy, SquareTerminal } from '@lucide/svelte';
 	import AgentDisclosure from './AgentDisclosure.svelte';
 	import type { ToolResultStatus } from '../types';
@@ -94,7 +95,7 @@
 				<button
 					type="button"
 					onclick={onRetry}
-					class="rounded-md px-2 py-0.5 text-xs font-medium text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+					class={buttonClass('ghost', 'sm')}
 				>
 					Retry
 				</button>
@@ -103,7 +104,7 @@
 				type="button"
 				aria-label={copied ? 'Copied output' : 'Copy output'}
 				onclick={handleCopy}
-				class="inline-flex size-7 items-center justify-center rounded-md text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+				class={buttonClass('ghost', 'icon-sm')}
 			>
 				{#if copied}
 					<Check aria-hidden="true" class="size-3.5 text-status-success" />

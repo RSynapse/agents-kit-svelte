@@ -144,6 +144,13 @@
 		outline-offset: 2px;
 	}
 
+	/* Lucide icons default to the surrounding text size; utilities like size-4 still win. */
+	:where(svg.lucide-icon) {
+		width: 1.15em;
+		height: 1.15em;
+		flex-shrink: 0;
+	}
+
 	button:not(:disabled),
 	[role="button"]:not([aria-disabled="true"]),
 	summary {

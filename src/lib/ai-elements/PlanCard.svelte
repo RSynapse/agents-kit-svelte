@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import ThinkingShimmer from '../agents/ThinkingShimmer.svelte';
 	import type { RiskTier } from '../types';
@@ -136,7 +138,7 @@
 				aria-label="Toggle plan milestones"
 				aria-expanded={isOpen}
 				onclick={() => (isOpen = !isOpen)}
-				class="inline-flex size-7 items-center justify-center rounded-md border border-card-border bg-canvas-primary text-xs text-fg-light hover:text-fg-main"
+				class={buttonClass('secondary', 'icon-sm')}
 			>
 				<span class="transition-transform {isOpen ? 'rotate-180' : ''}">▾</span>
 			</button>
@@ -188,12 +190,13 @@
 				<span
 					class="inline-flex items-center gap-1.5 rounded-md bg-status-success-subtle px-3 py-1 font-mono text-xs font-medium text-status-success"
 				>
-					✓ Plan approved for execution
+					<Check aria-hidden="true" />
+					Plan approved for execution
 				</span>
 				<button
 					type="button"
 					onclick={() => (decision = 'pending')}
-					class="font-mono text-xs text-fg-light underline hover:text-fg-main"
+					class={buttonClass('ghost', 'sm')}
 				>
 					Change decision
 				</button>
@@ -209,14 +212,14 @@
 					<button
 						type="button"
 						onclick={submitRevision}
-						class="rounded-md bg-accent-primary px-3 py-1.5 font-mono text-xs font-medium text-fg-inverse"
+						class={buttonClass('primary', 'md')}
 					>
 						Send Revision
 					</button>
 					<button
 						type="button"
 						onclick={() => (decision = 'pending')}
-						class="rounded-md border border-card-border bg-card-bg px-2.5 py-1.5 font-mono text-xs text-fg-light"
+						class={buttonClass('secondary', 'md')}
 					>
 						Cancel
 					</button>
@@ -227,16 +230,17 @@
 					<button
 						type="button"
 						onclick={() => (decision = 'revising')}
-						class="rounded-md border border-card-border bg-card-bg px-3 py-1.5 font-mono text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+						class={buttonClass('secondary', 'md')}
 					>
 						Request Changes
 					</button>
 					<button
 						type="button"
 						onclick={handleApprove}
-						class="rounded-md bg-accent-primary px-3 py-1.5 font-mono text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
+						class={buttonClass('primary', 'md')}
 					>
-						✓ Approve Plan
+						<Check aria-hidden="true" />
+						Approve Plan
 					</button>
 				</div>
 			{/if}

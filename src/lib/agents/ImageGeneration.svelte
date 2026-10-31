@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { Check, CircleAlert, ImageIcon } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 
@@ -188,7 +189,7 @@
 			<button
 				type="button"
 				onclick={handleRegenerate}
-				class="shrink-0 rounded-md border border-card-border bg-card-bg px-2.5 py-1 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'sm', 'shrink-0')}
 			>
 				{currentStatus === 'error' ? 'Retry' : 'Cycle state'}
 			</button>

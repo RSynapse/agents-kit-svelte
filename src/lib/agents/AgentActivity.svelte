@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
 	import { ChevronDown, FileText, Globe, Pencil, Search, SquareTerminal, Wrench } from '@lucide/svelte';
@@ -76,7 +77,7 @@
 		aria-expanded={isOpen}
 		aria-controls={panelId}
 		onclick={() => (isOpen = !isOpen)}
-		class="group flex h-7 items-center gap-1.5 font-medium text-fg-light outline-none transition-colors hover:text-fg-main"
+		class={buttonClass('ghost', 'sm', 'group')}
 	>
 		<span>
 			{#if status === 'working'}

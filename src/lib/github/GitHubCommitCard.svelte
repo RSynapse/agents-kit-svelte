@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, RotateCcw } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import type { GitHubCommitData } from '../types';
 
@@ -100,7 +102,7 @@
 				type="button"
 				onclick={copySha}
 				title="Copy commit SHA"
-				class="rounded border border-card-border bg-canvas-secondary px-2 py-0.5 text-[11px] text-fg-main hover:bg-canvas-primary"
+				class={buttonClass('secondary', 'sm')}
 			>
 				{copied ? '✓ Copied' : commit.sha}
 			</button>
@@ -150,9 +152,9 @@
 					restored = true;
 					onRestore?.(commit.sha);
 				}}
-				class="rounded-md border border-card-border bg-canvas-secondary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-primary"
+				class={buttonClass('secondary', 'sm')}
 			>
-				{restored ? '✓ Checked out in worktree' : '↺ Checkout commit in worktree'}
+				{#if restored}<Check aria-hidden="true" />Checked out in worktree{:else}<RotateCcw aria-hidden="true" />Checkout commit in worktree{/if}
 			</button>
 		</div>
 	</AgentDisclosure>

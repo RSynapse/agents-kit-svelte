@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { FileCode, LayoutGrid, MessageCircle, Moon, SquareTerminal, Sun } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
+	import { Check, FileCode, LayoutGrid, MessageCircle, Moon, SquareTerminal, Sun } from '@lucide/svelte';
 	import AgentActivity from '../agents/AgentActivity.svelte';
 	import AgentProgress from '../agents/AgentProgress.svelte';
 	import ApprovalCard from '../agents/ApprovalCard.svelte';
@@ -498,7 +499,7 @@
 				type="button"
 				aria-label="Toggle color theme"
 				onclick={() => (isDark = !isDark)}
-				class="inline-flex h-7 items-center gap-1.5 rounded-lg border border-card-border bg-card-bg px-2.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'sm')}
 			>
 				{#if isDark}
 					<Sun aria-hidden="true" class="size-3.5 text-fg-light" />
@@ -588,7 +589,7 @@
 							<button
 								type="button"
 								onclick={() => (activeTab = 'chat')}
-								class="flex w-full items-center justify-between rounded-lg border border-card-border bg-card-bg px-2.5 py-2 text-left font-medium text-fg-main"
+								class={buttonClass('secondary', 'md', 'w-full justify-between text-left')}
 							>
 								<span class="truncate">Card 1210 · OAuth redirect loop</span>
 								<span class="font-mono text-[10px] text-status-success">● Live</span>
@@ -598,7 +599,7 @@
 							<button
 								type="button"
 								onclick={() => (activeTab = 'chat')}
-								class="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-fg-light hover:bg-card-bg hover:text-fg-main"
+								class={buttonClass('ghost', 'md', 'w-full justify-between text-left')}
 							>
 								<span class="truncate">Card 1198 · Pairing token expiry</span>
 								<span class="font-mono text-[10px]">Merged</span>
@@ -608,7 +609,7 @@
 							<button
 								type="button"
 								onclick={() => (activeTab = 'chat')}
-								class="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-fg-light hover:bg-card-bg hover:text-fg-main"
+								class={buttonClass('ghost', 'md', 'w-full justify-between text-left')}
 							>
 								<span class="truncate">Card 1204 · Board column focus</span>
 								<span class="font-mono text-[10px]">Pass</span>
@@ -734,7 +735,8 @@
 							</p>
 							{#if decisionSummary}
 								<p class="font-medium text-status-success">
-									✓ Applied policy: {decisionSummary}
+									<Check aria-hidden="true" />
+									Applied policy: {decisionSummary}
 								</p>
 							{/if}
 						</StreamingResponse>

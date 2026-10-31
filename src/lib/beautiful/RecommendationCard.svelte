@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	import { Check, Sparkles } from '@lucide/svelte';
 	export interface RecommendationOption {
 		id: string;
@@ -163,7 +164,7 @@
 		<button
 			type="button"
 			onclick={handleAccept}
-			class="inline-flex h-8 items-center rounded-md bg-fg-main px-3 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
+			class={buttonClass('primary', 'md')}
 		>
 			{accepted ? 'Accepted' : acceptLabel}
 		</button>

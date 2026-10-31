@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
 	export interface FineTuneField {
 		id: string;
 		label: string;
@@ -172,14 +173,14 @@
 		<button
 			type="button"
 			onclick={handleReset}
-			class="rounded-lg border border-card-border bg-canvas-secondary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-primary"
+			class={buttonClass('secondary', 'md')}
 		>
 			Reset
 		</button>
 		<button
 			type="button"
 			onclick={handleApply}
-			class="rounded-lg bg-accent-primary px-3.5 py-1.5 text-xs font-semibold text-fg-inverse transition-opacity hover:opacity-90"
+			class={buttonClass('primary', 'md')}
 		>
 			Apply
 		</button>
