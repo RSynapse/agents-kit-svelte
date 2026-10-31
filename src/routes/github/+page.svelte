@@ -170,7 +170,7 @@
 										onApproveMerge={(n) => recordEvent(`Queued PR ${n} for referee merge`)}
 										onRequestChanges={(n) => recordEvent(`Sent back PR ${n} for agent revision`)}
 									/>
-									<GitHubReviewThreadCard thread={SAMPLE_REVIEW_THREAD}
+									<GitHubReviewThreadCard currentUser="argon-agent" thread={SAMPLE_REVIEW_THREAD}
 										onApplySuggestion={(id) => recordEvent(`Applied suggested patch on thread ${id}`)}
 										onReply={(id, text) => recordEvent(`Replied on ${id}: "${text}"`)}
 									/>
@@ -212,7 +212,7 @@
 			{/each}
 		</div>
 	{:else if activeView === 'kanban'}
-		<GitHubKanbanBoard issues={SAMPLE_BOARD_ISSUES}
+		<GitHubKanbanBoard title="RSynapse/trailside · Reactive Board" badge="GitHub App Read-Only Sync" description="What's in motion across Triage, Active Worktree Runs, Referee Review, and Merged cards" issues={SAMPLE_BOARD_ISSUES}
 			onSelectIssue={(issue) => recordEvent(`Opened card inspector for Issue ${issue.number}`)}
 		/>
 	{:else if activeView === 'bento'}
@@ -243,7 +243,7 @@
 				<GitHubCommitCard commit={SAMPLE_COMMIT}
 					onRestore={(sha) => recordEvent(`Restored worktree to commit ${sha}`)}
 				/>
-				<GitHubReviewThreadCard thread={SAMPLE_REVIEW_THREAD}
+				<GitHubReviewThreadCard currentUser="argon-agent" thread={SAMPLE_REVIEW_THREAD}
 					onApplySuggestion={(id) => recordEvent(`Applied suggested patch on thread ${id}`)}
 					onReply={(id, text) => recordEvent(`Replied on ${id}: "${text}"`)}
 				/>

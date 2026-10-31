@@ -1434,9 +1434,9 @@
 							{:else if item.slug === 'github-checks-panel'}
 								<GitHubChecksPanel checks={sampleChecks} />
 							{:else if item.slug === 'github-review-thread'}
-								<GitHubReviewThreadCard thread={sampleThread} />
+								<GitHubReviewThreadCard currentUser="argon-agent" thread={sampleThread} />
 							{:else if item.slug === 'github-kanban-board'}
-								<GitHubKanbanBoard issues={SAMPLE_BOARD_ISSUES} />
+								<GitHubKanbanBoard title="RSynapse/trailside · Reactive Board" badge="GitHub App Read-Only Sync" description="What's in motion across Triage, Active Worktree Runs, Referee Review, and Merged cards" issues={SAMPLE_BOARD_ISSUES} />
 							{:else if item.slug === 'github-bento-layout'}
 								<GitHubBentoLayout repoName="RSynapse/trailside" repoDetail="GitHub App installation active" branchDetail="Protected · Referee merge queue" stats={SAMPLE_BENTO_STATS} pullRequest={SAMPLE_PULL_REQUEST} checks={SAMPLE_CHECKS} issue={SAMPLE_ISSUE} commit={SAMPLE_COMMIT} thread={SAMPLE_REVIEW_THREAD} />
 							{:else if item.slug === 'github-lifecycle-timeline'}

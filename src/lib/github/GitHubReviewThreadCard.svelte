@@ -5,6 +5,8 @@
 
 	interface Props {
 		thread: GitHubReviewThreadData;
+		/** Author name shown on replies typed into the card. */
+		currentUser?: string;
 		onApplySuggestion?: (threadId: string) => void;
 		onReply?: (threadId: string, body: string) => void;
 		class?: string;
@@ -12,6 +14,7 @@
 
 	let {
 		thread,
+		currentUser = 'You',
 		onApplySuggestion,
 		onReply,
 		class: className = ''
@@ -34,7 +37,7 @@
 		if (!trimmed) return;
 		extraReplies = [
 			...extraReplies,
-			{ id: `rep-${Date.now()}`, author: 'argon-agent', body: trimmed }
+			{ id: `rep-${Date.now()}`, author: currentUser, body: trimmed }
 		];
 		replyText = '';
 		onReply?.(thread.id, trimmed);

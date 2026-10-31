@@ -9,6 +9,10 @@
 
 	interface Props {
 		issues?: GitHubIssueData[];
+		title?: string;
+		/** Small badge next to the title, such as the sync source. */
+		badge?: string;
+		description?: string;
 		onSelectIssue?: (issue: GitHubIssueData) => void;
 		class?: string;
 	}
@@ -24,7 +28,14 @@
 		{ id: 'closed', label: 'Merged & Verified', description: 'Landed on main & verified live' }
 	];
 
-	let { issues = [], onSelectIssue, class: className = '' }: Props = $props();
+	let {
+		issues = [],
+		title = 'Board',
+		badge,
+		description,
+		onSelectIssue,
+		class: className = ''
+	}: Props = $props();
 
 	const [send, receive] = createBoardCrossfade(260);
 
@@ -78,16 +89,18 @@
 	<div class="flex flex-wrap items-center justify-between gap-3">
 		<div>
 			<div class="flex flex-wrap items-center gap-2">
-				<h2 class="text-base font-bold text-fg-main">RSynapse/trailside · Reactive Board</h2>
-				<span
-					class="whitespace-nowrap rounded-full bg-status-success-subtle px-2 py-0.5 font-mono text-[11px] font-medium text-status-success"
-				>
-					GitHub App Read-Only Sync
-				</span>
+				<h2 class="text-base font-bold text-fg-main">{title}</h2>
+				{#if badge}
+					<span
+						class="whitespace-nowrap rounded-full bg-status-success-subtle px-2 py-0.5 font-mono text-[11px] font-medium text-status-success"
+					>
+						{badge}
+					</span>
+				{/if}
 			</div>
-			<p class="mt-0.5 text-xs text-fg-light">
-				What's in motion across Triage, Active Worktree Runs, Referee Review, and Merged cards
-			</p>
+			{#if description}
+				<p class="mt-0.5 text-xs text-fg-light">{description}</p>
+			{/if}
 		</div>
 
 		<div class="flex flex-wrap items-center gap-2">
