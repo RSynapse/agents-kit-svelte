@@ -24,6 +24,9 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		await expect(page.getByRole('tab', { name: /AI Elements & Coding/i })).toBeVisible();
 		await expect(page.getByRole('tab', { name: /Voice & Effects/i })).toBeVisible();
 
+		// Verify all 68 individual component showcase cards are rendered on /
+		await expect(page.locator('article[data-component-slug]')).toHaveCount(68);
+
 		// Toggle Svelte 5 Code preview on the first component card
 		const firstCodeToggle = page.getByRole('button', { name: /Svelte 5 Code/i }).first();
 		await firstCodeToggle.click();

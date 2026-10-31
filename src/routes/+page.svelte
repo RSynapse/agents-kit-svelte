@@ -5,6 +5,7 @@
 		AgentArtifact,
 		AgentCheckpoint,
 		AgentContextMeter,
+		AgentDisclosure,
 		AgentEvaluator,
 		AgentFormGenerator,
 		AgentGenerativeSurface,
@@ -41,7 +42,9 @@
 		ImageGeneration,
 		InsightCards,
 		IntelligentUIRenderer,
+		Message,
 		MessageBubble,
+		MessageScroller,
 		PackageInfo,
 		PlanCard,
 		PromptInput,
@@ -49,10 +52,12 @@
 		ReasoningText,
 		RecommendationCard,
 		RecordsTable,
+		ResultActions,
 		SchemaDisplay,
 		SearchList,
 		SelectionActions,
 		StackTrace,
+		StreamingResponse,
 		Svelte5MotionLab,
 		Terminal,
 		TestResults,
@@ -61,6 +66,7 @@
 		ToolApproval,
 		ToolChips,
 		ToolResult,
+		TrailsideClaudeChat,
 		VoiceWaveVisualizer,
 		WebPreview
 	} from '$lib';
@@ -77,6 +83,7 @@
 		GitHubIssueData,
 		GitHubPullRequestData,
 		GitHubReviewThreadData,
+		ResultActionState,
 		SupportedAgentOption,
 		TodoItem,
 		ToolApprovalParam
@@ -104,6 +111,9 @@
 	let codeViewSlugs = $state<Record<string, boolean>>({});
 	let copiedSlug = $state<string | null>(null);
 	let selectedRecordIds = $state<string[]>(['rec-1', 'rec-2']);
+	let disclosureDemoOpen = $state(true);
+	let resultActionMode = $state<ResultActionState>('view');
+	let resultSaved = $state(false);
 	let ready = $state(false);
 
 	$effect(() => {
@@ -422,7 +432,7 @@ svelte-check found 0 errors and 0 warnings
 </script>
 
 <svelte:head>
-	<title>agents-kit-svelte · 67 Svelte 5 Agent, GitHub & Intelligent UI Components</title>
+	<title>agents-kit-svelte · 68 Svelte 5 Agent, GitHub & Intelligent UI Components</title>
 </svelte:head>
 
 <div class="mx-auto max-w-[1440px] px-4 py-6 sm:px-6">
@@ -435,7 +445,7 @@ svelte-check found 0 errors and 0 warnings
 						Open-Source Svelte 5 Port
 					</span>
 					<span class="rounded-full bg-status-success-subtle px-2.5 py-0.5 font-mono text-xs font-medium text-status-success">
-						67 Components · 100% Svelte 5 Runes · OKLCH Tokens
+						68 Components · 100% Svelte 5 Runes · OKLCH Tokens
 					</span>
 				</div>
 				<h1 class="mt-2 text-2xl font-semibold tracking-tight text-fg-main sm:text-3xl">
@@ -564,7 +574,7 @@ svelte-check found 0 errors and 0 warnings
 			<input
 				type="search"
 				aria-label="Search components"
-				placeholder="Search 67 components (e.g. Kanban, Diff, Orchestrator)..."
+				placeholder="Search 68 components (e.g. Kanban, Diff, Orchestrator)..."
 				bind:value={searchQuery}
 				class="w-full rounded-xl border border-card-border bg-canvas-primary px-3.5 py-2 text-xs text-fg-main outline-none focus:border-accent-primary sm:w-80"
 			/>
@@ -622,6 +632,8 @@ svelte-check found 0 errors and 0 warnings
 							language="svelte"
 							code={item.usageSnippet}
 						/>
+					{:else if item.slug === 'trailside-claude-chat'}
+						<TrailsideClaudeChat />
 					{:else if item.slug === 'agent-activity'}
 						<AgentActivity
 							items={sampleActivity}
@@ -629,6 +641,22 @@ svelte-check found 0 errors and 0 warnings
 							durationSeconds={6}
 							defaultOpen={true}
 						/>
+					{:else if item.slug === 'agent-disclosure'}
+						<div class="space-y-2">
+							<button
+								type="button"
+								disabled={!ready}
+								onclick={() => (disclosureDemoOpen = !disclosureDemoOpen)}
+								class="rounded-lg border border-card-border bg-canvas-secondary px-3 py-1.5 font-mono text-xs font-medium text-fg-main transition-colors hover:bg-canvas-primary"
+							>
+								{disclosureDemoOpen ? '▼ Collapse Disclosure' : '▶ Expand Disclosure'}
+							</button>
+							<AgentDisclosure open={disclosureDemoOpen}>
+								<div class="rounded-xl border border-card-border bg-canvas-secondary p-3 font-mono text-xs text-fg-main">
+									Accessible Svelte 5 slide+fade disclosure panel with <code class="text-accent-primary">inert</code> hidden state.
+								</div>
+							</AgentDisclosure>
+						</div>
 					{:else if item.slug === 'todo-list'}
 						<TodoList title="Svelte 5 Port & Verification Plan" items={sampleTodos} defaultOpen={true} />
 					{:else if item.slug === 'tool-approval'}
@@ -642,8 +670,8 @@ svelte-check found 0 errors and 0 warnings
 							tool="Bash"
 							summary="corepack pnpm test"
 							status="success"
-							meta="96ms · 7 passed"
-							output="✔ all Svelte components in src/ comply with Svelte 5 Runes, Props typing, and semantic token rules"
+							meta="96ms · 8 passed"
+							output="✔ all 68 Svelte components in src/ comply with Svelte 5 Runes, Props typing, and semantic token rules"
 							defaultOpen={true}
 						/>
 					{:else if item.slug === 'file-diff'}
@@ -668,6 +696,17 @@ svelte-check found 0 errors and 0 warnings
 							agents={sampleAgents}
 							selectedAgentId="claude-code"
 						/>
+					{:else if item.slug === 'message'}
+						<Message
+							role="assistant"
+							author="Claude Code"
+							badge="Connected Computer"
+							timestamp="21:18"
+						>
+							<p class="text-sm text-fg-main">
+								Verified worktree <code class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-xs">trailside/2151-drawer-hydration</code> with zero TypeScript diagnostics.
+							</p>
+						</Message>
 					{:else if item.slug === 'message-bubble'}
 						<div class="space-y-2">
 							<MessageBubble
@@ -684,21 +723,54 @@ svelte-check found 0 errors and 0 warnings
 								author="Claude Code"
 								timestamp="21:16"
 								collapsible={true}
-								text="All 67 Svelte 5 components are live with strict TypeScript Props, OKLCH dark/light tokens, and interactive showcases."
+								text="All 68 Svelte 5 components are live with strict TypeScript Props, OKLCH dark/light tokens, and interactive showcases."
 							/>
 						</div>
+					{:else if item.slug === 'message-scroller'}
+						<MessageScroller
+							items={[
+								{ id: 'ms-1', label: 'Prompt #1', role: 'user' },
+								{ id: 'ms-2', label: 'Claude Response', role: 'assistant' }
+							]}
+							class="max-h-48 rounded-xl border border-card-border bg-canvas-primary p-4"
+						>
+							<div class="space-y-3">
+								<MessageBubble
+									variant="tint"
+									align="end"
+									author="gregory.winkler"
+									text="Verify auto-follow scroll rail behavior."
+								/>
+								<MessageBubble
+									variant="soft"
+									align="start"
+									author="Claude Code"
+									text="MessageScroller tracks scroll distance from the bottom edge and pins live streaming updates."
+								/>
+							</div>
+						</MessageScroller>
+					{:else if item.slug === 'streaming-response'}
+						<StreamingResponse
+							status="complete"
+							copyText="All 68 Svelte 5 components verified with 0 errors and 0 warnings."
+							sources={sampleCitations}
+						>
+							<p class="text-sm text-fg-main">
+								All 68 Svelte 5 components verified with <code class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-xs">svelte-check</code> (0 errors, 0 warnings) and interactive action bar.
+							</p>
+						</StreamingResponse>
 					{:else if item.slug === 'citations'}
 						<Citations citations={sampleCitations} defaultOpen={true} />
 					{:else if item.slug === 'image-generation'}
 						<ImageGeneration />
 					{:else if item.slug === 'ai-sidebar'}
 						<AISidebar />
-					{:else if item.slug === 'loading-states'}
-						<div class="flex flex-wrap items-center gap-4">
-							<ThinkingShimmer label="Analyzing repository structure..." />
-							<AgentProgress label="Running Playwright suite" elapsedSeconds={14} />
-							<ReasoningText />
-						</div>
+					{:else if item.slug === 'thinking-shimmer'}
+						<ThinkingShimmer label="Analyzing repository structure..." />
+					{:else if item.slug === 'agent-progress'}
+						<AgentProgress label="Running Playwright suite" elapsedSeconds={14} />
+					{:else if item.slug === 'reasoning-text'}
+						<ReasoningText />
 					{:else if item.slug === 'tool-chips'}
 						<ToolChips />
 					{:else if item.slug === 'recommendation-card'}
@@ -708,16 +780,15 @@ svelte-check found 0 errors and 0 warnings
 					{:else if item.slug === 'diff-table'}
 						<DiffTable />
 					{:else if item.slug === 'records-table'}
-						<div class="space-y-3">
-							<SelectionActions
-								selectedCount={selectedRecordIds.length}
-								onClear={() => (selectedRecordIds = [])}
-							/>
-							<RecordsTable
-								selectedIds={selectedRecordIds}
-								onSelectionChange={(ids) => (selectedRecordIds = ids)}
-							/>
-						</div>
+						<RecordsTable
+							selectedIds={selectedRecordIds}
+							onSelectionChange={(ids) => (selectedRecordIds = ids)}
+						/>
+					{:else if item.slug === 'selection-actions'}
+						<SelectionActions
+							selectedCount={selectedRecordIds.length || 2}
+							onClear={() => (selectedRecordIds = [])}
+						/>
 					{:else if item.slug === 'filter-table'}
 						<FilterTable />
 					{:else if item.slug === 'flowchart'}
@@ -744,6 +815,18 @@ svelte-check found 0 errors and 0 warnings
 						<GitHubBentoLayout />
 					{:else if item.slug === 'agent-generative-surface'}
 						<AgentGenerativeSurface content={sampleSurfaceContent} />
+					{:else if item.slug === 'result-actions'}
+						<ResultActions
+							state={resultActionMode}
+							saved={resultSaved}
+							onExpand={() =>
+								(resultActionMode = resultActionMode === 'expanded' ? 'view' : 'expanded')}
+							onEdit={() =>
+								(resultActionMode = resultActionMode === 'editing' ? 'view' : 'editing')}
+							onCompare={() =>
+								(resultActionMode = resultActionMode === 'comparing' ? 'view' : 'comparing')}
+							onSave={() => (resultSaved = !resultSaved)}
+						/>
 					{:else if item.slug === 'intelligent-ui-renderer'}
 						<IntelligentUIRenderer nodes={sampleDynamicNodes} />
 					{:else if item.slug === 'agent-orchestrator'}
@@ -769,10 +852,9 @@ svelte-check found 0 errors and 0 warnings
 					{:else if item.slug === 'agent-thinking-indicator'}
 						<AgentThinkingIndicator />
 					{:else if item.slug === 'agent-context-meter'}
-						<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-							<AgentContextMeter usedTokens={64200} maxTokens={200000} />
-							<AgentCheckpoint checkpoint={sampleCheckpoint} />
-						</div>
+						<AgentContextMeter usedTokens={64200} maxTokens={200000} />
+					{:else if item.slug === 'agent-checkpoint'}
+						<AgentCheckpoint checkpoint={sampleCheckpoint} />
 					{:else if item.slug === 'chain-of-thought'}
 						<ChainOfThought />
 					{:else if item.slug === 'stack-trace'}
@@ -786,16 +868,15 @@ svelte-check found 0 errors and 0 warnings
 					{:else if item.slug === 'web-preview'}
 						<WebPreview />
 					{:else if item.slug === 'plan-card'}
-						<div class="space-y-4">
-							<PlanCard />
-							<PromptSuggestions />
-						</div>
-					{:else if item.slug === 'test-results-terminal'}
-						<div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
-							<TestResults suites={sampleTestSuites} />
-							<Terminal output={sampleTerminalOutput} title="~/agents-kit-svelte · zsh" />
-							<FileTree nodes={sampleFileTree} />
-						</div>
+						<PlanCard />
+					{:else if item.slug === 'prompt-suggestions'}
+						<PromptSuggestions />
+					{:else if item.slug === 'test-results'}
+						<TestResults suites={sampleTestSuites} />
+					{:else if item.slug === 'terminal'}
+						<Terminal output={sampleTerminalOutput} title="~/agents-kit-svelte · zsh" />
+					{:else if item.slug === 'file-tree'}
+						<FileTree nodes={sampleFileTree} />
 					{:else if item.slug === 'voice-wave-visualizer'}
 						<VoiceWaveVisualizer />
 					{:else if item.slug === 'border-beam'}

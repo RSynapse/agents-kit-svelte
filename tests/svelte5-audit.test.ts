@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 import test from 'node:test';
+import { CATALOG_ITEMS } from '../src/lib/state/catalog-registry.ts';
 import { validateSvelte5ComponentSource } from '../src/lib/state/chat-helpers.ts';
 
 /**
@@ -67,4 +68,31 @@ test('library deeply integrates Svelte 5 motion, transitions, flip animations, r
 	assert.match(combined, /\bnew SvelteMap\b/, 'Expected svelte/reactivity SvelteMap usage');
 	assert.match(combined, /\{#snippet\s+\w+/, 'Expected Svelte 5 {#snippet} blocks');
 	assert.match(combined, /\{@render\s+\w+/, 'Expected Svelte 5 {@render} calls');
+});
+
+test('every single .svelte component in src/lib/ has a dedicated 1-to-1 showcase entry in CATALOG_ITEMS and +page.svelte', () => {
+	const rootDir = process.cwd();
+	const libDir = join(rootDir, 'src', 'lib');
+	const libSvelteFiles = collectFilesByExtension(libDir, '.svelte').map((f) =>
+		relative(rootDir, f).replace(/\\/g, '/')
+	);
+
+	assert.equal(libSvelteFiles.length, 68, 'Expected 68 .svelte components in src/lib/');
+	assert.equal(CATALOG_ITEMS.length, 68, 'Expected 68 catalog items in CATALOG_ITEMS');
+
+	const catalogPaths = new Set(CATALOG_ITEMS.map((item) => item.sveltePath));
+	for (const relPath of libSvelteFiles) {
+		assert.ok(
+			catalogPaths.has(relPath),
+			`Component ${relPath} is missing a 1-to-1 entry in CATALOG_ITEMS`
+		);
+	}
+
+	const pageSource = readFileSync(join(rootDir, 'src', 'routes', '+page.svelte'), 'utf8');
+	for (const item of CATALOG_ITEMS) {
+		assert.ok(
+			pageSource.includes(`item.slug === '${item.slug}'`),
+			`Catalog slug '${item.slug}' (${item.sveltePath}) is not rendered in src/routes/+page.svelte`
+		);
+	}
 });

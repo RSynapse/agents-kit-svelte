@@ -18,7 +18,16 @@ export interface CatalogItemMeta {
 }
 
 export const CATALOG_ITEMS: CatalogItemMeta[] = [
-	// 1. beUI Agents
+	// 1. beUI Agents (19 components + TrailsideClaudeChat workbench = 20)
+	{
+		slug: 'trailside-claude-chat',
+		name: 'TrailsideClaudeChat',
+		category: 'beUI Agents',
+		sveltePath: 'src/lib/trailside/TrailsideClaudeChat.svelte',
+		upstreamSource: 'Trailside Dynamic Claude Code Workbench',
+		description: 'Full multi-turn Claude Code workbench with run header, context meter, tool traces, inline unified diffs, and composer.',
+		usageSnippet: `<script lang="ts">\n  import { TrailsideClaudeChat } from 'agents-kit-svelte';\n</script>\n<TrailsideClaudeChat />`
+	},
 	{
 		slug: 'agent-activity',
 		name: 'AgentActivity',
@@ -29,12 +38,21 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		usageSnippet: `<script lang="ts">\n  import { AgentActivity } from 'agents-kit-svelte';\n</script>\n<AgentActivity items={items} status="complete" durationSeconds={6} />`
 	},
 	{
+		slug: 'agent-disclosure',
+		name: 'AgentDisclosure',
+		category: 'beUI Agents',
+		sveltePath: 'src/lib/agents/AgentDisclosure.svelte',
+		upstreamSource: 'components/beui/components/agents/agent-disclosure.tsx',
+		description: 'Svelte 5 slide + fade collapsible disclosure primitive with reduced-motion support.',
+		usageSnippet: `<script lang="ts">\n  import { AgentDisclosure } from 'agents-kit-svelte';\n</script>\n<AgentDisclosure open={isOpen}>Expanded content</AgentDisclosure>`
+	},
+	{
 		slug: 'todo-list',
 		name: 'TodoList',
 		category: 'beUI Agents',
 		sveltePath: 'src/lib/agents/TodoList.svelte',
 		upstreamSource: 'components/beui/components/agents/todo-list.tsx',
-		description: 'Streaming task plan checklist with animated status indicators and completion counter.',
+		description: 'Streaming task plan checklist with Tween progress bar, animate:flip items, and completion counter.',
 		usageSnippet: `<script lang="ts">\n  import { TodoList } from 'agents-kit-svelte';\n</script>\n<TodoList title="Implementation plan" items={todoItems} />`
 	},
 	{
@@ -92,6 +110,15 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		usageSnippet: `<script lang="ts">\n  import { PromptInput } from 'agents-kit-svelte';\n</script>\n<PromptInput agents={agents} selectedAgentId="claude-code" onSubmit={send} />`
 	},
 	{
+		slug: 'message',
+		name: 'Message',
+		category: 'beUI Agents',
+		sveltePath: 'src/lib/agents/Message.svelte',
+		upstreamSource: 'components/beui/components/agents/message.tsx',
+		description: 'Turn-level conversation container with role badge, copy/feedback actions, and snippet children.',
+		usageSnippet: `<script lang="ts">\n  import { Message } from 'agents-kit-svelte';\n</script>\n<Message role="assistant" author="Claude Code">Turn body</Message>`
+	},
+	{
 		slug: 'message-bubble',
 		name: 'MessageBubble',
 		category: 'beUI Agents',
@@ -99,6 +126,24 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		upstreamSource: 'components/beui/components/agents/message-bubble.tsx',
 		description: 'Composable message bubble with avatar, delivery status, and show-more disclosure.',
 		usageSnippet: `<script lang="ts">\n  import { MessageBubble } from 'agents-kit-svelte';\n</script>\n<MessageBubble author="Claude Code" collapsible={true} />`
+	},
+	{
+		slug: 'message-scroller',
+		name: 'MessageScroller',
+		category: 'beUI Agents',
+		sveltePath: 'src/lib/agents/MessageScroller.svelte',
+		upstreamSource: 'components/beui/components/agents/message-scroller.tsx',
+		description: 'Auto-pinned conversation scroll container with floating Jump to latest pill.',
+		usageSnippet: `<script lang="ts">\n  import { MessageScroller } from 'agents-kit-svelte';\n</script>\n<MessageScroller>Conversation turns</MessageScroller>`
+	},
+	{
+		slug: 'streaming-response',
+		name: 'StreamingResponse',
+		category: 'beUI Agents',
+		sveltePath: 'src/lib/agents/StreamingResponse.svelte',
+		upstreamSource: 'components/beui/components/agents/streaming-response.tsx',
+		description: 'Token-streaming text renderer with live blinking cursor when streaming is active.',
+		usageSnippet: `<script lang="ts">\n  import { StreamingResponse } from 'agents-kit-svelte';\n</script>\n<StreamingResponse text={streamedText} streaming={true} />`
 	},
 	{
 		slug: 'citations',
@@ -128,16 +173,34 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		usageSnippet: `<script lang="ts">\n  import { AISidebar } from 'agents-kit-svelte';\n</script>\n<AISidebar />`
 	},
 	{
-		slug: 'loading-states',
-		name: 'ThinkingShimmer · AgentProgress · ReasoningText',
+		slug: 'thinking-shimmer',
+		name: 'ThinkingShimmer',
 		category: 'beUI Agents',
-		sveltePath: 'src/lib/agents/{ThinkingShimmer,AgentProgress,ReasoningText}.svelte',
-		upstreamSource: 'components/beui/components/agents/loading-states',
-		description: 'Animated status shimmer, 3x3 matrix timer, and cycling reasoning phrases.',
-		usageSnippet: `<script lang="ts">\n  import { ThinkingShimmer, AgentProgress, ReasoningText } from 'agents-kit-svelte';\n</script>\n<AgentProgress label="Running checks" />`
+		sveltePath: 'src/lib/agents/ThinkingShimmer.svelte',
+		upstreamSource: 'components/beui/components/agents/loading-states/thinking-shimmer.tsx',
+		description: 'OKLCH gradient text shimmer indicator with reduced-motion fallback.',
+		usageSnippet: `<script lang="ts">\n  import { ThinkingShimmer } from 'agents-kit-svelte';\n</script>\n<ThinkingShimmer label="Analyzing repository structure..." />`
+	},
+	{
+		slug: 'agent-progress',
+		name: 'AgentProgress',
+		category: 'beUI Agents',
+		sveltePath: 'src/lib/agents/AgentProgress.svelte',
+		upstreamSource: 'components/beui/components/agents/loading-states/agent-progress.tsx',
+		description: 'Animated 3x3 matrix activity indicator with live elapsed timer.',
+		usageSnippet: `<script lang="ts">\n  import { AgentProgress } from 'agents-kit-svelte';\n</script>\n<AgentProgress label="Running Playwright suite" elapsedSeconds={14} />`
+	},
+	{
+		slug: 'reasoning-text',
+		name: 'ReasoningText',
+		category: 'beUI Agents',
+		sveltePath: 'src/lib/agents/ReasoningText.svelte',
+		upstreamSource: 'components/beui/components/agents/loading-states/reasoning-text.tsx',
+		description: 'Cycling status phrase indicator for long-running agent reasoning turns.',
+		usageSnippet: `<script lang="ts">\n  import { ReasoningText } from 'agents-kit-svelte';\n</script>\n<ReasoningText />`
 	},
 
-	// 2. Beautiful UI
+	// 2. Beautiful UI (11 components)
 	{
 		slug: 'tool-chips',
 		name: 'ToolChips',
@@ -176,12 +239,21 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 	},
 	{
 		slug: 'records-table',
-		name: 'RecordsTable & SelectionActions',
+		name: 'RecordsTable',
 		category: 'Beautiful UI',
 		sveltePath: 'src/lib/beautiful/RecordsTable.svelte',
 		upstreamSource: 'components/beautiful-ui/records-table.tsx',
-		description: 'Sortable, selectable agent data table paired with bulk SelectionActions toolbar.',
+		description: 'Sortable, multi-selectable agent data table with category tags and strength badges.',
 		usageSnippet: `<script lang="ts">\n  import { RecordsTable } from 'agents-kit-svelte';\n</script>\n<RecordsTable />`
+	},
+	{
+		slug: 'selection-actions',
+		name: 'SelectionActions',
+		category: 'Beautiful UI',
+		sveltePath: 'src/lib/beautiful/SelectionActions.svelte',
+		upstreamSource: 'components/beautiful-ui/selection-actions.tsx',
+		description: 'Floating bulk-action toolbar for selected table rows or text excerpts.',
+		usageSnippet: `<script lang="ts">\n  import { SelectionActions } from 'agents-kit-svelte';\n</script>\n<SelectionActions selectedCount={3} />`
 	},
 	{
 		slug: 'filter-table',
@@ -229,14 +301,14 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		usageSnippet: `<script lang="ts">\n  import { SearchList } from 'agents-kit-svelte';\n</script>\n<SearchList />`
 	},
 
-	// 3. GitHub Cards & Layouts
+	// 3. GitHub Cards & Layouts (7 components)
 	{
 		slug: 'github-issue-card',
 		name: 'GitHubIssueCard',
 		category: 'GitHub Cards & Layouts',
 		sveltePath: 'src/lib/github/GitHubIssueCard.svelte',
 		upstreamSource: 'Trailside GitHub Suite',
-		description: 'GitHub issue card with triage labels, risk tier, active worktree run, criteria progress, and dispatch actions.',
+		description: 'GitHub issue card with triage labels, risk tier, active worktree run, Spring criteria progress, and dispatch actions.',
 		usageSnippet: `<script lang="ts">\n  import { GitHubIssueCard } from 'agents-kit-svelte';\n</script>\n<GitHubIssueCard issue={issue} />`
 	},
 	{
@@ -281,7 +353,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		category: 'GitHub Cards & Layouts',
 		sveltePath: 'src/lib/github/GitHubKanbanBoard.svelte',
 		upstreamSource: 'Trailside GitHub Suite',
-		description: '4-column reactive GitHub board layout (Triage, In Progress Runs, Ready for You, Merged) with area filters.',
+		description: '4-column reactive GitHub board layout with Svelte 5 crossfade (send/receive) and animate:flip transitions.',
 		usageSnippet: `<script lang="ts">\n  import { GitHubKanbanBoard } from 'agents-kit-svelte';\n</script>\n<GitHubKanbanBoard />`
 	},
 	{
@@ -294,15 +366,24 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		usageSnippet: `<script lang="ts">\n  import { GitHubBentoLayout } from 'agents-kit-svelte';\n</script>\n<GitHubBentoLayout />`
 	},
 
-	// 4. Intelligent UI & Generative
+	// 4. Intelligent UI & Generative (3 components)
 	{
 		slug: 'agent-generative-surface',
-		name: 'AgentGenerativeSurface & ResultActions',
+		name: 'AgentGenerativeSurface',
 		category: 'Intelligent UI & Generative',
 		sveltePath: 'src/lib/intelligent-ui/AgentGenerativeSurface.svelte',
 		upstreamSource: 'components/agents-ui/agent-generative-surface.tsx',
-		description: 'Polymorphic generative surface supporting comparison, recommendation, checklist, document, source-brief, activity, and GitHub cards with inline Edit & Compare modes.',
+		description: 'Polymorphic generative surface supporting comparison, recommendation, checklist, document, source-brief, activity, and GitHub cards.',
 		usageSnippet: `<script lang="ts">\n  import { AgentGenerativeSurface } from 'agents-kit-svelte';\n</script>\n<AgentGenerativeSurface content={surfacePayload} />`
+	},
+	{
+		slug: 'result-actions',
+		name: 'ResultActions',
+		category: 'Intelligent UI & Generative',
+		sveltePath: 'src/lib/intelligent-ui/ResultActions.svelte',
+		upstreamSource: 'components/agents-ui/result-actions.tsx',
+		description: 'Composable action bar for generated surfaces with Expand, Edit, Compare, Save, Copy, and Markdown export.',
+		usageSnippet: `<script lang="ts">\n  import { ResultActions } from 'agents-kit-svelte';\n</script>\n<ResultActions state="view" saved={false} />`
 	},
 	{
 		slug: 'intelligent-ui-renderer',
@@ -310,11 +391,11 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		category: 'Intelligent UI & Generative',
 		sveltePath: 'src/lib/intelligent-ui/IntelligentUIRenderer.svelte',
 		upstreamSource: 'Dynamic Intelligent UI Engine',
-		description: 'Declarative JSON-schema to Svelte 5 renderer that dynamically mounts registered agent & GitHub components.',
+		description: 'Declarative JSON-schema to Svelte 5 renderer with animate:flip and fly transitions.',
 		usageSnippet: `<script lang="ts">\n  import { IntelligentUIRenderer } from 'agents-kit-svelte';\n</script>\n<IntelligentUIRenderer nodes={schemaNodes} onIntent={handleIntent} />`
 	},
 
-	// 5. Agents UI Orchestration
+	// 5. Agents UI Orchestration (11 components)
 	{
 		slug: 'agent-orchestrator',
 		name: 'AgentOrchestrator',
@@ -415,15 +496,24 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		usageSnippet: `<script lang="ts">\n  import { AgentThinkingIndicator } from 'agents-kit-svelte';\n</script>\n<AgentThinkingIndicator />`
 	},
 
-	// 6. AI Elements & Coding
+	// 6. AI Elements & Coding (13 components)
 	{
 		slug: 'agent-context-meter',
-		name: 'AgentContextMeter & AgentCheckpoint',
+		name: 'AgentContextMeter',
 		category: 'AI Elements & Coding',
-		sveltePath: 'src/lib/runtime/{AgentContextMeter,AgentCheckpoint}.svelte',
-		upstreamSource: 'components/agents-ui/agent-{context-meter,checkpoint}.tsx',
-		description: 'Token window usage bar with expandable source breakdown plus worktree checkpoint restore card.',
-		usageSnippet: `<script lang="ts">\n  import { AgentContextMeter, AgentCheckpoint } from 'agents-kit-svelte';\n</script>\n<AgentContextMeter usedTokens={48200} maxTokens={200000} />`
+		sveltePath: 'src/lib/runtime/AgentContextMeter.svelte',
+		upstreamSource: 'components/agents-ui/agent-context-meter.tsx',
+		description: 'Spring-animated token window usage bar with expandable source breakdown popover.',
+		usageSnippet: `<script lang="ts">\n  import { AgentContextMeter } from 'agents-kit-svelte';\n</script>\n<AgentContextMeter usedTokens={48200} maxTokens={200000} />`
+	},
+	{
+		slug: 'agent-checkpoint',
+		name: 'AgentCheckpoint',
+		category: 'AI Elements & Coding',
+		sveltePath: 'src/lib/runtime/AgentCheckpoint.svelte',
+		upstreamSource: 'components/agents-ui/agent-checkpoint.tsx',
+		description: 'Worktree git checkpoint card with commit SHA, changed file count, and restore trigger.',
+		usageSnippet: `<script lang="ts">\n  import { AgentCheckpoint } from 'agents-kit-svelte';\n</script>\n<AgentCheckpoint checkpoint={checkpoint} />`
 	},
 	{
 		slug: 'chain-of-thought',
@@ -481,24 +571,51 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 	},
 	{
 		slug: 'plan-card',
-		name: 'PlanCard & PromptSuggestions',
+		name: 'PlanCard',
 		category: 'AI Elements & Coding',
-		sveltePath: 'src/lib/ai-elements/{PlanCard,PromptSuggestions}.svelte',
-		upstreamSource: 'components/ai-elements/{plan,suggestion}.tsx',
-		description: 'Structured agent execution plan card paired with categorized starter prompt pills.',
-		usageSnippet: `<script lang="ts">\n  import { PlanCard, PromptSuggestions } from 'agents-kit-svelte';\n</script>\n<PlanCard />`
+		sveltePath: 'src/lib/ai-elements/PlanCard.svelte',
+		upstreamSource: 'components/ai-elements/plan.tsx',
+		description: 'Structured agent execution plan card with approval status and step dependencies.',
+		usageSnippet: `<script lang="ts">\n  import { PlanCard } from 'agents-kit-svelte';\n</script>\n<PlanCard />`
 	},
 	{
-		slug: 'test-results-terminal',
-		name: 'TestResults · Terminal · FileTree',
+		slug: 'prompt-suggestions',
+		name: 'PromptSuggestions',
 		category: 'AI Elements & Coding',
-		sveltePath: 'src/lib/runtime/{TestResults,Terminal,FileTree}.svelte',
-		upstreamSource: 'components/ai-elements/{test-results,terminal,file-tree}.tsx',
-		description: 'Expandable test suite runner, live worktree terminal console, and accessible file tree.',
-		usageSnippet: `<script lang="ts">\n  import { TestResults, Terminal, FileTree } from 'agents-kit-svelte';\n</script>\n<TestResults suites={suites} />`
+		sveltePath: 'src/lib/ai-elements/PromptSuggestions.svelte',
+		upstreamSource: 'components/ai-elements/suggestion.tsx',
+		description: 'Categorized starter prompt pills with search highlighting.',
+		usageSnippet: `<script lang="ts">\n  import { PromptSuggestions } from 'agents-kit-svelte';\n</script>\n<PromptSuggestions />`
+	},
+	{
+		slug: 'test-results',
+		name: 'TestResults',
+		category: 'AI Elements & Coding',
+		sveltePath: 'src/lib/runtime/TestResults.svelte',
+		upstreamSource: 'components/ai-elements/test-results.tsx',
+		description: 'Expandable test suite runner with pass/fail/skip counts and per-case durations.',
+		usageSnippet: `<script lang="ts">\n  import { TestResults } from 'agents-kit-svelte';\n</script>\n<TestResults suites={suites} />`
+	},
+	{
+		slug: 'terminal',
+		name: 'Terminal',
+		category: 'AI Elements & Coding',
+		sveltePath: 'src/lib/runtime/Terminal.svelte',
+		upstreamSource: 'components/ai-elements/terminal.tsx',
+		description: 'Worktree terminal console with copy buffer and streaming status.',
+		usageSnippet: `<script lang="ts">\n  import { Terminal } from 'agents-kit-svelte';\n</script>\n<Terminal output={output} />`
+	},
+	{
+		slug: 'file-tree',
+		name: 'FileTree',
+		category: 'AI Elements & Coding',
+		sveltePath: 'src/lib/runtime/FileTree.svelte',
+		upstreamSource: 'components/ai-elements/file-tree.tsx',
+		description: 'Accessible worktree changed-file tree with per-file +additions/-deletions.',
+		usageSnippet: `<script lang="ts">\n  import { FileTree } from 'agents-kit-svelte';\n</script>\n<FileTree nodes={nodes} />`
 	},
 
-	// 7. Voice & Effects
+	// 7. Voice & Effects (3 components)
 	{
 		slug: 'voice-wave-visualizer',
 		name: 'VoiceWaveVisualizer',
