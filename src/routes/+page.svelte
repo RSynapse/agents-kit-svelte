@@ -1,4 +1,6 @@
 <script lang="ts">
+	import HeroDemo from './HeroDemo.svelte';
+	import { prefersReducedMotion } from 'svelte/motion';
 	import { SEGMENT_GROUP_CLASS, badgeClass, buttonClass, segmentClass } from '$lib/ui/styles';
 	import {
 		ArrowRight,
@@ -11,6 +13,7 @@
 		GitPullRequest,
 		LayoutTemplate,
 		MessagesSquare,
+		RotateCcw,
 		Search,
 		Sparkle
 	} from '@lucide/svelte';
@@ -135,9 +138,6 @@
 	let disclosureDemoOpen = $state(true);
 	let resultActionMode = $state<ResultActionState>('view');
 	let resultSaved = $state(false);
-	let heroPromptValue = $state('');
-	let heroAgentId = $state<SupportedAgentId>('claude-code');
-	let heroNotice = $state('');
 	let ready = $state(false);
 
 	interface ScrollerTurn {
@@ -557,9 +557,6 @@
 		}
 	];
 
-	const sampleTerminalOutput = `$ corepack pnpm check && corepack pnpm test
-svelte-check found 0 errors and 0 warnings
-✔ all 68 Svelte components pass audit (105ms)`;
 
 	const sampleFileTree = [
 		{
@@ -575,6 +572,77 @@ svelte-check found 0 errors and 0 warnings
 				{ path: 'src/lib/ai-elements', name: 'ai-elements/ & runtime/ (14 components)', kind: 'file' as const, additions: 14 }
 			]
 		}
+	];
+
+	// Shared demo clock: drives the self-playing previews while the tab is visible.
+	let demoTick = $state(0);
+	let demoStarts = $state<Record<string, number>>({});
+	let replayCounts = $state<Record<string, number>>({});
+
+	$effect(() => {
+		if (prefersReducedMotion.current) return;
+		const timer = window.setInterval(() => {
+			if (!document.hidden) demoTick += 1;
+		}, 900);
+		return () => window.clearInterval(timer);
+	});
+
+	/**
+	 * Returns how far a looping demo has progressed, from 0 to `total`, holding on the
+	 * finished state for `hold` ticks before starting again. Reduced motion shows the end.
+	 */
+	function liveStep(slug: string, total: number, hold = 5): number {
+		if (prefersReducedMotion.current) return total;
+		const t = Math.max(0, demoTick - (demoStarts[slug] ?? 0)) % (total + hold);
+		return Math.min(total, t);
+	}
+
+	/** Remounts a preview and restarts its demo loop. */
+	function replayDemo(slug: string): void {
+		replayCounts = { ...replayCounts, [slug]: (replayCounts[slug] ?? 0) + 1 };
+		demoStarts = { ...demoStarts, [slug]: demoTick };
+	}
+
+	function liveActivity(): ActivityItem[] {
+		const step = liveStep('agent-activity', sampleActivity.length);
+		return sampleActivity.slice(0, Math.min(step + 1, sampleActivity.length)).map((item, i) =>
+			item.type === 'text'
+				? { ...item, status: i < step ? 'complete' : 'running' }
+				: { ...item, status: i < step ? 'complete' : 'running' }
+		) as ActivityItem[];
+	}
+
+	function liveTodos(): TodoItem[] {
+		const step = liveStep('todo-list', sampleTodos.length * 2);
+		return sampleTodos.map((todo, i) => ({
+			...todo,
+			status: step >= i * 2 + 2 ? 'completed' : step >= i * 2 + 1 ? 'in-progress' : 'pending'
+		}));
+	}
+
+	const STREAM_TEXT =
+		'All 68 Svelte 5 components verified with svelte-check (0 errors, 0 warnings), and every preview on this page is live.';
+
+	function liveStream(): { text: string; done: boolean } {
+		const words = STREAM_TEXT.split(' ');
+		const step = liveStep('streaming-response', Math.ceil(words.length / 3));
+		const shown = Math.min(words.length, step * 3);
+		return { text: words.slice(0, shown).join(' '), done: shown >= words.length };
+	}
+
+	function liveTerminal(): { output: string; done: boolean } {
+		const lines = LIVE_TERMINAL_LINES;
+		const step = liveStep('terminal', lines.length);
+		return { output: lines.slice(0, Math.max(1, step)).join('\n'), done: step >= lines.length };
+	}
+
+	const LIVE_TERMINAL_LINES = [
+		'$ corepack pnpm check && corepack pnpm test',
+		'svelte-check found 0 errors and 0 warnings',
+		'▶ svelte5 audit',
+		'  ✔ every component uses Runes (41ms)',
+		'  ✔ no hex colors in components (12ms)',
+		'✔ all 68 Svelte components pass audit (105ms)'
 	];
 
 	/**
@@ -677,22 +745,9 @@ svelte-check found 0 errors and 0 warnings
 				Runes. Soft by default, and yours to copy and change.
 			</p>
 
-			<!-- Interactive HomeChatPreview -->
-			<div class="mx-auto mt-10 w-full max-w-[620px] text-left">
-				<PromptInput
-					bind:value={heroPromptValue}
-					agents={sampleAgents}
-					selectedAgentId={heroAgentId}
-					onAgentChange={(id) => (heroAgentId = id)}
-					onSubmit={(submitted) => {
-						const agentLabel =
-							sampleAgents.find((a) => a.id === heroAgentId)?.label ?? heroAgentId;
-						heroNotice = `Prompt "${submitted}" previewed with ${agentLabel}. No model was contacted.`;
-					}}
-				/>
-				<p class="mt-3 text-center text-xs text-fg-light" role="status">
-					{heroNotice || 'Live PromptInput preview. Nothing is sent to a model.'}
-				</p>
+			<!-- Live, self-playing agent conversation -->
+			<div class="mx-auto mt-10 w-full max-w-[720px]">
+				<HeroDemo agents={sampleAgents} />
 			</div>
 
 			<div class="mt-8 flex flex-wrap justify-center gap-2.5">
@@ -924,6 +979,16 @@ svelte-check found 0 errors and 0 warnings
 								<button
 									type="button"
 									disabled={!ready}
+									aria-label="Replay {item.name} demo"
+									title="Replay demo"
+									onclick={() => replayDemo(item.slug)}
+									class={buttonClass('ghost', 'icon-sm')}
+								>
+									<RotateCcw aria-hidden="true" />
+								</button>
+								<button
+									type="button"
+									disabled={!ready}
 									aria-label={copiedSlug === item.slug ? 'Snippet copied' : `Copy ${item.name} usage snippet`}
 									title="Copy usage snippet"
 									onclick={() => copySnippet(item.slug, item.usageSnippet)}
@@ -942,6 +1007,7 @@ svelte-check found 0 errors and 0 warnings
 						<div
 							class="relative isolate overflow-x-auto rounded-[18px] bg-canvas-secondary/70 p-4 sm:p-6"
 						>
+							{#key replayCounts[item.slug] ?? 0}
 							{#if tabMode === 'usage'}
 								<CodeBlock
 									filename="{item.slug}-example.svelte"
@@ -960,9 +1026,10 @@ svelte-check found 0 errors and 0 warnings
 									class="rounded-xl border border-card-border"
 								/>
 							{:else if item.slug === 'agent-activity'}
+								{@const activityItems = liveActivity()}
 								<AgentActivity
-									items={sampleActivity}
-									status="complete"
+									items={activityItems}
+									status={activityItems.every((i) => i.status === 'complete') ? 'complete' : 'working'}
 									durationSeconds={6}
 									defaultOpen={true}
 								/>
@@ -990,7 +1057,7 @@ svelte-check found 0 errors and 0 warnings
 							{:else if item.slug === 'todo-list'}
 								<TodoList
 									title="Svelte 5 Port & Verification Plan"
-									items={sampleTodos}
+									items={liveTodos()}
 									defaultOpen={true}
 								/>
 							{:else if item.slug === 'tool-approval'}
@@ -1109,18 +1176,14 @@ svelte-check found 0 errors and 0 warnings
 									</form>
 								</div>
 							{:else if item.slug === 'streaming-response'}
+								{@const stream = liveStream()}
 								<StreamingResponse
-									status="complete"
-									copyText="All 68 Svelte 5 components verified with 0 errors and 0 warnings."
+									status={stream.done ? 'complete' : 'streaming'}
+									copyText={STREAM_TEXT}
 									sources={sampleCitations}
+									showActions={stream.done}
 								>
-									<p class="text-sm text-fg-main">
-										All 68 Svelte 5 components verified with
-										<code class="rounded bg-card-bg px-1.5 py-0.5 font-mono text-xs"
-											>svelte-check</code
-										>
-										(0 errors, 0 warnings) and interactive action bar.
-									</p>
+									<p class="min-h-10 text-sm text-fg-main">{stream.text}</p>
 								</StreamingResponse>
 							{:else if item.slug === 'citations'}
 								<Citations citations={sampleCitations} defaultOpen={true} />
@@ -1129,9 +1192,9 @@ svelte-check found 0 errors and 0 warnings
 							{:else if item.slug === 'ai-sidebar'}
 								<AISidebar />
 							{:else if item.slug === 'thinking-shimmer'}
-								<ThinkingShimmer label="Analyzing repository structure..." />
+								<ThinkingShimmer spark label="Analyzing repository structure..." />
 							{:else if item.slug === 'agent-progress'}
-								<AgentProgress label="Running Playwright suite" elapsedSeconds={14} />
+								<AgentProgress label="Running Playwright suite" initialSeconds={14} />
 							{:else if item.slug === 'reasoning-text'}
 								<ReasoningText />
 							{:else if item.slug === 'tool-chips'}
@@ -1237,7 +1300,8 @@ svelte-check found 0 errors and 0 warnings
 							{:else if item.slug === 'test-results'}
 								<TestResults suites={sampleTestSuites} />
 							{:else if item.slug === 'terminal'}
-								<Terminal output={sampleTerminalOutput} title="~/agents-kit-svelte · zsh" />
+								{@const term = liveTerminal()}
+								<Terminal output={term.output} streaming={!term.done} title="~/agents-kit-svelte · zsh" />
 							{:else if item.slug === 'file-tree'}
 								<FileTree nodes={sampleFileTree} />
 							{:else if item.slug === 'voice-wave-visualizer'}
@@ -1247,6 +1311,7 @@ svelte-check found 0 errors and 0 warnings
 							{:else if item.slug === 'svelte5-motion-lab'}
 								<Svelte5MotionLab />
 							{/if}
+							{/key}
 						</div>
 					</article>
 				{/each}
