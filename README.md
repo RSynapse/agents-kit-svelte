@@ -54,6 +54,43 @@ A step-by-step guide with live output is on the showcase site under **Install**.
 
 ---
 
+## Connecting a real agent
+
+The chat components take plain data, so you can feed them from any agent runtime. The kit ships a small data layer for that:
+
+- **`AgentEvent`**: one event union for text and thinking deltas, tool calls and results, approvals, todos, usage and errors.
+- **`AgentSession`**: a Svelte 5 runes class that folds events into reactive state (`messages`, `toolCalls`, `todos`, `usage`, `status`).
+- **Selectors** that turn that state into component props: `toActivityItems`, `toApprovalParams`, `messageText`, `contextTokens`, `pendingApprovals`.
+- **Adapters** for Claude: `fromClaudeAgentSdk` (Claude Agent SDK `query()` messages) and `fromMessagesStream` (Messages API streaming events). They are typed structurally, so the kit doesn't depend on either SDK.
+
+```svelte
+<script lang="ts">
+  import {
+    AgentActivity, TodoList, ToolApproval, AgentSession,
+    fromClaudeAgentSdk, toActivityItems, toApprovalParams, pendingApprovals
+  } from 'agents-kit-svelte';
+
+  const session = new AgentSession();
+  // Stream SDK messages from your server (e.g. as server-sent events), then:
+  // await session.consume(fromClaudeAgentSdk(messages));
+</script>
+
+<AgentActivity items={toActivityItems(session.state)} />
+<TodoList items={session.state.todos} />
+{#each pendingApprovals(session.state) as call (call.id)}
+  <ToolApproval
+    tool={call.name}
+    params={toApprovalParams(call.input)}
+    onApprove={() => session.resolveApproval(call.id, true)}
+    onDeny={() => session.resolveApproval(call.id, false)}
+  />
+{/each}
+```
+
+Approvals come from the Agent SDK's `canUseTool` callback rather than its message stream. When the SDK runs in the same process as the UI, `await session.requestApproval(toolUseID, { params })` inside that callback resolves once the user clicks. When it runs on a server, send an `approval.request` event to the browser alongside the messages, and post the user's answer back from `onApprove` / `onDeny`. For another runtime, write an adapter that yields `AgentEvent`s; see `src/lib/core/agent/adapters.ts` for the pattern.
+
+---
+
 ## Local Development
 
 ```bash
