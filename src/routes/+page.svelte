@@ -107,6 +107,8 @@
 	} from '$lib';
 	import { SAMPLE_SKILLS, SAMPLE_SKILL_STEPS } from '$lib/entries/fixtures';
 	import { CATALOG_ITEMS, type CatalogCategory } from '$site/catalog-registry';
+	import { holdHeight } from '$site/hold-height';
+	import { SvelteSet } from 'svelte/reactivity';
 	import type {
 		ActivityItem,
 		ApprovalQuestion,
@@ -602,18 +604,36 @@
 		}
 	];
 
-	// Shared demo clock: drives the self-playing previews while the tab is visible.
-	let demoTick = $state(0);
+	// Demo clock: each preview advances only while it is on screen. A preview that kept
+	// looping above the viewport would change height and make the page re-anchor and jitter.
+	const visibleSlugs = new SvelteSet<string>();
+	let demoTicks = $state<Record<string, number>>({});
 	let demoStarts = $state<Record<string, number>>({});
 	let replayCounts = $state<Record<string, number>>({});
 
 	$effect(() => {
 		if (prefersReducedMotion.current) return;
 		const timer = window.setInterval(() => {
-			if (!document.hidden) demoTick += 1;
+			if (document.hidden) return;
+			for (const slug of visibleSlugs) demoTicks[slug] = (demoTicks[slug] ?? 0) + 1;
 		}, 900);
 		return () => window.clearInterval(timer);
 	});
+
+	/** Adds a catalogue card to `visibleSlugs` while any part of it is on screen. */
+	function trackVisible(node: HTMLElement, slug: string) {
+		const observer = new IntersectionObserver(([entry]) => {
+			if (entry?.isIntersecting) visibleSlugs.add(slug);
+			else visibleSlugs.delete(slug);
+		});
+		observer.observe(node);
+		return {
+			destroy() {
+				observer.disconnect();
+				visibleSlugs.delete(slug);
+			}
+		};
+	}
 
 	/**
 	 * Returns how far a looping demo has progressed, from 0 to `total`, holding on the
@@ -621,14 +641,14 @@
 	 */
 	function liveStep(slug: string, total: number, hold = 5): number {
 		if (prefersReducedMotion.current) return total;
-		const t = Math.max(0, demoTick - (demoStarts[slug] ?? 0)) % (total + hold);
+		const t = Math.max(0, (demoTicks[slug] ?? 0) - (demoStarts[slug] ?? 0)) % (total + hold);
 		return Math.min(total, t);
 	}
 
 	/** Remounts a preview and restarts its demo loop. */
 	function replayDemo(slug: string): void {
 		replayCounts = { ...replayCounts, [slug]: (replayCounts[slug] ?? 0) + 1 };
-		demoStarts = { ...demoStarts, [slug]: demoTick };
+		demoStarts = { ...demoStarts, [slug]: demoTicks[slug] ?? 0 };
 	}
 
 	function liveActivity(): ActivityItem[] {
@@ -1083,6 +1103,7 @@
 					<article
 						id={item.slug}
 						data-component-slug={item.slug}
+						use:trackVisible={item.slug}
 						class="scroll-mt-24 rounded-window border border-card-border bg-card-bg p-4 ak-shadow-soft-sm sm:p-5"
 					>
 						<!-- Upstream FamilyPreview Header -->
@@ -1166,6 +1187,7 @@
 
 						<!-- Upstream rounded-[14px] Stage -->
 						<div
+							use:holdHeight={`${tabMode}:${replayCounts[item.slug] ?? 0}`}
 							class="relative isolate overflow-x-auto rounded-[18px] bg-canvas-secondary/70 p-4 sm:p-6"
 						>
 							{#key replayCounts[item.slug] ?? 0}
@@ -1401,21 +1423,21 @@
 							{:else if item.slug === 'github-bento-layout'}
 								<GitHubBentoLayout />
 							{:else if item.slug === 'github-lifecycle-timeline'}
-								<GitHubLifecycleTimeline />
+								<GitHubLifecycleTimeline live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-issue-triage'}
-								<GitHubIssueTriage />
+								<GitHubIssueTriage live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-branch-card'}
-								<GitHubBranchCard />
+								<GitHubBranchCard live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-pr-review'}
-								<GitHubPullRequestReview />
+								<GitHubPullRequestReview live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-merge-queue'}
-								<GitHubMergeQueue />
+								<GitHubMergeQueue live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-deployment-pipeline'}
-								<GitHubDeploymentPipeline />
+								<GitHubDeploymentPipeline live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-release-card'}
-								<GitHubReleaseCard />
+								<GitHubReleaseCard live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-incident-card'}
-								<GitHubIncidentCard />
+								<GitHubIncidentCard live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'agent-generative-surface'}
 								<AgentGenerativeSurface content={sampleSurfaceContent} />
 							{:else if item.slug === 'result-actions'}
