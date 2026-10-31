@@ -51,7 +51,7 @@
 	let { initialDark = false, class: className = '' }: Props = $props();
 
 	const SUPPORTED_AGENTS: SupportedAgentOption[] = [
-		{ id: 'claude-code', label: 'Claude Code', version: 'v1.0.42', signedIn: true },
+		{ id: 'claude-code', label: 'AK-S Agent', version: 'v0.3.0', signedIn: true },
 		{ id: 'codex', label: 'Codex CLI', version: 'v0.29.0', signedIn: true },
 		{ id: 'gemini', label: 'Gemini CLI', version: 'v2.4.1', signedIn: true }
 	];
@@ -454,11 +454,11 @@
 			<span
 				class="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-fg-main font-mono text-xs font-bold text-fg-inverse"
 			>
-				TS
+				AK
 			</span>
 			<div class="min-w-0">
 				<div class="flex flex-wrap items-center gap-2">
-					<span class="font-mono text-xs font-semibold text-accent-primary">Card 1210</span>
+					<span class="font-mono text-xs font-semibold text-accent-primary">AK-S Chat · Card 1210</span>
 					<h1 class="truncate text-sm font-bold text-fg-main sm:text-base">
 						Fix OAuth callback redirect loop on deep links
 					</h1>
@@ -514,7 +514,7 @@
 				? 'bg-card-bg text-fg-main shadow-xs'
 				: 'text-fg-light hover:text-fg-main'}"
 		>
-			💬 Claude Code Chat
+			💬 AK-S Chat
 		</button>
 		<button
 			type="button"

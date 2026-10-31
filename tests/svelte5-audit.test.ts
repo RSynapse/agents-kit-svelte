@@ -94,5 +94,10 @@ test('every single .svelte component in src/lib/ has a dedicated 1-to-1 showcase
 			pageSource.includes(`item.slug === '${item.slug}'`),
 			`Catalog slug '${item.slug}' (${item.sveltePath}) is not rendered in src/routes/+page.svelte`
 		);
+		const lineCount = item.usageSnippet.trim().split('\n').length;
+		assert.ok(
+			lineCount >= 6,
+			`Catalog item '${item.slug}' usageSnippet is too short (${lineCount} lines); must include full rendering code`
+		);
 	}
 });

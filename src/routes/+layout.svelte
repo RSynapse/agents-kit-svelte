@@ -13,10 +13,10 @@
 	let ready = $state(false);
 
 	const NAV_LINKS = [
-		{ href: '/', label: 'Component Catalogue (60+)' },
-		{ href: '/claude-code', label: 'Claude Code Workbench' },
-		{ href: '/github', label: 'GitHub Cards & Layouts' },
-		{ href: '/intelligent-ui', label: 'Intelligent UI Engine' }
+		{ href: '/', label: 'Components' },
+		{ href: '/claude-code', label: 'AK-S Chat' },
+		{ href: '/github', label: 'GitHub Suite' },
+		{ href: '/intelligent-ui', label: 'Playground' }
 	];
 
 	$effect(() => {
@@ -29,54 +29,66 @@
 </script>
 
 <div class="min-h-screen bg-canvas-primary text-fg-main">
-	<nav
-		aria-label="Showcase primary navigation"
-		class="sticky top-0 z-40 flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border bg-card-bg px-4 py-2.5 sm:px-6"
-	>
-		<div class="flex items-center gap-3">
-			<a
-				href="/"
-				class="flex items-center gap-2 font-mono text-sm font-bold text-fg-main no-underline"
-			>
-				<span
-					class="inline-flex size-6 items-center justify-center rounded-md bg-fg-main text-xs text-fg-inverse"
-				>
-					AK
-				</span>
-				<span>agents-kit-svelte</span>
-			</a>
-			<span
-				class="hidden rounded-full border border-card-border bg-canvas-secondary px-2 py-0.5 font-mono text-[10px] font-semibold text-accent-primary sm:inline-block"
-			>
-				Svelte 5 Runes · Intelligent UI · GitHub Suite
-			</span>
-		</div>
-
-		<div class="flex flex-wrap items-center gap-1 text-xs">
-			{#each NAV_LINKS as item (item.href)}
-				{@const active = page.url.pathname === item.href}
+	<header class="sticky top-0 z-40 border-b border-canvas-border bg-card-bg backdrop-blur">
+		<div class="mx-auto flex min-h-16 max-w-[1440px] flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 py-2 sm:h-16 sm:flex-nowrap sm:px-6 sm:py-0">
+			<div class="flex items-center gap-2.5 sm:gap-3">
 				<a
-					href={item.href}
-					aria-current={active ? 'page' : undefined}
-					class="rounded-lg px-3 py-1.5 font-semibold no-underline transition-colors {active
-						? 'bg-accent-subtle text-accent-primary'
-						: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+					href="/"
+					class="flex items-center gap-2 text-sm font-semibold whitespace-nowrap text-fg-main no-underline"
 				>
-					{item.label}
+					<span
+						class="inline-flex size-6 items-center justify-center rounded-md bg-fg-main font-mono text-[11px] font-bold text-fg-inverse"
+					>
+						AK
+					</span>
+					<span>Agents Kit</span>
+					<span class="font-mono text-xs font-medium text-fg-light">Svelte</span>
 				</a>
-			{/each}
+				<select
+					aria-label="Library version"
+					class="h-7 rounded-md border border-canvas-border bg-transparent px-1.5 font-mono text-xs text-fg-light"
+				>
+					<option value="0.3">v0.3 · Svelte 5</option>
+				</select>
+			</div>
 
-			<button
-				type="button"
-				disabled={!ready}
-				aria-label="Toggle global color theme"
-				onclick={() => (isDark = !isDark)}
-				class="ml-2 rounded-lg border border-card-border bg-canvas-secondary px-2.5 py-1.5 font-mono text-xs font-medium text-fg-main transition-colors hover:bg-canvas-primary"
+			<nav
+				aria-label="Showcase primary navigation"
+				class="order-last flex w-full items-center justify-between text-xs sm:order-none sm:ml-auto sm:w-auto sm:justify-start sm:gap-1 sm:text-sm"
 			>
-				{isDark ? '☀ Light' : '☾ Dark'}
-			</button>
+				{#each NAV_LINKS as item (item.href)}
+					{@const active = page.url.pathname === item.href}
+					<a
+						href={item.href}
+						aria-current={active ? 'page' : undefined}
+						class="rounded-lg px-2.5 py-2 font-medium no-underline transition-colors sm:px-3 {active
+							? 'bg-canvas-secondary text-fg-main'
+							: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+					>
+						{item.label}
+					</a>
+				{/each}
+				<a
+					href="/#svelte5-motion-lab"
+					class="rounded-lg px-2.5 py-2 font-medium text-fg-light no-underline transition-colors hover:bg-canvas-secondary hover:text-fg-main sm:px-3"
+				>
+					Motion Lab
+				</a>
+			</nav>
+
+			<div class="flex items-center gap-2">
+				<button
+					type="button"
+					disabled={!ready}
+					aria-label="Toggle global color theme"
+					onclick={() => (isDark = !isDark)}
+					class="rounded-lg border border-card-border bg-canvas-secondary px-2.5 py-1.5 font-mono text-xs font-medium text-fg-main transition-colors hover:bg-canvas-primary"
+				>
+					{isDark ? '☀ Light' : '☾ Dark'}
+				</button>
+			</div>
 		</div>
-	</nav>
+	</header>
 
 	{@render children()}
 </div>

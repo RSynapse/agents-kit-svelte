@@ -11,9 +11,13 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 
 		await expect(
 			page.getByRole('heading', {
-				name: /agents-kit-svelte: Dynamic Agentic, GitHub & Intelligent UI Kit/i
+				name: /Build better\s*agent interfaces/i
 			})
 		).toBeVisible();
+
+		// Verify sticky left sidebar collection selector & component index
+		await expect(page.getByLabel('Collection')).toBeVisible();
+		await expect(page.getByRole('navigation', { name: 'Component families' })).toBeVisible();
 
 		// Verify category filter tabs
 		await expect(page.getByRole('tab', { name: /beUI Agents/i })).toBeVisible();
