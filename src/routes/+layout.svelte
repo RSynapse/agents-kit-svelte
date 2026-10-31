@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { buttonClass } from '$lib/ui/styles';
+	import { Moon, Sun } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
@@ -30,7 +32,7 @@
 </script>
 
 <div class="min-h-screen bg-canvas-primary text-fg-main">
-	<header class="sticky top-0 z-40 border-b border-canvas-border bg-card-bg backdrop-blur">
+	<header class="sticky top-0 z-40 border-b border-canvas-border bg-canvas-primary">
 		<div class="mx-auto flex min-h-16 max-w-[1440px] flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 py-2 sm:h-16 sm:flex-nowrap sm:px-6 sm:py-0">
 			<div class="flex items-center gap-2.5 sm:gap-3">
 				<a
@@ -47,9 +49,9 @@
 				</a>
 				<select
 					aria-label="Library version"
-					class="h-7 rounded-md border border-canvas-border bg-transparent px-1.5 font-mono text-xs text-fg-light"
+					class="h-7 rounded-control border border-card-border bg-card-bg px-1.5 text-xs text-fg-light"
 				>
-					<option value="0.3">v0.3 · Svelte 5</option>
+					<option value="0.1">v0.1 · Svelte 5</option>
 				</select>
 			</div>
 
@@ -64,7 +66,7 @@
 					<a
 						href={item.href}
 						aria-current={active ? 'page' : undefined}
-						class="rounded-lg px-2.5 py-2 font-medium no-underline transition-colors sm:px-3 {active
+						class="rounded-control px-2.5 py-1.5 font-medium no-underline transition-colors sm:px-3 {active
 							? 'bg-canvas-secondary text-fg-main'
 							: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
 					>
@@ -73,7 +75,7 @@
 				{/each}
 				<a
 					href="{base}/#svelte5-motion-lab"
-					class="rounded-lg px-2.5 py-2 font-medium text-fg-light no-underline transition-colors hover:bg-canvas-secondary hover:text-fg-main sm:px-3"
+					class="rounded-control px-2.5 py-1.5 font-medium text-fg-light no-underline transition-colors hover:bg-canvas-secondary hover:text-fg-main sm:px-3"
 				>
 					Motion Lab
 				</a>
@@ -85,9 +87,10 @@
 					disabled={!ready}
 					aria-label="Toggle global color theme"
 					onclick={() => (isDark = !isDark)}
-					class="rounded-lg border border-card-border bg-canvas-secondary px-2.5 py-1.5 font-mono text-xs font-medium text-fg-main transition-colors hover:bg-canvas-primary"
+					title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+					class={buttonClass('ghost', 'icon')}
 				>
-					{isDark ? '☀ Light' : '☾ Dark'}
+					{#if isDark}<Sun aria-hidden="true" />{:else}<Moon aria-hidden="true" />{/if}
 				</button>
 			</div>
 		</div>

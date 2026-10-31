@@ -146,7 +146,7 @@
 			onclick={toggleAllValues}
 			class={buttonClass('secondary', 'sm')}
 		>
-			<span>{#if showAllValues}<EyeOff aria-hidden="true" />Hide values{:else}<Eye aria-hidden="true" />Reveal values{/if}</span>
+			{#if showAllValues}<EyeOff aria-hidden="true" />Hide values{:else}<Eye aria-hidden="true" />Reveal values{/if}
 		</button>
 	</div>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
-	import { Mic, VolumeX } from '@lucide/svelte';
+	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
+	import { Mic, MicOff, VolumeX } from '@lucide/svelte';
 	export type VoiceSessionState = 'idle' | 'listening' | 'speaking' | 'processing';
 
 	export interface VoiceDeviceOption {
@@ -191,11 +191,9 @@
 			type="button"
 			aria-pressed={muted}
 			onclick={() => (muted = !muted)}
-			class="rounded-md px-3 py-1 font-mono text-xs font-medium transition-colors {muted
-				? 'bg-status-danger-subtle text-status-danger'
-				: 'border border-card-border bg-canvas-primary text-fg-main hover:bg-canvas-secondary'}"
+			class={buttonClass(muted ? 'danger' : 'secondary', 'sm')}
 		>
-			{#if muted}<VolumeX aria-hidden="true" />Unmute Mic{:else}<Mic aria-hidden="true" />Mute Mic{/if}
+			{#if muted}<MicOff aria-hidden="true" />Unmute{:else}<Mic aria-hidden="true" />Mute{/if}
 		</button>
 	</div>
 </div>

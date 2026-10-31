@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ArrowRight, Check, Plus } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
@@ -141,7 +142,7 @@
 					onclick={() => springMetric.set(preset)}
 					class="{segmentClass(springMetric.targetValue === preset)}"
 				>
-					Spring → {preset}%
+					{preset}%
 				</button>
 			{/each}
 		</div>
@@ -220,13 +221,13 @@
 							disabled={!ready}
 							aria-pressed={isSelected}
 							onclick={() => toggleReactiveTag(tag)}
-							class="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 font-mono text-[11px] transition-colors {isSelected
-								? 'border-accent-primary bg-accent-subtle font-semibold text-accent-primary'
-								: 'border-card-border bg-canvas-secondary text-fg-light hover:text-fg-main'}"
+							class="inline-flex h-6 items-center gap-1 rounded-chip border px-2 font-mono text-[11px] transition-colors {isSelected
+								? 'border-fg-main/20 bg-fg-main text-fg-inverse'
+								: 'border-card-border bg-card-bg text-fg-light hover:text-fg-main'}"
 						>
 							{#key isSelected}
-								<span in:fade={{ duration: motionDuration(120) }}>
-									{isSelected ? '●' : '○'}
+								<span in:fade={{ duration: motionDuration(120) }} class="inline-flex">
+									{#if isSelected}<Check aria-hidden="true" class="size-3" />{:else}<Plus aria-hidden="true" class="size-3" />{/if}
 								</span>
 							{/key}
 							<span>{tag}</span>
@@ -276,14 +277,14 @@
 								>
 									<div class="flex w-full items-center justify-between gap-1">
 										{@render laneBadge(card.lane)}
-										<span class="font-mono text-[10px] text-fg-light">Advance →</span>
+										<ArrowRight aria-label="Advance" class="size-3.5 text-fg-light" />
 									</div>
 									<span class="text-xs font-semibold text-fg-main">{card.title}</span>
 								</button>
 							{:else}
 								<div
 									in:fly={{ y: 4, duration: motionDuration(150) }}
-									class="rounded-lg border border-dashed border-card-border py-4 text-center font-mono text-[11px] text-fg-light"
+									class="rounded-control border border-dashed border-card-border py-4 text-center text-xs text-fg-light"
 								>
 									Empty lane
 								</div>

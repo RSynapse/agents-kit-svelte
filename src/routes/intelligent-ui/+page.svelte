@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Check } from '@lucide/svelte';
 	import AgentGenerativeSurface from '$lib/intelligent-ui/AgentGenerativeSurface.svelte';
 	import IntelligentUIRenderer from '$lib/intelligent-ui/IntelligentUIRenderer.svelte';
 	import type { DynamicUINode, GeneratedSurfaceContent } from '$lib/types';
@@ -351,7 +352,7 @@
 					{#if parsedSchema.error}
 						<span class="font-mono text-status-danger">{parsedSchema.error}</span>
 					{:else}
-						<span class="font-mono text-status-success">✓ Valid schema ({parsedSchema.nodes.length} nodes)</span>
+						<span class="inline-flex items-center gap-1 text-status-success"><Check aria-hidden="true" class="size-3.5" />Valid schema ({parsedSchema.nodes.length} nodes)</span>
 					{/if}
 				</div>
 				<textarea

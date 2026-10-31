@@ -88,7 +88,7 @@
 
 	<!-- Live Interaction Telemetry Bar -->
 	<div class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-card-border bg-card-bg px-4 py-2.5 font-mono text-xs">
-		<span class="font-semibold text-accent-primary">● Live Intent Stream:</span>
+		<span class="inline-flex items-center gap-1.5 font-medium text-fg-main"><span aria-hidden="true" class="ak-breathe size-1.5 rounded-full bg-status-success"></span>Live intent stream:</span>
 		<span class="truncate text-fg-main">{eventLog[0]}</span>
 		<span class="text-fg-light">{eventLog.length} events</span>
 	</div>

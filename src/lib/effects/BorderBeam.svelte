@@ -19,7 +19,7 @@
 		active = true,
 		tone = 'accent',
 		size = 'md',
-		durationSeconds = 2.4,
+		durationSeconds = 6,
 		label = 'Active Worktree Run · Claude Code',
 		children,
 		class: className = ''
@@ -58,15 +58,13 @@
 	style:--ak-beam-duration="{durationSeconds}s"
 	data-active={isActive}
 	data-size={size}
-	class="ak-border-beam relative overflow-hidden rounded-xl p-[1.5px] transition-all {isActive
-		? 'bg-canvas-border'
-		: 'bg-card-border'} {className}"
+	class="ak-border-beam relative overflow-hidden rounded-card bg-card-border p-px {className}"
 >
 	{#if isActive}
-		<div aria-hidden="true" class="ak-border-beam-glow pointer-events-none absolute inset-0"></div>
+		<div aria-hidden="true" class="ak-border-beam-glow pointer-events-none absolute"></div>
 	{/if}
 
-	<div class="relative z-10 rounded-[10.5px] bg-card-bg">
+	<div class="relative z-10 rounded-[9px] bg-card-bg">
 		{#if children}
 			{@render children()}
 		{:else}
@@ -74,9 +72,9 @@
 				<div class="space-y-1">
 					<div class="flex items-center gap-2">
 						<span
-							class="inline-flex size-2 rounded-full {isActive
-								? 'bg-accent-primary'
-								: 'bg-canvas-border'}"
+							class="inline-flex size-1.5 rounded-full {isActive
+								? 'ak-breathe bg-accent-primary'
+								: 'bg-fg-light'}"
 						></span>
 						<span class="font-semibold text-fg-main">{label}</span>
 					</div>
@@ -109,21 +107,27 @@
 	}
 
 	.ak-border-beam-glow {
+		/* A single soft highlight travelling the hairline; no glow, blur or bloom. */
+		top: 50%;
+		left: 50%;
+		width: max(300%, 40rem);
+		aspect-ratio: 1;
+		translate: -50% -50%;
 		background: conic-gradient(
 			from 0deg,
 			transparent 0deg,
-			transparent 250deg,
-			var(--ak-beam-color) 320deg,
+			transparent 290deg,
+			color-mix(in oklch, var(--ak-beam-color) 70%, transparent) 345deg,
 			transparent 360deg
 		);
-		animation: ak-beam-spin var(--ak-beam-duration, 2.4s) linear infinite;
+		animation: ak-beam-spin var(--ak-beam-duration, 6s) linear infinite;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.ak-border-beam-glow {
 			animation: none;
 			background: var(--ak-beam-color);
-			opacity: 0.45;
+			opacity: 0.25;
 		}
 	}
 </style>

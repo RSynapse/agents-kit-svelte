@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { SEGMENT_GROUP_CLASS, badgeClass, buttonClass, segmentClass } from '$lib/ui/styles';
+	import { ArrowRight, Check, ChevronDown, Code, Copy, Eye, FileCode, Search } from '@lucide/svelte';
 	import { base } from '$app/paths';
 	import {
 		AISidebar,
@@ -607,10 +609,11 @@ svelte-check found 0 errors and 0 warnings
 	<section class="mx-auto max-w-[860px] px-5 pt-14 pb-12 text-center sm:pt-20">
 		<a
 			href="#components"
-			class="inline-flex items-center gap-2 text-xs text-fg-light no-underline transition-colors hover:text-fg-main"
+			class="inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg py-1 pr-3 pl-1 text-xs text-fg-light no-underline ak-shadow-btn transition-colors hover:text-fg-main"
 		>
-			<span>New in v0.3 · 68 Svelte 5 Runes Components, AK-S Chat &amp; GitHub Suite</span>
-			<span aria-hidden="true">→</span>
+			<span class={badgeClass('neutral')}>v0.1</span>
+			<span>68 Svelte 5 components, AK-S Chat &amp; GitHub suite</span>
+			<ArrowRight aria-hidden="true" class="size-3.5" />
 		</a>
 
 		<h1 class="mt-5 text-4xl leading-[1.08] font-semibold tracking-tight text-fg-main sm:text-6xl">
@@ -627,7 +630,7 @@ svelte-check found 0 errors and 0 warnings
 
 		<!-- Interactive HomeChatPreview (matching upstream HomeChatPreview) -->
 		<div class="mx-auto mt-8 w-full max-w-[600px] text-left">
-			<div class="rounded-2xl border border-accent-primary/40 bg-card-bg p-1.5 shadow-xs">
+			<div class="rounded-window ak-shadow-card">
 				<PromptInput
 					bind:value={heroPromptValue}
 					agents={sampleAgents}
@@ -640,8 +643,8 @@ svelte-check found 0 errors and 0 warnings
 					}}
 				/>
 			</div>
-			<p class="mt-2.5 text-center font-mono text-[11px] text-fg-light" role="status">
-				{heroNotice || 'PromptInput + BorderBeam · Interactive Svelte 5 preview'}
+			<p class="mt-2.5 text-center text-xs text-fg-light" role="status">
+				{heroNotice || 'Live PromptInput preview. Nothing is sent to a model.'}
 			</p>
 		</div>
 
@@ -651,7 +654,7 @@ svelte-check found 0 errors and 0 warnings
 				class="inline-flex h-9 items-center gap-2 rounded-lg bg-fg-main px-4 text-sm font-medium text-fg-inverse no-underline transition-opacity hover:opacity-90"
 			>
 				<span>Browse 68 components</span>
-				<span aria-hidden="true">→</span>
+				<ArrowRight aria-hidden="true" class="size-4" />
 			</a>
 			<a
 				href="{base}/claude-code/"
@@ -688,9 +691,10 @@ svelte-check found 0 errors and 0 warnings
 			</div>
 			<a
 				href="{base}/claude-code/"
-				class="text-sm text-fg-light no-underline transition-colors hover:text-fg-main"
+				class="inline-flex items-center gap-1 text-sm text-fg-light no-underline transition-colors hover:text-fg-main"
 			>
-				Explore interactive workbenches →
+				Explore interactive workbenches
+				<ArrowRight aria-hidden="true" class="size-3.5" />
 			</a>
 		</div>
 
@@ -700,7 +704,7 @@ svelte-check found 0 errors and 0 warnings
 				class="group flex flex-col justify-between rounded-[10px] border border-canvas-border bg-card-bg p-4 no-underline transition-colors hover:bg-canvas-secondary"
 			>
 				<div>
-					<p class="font-mono text-xs text-fg-light">01 · Agentic Coding Workbench</p>
+					<p class="text-xs text-fg-light">01 · Agentic Coding Workbench</p>
 					<h3 class="mt-1.5 text-sm font-medium text-fg-main">AK-S Chat Workbench</h3>
 					<p class="mt-2 text-[13px] leading-6 text-fg-light">
 						Multi-turn agent session with collapsible tool traces, inline unified diffs, bash permissions, and worktree context meter.
@@ -708,7 +712,7 @@ svelte-check found 0 errors and 0 warnings
 				</div>
 				<span class="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-fg-main">
 					<span>Try AK-S Chat</span>
-					<span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+					<ArrowRight aria-hidden="true" class="size-3.5 text-fg-light transition-colors group-hover:text-fg-main" />
 				</span>
 			</a>
 
@@ -717,7 +721,7 @@ svelte-check found 0 errors and 0 warnings
 				class="group flex flex-col justify-between rounded-[10px] border border-canvas-border bg-card-bg p-4 no-underline transition-colors hover:bg-canvas-secondary"
 			>
 				<div>
-					<p class="font-mono text-xs text-fg-light">02 · Repository &amp; Board Suite</p>
+					<p class="text-xs text-fg-light">02 · Repository &amp; Board Suite</p>
 					<h3 class="mt-1.5 text-sm font-medium text-fg-main">GitHub Cards, Bento &amp; Kanban</h3>
 					<p class="mt-2 text-[13px] leading-6 text-fg-light">
 						Reactive 4-column crossfade board, issue run dispatch cards, PR referee cards, CI check suites, and review threads.
@@ -725,7 +729,7 @@ svelte-check found 0 errors and 0 warnings
 				</div>
 				<span class="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-fg-main">
 					<span>Try GitHub Suite</span>
-					<span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+					<ArrowRight aria-hidden="true" class="size-3.5 text-fg-light transition-colors group-hover:text-fg-main" />
 				</span>
 			</a>
 
@@ -734,7 +738,7 @@ svelte-check found 0 errors and 0 warnings
 				class="group flex flex-col justify-between rounded-[10px] border border-canvas-border bg-card-bg p-4 no-underline transition-colors hover:bg-canvas-secondary"
 			>
 				<div>
-					<p class="font-mono text-xs text-fg-light">03 · Generative Surfaces</p>
+					<p class="text-xs text-fg-light">03 · Generative Surfaces</p>
 					<h3 class="mt-1.5 text-sm font-medium text-fg-main">Dynamic Intelligent UI Engine</h3>
 					<p class="mt-2 text-[13px] leading-6 text-fg-light">
 						Declarative JSON-schema to Svelte 5 renderer plus polymorphic generative surfaces with inline Edit, Compare, and export.
@@ -742,7 +746,7 @@ svelte-check found 0 errors and 0 warnings
 				</div>
 				<span class="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-fg-main">
 					<span>Try Intelligent UI</span>
-					<span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+					<ArrowRight aria-hidden="true" class="size-3.5 text-fg-light transition-colors group-hover:text-fg-main" />
 				</span>
 			</a>
 		</div>
@@ -759,9 +763,9 @@ svelte-check found 0 errors and 0 warnings
 			class="border-b border-canvas-border p-4 lg:sticky lg:top-16 lg:h-[calc(100dvh-4rem)] lg:overflow-auto lg:border-r lg:border-b-0"
 		>
 			<label
-				class="flex h-9 items-center gap-2 rounded-lg border border-card-border bg-canvas-secondary px-3 focus-within:border-accent-primary"
+				class="flex h-8 items-center gap-2 rounded-control border border-card-border bg-card-bg px-2.5 transition-colors focus-within:border-fg-light"
 			>
-				<span class="font-mono text-xs text-fg-light" aria-hidden="true">⌕</span>
+				<Search aria-hidden="true" class="size-3.5 text-fg-light" />
 				<input
 					type="search"
 					aria-label="Search components"
@@ -780,7 +784,7 @@ svelte-check found 0 errors and 0 warnings
 						(selectedCategory = (e.currentTarget as HTMLSelectElement).value as
 							| 'All'
 							| CatalogCategory)}
-					class="mt-1.5 h-9 w-full rounded-lg border border-card-border bg-card-bg px-2 text-xs text-fg-main"
+					class="mt-1.5 h-8 w-full rounded-control border border-card-border bg-card-bg px-2 text-xs text-fg-main"
 				>
 					{#each CATEGORIES as cat (cat)}
 						{@const count =
@@ -795,14 +799,14 @@ svelte-check found 0 errors and 0 warnings
 			</div>
 
 			<nav class="mt-6 hidden lg:block" aria-label="Component families">
-				<p class="mb-2 px-2 font-mono text-[11px] tracking-wider text-fg-light uppercase">
+				<p class="mb-2 px-2 text-xs font-medium text-fg-light">
 					Components ({filteredCatalog.length})
 				</p>
 				<div class="space-y-0.5">
 					{#each filteredCatalog as item (item.slug)}
 						<a
 							href="#{item.slug}"
-							class="block truncate rounded-lg px-2 py-1.5 text-xs text-fg-light no-underline transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+							class="block truncate rounded-control px-2 py-1.5 text-[13px] text-fg-light no-underline transition-colors hover:bg-canvas-secondary hover:text-fg-main"
 						>
 							{item.name}
 						</a>
@@ -822,15 +826,12 @@ svelte-check found 0 errors and 0 warnings
 					From the first prompt to the final result. Explore thinking, tools, decisions, GitHub
 					workflows, and generated interfaces in one consistent Svelte 5 collection.
 				</p>
-				<p class="mt-2.5 font-mono text-xs text-fg-light">
-					{CATALOG_ITEMS.length} Svelte 5 components · Live Preview, Usage Code &amp; Component Source
-					tabs
-				</p>
+
 			</header>
 
 			<!-- Category Tab Strip (accessible tablist for quick one-click filtering) -->
 			<div
-				class="mb-6 flex flex-wrap items-center gap-1.5 border-b border-canvas-border pb-4"
+				class="mb-8 flex flex-wrap items-center gap-1.5"
 				role="tablist"
 				aria-label="Component category filter"
 			>
@@ -845,109 +846,99 @@ svelte-check found 0 errors and 0 warnings
 						disabled={!ready}
 						aria-selected={selectedCategory === category}
 						onclick={() => (selectedCategory = category)}
-						class="rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors {selectedCategory ===
+						class="inline-flex h-7 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-colors {selectedCategory ===
 						category
 							? 'bg-fg-main text-fg-inverse'
-							: 'bg-canvas-secondary text-fg-light hover:text-fg-main'}"
+							: 'border border-card-border text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
 					>
 						{category}
-						<span class="ml-1 font-mono text-[11px] opacity-75">({count})</span>
+						<span class="tabular-nums opacity-60">{count}</span>
 					</button>
 				{/each}
 			</div>
 
 			<!-- 68 Component Sections (upstream dashed-border FamilyPreview layout) -->
-			<div class="space-y-8">
+			<div class="space-y-10">
 				{#each filteredCatalog as item (item.slug)}
 					{@const tabMode = getTabMode(item.slug)}
 					{@const showCode = tabMode !== 'preview'}
 					<article
 						id={item.slug}
 						data-component-slug={item.slug}
-						class="scroll-mt-24 border-b border-dashed border-canvas-border pb-7"
+						class="scroll-mt-24 border-b border-canvas-border pb-8"
 					>
 						<!-- Upstream FamilyPreview Header -->
-						<header class="mb-3 flex flex-wrap items-end justify-between gap-3">
+						<header class="mb-3 flex flex-wrap items-start justify-between gap-3">
 							<div class="max-w-2xl">
 								<div class="flex flex-wrap items-center gap-2">
-									<h3 class="text-[14px] font-semibold tracking-tight text-fg-main">
+									<h3 class="text-sm font-semibold text-fg-main">
 										{item.name}
 									</h3>
-									<span
-										class="rounded-md bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-light"
-									>
+									<span class={badgeClass('neutral')}>
 										{item.category}
 									</span>
 								</div>
-								<p class="mt-0.5 font-mono text-[11px] text-fg-light">
-									{item.upstreamSource} · {item.sveltePath}
+								<p class="mt-1 text-[13px] leading-5 text-fg-light">{item.description}</p>
+								<p class="mt-1 truncate font-mono text-[11px] text-fg-light/80">
+									{item.sveltePath}
 								</p>
-								<p class="mt-1 text-xs text-fg-light">{item.description}</p>
 							</div>
 
-							<!-- Preview | Svelte 5 Code (Usage) | Component Source (.svelte) + Copy -->
-							<div class="flex flex-wrap items-center gap-1.5">
-								{#if showCode}
+							<!-- Preview | Usage | Source segmented control + copy -->
+							<div class="flex items-center gap-1.5">
+								<div class={SEGMENT_GROUP_CLASS} role="group" aria-label="{item.name} view">
 									<button
 										type="button"
 										disabled={!ready}
+										aria-pressed={tabMode === 'preview'}
 										onclick={() => setTabMode(item.slug, 'preview')}
-										class="rounded-lg border border-card-border bg-card-bg px-2.5 py-1.5 font-mono text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+										class={segmentClass(tabMode === 'preview')}
 									>
-										◀ Live Preview
+										<Eye aria-hidden="true" />
+										Preview
 									</button>
-								{:else}
 									<button
 										type="button"
 										disabled={!ready}
+										aria-pressed={tabMode === 'usage'}
 										onclick={() => setTabMode(item.slug, 'usage')}
-										class="rounded-lg border border-card-border bg-card-bg px-2.5 py-1.5 font-mono text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+										class={segmentClass(tabMode === 'usage')}
 									>
-										&lt;/&gt; Svelte 5 Code
+										<Code aria-hidden="true" />
+										Usage
 									</button>
-								{/if}
+									<button
+										type="button"
+										disabled={!ready}
+										aria-pressed={tabMode === 'source'}
+										onclick={() => setTabMode(item.slug, 'source')}
+										class={segmentClass(tabMode === 'source')}
+									>
+										<FileCode aria-hidden="true" />
+										Source
+									</button>
+								</div>
 
 								<button
 									type="button"
 									disabled={!ready}
-									aria-pressed={tabMode === 'usage'}
-									onclick={() => setTabMode(item.slug, tabMode === 'usage' ? 'preview' : 'usage')}
-									class="rounded-lg px-2.5 py-1.5 font-mono text-xs transition-colors {tabMode ===
-									'usage'
-										? 'bg-fg-main font-medium text-fg-inverse'
-										: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
-								>
-									Usage Snippet
-								</button>
-
-								<button
-									type="button"
-									disabled={!ready}
-									aria-pressed={tabMode === 'source'}
-									onclick={() =>
-										setTabMode(item.slug, tabMode === 'source' ? 'preview' : 'source')}
-									class="rounded-lg px-2.5 py-1.5 font-mono text-xs transition-colors {tabMode ===
-									'source'
-										? 'bg-fg-main font-medium text-fg-inverse'
-										: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
-								>
-									Full Source
-								</button>
-
-								<button
-									type="button"
-									disabled={!ready}
+									aria-label={copiedSlug === item.slug ? 'Snippet copied' : `Copy ${item.name} usage snippet`}
+									title="Copy usage snippet"
 									onclick={() => copySnippet(item.slug, item.usageSnippet)}
-									class="rounded-lg border border-card-border bg-card-bg px-2.5 py-1.5 font-mono text-xs font-medium text-fg-light transition-colors hover:text-fg-main"
+									class={buttonClass('ghost', 'icon-sm')}
 								>
-									{copiedSlug === item.slug ? '✓ Copied' : 'Copy snippet'}
+									{#if copiedSlug === item.slug}
+										<Check aria-hidden="true" class="text-status-success" />
+									{:else}
+										<Copy aria-hidden="true" />
+									{/if}
 								</button>
 							</div>
 						</header>
 
 						<!-- Upstream rounded-[14px] Stage -->
 						<div
-							class="relative isolate overflow-x-auto rounded-[14px] border border-canvas-border bg-canvas-secondary p-3 sm:p-4"
+							class="relative isolate overflow-x-auto rounded-window border border-canvas-border bg-canvas-secondary/60 p-4 sm:p-6"
 						>
 							{#if tabMode === 'usage'}
 								<CodeBlock
@@ -979,13 +970,15 @@ svelte-check found 0 errors and 0 warnings
 										type="button"
 										disabled={!ready}
 										onclick={() => (disclosureDemoOpen = !disclosureDemoOpen)}
-										class="rounded-lg border border-card-border bg-card-bg px-3 py-1.5 font-mono text-xs font-medium text-fg-main transition-colors hover:bg-canvas-primary"
+										aria-expanded={disclosureDemoOpen}
+										class={buttonClass('secondary', 'sm')}
 									>
-										{disclosureDemoOpen ? '▼ Collapse Disclosure' : '▶ Expand Disclosure'}
+										<ChevronDown aria-hidden="true" class="transition-transform duration-200 {disclosureDemoOpen ? 'rotate-180' : ''}" />
+										{disclosureDemoOpen ? 'Collapse' : 'Expand'}
 									</button>
 									<AgentDisclosure open={disclosureDemoOpen}>
 										<div
-											class="rounded-xl border border-card-border bg-card-bg p-3 font-mono text-xs text-fg-main"
+											class="rounded-card border border-card-border bg-card-bg p-3 text-[13px] text-fg-main"
 										>
 											Accessible Svelte 5 slide+fade disclosure panel with
 											<code class="text-accent-primary">inert</code> hidden state.

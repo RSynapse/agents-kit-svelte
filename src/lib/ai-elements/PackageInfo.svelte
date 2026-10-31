@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
-	import { ArrowRight, Check, Package } from '@lucide/svelte';
+	import { SEGMENT_GROUP_CLASS, badgeClass, segmentClass } from '../ui/styles';
+	import { ArrowRight, BadgeCheck, Check, Package } from '@lucide/svelte';
 	export type PackageChangeType = 'major' | 'minor' | 'patch' | 'added' | 'removed';
 
 	export interface PackageDependencyItem {
@@ -90,10 +90,10 @@
 				<span class="font-mono text-sm font-semibold text-fg-main">{name}</span>
 				{#if verified}
 					<span
-						class="rounded-full bg-status-success-subtle px-2 py-0.5 font-mono text-[11px] font-medium text-status-success"
+						class={badgeClass('success')}
 					>
-						<Check aria-hidden="true" />
-						verified
+						<BadgeCheck aria-hidden="true" />
+						Verified
 					</span>
 				{/if}
 			</div>

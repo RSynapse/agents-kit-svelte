@@ -144,11 +144,13 @@
 		outline-offset: 2px;
 	}
 
-	/* Lucide icons default to the surrounding text size; utilities like size-4 still win. */
-	:where(svg.lucide-icon) {
+	/* Lucide icons sit inline at the surrounding text size; utilities (size-4, hidden) still win. */
+	svg.lucide-icon {
+		display: inline-block;
 		width: 1.15em;
 		height: 1.15em;
 		flex-shrink: 0;
+		vertical-align: -0.2em;
 	}
 
 	button:not(:disabled),
