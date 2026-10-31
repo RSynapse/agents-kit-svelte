@@ -2,8 +2,8 @@
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
-	import { fade, fly } from 'svelte/transition';
-	import { createBoardCrossfade, motionDuration } from '../state/motion.svelte';
+	import { fade } from 'svelte/transition';
+	import { createBoardCrossfade, motionDuration, rise } from '../state/motion.svelte';
 	import GitHubIssueCard from './GitHubIssueCard.svelte';
 	import type { GitHubIssueData, GitHubIssueState } from '../types';
 
@@ -282,7 +282,7 @@
 
 	{#if activeDrawerIssue}
 		<div
-			transition:fly={{ y: 10, duration: motionDuration(200), easing: cubicOut }}
+			transition:rise
 			role="region"
 			aria-label="Selected card inspector"
 			class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-accent-primary bg-accent-subtle px-4 py-3 text-xs"

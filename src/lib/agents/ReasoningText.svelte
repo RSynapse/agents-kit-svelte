@@ -42,7 +42,7 @@
 >
 	<span
 		aria-hidden="true"
-		class="inline-block size-2 rounded-full bg-accent-primary animate-ping"
+		class="inline-block size-2 rounded-full bg-accent-primary ak-breathe"
 	></span>
 	<span class="ak-shimmer-text">{activePhrase}…</span>
 </span>

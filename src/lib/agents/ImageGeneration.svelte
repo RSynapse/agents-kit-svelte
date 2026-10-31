@@ -112,7 +112,7 @@
 						? 'bg-status-danger'
 						: currentStatus === 'complete'
 							? 'bg-status-success'
-							: 'animate-pulse bg-accent-primary'}"
+							: 'ak-breathe bg-accent-primary'}"
 				></span>
 				<span class="capitalize">{currentStatus}</span>
 			</span>
@@ -149,7 +149,7 @@
 				<div
 					class="flex size-10 items-center justify-center rounded-lg border border-card-border bg-card-bg text-fg-light"
 				>
-					<ImageIcon aria-hidden="true" class="size-5 animate-pulse" />
+					<ImageIcon aria-hidden="true" class="size-5 ak-breathe" />
 				</div>
 				<p class="mt-2 text-xs text-fg-light">{resolvedStatusText}…</p>
 			{/if}

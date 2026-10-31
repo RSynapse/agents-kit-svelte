@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowDown, ArrowUp, Check, Download, LoaderCircle, RefreshCw, X } from '@lucide/svelte';
+	import { ArrowDown, ArrowUp, Check, LoaderCircle, RefreshCw, X } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	export type FormFieldType = 'text' | 'email' | 'select' | 'textarea' | 'number' | 'checkbox';
 

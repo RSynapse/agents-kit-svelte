@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
+	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
-	import { backOut, cubicOut } from 'svelte/easing';
+	import { cubicOut } from 'svelte/easing';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
-	import { fly, scale } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 	import {
 		ReactiveSpringMetric,
 		createBoardCrossfade,
@@ -225,7 +225,7 @@
 								: 'border-card-border bg-canvas-secondary text-fg-light hover:text-fg-main'}"
 						>
 							{#key isSelected}
-								<span in:scale={{ start: 0.75, duration: motionDuration(150), easing: backOut }}>
+								<span in:fade={{ duration: motionDuration(120) }}>
 									{isSelected ? '●' : '○'}
 								</span>
 							{/key}

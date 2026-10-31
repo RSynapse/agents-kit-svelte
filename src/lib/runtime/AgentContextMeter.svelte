@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { buttonClass } from '../ui/styles';
-	import { cubicOut } from 'svelte/easing';
 	import { Spring, prefersReducedMotion } from 'svelte/motion';
-	import { fly } from 'svelte/transition';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import { computeContextMeter, formatCompactTokens } from '../state/chat-helpers';
-	import { motionDuration } from '../state/motion.svelte';
+	import { rise } from '../state/motion.svelte';
 	import type { ContextSourceItem } from '../types';
 
 	interface Props {
@@ -68,7 +66,7 @@
 	{#if sources.length > 0 && isOpen}
 		<div
 			id="agent-context-meter-panel"
-			transition:fly={{ y: -6, duration: motionDuration(180), easing: cubicOut }}
+			transition:rise={{ y: -4 }}
 			class="absolute right-0 top-9 z-30 w-72 rounded-card border border-card-border bg-card-bg p-3 shadow-lg"
 		>
 			<div class="flex items-center justify-between border-b border-canvas-border pb-2">

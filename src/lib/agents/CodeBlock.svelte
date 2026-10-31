@@ -59,7 +59,7 @@
 		<div class="ml-auto flex items-center gap-1.5">
 			{#if status === 'streaming'}
 				<span class="inline-flex items-center gap-1 font-mono text-[11px] text-accent-primary">
-					<span class="size-1.5 animate-pulse rounded-full bg-accent-primary"></span>
+					<span class="size-1.5 ak-breathe rounded-full bg-accent-primary"></span>
 					Writing
 				</span>
 			{/if}

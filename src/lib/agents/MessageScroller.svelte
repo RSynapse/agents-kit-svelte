@@ -1,8 +1,9 @@
 <script lang="ts">
+	import { rise } from '../state/motion.svelte';
 	import { buttonClass } from '../ui/styles';
 	import { ArrowDown } from '@lucide/svelte';
 	import { untrack, type Snippet } from 'svelte';
-	import { fly } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 
 	export interface RailItem {
 		id: string;
@@ -596,7 +597,7 @@
 			<div
 				aria-hidden="true"
 				style="top: calc(50% + {previewOffsetY}px);"
-				transition:fly={{ x: 6, duration: 150 }}
+				transition:fade={{ duration: 120 }}
 				class="pointer-events-none absolute right-9 z-30 w-64 max-w-[calc(100%-3rem)] -translate-y-1/2 transition-[top] duration-150 ease-out"
 			>
 				<div
@@ -635,7 +636,7 @@
 	{#if !isPinnedToBottom && railOverflowing}
 		<button
 			type="button"
-			transition:fly={{ y: 8, duration: 150 }}
+			transition:rise={{ y: 4 }}
 			onclick={() => scrollToEnd('smooth')}
 			class={buttonClass('secondary', 'sm', 'absolute bottom-3 left-1/2 z-20')}
 		>

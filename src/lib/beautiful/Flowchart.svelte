@@ -172,7 +172,7 @@
 							{#if node.status === 'complete'}
 								<Check class="size-2.5" />
 							{:else if node.status === 'running'}
-								<span class="size-1.5 animate-pulse rounded-full bg-accent-primary"></span>
+								<span class="size-1.5 ak-breathe rounded-full bg-accent-primary"></span>
 							{:else}
 								<span class="size-1.5 rounded-full bg-fg-light"></span>
 							{/if}

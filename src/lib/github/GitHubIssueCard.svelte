@@ -2,10 +2,9 @@
 	import { buttonClass } from '../ui/styles';
 	import { Check, CircleCheck, CircleDot, GitBranch, Play } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
-	import { backOut, cubicOut } from 'svelte/easing';
 	import { Spring, prefersReducedMotion } from 'svelte/motion';
-	import { fly, scale } from 'svelte/transition';
-	import { motionDuration } from '../state/motion.svelte';
+	import { fade } from 'svelte/transition';
+	import { motionDuration, rise } from '../state/motion.svelte';
 	import type { GitHubIssueData } from '../types';
 
 	interface Props {
@@ -128,7 +127,7 @@
 			<div class="flex min-w-0 items-center gap-1.5">
 				{#key issue.state}
 					<span
-						in:scale={{ start: 0.85, duration: motionDuration(180), easing: backOut }}
+						in:fade={{ duration: motionDuration(140) }}
 						class="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-chip px-1.5 py-px text-[11px] font-medium {issue.state ===
 						'closed'
 							? 'bg-canvas-secondary text-fg-light'
@@ -204,7 +203,7 @@
 		<!-- Active Worktree & Agent Run Strip -->
 		{#if (issue.assignedAgent || issue.worktreeBranch) && !compact}
 			<div
-				in:fly={{ y: 6, duration: motionDuration(180), easing: cubicOut }}
+				in:rise
 				class="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-card-border bg-canvas-secondary/60 px-3 py-2 text-xs"
 			>
 				<div class="flex items-center gap-2">

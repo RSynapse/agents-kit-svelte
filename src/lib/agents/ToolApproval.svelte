@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { buttonClass } from '../ui/styles';
 	import { Check, ChevronDown, ShieldCheck, X } from '@lucide/svelte';
-	import { backOut, cubicOut } from 'svelte/easing';
-	import { fly, scale } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import AgentDisclosure from './AgentDisclosure.svelte';
-	import { motionDuration } from '../state/motion.svelte';
+	import { motionDuration, rise } from '../state/motion.svelte';
 	import type { ToolApprovalParam, ToolApprovalStatus } from '../types';
 
 	interface Props {
@@ -103,7 +102,7 @@
 	<div class="flex items-start gap-3 p-4">
 		{#key activeStatus}
 			<span
-				in:scale={{ start: 0.85, duration: motionDuration(180), easing: backOut }}
+				in:fade={{ duration: motionDuration(140) }}
 				aria-hidden="true"
 				class="flex size-8 shrink-0 items-center justify-center rounded-md border border-card-border bg-card-bg {activeStatus ===
 					'approved' || activeStatus === 'complete'
@@ -193,7 +192,7 @@
 
 	{#if isWaiting}
 		<div
-			in:fly={{ y: 4, duration: motionDuration(160), easing: cubicOut }}
+			in:rise
 			class="flex flex-wrap items-center justify-end gap-2 border-t border-canvas-border bg-canvas-secondary/40 px-4 py-2.5"
 		>
 			<button
