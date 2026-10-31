@@ -45,10 +45,11 @@
 
 	interface Props {
 		initialDark?: boolean;
+		embedded?: boolean;
 		class?: string;
 	}
 
-	let { initialDark = false, class: className = '' }: Props = $props();
+	let { initialDark = false, embedded = false, class: className = '' }: Props = $props();
 
 	const SUPPORTED_AGENTS: SupportedAgentOption[] = [
 		{ id: 'claude-code', label: 'AK-S Agent', version: 'v0.3.0', signedIn: true },
@@ -445,7 +446,11 @@
 	}
 </script>
 
-<div class="flex h-[calc(100vh-3.5rem)] min-h-[560px] flex-col overflow-hidden bg-canvas-primary text-fg-main {className}">
+<div
+	class="flex {embedded
+		? 'h-[720px]'
+		: 'h-[calc(100vh-3.5rem)] min-h-[560px]'} flex-col overflow-hidden bg-canvas-primary text-fg-main {className}"
+>
 	<!-- Top Application Bar -->
 	<header
 		class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border bg-card-bg px-4 py-3 sm:px-6"
@@ -641,11 +646,11 @@
 	</div>
 
 	<!-- Workspace Body -->
-	<div class="flex min-h-0 flex-1">
+	<div class="flex min-h-0 flex-1 overflow-hidden">
 		<!-- Left Sidebar (Card Runs & Worktree Files) -->
 		<aside
 			aria-label="Worktree and Run sidebar"
-			class="hidden w-72 shrink-0 flex-col justify-between border-r border-canvas-border bg-canvas-secondary p-3.5 md:flex"
+			class="hidden min-h-0 w-64 shrink-0 flex-col justify-between gap-4 overflow-y-auto border-r border-canvas-border bg-canvas-secondary p-3.5 md:flex"
 		>
 			<div class="space-y-4">
 				<div>
@@ -715,7 +720,7 @@
 		</aside>
 
 		<!-- Main Active Tab Panel -->
-		<main class="flex min-w-0 flex-1 flex-col">
+		<main class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
 			{#if activeTab === 'chat'}
 				<MessageScroller items={railItems} streaming={isAgentWorking}>
 					<!-- User Initial Prompt -->

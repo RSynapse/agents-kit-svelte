@@ -816,9 +816,10 @@ svelte-check found 0 errors and 0 warnings
 									code={data.componentSources?.[item.slug] ?? item.usageSnippet}
 								/>
 							{:else if item.slug === 'trailside-claude-chat'}
-								<div class="max-h-[680px] overflow-hidden rounded-xl border border-card-border">
-									<TrailsideClaudeChat />
-								</div>
+								<TrailsideClaudeChat
+									embedded={true}
+									class="rounded-xl border border-card-border"
+								/>
 							{:else if item.slug === 'agent-activity'}
 								<AgentActivity
 									items={sampleActivity}
