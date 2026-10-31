@@ -42,7 +42,6 @@
 		AgentToolPalette,
 		ApprovalCard,
 		BorderBeam,
-		CATALOG_ITEMS,
 		ChainOfThought,
 		Citations,
 		CodeBlock,
@@ -83,8 +82,6 @@
 		RecommendationCard,
 		RecordsTable,
 		ResultActions,
-		SAMPLE_SKILLS,
-		SAMPLE_SKILL_STEPS,
 		SchemaDisplay,
 		SearchList,
 		SelectionActions,
@@ -108,10 +105,11 @@
 		VoiceWaveVisualizer,
 		WebPreview
 	} from '$lib';
+	import { SAMPLE_SKILLS, SAMPLE_SKILL_STEPS } from '$lib/entries/fixtures';
+	import { CATALOG_ITEMS, type CatalogCategory } from '$site/catalog-registry';
 	import type {
 		ActivityItem,
 		ApprovalQuestion,
-		CatalogCategory,
 		CheckpointEntry,
 		CitationItem,
 		DynamicUINode,

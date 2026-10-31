@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { CATALOG_ITEMS } from '$lib/state/catalog-registry';
+import { CATALOG_ITEMS } from '$site/catalog-registry';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {

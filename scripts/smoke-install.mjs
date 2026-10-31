@@ -56,6 +56,19 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({ plugins: [tailwindcss(), svelte()] });
 `,
 		'svelte.config.js': `export default {};\n`,
+		// A second build that imports one component from the package root, to check tree-shaking.
+		'vite.single.config.js': `import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+export default defineConfig({
+	plugins: [svelte()],
+	build: { outDir: 'dist-single', rollupOptions: { input: 'single.html' } }
+});
+`,
+		'single.html': `<!doctype html><html><body><div id="app"></div><script type="module" src="/src/single.ts"></script></body></html>\n`,
+		'src/single.ts': `import { mount } from 'svelte';
+import { TodoList } from 'agents-kit-svelte';
+mount(TodoList, { target: document.getElementById('app')!, props: { items: [] } });
+`,
 		'tsconfig.json': JSON.stringify(
 			{
 				compilerOptions: {
@@ -84,14 +97,20 @@ import App from './App.svelte';
 mount(App, { target: document.getElementById('app')! });
 `,
 		'src/App.svelte': `<script lang="ts">
-	import {
-		CodeBlock,
-		GitHubIssueCard,
-		ThinkingShimmer,
-		TodoList,
-		TrailsideClaudeChat,
-		type TodoItem
-	} from 'agents-kit-svelte';
+	import { CodeBlock, ThinkingShimmer, TodoList, type TodoItem } from 'agents-kit-svelte';
+	import { TrailsideClaudeChat } from 'agents-kit-svelte/chat';
+	import { GitHubIssueCard } from 'agents-kit-svelte/github';
+	import { SkillCard } from 'agents-kit-svelte/skills';
+	import { AgentOrchestrator } from 'agents-kit-svelte/workflows';
+	import { IntelligentUIRenderer } from 'agents-kit-svelte/generative';
+	import { InsightCards } from 'agents-kit-svelte/data';
+	import { BorderBeam } from 'agents-kit-svelte/effects';
+	import { buttonClass } from 'agents-kit-svelte/primitives';
+	import { AgentSession, parseUnifiedDiff } from 'agents-kit-svelte/core';
+	import { SAMPLE_SKILLS } from 'agents-kit-svelte/fixtures';
+
+	const session = new AgentSession();
+	const diff = parseUnifiedDiff(['@@ -1 +1 @@', '-a', '+b'].join(String.fromCharCode(10)));
 
 	const items: TodoItem[] = [
 		{ id: '1', label: 'Install agents-kit-svelte', status: 'completed' },
@@ -105,6 +124,11 @@ mount(App, { target: document.getElementById('app')! });
 	<CodeBlock code="pnpm add agents-kit-svelte" language="bash" />
 	<GitHubIssueCard compact />
 	<TrailsideClaudeChat />
+	<SkillCard skill={SAMPLE_SKILLS[0]} />
+	<AgentOrchestrator />
+	<IntelligentUIRenderer nodes={[]} />
+	<InsightCards />
+	<BorderBeam><button class={buttonClass('primary')}>{session.state.status} {diff.additions}</button></BorderBeam>
 </main>
 `
 	};
@@ -122,6 +146,22 @@ mount(App, { target: document.getElementById('app')! });
 	const expected = ['--color-canvas-primary-val', '.bg-card-bg', '.text-fg-main', '.ak-shimmer-text'];
 	const missing = expected.filter((needle) => !css.includes(needle));
 	if (missing.length) throw new Error(`Built CSS is missing: ${missing.join(', ')}`);
+
+	// Tree-shaking: one component from the root barrel must not pull in the rest of the kit.
+	run('npx vite build --config vite.single.config.js', app);
+	const singleDir = join(app, 'dist-single', 'assets');
+	const singleJs = readdirSync(singleDir)
+		.filter((f) => f.endsWith('.js'))
+		.map((f) => readFileSync(join(singleDir, f), 'utf8'))
+		.join('\n');
+	const leaked = ['Hold queue', 'argon-agent', 'RSynapse/trailside'].filter((needle) =>
+		singleJs.includes(needle)
+	);
+	if (leaked.length) throw new Error(`Importing TodoList alone bundled other components: ${leaked.join(', ')}`);
+	const kb = (Buffer.byteLength(singleJs) / 1024).toFixed(1);
+	console.log(`\nSingle-component bundle (TodoList + Svelte runtime + icons): ${kb} KB`);
+	const SINGLE_LIMIT_KB = 120;
+	if (Number(kb) > SINGLE_LIMIT_KB) throw new Error(`Single-component bundle is ${kb} KB, over ${SINGLE_LIMIT_KB} KB`);
 
 	console.log('\n✔ agents-kit-svelte installs, type-checks and builds in a fresh Svelte 5 + Tailwind v4 app.');
 } finally {
