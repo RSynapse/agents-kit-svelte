@@ -1443,21 +1443,21 @@
 							{:else if item.slug === 'github-bento-layout'}
 								<GitHubBentoLayout repoName="RSynapse/trailside" repoDetail="GitHub App installation active" branchDetail="Protected · Referee merge queue" stats={SAMPLE_BENTO_STATS} pullRequest={SAMPLE_PULL_REQUEST} checks={SAMPLE_CHECKS} issue={SAMPLE_ISSUE} commit={SAMPLE_COMMIT} thread={SAMPLE_REVIEW_THREAD} />
 							{:else if item.slug === 'github-lifecycle-timeline'}
-								<GitHubLifecycleTimeline stages={SAMPLE_LIFECYCLE_STAGES} live />
+								<GitHubLifecycleTimeline stages={SAMPLE_LIFECYCLE_STAGES} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-issue-triage'}
-								<GitHubIssueTriage issue={SAMPLE_TRIAGE_ISSUE} live />
+								<GitHubIssueTriage issue={SAMPLE_TRIAGE_ISSUE} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-branch-card'}
-								<GitHubBranchCard branch={SAMPLE_BRANCH} live />
+								<GitHubBranchCard branch={SAMPLE_BRANCH} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-pr-review'}
-								<GitHubPullRequestReview prNumber={2210} title="fix(export): quote CSV fields per RFC 4180" reviewer="mira-chen" files={SAMPLE_REVIEW_FILES} live />
+								<GitHubPullRequestReview prNumber={2210} title="fix(export): quote CSV fields per RFC 4180" reviewer="mira-chen" files={SAMPLE_REVIEW_FILES} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-merge-queue'}
-								<GitHubMergeQueue entries={SAMPLE_MERGE_QUEUE} live />
+								<GitHubMergeQueue entries={SAMPLE_MERGE_QUEUE} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-deployment-pipeline'}
-								<GitHubDeploymentPipeline sha="9b07d3e" environments={SAMPLE_ENVIRONMENTS} live />
+								<GitHubDeploymentPipeline sha="9b07d3e" environments={SAMPLE_ENVIRONMENTS} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-release-card'}
-								<GitHubReleaseCard release={SAMPLE_RELEASE} live />
+								<GitHubReleaseCard release={SAMPLE_RELEASE} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'github-incident-card'}
-								<GitHubIncidentCard incident={SAMPLE_INCIDENT} live />
+								<GitHubIncidentCard incident={SAMPLE_INCIDENT} live={visibleSlugs.has(item.slug)} />
 							{:else if item.slug === 'agent-generative-surface'}
 								<AgentGenerativeSurface content={sampleSurfaceContent} />
 							{:else if item.slug === 'result-actions'}
