@@ -129,7 +129,7 @@
 					Reduced motion: {prefersReducedMotion.current ? 'ON' : 'OFF'}
 				</span>
 			</div>
-			<h3 class="mt-1 text-base font-bold text-fg-main">
+			<h3 class="mt-1 text-base font-semibold text-fg-main">
 				Svelte 5 Microanimations, Spring Physics &amp; Crossfade Lab
 			</h3>
 		</div>
@@ -139,8 +139,10 @@
 				<button
 					type="button"
 					disabled={!ready}
+					aria-label="Spring to {preset}%"
+					aria-pressed={springMetric.targetValue === preset}
 					onclick={() => springMetric.set(preset)}
-					class="{segmentClass(springMetric.targetValue === preset)}"
+					class={segmentClass(springMetric.targetValue === preset)}
 				>
 					{preset}%
 				</button>

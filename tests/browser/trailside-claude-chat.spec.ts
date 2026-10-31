@@ -31,11 +31,11 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		// Verify all 68 individual component showcase cards are rendered on /
 		await expect(page.locator('article[data-component-slug]')).toHaveCount(68);
 
-		// Toggle Svelte 5 Code preview on the first component card
-		const firstCodeToggle = page.getByRole('button', { name: /Svelte 5 Code/i }).first();
-		await firstCodeToggle.click();
-		await expect(page.getByRole('button', { name: /Live Preview/i }).first()).toBeVisible();
-		await page.getByRole('button', { name: /Live Preview/i }).first().click();
+		// Toggle the Usage code view on the first component card
+		const firstUsageToggle = page.getByRole('button', { name: /^Usage$/ }).first();
+		await firstUsageToggle.click();
+		await expect(firstUsageToggle).toHaveAttribute('aria-pressed', 'true');
+		await page.getByRole('button', { name: /^Preview$/ }).first().click();
 
 		// Toggle dark mode and capture screenshot of the main Component Catalogue
 		await page.getByRole('button', { name: /Toggle global color theme/i }).click();
@@ -73,7 +73,7 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		// Filter to Voice & Effects and test Svelte5MotionLab (Spring, crossfade, SvelteSet/SvelteMap)
 		await page.getByRole('tab', { name: /Voice & Effects/i }).click();
 		await expect(page.getByRole('heading', { name: 'Svelte5MotionLab' })).toBeVisible();
-		const springBtn = page.getByRole('button', { name: 'Spring → 98%' });
+		const springBtn = page.getByRole('button', { name: 'Spring to 98%' });
 		await springBtn.click();
 		const crossfadeCard = page.getByRole('button', { name: /Card 2177 · Skills Scroll Cue/i });
 		await crossfadeCard.click();
