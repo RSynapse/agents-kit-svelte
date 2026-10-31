@@ -52,6 +52,24 @@ The theme provides the design tokens and light/dark palettes (toggle dark mode w
 
 A step-by-step guide with live output is on the showcase site under **Install**.
 
+### Entry points
+
+Import everything from `agents-kit-svelte`, or from one collection to keep editor auto-imports focused. Unused components are tree-shaken either way; a page that imports only `TodoList` builds to about 63 KB of JavaScript, Svelte runtime included.
+
+| Import | Contains |
+| --- | --- |
+| `agents-kit-svelte/chat` | Messages, composer, activity, todos, tool approval and results, diffs, code, terminal, context meter, checkpoints, `TrailsideClaudeChat` |
+| `agents-kit-svelte/github` | Issue, PR, commit, checks and review cards, Kanban and bento layouts, the dev-lifecycle set |
+| `agents-kit-svelte/skills` | Skill library, card, router, invocation, editor, proposal card and their helpers |
+| `agents-kit-svelte/workflows` | Orchestrator, routing hub, task queue, parallel and sequential workflows, evaluator, ops monitor |
+| `agents-kit-svelte/generative` | `IntelligentUIRenderer`, `AgentGenerativeSurface`, `ResultActions` |
+| `agents-kit-svelte/data` | Tables, insight and recommendation cards, flowchart, search list, tool chips |
+| `agents-kit-svelte/effects` | `BorderBeam`, `Svelte5MotionLab` |
+| `agents-kit-svelte/primitives` | Style recipes (`buttonClass`, `SURFACE`, ...), motion helpers, `AgentDisclosure`, `ThinkingShimmer` |
+| `agents-kit-svelte/core` | Types, diff parsing, skill ranking, agent events, `AgentSession` and the Claude adapters. No components, safe on a server. |
+| `agents-kit-svelte/fixtures` | Sample data for demos and tests. Not exported from the root. |
+| `agents-kit-svelte/theme.css` | Design tokens and light/dark palettes |
+
 ---
 
 ## Connecting a real agent

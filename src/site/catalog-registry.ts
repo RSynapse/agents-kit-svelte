@@ -1824,7 +1824,8 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Searchable library of installed skills with Personal, Project, Plugin and Built-in scopes, enable switches and flip-animated filtering.',
 		usageSnippet: `<script lang="ts">
-  import { SkillLibrary, SAMPLE_SKILLS, type AgentSkill } from 'agents-kit-svelte';
+  import { SkillLibrary, type AgentSkill } from 'agents-kit-svelte';
+  import { SAMPLE_SKILLS } from 'agents-kit-svelte/fixtures';
 
   let skills = $state<AgentSkill[]>(SAMPLE_SKILLS);
   let lastRun = $state<string | null>(null);
@@ -1882,7 +1883,8 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Shows which skill a request would load: ranked candidates, matched terms, a threshold marker and a tweened confidence readout.',
 		usageSnippet: `<script lang="ts">
-  import { SkillRouter, SAMPLE_SKILLS, type SkillMatch } from 'agents-kit-svelte';
+  import { SkillRouter, type SkillMatch } from 'agents-kit-svelte';
+  import { SAMPLE_SKILLS } from 'agents-kit-svelte/fixtures';
 
   let routed = $state<SkillMatch | null>(null);
 </script>
@@ -1903,7 +1905,8 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Inline “Using skill” trace for a chat transcript, with step statuses, a tweened progress bar and an optional result snippet.',
 		usageSnippet: `<script lang="ts">
-  import { SkillInvocation, SAMPLE_SKILLS, type SkillInvocationStep } from 'agents-kit-svelte';
+  import { SkillInvocation, type SkillInvocationStep } from 'agents-kit-svelte';
+  import { SAMPLE_SKILLS } from 'agents-kit-svelte/fixtures';
 
   let steps = $state<SkillInvocationStep[]>([
     { id: 's-1', label: 'Read SKILL.md', detail: 'release-notes · 2.1 KB', status: 'complete' },
@@ -1952,7 +1955,8 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Review card for a skill the agent suggests saving, or an update to one, with the evidence, a line diff of SKILL.md and Save or Not now.',
 		usageSnippet: `<script lang="ts">
-  import { SkillProposalCard, SAMPLE_SKILL_PROPOSAL, type SkillProposal } from 'agents-kit-svelte';
+  import { SkillProposalCard, type SkillProposal } from 'agents-kit-svelte';
+  import { SAMPLE_SKILL_PROPOSAL } from 'agents-kit-svelte/fixtures';
 
   const proposal: SkillProposal = SAMPLE_SKILL_PROPOSAL;
   let saved = $state(false);

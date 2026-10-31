@@ -5,9 +5,9 @@ import {
 	isImeComposing,
 	parseUnifiedDiff,
 	summarizeActivity,
-	summarizeTodos,
-	validateSvelte5ComponentSource
+	summarizeTodos
 } from '../src/lib/state/chat-helpers.ts';
+import { validateSvelte5ComponentSource } from '../src/site/svelte5-audit.ts';
 
 test('parseUnifiedDiff parses hunk headers, line numbers, additions and deletions', () => {
 	const patch = [

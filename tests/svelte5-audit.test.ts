@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import test from 'node:test';
-import { CATALOG_ITEMS } from '../src/lib/state/catalog-registry.ts';
-import { validateSvelte5ComponentSource } from '../src/lib/state/chat-helpers.ts';
+import { CATALOG_ITEMS } from '../src/site/catalog-registry.ts';
+import { validateSvelte5ComponentSource } from '../src/site/svelte5-audit.ts';
 
 /**
  * Recursively collects all `.svelte` and `.svelte.ts` files under a directory.
