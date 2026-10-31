@@ -13,3 +13,16 @@ export { default as AgentThinkingIndicator } from '../agents-ui/AgentThinkingInd
 export { default as AgentToolPalette } from '../agents-ui/AgentToolPalette.svelte';
 
 export type * from '../types';
+
+// Types declared in the components themselves.
+export type { ArtifactType, ArtifactVersion, ArtifactMetadata } from '../agents-ui/AgentArtifact.svelte';
+export type { EvalCriterionStatus, EvalCriterion, EvalIteration } from '../agents-ui/AgentEvaluator.svelte';
+export type { FormFieldType, FormFieldValidation, FormField } from '../agents-ui/AgentFormGenerator.svelte';
+export type { OpsSignal, OpsServiceMetric, IncidentEvent } from '../agents-ui/AgentOpsMonitor.svelte';
+export type { SubAgentStatus, SubAgentMetrics, SubAgent, CommLogEntry } from '../agents-ui/AgentOrchestrator.svelte';
+export type { ParallelLaneStatus, ParallelLane } from '../agents-ui/AgentParallelProcessor.svelte';
+export type { RouteStatus, RouteClassification, AgentRoute, RoutingHistoryEntry } from '../agents-ui/AgentRoutingHub.svelte';
+export type { WorkflowStepStatus, WorkflowStep } from '../agents-ui/AgentSequentialWorkflow.svelte';
+export type { AgentTaskStatus, AgentTaskPriority, AgentTaskTimelineEvent, AgentTask } from '../agents-ui/AgentTaskQueue.svelte';
+export type { ThinkingVariant, ThinkingState } from '../agents-ui/AgentThinkingIndicator.svelte';
+export type { ToolCategory, AgentToolParameter, AgentTool } from '../agents-ui/AgentToolPalette.svelte';
