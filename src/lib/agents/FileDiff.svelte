@@ -64,7 +64,7 @@
 			aria-expanded={isOpen}
 			aria-controls={panelId}
 			onclick={() => (isOpen = !isOpen)}
-			class={buttonClass('ghost', 'sm', 'group min-w-0 flex-1 text-left')}
+			class="group flex min-w-0 flex-1 items-center gap-2 text-left text-fg-light outline-none transition-colors hover:text-fg-main"
 		>
 			<FileCode aria-hidden="true" class="size-4 shrink-0 text-fg-light" />
 

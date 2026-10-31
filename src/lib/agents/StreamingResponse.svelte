@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonClass } from '../ui/styles';
+	import { buttonClass, toggleButtonClass } from '../ui/styles';
 	import { Check, Copy, RefreshCw, ThumbsDown, ThumbsUp } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import Citations from './Citations.svelte';
@@ -82,10 +82,7 @@
 				aria-label="Helpful"
 				aria-pressed={feedback === 'up'}
 				onclick={() => (feedback = feedback === 'up' ? null : 'up')}
-				class="inline-flex size-7 items-center justify-center rounded-md transition-colors {feedback ===
-				'up'
-					? 'bg-accent-subtle text-accent-primary'
-					: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+				class={toggleButtonClass(feedback === 'up', 'icon-sm')}
 			>
 				<ThumbsUp aria-hidden="true" class="size-3.5" />
 			</button>
@@ -94,10 +91,7 @@
 				aria-label="Not helpful"
 				aria-pressed={feedback === 'down'}
 				onclick={() => (feedback = feedback === 'down' ? null : 'down')}
-				class="inline-flex size-7 items-center justify-center rounded-md transition-colors {feedback ===
-				'down'
-					? 'bg-accent-subtle text-accent-primary'
-					: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+				class={toggleButtonClass(feedback === 'down', 'icon-sm')}
 			>
 				<ThumbsDown aria-hidden="true" class="size-3.5" />
 			</button>

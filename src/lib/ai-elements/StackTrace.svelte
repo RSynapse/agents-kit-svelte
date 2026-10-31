@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Check, Sparkles } from '@lucide/svelte';
+	import { Check, ChevronDown, Sparkles } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 
@@ -259,9 +259,9 @@
 				aria-label="Toggle stack trace frames"
 				aria-expanded={isOpen}
 				onclick={() => (isOpen = !isOpen)}
-				class="inline-flex size-7 items-center justify-center rounded-md text-xs text-fg-light hover:bg-card-bg"
+				class={buttonClass('ghost', 'icon-sm')}
 			>
-				<span class="transition-transform duration-150 {isOpen ? 'rotate-180' : ''}">▾</span>
+				<ChevronDown aria-hidden="true" class="transition-transform duration-200 {isOpen ? 'rotate-180' : ''}" />
 			</button>
 		</div>
 	</div>

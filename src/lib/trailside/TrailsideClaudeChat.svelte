@@ -577,17 +577,17 @@
 							<button
 								type="button"
 								onclick={() => (activeTab = 'chat')}
-								class={buttonClass('secondary', 'md', 'w-full justify-between text-left')}
+								class="flex w-full items-center justify-between gap-2 rounded-control border border-card-border bg-card-bg px-2.5 py-2 text-left font-medium text-fg-main ak-shadow-btn"
 							>
 								<span class="truncate">Card 1210 · OAuth redirect loop</span>
-								<span class="font-mono text-[10px] text-status-success">● Live</span>
+								<span class="inline-flex items-center gap-1 text-[11px] text-status-success"><span aria-hidden="true" class="ak-breathe size-1.5 rounded-full bg-current"></span>Live</span>
 							</button>
 						</li>
 						<li>
 							<button
 								type="button"
 								onclick={() => (activeTab = 'chat')}
-								class={buttonClass('ghost', 'md', 'w-full justify-between text-left')}
+								class="flex w-full items-center justify-between gap-2 rounded-control px-2.5 py-1.5 text-left text-fg-light transition-colors hover:bg-card-bg hover:text-fg-main"
 							>
 								<span class="truncate">Card 1198 · Pairing token expiry</span>
 								<span class="font-mono text-[10px]">Merged</span>
@@ -597,7 +597,7 @@
 							<button
 								type="button"
 								onclick={() => (activeTab = 'chat')}
-								class={buttonClass('ghost', 'md', 'w-full justify-between text-left')}
+								class="flex w-full items-center justify-between gap-2 rounded-control px-2.5 py-1.5 text-left text-fg-light transition-colors hover:bg-card-bg hover:text-fg-main"
 							>
 								<span class="truncate">Card 1204 · Board column focus</span>
 								<span class="font-mono text-[10px]">Pass</span>
@@ -625,7 +625,7 @@
 			<div class="rounded-card border border-card-border bg-card-bg p-3 text-xs">
 				<div class="flex items-center justify-between text-xs text-fg-light">
 					<span>Companion Runtime</span>
-					<span class="text-status-success">● Ready</span>
+					<span class="inline-flex items-center gap-1 text-status-success"><span aria-hidden="true" class="size-1.5 rounded-full bg-current"></span>Ready</span>
 				</div>
 				<p class="mt-1 font-medium text-fg-main">{activeAgent.label} ({activeAgent.version})</p>
 				<p class="mt-0.5 text-[11px] text-fg-light">

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Pencil } from '@lucide/svelte';
+	import { Bookmark, FileText, Folder, FolderOpen, GitBranch, Pencil, Pin, PinOff } from '@lucide/svelte';
+	import type { Component } from 'svelte';
 	import { buttonClass } from '../ui/styles';
 	export type SidebarResourceKind = 'folder' | 'project' | 'file' | 'bookmark' | 'worktree';
 
@@ -196,17 +197,17 @@
 	}
 
 	/**
-	 * Returns a concise icon glyph for a resource kind and expansion state.
+	 * Returns the Lucide icon component for a resource kind and expansion state.
 	 *
 	 * @param item - Resource item.
 	 * @param isExpanded - Whether the item is currently expanded.
-	 * @returns Unicode glyph representing the resource.
+	 * @returns Lucide icon component representing the resource.
 	 */
-	function getIconGlyph(item: SidebarResource, isExpanded: boolean): string {
-		if (item.kind === 'worktree') return '⎇';
-		if (item.kind === 'folder' || item.kind === 'project') return isExpanded ? '📂' : '📁';
-		if (item.kind === 'bookmark') return '★';
-		return '📄';
+	function getItemIcon(item: SidebarResource, isExpanded: boolean): Component {
+		if (item.kind === 'worktree') return GitBranch;
+		if (item.kind === 'folder' || item.kind === 'project') return isExpanded ? FolderOpen : Folder;
+		if (item.kind === 'bookmark') return Bookmark;
+		return FileText;
 	}
 
 	/**
@@ -287,10 +288,10 @@
 	class="flex w-full max-w-xs flex-col rounded-card border border-card-border bg-card-bg p-3 text-sm text-fg-main {className}"
 >
 	<header class="mb-2 flex items-center justify-between gap-2 px-1">
-		<span class="font-mono text-xs font-semibold tracking-wider text-fg-light uppercase">
+		<span class="text-xs font-medium text-fg-light">
 			{ariaLabel}
 		</span>
-		<span class="rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-light">
+		<span class="rounded-chip bg-canvas-secondary px-1.5 py-px text-[11px] tabular-nums text-fg-light">
 			{flatRows.length}
 		</span>
 	</header>
@@ -319,12 +320,12 @@
 						onclick={() => selectItem(pin.id)}
 						class="flex w-full items-center justify-between gap-2 rounded-md px-2 py-1 text-left text-xs transition-colors {selectedId ===
 						pin.id
-							? 'bg-accent-subtle font-medium text-accent-primary'
-							: 'text-fg-main hover:bg-canvas-secondary'}"
+							? 'bg-canvas-secondary font-medium text-fg-main'
+							: 'text-fg-main hover:bg-canvas-secondary/60'}"
 					>
-						<span class=" truncate">📌 {pin.label}</span>
+						<span class="inline-flex min-w-0 items-center gap-1.5"><Pin aria-hidden="true" class="size-3.5 shrink-0 text-fg-light" /><span class="truncate">{pin.label}</span></span>
 						{#if pin.badge}
-							<span class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] text-fg-light">
+							<span class="rounded-chip bg-canvas-secondary px-1.5 py-px text-[11px] text-fg-light">
 								{pin.badge}
 							</span>
 						{/if}
@@ -339,6 +340,7 @@
 			{@const container = isContainer(row.item)}
 			{@const isExpanded = expandedIds.has(row.item.id)}
 			{@const isSelected = selectedId === row.item.id}
+			{@const ItemIcon = getItemIcon(row.item, isExpanded)}
 			<div
 				role="treeitem"
 				aria-level={row.depth + 1}
@@ -346,12 +348,10 @@
 				aria-selected={isSelected}
 				style="padding-left: {8 + row.depth * 14}px"
 				class="group flex min-h-8 items-center gap-1.5 rounded-lg pr-1.5 transition-colors {isSelected
-					? 'bg-accent-subtle text-accent-primary'
-					: 'text-fg-main hover:bg-canvas-secondary'}"
+					? 'bg-canvas-secondary text-fg-main'
+					: 'text-fg-main hover:bg-canvas-secondary/60'}"
 			>
-				<span aria-hidden="true" class="inline-flex size-4 shrink-0 items-center justify-center text-xs">
-					{getIconGlyph(row.item, isExpanded)}
-				</span>
+				<ItemIcon aria-hidden="true" class="size-3.5 shrink-0 {isSelected ? 'text-fg-main' : 'text-fg-light'}" />
 
 				{#if renamingId === row.item.id}
 					<input
@@ -376,11 +376,11 @@
 						ondblclick={() => startRename(row.item)}
 						class="flex min-w-0 flex-1 items-center justify-between gap-2 py-1 text-left text-xs outline-none disabled:opacity-50"
 					>
-						<span class="truncate {isSelected ? 'font-semibold' : 'font-normal'}">
+						<span class="truncate {isSelected ? 'font-medium' : 'font-normal'}">
 							{row.item.label}
 						</span>
 						{#if row.item.badge}
-							<span class="shrink-0 rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] text-fg-light">
+							<span class="shrink-0 rounded-chip bg-canvas-secondary px-1.5 py-px text-[11px] text-fg-light">
 								{row.item.badge}
 							</span>
 						{/if}
@@ -391,15 +391,15 @@
 							type="button"
 							aria-label={row.item.pinned ? `Unpin ${row.item.label}` : `Pin ${row.item.label}`}
 							onclick={() => togglePin(row.item)}
-							class={buttonClass('ghost', 'sm')}
+							class={buttonClass('ghost', 'icon-xs')}
 						>
-							{#if row.item.pinned}★{:else}☆{/if}
+							{#if row.item.pinned}<PinOff aria-hidden="true" />{:else}<Pin aria-hidden="true" />{/if}
 						</button>
 						<button
 							type="button"
 							aria-label="Rename {row.item.label}"
 							onclick={() => startRename(row.item)}
-							class={buttonClass('ghost', 'icon-sm')}
+							class={buttonClass('ghost', 'icon-xs')}
 						><Pencil aria-hidden="true" />
 						</button>
 					</div>

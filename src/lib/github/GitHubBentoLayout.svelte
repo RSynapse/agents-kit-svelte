@@ -24,7 +24,7 @@
 		<div class="rounded-card border border-card-border bg-card-bg p-3.5">
 			<span class="text-[11px] capitalize text-fg-light font-medium">Linked Repository</span>
 			<p class="mt-1 truncate font-mono text-sm font-bold text-fg-main">{repoName}</p>
-			<p class="mt-0.5 text-xs text-status-success">● GitHub App Installation Active</p>
+			<p class="mt-0.5 inline-flex items-center gap-1.5 text-xs text-fg-light"><span aria-hidden="true" class="size-1.5 rounded-full bg-status-success"></span>GitHub App installation active</p>
 		</div>
 		<div class="rounded-card border border-card-border bg-card-bg p-3.5">
 			<span class="text-[11px] capitalize text-fg-light font-medium">Open Agent PRs</span>

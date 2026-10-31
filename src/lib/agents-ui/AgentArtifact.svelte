@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Check, Copy, Download, LoaderCircle, Pencil, RefreshCw } from '@lucide/svelte';
+	import { Share2, Check, Copy, Download, LoaderCircle, Pencil, RefreshCw } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	export type ArtifactType = 'document' | 'code' | 'table' | 'chart';
 
@@ -334,8 +334,9 @@
 			<button
 				type="button"
 				onclick={() => onShare?.()}
-				class={buttonClass('ghost', 'sm')}
+				class={buttonClass('ghost', 'xs')}
 			>
+				<Share2 aria-hidden="true" />
 				Share
 			</button>
 		</div>

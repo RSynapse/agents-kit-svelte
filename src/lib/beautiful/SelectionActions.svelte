@@ -83,7 +83,7 @@
 
 	{#if selectedText}
 		<blockquote
-			class="mt-2.5 border-l-2 border-accent-primary bg-canvas-secondary py-1.5 pr-3 pl-3 text-xs leading-5 text-fg-light"
+			class="mt-2.5 rounded-r-control border-l-2 border-card-border bg-canvas-secondary/70 py-1.5 pr-3 pl-3 text-xs leading-5 text-fg-light"
 		>
 			{selectedText}
 		</blockquote>
@@ -95,12 +95,10 @@
 				type="button"
 				disabled={isWorking}
 				onclick={() => triggerAction(action.id)}
-				class="rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50 {action.tone ===
-				'accent'
-					? 'border-transparent bg-accent-primary text-fg-inverse hover:opacity-90'
-					: action.tone === 'danger'
-						? 'border-card-border bg-canvas-primary text-status-danger hover:bg-status-danger-subtle'
-						: 'border-card-border bg-canvas-secondary text-fg-main hover:bg-accent-subtle hover:text-accent-primary'}"
+				class={buttonClass(
+					action.tone === 'accent' ? 'primary' : action.tone === 'danger' ? 'danger' : 'secondary',
+					'md'
+				)}
 			>
 				{action.label}
 			</button>

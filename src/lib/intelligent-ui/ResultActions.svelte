@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Check, Download, GitCompare, Pencil, Star } from '@lucide/svelte';
-	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
+	import { Bookmark, Check, Columns2, Copy, Download, Maximize2, Minimize2, Pencil } from '@lucide/svelte';
+	import { buttonClass, toggleButtonClass } from '../ui/styles';
 	import type { ResultActionState } from '../types';
 
 	interface Props {
@@ -44,22 +44,28 @@
 <div
 	role="toolbar"
 	aria-label="Generated result actions"
-	class="{SEGMENT_GROUP_CLASS} flex-wrap text-xs"
+	class="inline-flex flex-wrap items-center gap-0.5 rounded-control border border-card-border bg-card-bg p-0.5 ak-shadow-btn {className}"
 >
 	<button
 		type="button"
 		aria-pressed={actionState === 'expanded'}
 		onclick={onExpand}
-		class="{segmentClass(actionState === 'expanded')}"
+		class={toggleButtonClass(actionState === 'expanded')}
 	>
-		{actionState === 'expanded' ? '↙ Collapse' : '↗ Expand'}
+		{#if actionState === 'expanded'}
+			<Minimize2 aria-hidden="true" />
+			Collapse
+		{:else}
+			<Maximize2 aria-hidden="true" />
+			Expand
+		{/if}
 	</button>
 
 	<button
 		type="button"
 		aria-pressed={actionState === 'editing'}
 		onclick={onEdit}
-		class="{segmentClass(actionState === 'editing')}"
+		class={toggleButtonClass(actionState === 'editing')}
 	>
 		<Pencil aria-hidden="true" />
 		Edit
@@ -69,39 +75,41 @@
 		type="button"
 		aria-pressed={actionState === 'comparing'}
 		onclick={onCompare}
-		class="{segmentClass(actionState === 'comparing')}"
+		class={toggleButtonClass(actionState === 'comparing')}
 	>
-		<GitCompare aria-hidden="true" />
+		<Columns2 aria-hidden="true" />
 		Compare
 	</button>
+
+	<span aria-hidden="true" class="mx-0.5 h-4 w-px bg-canvas-border"></span>
 
 	<button
 		type="button"
 		aria-pressed={saved}
+		aria-label={saved ? 'Remove from saved' : 'Save result'}
 		onclick={onSave}
-		class="rounded-lg px-2.5 py-1 font-medium transition-colors {saved
-			? 'bg-accent-subtle text-accent-primary'
-			: 'text-fg-light hover:text-fg-main'}"
+		class={toggleButtonClass(saved, 'icon-sm')}
 	>
-		{#if saved}<Star aria-hidden="true" />Saved{:else}<Star aria-hidden="true" />Save{/if}
+		<Bookmark aria-hidden="true" class={saved ? 'fill-current' : ''} />
 	</button>
 
 	<button
 		type="button"
+		aria-label={copied ? 'Copied' : 'Copy result'}
 		onclick={handleCopy}
-		class={buttonClass('ghost', 'sm')}
+		class={buttonClass('ghost', 'icon-sm')}
 	>
-		{#if copied}<Check aria-hidden="true" />Copied{:else}Copy{/if}
+		{#if copied}<Check aria-hidden="true" class="text-status-success" />{:else}<Copy aria-hidden="true" />{/if}
 	</button>
 
 	{#if onDownload}
 		<button
 			type="button"
+			aria-label="Download as Markdown"
 			onclick={onDownload}
-			class={buttonClass('ghost', 'sm')}
+			class={buttonClass('ghost', 'icon-sm')}
 		>
 			<Download aria-hidden="true" />
-			.md
 		</button>
 	{/if}
 </div>

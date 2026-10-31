@@ -52,7 +52,7 @@
 		aria-expanded={isOpen}
 		aria-controls={panelId}
 		onclick={() => (isOpen = !isOpen)}
-		class={buttonClass('ghost', 'sm', 'group w-full text-left')}
+		class="group flex h-11 w-full items-center gap-2.5 px-3.5 text-left text-fg-light outline-none transition-colors hover:text-fg-main"
 	>
 		{#key summary.allCompleted}
 			<span

@@ -272,7 +272,7 @@
 									out:send={{ key: card.id }}
 									animate:flip={{ duration: motionDuration(240), easing: cubicOut }}
 									onclick={() => cycleCardLane(card.id)}
-									class={buttonClass('secondary', 'sm', 'w-full text-left')}
+									class="flex w-full flex-col items-start gap-1.5 rounded-control border border-card-border bg-card-bg p-2.5 text-left transition-colors hover:border-fg-light/40"
 								>
 									<div class="flex w-full items-center justify-between gap-1">
 										{@render laneBadge(card.lane)}

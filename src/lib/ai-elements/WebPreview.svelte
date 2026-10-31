@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RefreshCw } from '@lucide/svelte';
+	import { Check, ChevronDown, LoaderCircle, RefreshCw } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
 	import type { Snippet } from 'svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
@@ -170,18 +170,18 @@
 					</div>
 
 					<div class="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-						<div class="rounded-lg border border-card-border bg-canvas-primary p-3">
-							<div class="font-mono text-[11px] text-fg-light">Triage Queue</div>
+						<div class="rounded-control border border-card-border p-3">
+							<div class="text-xs text-fg-light">Triage Queue</div>
 							<div class="mt-1 font-semibold text-fg-main">3 Cards Ready</div>
-							<div class="mt-1 text-xs text-status-success">✓ All checks green</div>
+							<div class="mt-1 inline-flex items-center gap-1 text-xs text-status-success"><Check aria-hidden="true" class="size-3.5" />All checks green</div>
 						</div>
-						<div class="rounded-lg border border-card-border bg-canvas-primary p-3">
-							<div class="font-mono text-[11px] text-fg-light">Active Worktree</div>
+						<div class="rounded-control border border-card-border p-3">
+							<div class="text-xs text-fg-light">Active Worktree</div>
 							<div class="mt-1 font-semibold text-fg-main">feat/svelte5-primitives</div>
-							<div class="mt-1 text-xs text-accent-primary">◎ Claude Code running</div>
+							<div class="mt-1 inline-flex items-center gap-1 text-xs text-accent-primary"><LoaderCircle aria-hidden="true" class="size-3.5 animate-spin" />Claude Code running</div>
 						</div>
-						<div class="rounded-lg border border-card-border bg-canvas-primary p-3">
-							<div class="font-mono text-[11px] text-fg-light">Referee Gate</div>
+						<div class="rounded-control border border-card-border p-3">
+							<div class="text-xs text-fg-light">Referee Gate</div>
 							<div class="mt-1 font-semibold text-fg-main">Pass (0 violations)</div>
 							<div class="mt-1 text-xs text-fg-light">OKLCH tokens verified</div>
 						</div>
@@ -214,9 +214,7 @@
 					</span>
 				{/if}
 			</div>
-			<span class="text-terminal-muted transition-transform {consoleOpen ? 'rotate-180' : ''}">
-				▾
-			</span>
+			<ChevronDown aria-hidden="true" class="size-3.5 text-terminal-muted transition-transform duration-200 {consoleOpen ? 'rotate-180' : ''}" />
 		</button>
 
 		<AgentDisclosure open={consoleOpen}>

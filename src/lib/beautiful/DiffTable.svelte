@@ -148,10 +148,9 @@
 									type="button"
 									aria-pressed={row.status === 'rejected'}
 									onclick={() => setDecision(row.id, 'rejected')}
-									class="rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors {row.status ===
-									'rejected'
-										? 'border-status-danger bg-status-danger-subtle text-status-danger'
-										: 'border-card-border bg-canvas-primary text-fg-light hover:text-fg-main'}"
+									class={row.status === 'rejected'
+										? 'inline-flex h-7 items-center gap-1.5 rounded-control border border-status-danger/40 bg-status-danger-subtle px-2.5 text-xs font-medium text-status-danger [&_svg]:size-3.5'
+										: buttonClass('secondary', 'sm')}
 								>
 									<X aria-hidden="true" />
 									Reject
@@ -160,10 +159,9 @@
 									type="button"
 									aria-pressed={row.status === 'accepted'}
 									onclick={() => setDecision(row.id, 'accepted')}
-									class="rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors {row.status ===
-									'accepted'
-										? 'border-status-success bg-status-success-subtle text-status-success'
-										: 'border-card-border bg-canvas-primary text-fg-light hover:text-fg-main'}"
+									class={row.status === 'accepted'
+										? 'inline-flex h-7 items-center gap-1.5 rounded-control border border-status-success/40 bg-status-success-subtle px-2.5 text-xs font-medium text-status-success [&_svg]:size-3.5'
+										: buttonClass('secondary', 'sm')}
 								>
 									<Check aria-hidden="true" />
 									Accept

@@ -132,3 +132,17 @@ export function segmentClass(active: boolean): string {
 
 /** Container for `segmentClass` triggers. */
 export const SEGMENT_GROUP_CLASS = 'inline-flex items-center gap-0.5 rounded-[10px] bg-canvas-secondary p-0.5';
+
+/**
+ * Builds the class list for a ghost toggle button (toolbar, feedback, filters).
+ *
+ * @param active - Whether the toggle is on.
+ * @param size - Height and padding preset (default `sm`).
+ * @param extra - Additional classes appended last.
+ * @returns Space-separated class string.
+ */
+export function toggleButtonClass(active: boolean, size: ButtonSize = 'sm', extra = ''): string {
+	return `${BUTTON_BASE} ${BUTTON_SIZES[size]} ${
+		active ? 'bg-canvas-secondary text-fg-main' : 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'
+	} ${extra}`.trim();
+}

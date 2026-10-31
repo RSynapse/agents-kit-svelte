@@ -126,7 +126,7 @@
 				class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 font-mono text-xs text-fg-main outline-none focus:border-accent-primary"
 			>
 				{#each devices as mic (mic.id)}
-					<option value={mic.id}>🎙 {mic.label}</option>
+					<option value={mic.id}>{mic.label}</option>
 				{/each}
 			</select>
 
@@ -136,7 +136,7 @@
 				class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 font-mono text-xs text-fg-main outline-none focus:border-accent-primary"
 			>
 				{#each personas as persona (persona.id)}
-					<option value={persona.id}>🔊 {persona.name} ({persona.accent})</option>
+					<option value={persona.id}>{persona.name} ({persona.accent})</option>
 				{/each}
 			</select>
 		</div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Check } from '@lucide/svelte';
+	import { Check, ChevronDown, LoaderCircle } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import ThinkingShimmer from '../agents/ThinkingShimmer.svelte';
@@ -140,7 +140,7 @@
 				onclick={() => (isOpen = !isOpen)}
 				class={buttonClass('secondary', 'icon-sm')}
 			>
-				<span class="transition-transform {isOpen ? 'rotate-180' : ''}">▾</span>
+				<ChevronDown aria-hidden="true" class="transition-transform duration-200 {isOpen ? 'rotate-180' : ''}" />
 			</button>
 		</div>
 	</div>
@@ -152,14 +152,20 @@
 					<div class="flex items-start gap-3">
 						<span
 							aria-hidden="true"
-							class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full font-mono text-xs {item.status ===
+							class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium tabular-nums {item.status ===
 							'completed'
 								? 'bg-status-success-subtle text-status-success'
 								: item.status === 'in-progress'
 									? 'bg-accent-subtle text-accent-primary'
 									: 'bg-canvas-secondary text-fg-light'}"
 						>
-							{item.status === 'completed' ? '✓' : item.status === 'in-progress' ? '◎' : idx + 1}
+							{#if item.status === 'completed'}
+								<Check class="size-3" />
+							{:else if item.status === 'in-progress'}
+								<LoaderCircle class="size-3 animate-spin" />
+							{:else}
+								{idx + 1}
+							{/if}
 						</span>
 
 						<div class="min-w-0 flex-1 space-y-1.5">

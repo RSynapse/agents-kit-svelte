@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Search } from '@lucide/svelte';
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	export interface SearchListItem {
 		id: string;
@@ -107,7 +108,7 @@
 	class="w-full max-w-xl rounded-card border border-card-border bg-card-bg p-3 text-fg-main {className}"
 >
 	<div class="flex items-center gap-2 border-b border-canvas-border pb-2.5">
-		<span aria-hidden="true" class="pl-1.5 font-mono text-xs text-fg-light">⌕</span>
+		<Search aria-hidden="true" class="ml-1.5 size-3.5 text-fg-light" />
 		<input
 			type="search"
 			value={internalQuery}

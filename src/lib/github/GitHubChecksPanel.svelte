@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RefreshCw, Zap } from '@lucide/svelte';
+	import { Check, RefreshCw, X, Zap } from '@lucide/svelte';
 	import { buttonClass } from '../ui/styles';
 	import type { GitHubCheckItem } from '../types';
 
@@ -102,7 +102,7 @@
 				<div class="min-w-0 flex-1">
 					<div class="flex flex-wrap items-center gap-2">
 						<span
-							class="inline-flex size-4 shrink-0 items-center justify-center rounded-full font-mono text-[10px] font-bold {isFixing ||
+							class="inline-flex size-4 shrink-0 items-center justify-center rounded-full {isFixing ||
 							isRerunning
 								? 'bg-accent-subtle text-accent-primary'
 								: check.status === 'passed'
@@ -111,7 +111,13 @@
 										? 'bg-status-danger-subtle text-status-danger'
 										: 'bg-canvas-secondary text-fg-light'}"
 						>
-							{isFixing || isRerunning ? '↻' : check.status === 'passed' ? '✓' : '✕'}
+							{#if isFixing || isRerunning}
+								<RefreshCw class="size-2.5 animate-spin" />
+							{:else if check.status === 'passed'}
+								<Check class="size-2.5" strokeWidth={3} />
+							{:else}
+								<X class="size-2.5" strokeWidth={3} />
+							{/if}
 						</span>
 						<span class="font-medium text-fg-main">{check.name}</span>
 						<span class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] text-fg-light">

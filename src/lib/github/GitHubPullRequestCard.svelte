@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { buttonClass } from '../ui/styles';
-	import { Check, ChevronDown, GitPullRequest, ShieldCheck } from '@lucide/svelte';
+	import { ArrowLeft, Check, ChevronDown, GitPullRequest, ShieldCheck } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import type { GitHubPullRequestData } from '../types';
 
@@ -124,7 +124,7 @@
 		<code class="rounded bg-canvas-secondary px-2 py-0.5 text-[11px] text-fg-main">
 			{pr.headBranch}
 		</code>
-		<span>→</span>
+		<ArrowLeft aria-hidden="true" class="size-3" />
 		<code class="rounded bg-canvas-secondary px-2 py-0.5 text-[11px] text-fg-main">
 			{pr.baseBranch}
 		</code>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
-	import { Check, Package } from '@lucide/svelte';
+	import { ArrowRight, Check, Package } from '@lucide/svelte';
 	export type PackageChangeType = 'major' | 'minor' | 'patch' | 'added' | 'removed';
 
 	export interface PackageDependencyItem {
@@ -104,7 +104,7 @@
 						<span>v{currentVersion}</span>
 					{/if}
 					{#if currentVersion && newVersion}
-						<span aria-hidden="true">→</span>
+						<ArrowRight aria-hidden="true" class="size-3" />
 					{/if}
 					{#if newVersion}
 						<span class="font-semibold text-fg-main">v{newVersion}</span>
