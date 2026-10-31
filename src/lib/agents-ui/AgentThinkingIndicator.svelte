@@ -51,7 +51,7 @@
 		variant = 'orbs',
 		state: thinkingState = 'working',
 		label,
-		detail = 'Claude Code 1.0 · Card 191 Attempt 1 · 18.4k tokens',
+		detail,
 		paused = false,
 		showControls = true,
 		onVariantChange,

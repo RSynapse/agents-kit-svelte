@@ -182,9 +182,13 @@
 			{:else if node.component === 'flowchart'}
 				<Flowchart {...node.props as ComponentProps<typeof Flowchart>} />
 			{:else if node.component === 'agent-orchestrator'}
-				<AgentOrchestrator />
+				{#if typeof node.props.orchestratorName === 'string'}
+					<AgentOrchestrator {...node.props as unknown as ComponentProps<typeof AgentOrchestrator>} />
+				{:else}
+					{@render missingProp('orchestratorName')}
+				{/if}
 			{:else if node.component === 'agent-evaluator'}
-				<AgentEvaluator />
+				<AgentEvaluator {...node.props as ComponentProps<typeof AgentEvaluator>} />
 			{:else if node.component === 'stack-trace'}
 				{#if typeof node.props.trace === 'string'}
 					<StackTrace trace={node.props.trace} />

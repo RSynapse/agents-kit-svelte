@@ -37,83 +37,9 @@
 		class?: string;
 	}
 
-	const defaultIterations: EvalIteration[] = [
-		{
-			id: 'iter-1',
-			number: 1,
-			output: 'Added retry handler in outbox service, checking revision before idempotency key.',
-			score: 58,
-			feedback:
-				'Referee send-back: Idempotency lookup must precede new-intent revision checks per ENG-0001.',
-			criteria: [
-				{
-					label: 'Authorization & Idempotency Order',
-					score: 40,
-					maxScore: 100,
-					weight: 40,
-					status: 'fail',
-					note: 'Revision check ran before idempotency lookup.'
-				},
-				{
-					label: 'Atomic Outbox & Journal Transaction',
-					score: 82,
-					maxScore: 100,
-					weight: 35,
-					status: 'warn',
-					note: 'Journal write lacked rollback test coverage.'
-				},
-				{
-					label: 'Svelte 5 Runes & Semantic Tokens',
-					score: 95,
-					maxScore: 100,
-					weight: 25,
-					status: 'pass',
-					note: 'Zero legacy reactivity or hardcoded hex tokens.'
-				}
-			],
-			status: 'failed'
-		},
-		{
-			id: 'iter-2',
-			number: 2,
-			output:
-				'Reordered domain pipeline: reauthorize session -> lookup idempotency key -> check revision -> atomic outbox commit.',
-			score: 94,
-			feedback:
-				'Referee pass: All red-team invariants satisfied with deterministic SQLite fixture coverage.',
-			criteria: [
-				{
-					label: 'Authorization & Idempotency Order',
-					score: 96,
-					maxScore: 100,
-					weight: 40,
-					status: 'pass',
-					note: 'Verified replay returns stored effect prior to revision check.'
-				},
-				{
-					label: 'Atomic Outbox & Journal Transaction',
-					score: 92,
-					maxScore: 100,
-					weight: 35,
-					status: 'pass',
-					note: 'Effects, outbox, and journal commit in single transaction.'
-				},
-				{
-					label: 'Svelte 5 Runes & Semantic Tokens',
-					score: 95,
-					maxScore: 100,
-					weight: 25,
-					status: 'pass',
-					note: 'Passes static audit and typecheck.'
-				}
-			],
-			status: 'passed'
-		}
-	];
-
 	let {
-		taskDescription = 'Rubric-based Referee & Red-Team Scorecard for Card 191 (Risk Tier T2)',
-		iterations = defaultIterations,
+		taskDescription,
+		iterations = [],
 		currentIteration,
 		qualityThreshold = 85,
 		maxIterations = 4,
@@ -127,7 +53,7 @@
 	}: Props = $props();
 
 	let localThreshold = $state(85);
-	let openIterationId = $state<string | undefined>('iter-2');
+	let openIterationId = $state<string | undefined>(undefined);
 	let accepted = $state(false);
 
 	$effect(() => {
@@ -223,7 +149,7 @@
 				</span>
 			</div>
 			<h2 class="mt-1.5 text-base font-semibold text-fg-main">Rubric & Red-Team Evaluation</h2>
-			<p class="mt-0.5 text-xs text-fg-light">{taskDescription}</p>
+			{#if taskDescription}<p class="mt-0.5 text-xs text-fg-light">{taskDescription}</p>{/if}
 		</div>
 
 		<div class="flex flex-wrap items-center gap-2">

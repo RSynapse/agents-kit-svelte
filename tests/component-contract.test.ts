@@ -37,7 +37,7 @@ test('every component forwards rest props to its root element', () => {
 	}
 });
 
-/** Folders already moved to fixtures. The rest follow collection by collection. */
+/** Collections whose demo data lives in src/lib/fixtures. */
 const NO_DEMO_DEFAULTS = [
 	'src/lib/github/',
 	'src/lib/agents/',
@@ -45,7 +45,8 @@ const NO_DEMO_DEFAULTS = [
 	'src/lib/runtime/',
 	'src/lib/beautiful/',
 	'src/lib/skills/',
-	'src/lib/intelligent-ui/'
+	'src/lib/intelligent-ui/',
+	'src/lib/agents-ui/'
 ];
 /** UI defaults that are not demo data. */
 const ALLOWED_DEFAULTS = new Set(['DEFAULT_PHRASES', 'DEFAULT_PROGRESS', 'DEFAULT_FOLLOW_THRESHOLD_PX']);

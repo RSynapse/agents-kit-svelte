@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { SEGMENT_GROUP_CLASS, buttonClass, segmentClass } from '../ui/styles';
-	export type ToolCategory = 'all' | 'worktree' | 'contracts' | 'companion' | 'verification';
+	/** A tool category id, or 'all'. Categories come from the tools you pass. */
+	export type ToolCategory = string;
 
 	export interface AgentToolParameter {
 		name: string;
@@ -14,15 +15,19 @@
 		id: string;
 		name: string;
 		description: string;
-		category: Exclude<ToolCategory, 'all'>;
+		category: string;
 		enabled?: boolean;
 		usageCount?: number;
 		lastUsedLabel?: string;
 		parameters?: AgentToolParameter[];
 	}
 
-	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'tools' | 'onToolClick' | 'onToolToggle' | 'showUsageStats' | 'gridView'> {
+	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'tools' | 'categoryLabels' | 'defaultSelectedId' | 'onToolClick' | 'onToolToggle' | 'showUsageStats' | 'gridView'> {
 		tools?: AgentTool[];
+		/** Display names for category ids. Defaults to the id with a capital first letter. */
+		categoryLabels?: Record<string, string>;
+		/** Tool shown in the parameter preview at first. Defaults to the first visible tool. */
+		defaultSelectedId?: string;
 		onToolClick?: (tool: AgentTool) => void;
 		onToolToggle?: (toolId: string, enabled: boolean) => void;
 		showUsageStats?: boolean;
@@ -30,82 +35,10 @@
 		class?: string;
 	}
 
-	const defaultTools: AgentTool[] = [
-		{
-			id: 'mcp-worktree-create',
-			name: 'worktree.create_isolated',
-			description: 'Creates an isolated git worktree branch for a dispatched card attempt.',
-			category: 'worktree',
-			enabled: true,
-			usageCount: 42,
-			lastUsedLabel: '2m ago',
-			parameters: [
-				{ name: 'cardId', type: 'string', required: true, description: 'Card identifier' },
-				{ name: 'attemptNumber', type: 'number', required: true, description: 'Attempt counter' }
-			]
-		},
-		{
-			id: 'mcp-contracts-export',
-			name: 'contracts.export_g0_schema',
-			description: 'Exports TypeScript G0 contracts into canonical JSON schema artifacts.',
-			category: 'contracts',
-			enabled: true,
-			usageCount: 28,
-			lastUsedLabel: '6m ago',
-			parameters: [
-				{ name: 'verifyClean', type: 'boolean', required: false, description: 'Fail on drift' }
-			]
-		},
-		{
-			id: 'mcp-companion-probe',
-			name: 'companion.probe_agents',
-			description:
-				'Runs fixed read-only direct argv version probe for Claude Code, Codex, and Gemini.',
-			category: 'companion',
-			enabled: true,
-			usageCount: 19,
-			lastUsedLabel: '14m ago',
-			parameters: [
-				{ name: 'timeoutMs', type: 'number', required: false, description: 'Bounded timeout' }
-			]
-		},
-		{
-			id: 'mcp-verify-svelte5',
-			name: 'verify.audit_svelte5_runes',
-			description:
-				'Audits all .svelte files for Runes compliance, Props typing, and semantic CSS tokens.',
-			category: 'verification',
-			enabled: true,
-			usageCount: 64,
-			lastUsedLabel: 'Just now',
-			parameters: [
-				{ name: 'directory', type: 'string', required: true, description: 'Source directory' }
-			]
-		},
-		{
-			id: 'mcp-db-fixture',
-			name: 'db.reset_disposable_fixture',
-			description: 'Resets the local disposable SQLite database and outbox journal state.',
-			category: 'verification',
-			enabled: false,
-			usageCount: 11,
-			lastUsedLabel: '1h ago',
-			parameters: [
-				{ name: 'seedSample', type: 'boolean', required: false, description: 'Seed sample rows' }
-			]
-		}
-	];
-
-	const categories: { id: ToolCategory; label: string }[] = [
-		{ id: 'all', label: 'All Tools' },
-		{ id: 'worktree', label: 'Worktree' },
-		{ id: 'contracts', label: 'Contracts' },
-		{ id: 'companion', label: 'Companion' },
-		{ id: 'verification', label: 'Verification' }
-	];
-
 	let {
-		tools = defaultTools,
+		tools = [],
+		categoryLabels = {},
+		defaultSelectedId,
 		onToolClick,
 		onToolToggle,
 		showUsageStats = true,
@@ -117,12 +50,21 @@
 	let localTools = $state<AgentTool[]>([]);
 	let searchQuery = $state('');
 	let activeCategory = $state<ToolCategory>('all');
-	let selectedToolId = $state<string>('mcp-verify-svelte5');
+	let selectedToolId = $state<string>('');
 	let lastInvokedTool = $state<string | null>(null);
 
 	$effect(() => {
 		localTools = tools.map((t) => ({ ...t }));
+		selectedToolId = defaultSelectedId ?? '';
 	});
+
+	let categories = $derived<{ id: ToolCategory; label: string }[]>([
+		{ id: 'all', label: categoryLabels.all ?? 'All Tools' },
+		...[...new Set(tools.map((t) => t.category))].map((id) => ({
+			id,
+			label: categoryLabels[id] ?? id.charAt(0).toUpperCase() + id.slice(1)
+		}))
+	]);
 
 	let filteredTools = $derived(
 		localTools.filter((tool) => {

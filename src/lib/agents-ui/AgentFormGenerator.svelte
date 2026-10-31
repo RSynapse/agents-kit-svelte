@@ -24,7 +24,7 @@
 	}
 
 	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'formTitle' | 'formDescription' | 'fields' | 'isGenerating' | 'showPreview' | 'onAddField' | 'onRemoveField' | 'onRegenerate' | 'onExportSchema' | 'onFieldReorder' | 'onSubmitPayload'> {
-		formTitle?: string;
+		formTitle: string;
 		formDescription?: string;
 		fields?: FormField[];
 		isGenerating?: boolean;
@@ -38,61 +38,10 @@
 		class?: string;
 	}
 
-	const defaultFields: FormField[] = [
-		{
-			id: 'worktreeBranch',
-			label: 'Worktree Branch Name',
-			type: 'text',
-			placeholder: 'trailside/card-191-attempt-1',
-			required: true,
-			defaultValue: 'trailside/card-191-attempt-1',
-			validation: { minLength: 5, maxLength: 80 }
-		},
-		{
-			id: 'agentId',
-			label: 'Target Supported Agent',
-			type: 'select',
-			required: true,
-			options: ['claude-code', 'codex', 'gemini'],
-			defaultValue: 'claude-code'
-		},
-		{
-			id: 'riskTier',
-			label: 'Risk Tier Gate',
-			type: 'select',
-			required: true,
-			options: ['T0', 'T1', 'T2', 'T3', 'T4'],
-			defaultValue: 'T2'
-		},
-		{
-			id: 'tokenBudget',
-			label: 'Max Token Budget',
-			type: 'number',
-			required: true,
-			defaultValue: 40000,
-			validation: { min: 1000, max: 200000 }
-		},
-		{
-			id: 'verificationPrompt',
-			label: 'Verification Acceptance Instructions',
-			type: 'textarea',
-			placeholder: 'Describe the test suite and contract checks required…',
-			required: true,
-			defaultValue: 'Run corepack pnpm test and verify zero uncommitted schema diffs.',
-			validation: { minLength: 10, maxLength: 500 }
-		},
-		{
-			id: 'isolatedDb',
-			label: 'Use disposable SQLite fixture database',
-			type: 'checkbox',
-			defaultValue: true
-		}
-	];
-
 	let {
-		formTitle = 'Dispatch Worktree Run Tool Schema',
-		formDescription = 'Dynamic schema-to-form generator for structured agent tool inputs with live validation and JSON payload preview.',
-		fields = defaultFields,
+		formTitle,
+		formDescription,
+		fields = [],
 		isGenerating = false,
 		showPreview = true,
 		onAddField,
@@ -251,7 +200,7 @@
 		<div>
 			<p class="text-xs font-medium text-fg-light">Structured Tool Input Builder</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">{formTitle}</h2>
-			<p class="mt-0.5 text-xs text-fg-light">{formDescription}</p>
+			{#if formDescription}<p class="mt-0.5 text-xs text-fg-light">{formDescription}</p>{/if}
 		</div>
 
 		<div class="flex flex-wrap items-center gap-2">

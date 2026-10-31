@@ -34,7 +34,7 @@
 	}
 
 	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'orchestratorName' | 'supervisorModel' | 'description' | 'subAgents' | 'communicationLog' | 'aggregatedResult' | 'isProcessing' | 'timestamp' | 'onStart' | 'onPauseAll' | 'onRedistribute' | 'onRetryAgent'> {
-		orchestratorName?: string;
+		orchestratorName: string;
 		supervisorModel?: string;
 		description?: string;
 		subAgents?: SubAgent[];
@@ -49,83 +49,15 @@
 		class?: string;
 	}
 
-	const defaultSubAgents: SubAgent[] = [
-		{
-			id: 'researcher',
-			name: 'Repo Explorer',
-			role: 'Codebase & Contract Discovery',
-			model: 'Claude Code 1.0',
-			status: 'completed',
-			task: 'Inspect G0 schema definitions and locate outbox transaction boundaries',
-			progress: 100,
-			metrics: { tokens: 14200, budgetTokens: 20000, cost: '$0.04', latency: '9.4s' },
-			logs: [
-				'Scanned contracts/g0/src/index.ts and verified envelope versions.',
-				'Mapped atomic outbox writer in apps/service/src/db/outbox.ts.',
-				'Returned 4 contract invariants to Supervisor.'
-			]
-		},
-		{
-			id: 'implementer',
-			name: 'Worktree Builder',
-			role: 'TDD Patch Implementation',
-			model: 'Claude Code 1.0',
-			status: 'running',
-			task: 'Implement idempotent retry handler before revision check in worktree',
-			progress: 68,
-			metrics: { tokens: 24800, budgetTokens: 40000, cost: '$0.08', latency: '18.2s' },
-			logs: [
-				'Created isolated branch trailside/card-191-attempt-1.',
-				'Added failing unit test for duplicate idempotency key replay.',
-				'Updating domain handler to reauthorize prior to lookup…'
-			]
-		},
-		{
-			id: 'verifier',
-			name: 'Referee & Verifier',
-			role: 'Independent Gate Evaluation',
-			model: 'Codex 0.42',
-			status: 'idle',
-			task: 'Run contract export check and independent acceptance suite',
-			progress: 0,
-			metrics: { tokens: 0, budgetTokens: 15000, cost: '$0.00', latency: '—' },
-			logs: ['Waiting for Worktree Builder handoff before starting referee checks.']
-		}
-	];
-
-	const defaultCommLog: CommLogEntry[] = [
-		{
-			id: 'log-1',
-			timestamp: '14:02:11',
-			from: 'Supervisor',
-			to: 'Repo Explorer',
-			message: 'Locate all idempotency lookup call sites and verify revision ordering.'
-		},
-		{
-			id: 'log-2',
-			timestamp: '14:02:20',
-			from: 'Repo Explorer',
-			to: 'Supervisor',
-			message: 'Found 3 call sites; domain spec requires reauthorization before lookup.'
-		},
-		{
-			id: 'log-3',
-			timestamp: '14:02:22',
-			from: 'Supervisor',
-			to: 'Worktree Builder',
-			message: 'Apply TDD patch on branch trailside/card-191-attempt-1 with 40k token budget.'
-		}
-	];
-
 	let {
-		orchestratorName = 'Supervisor Delegation Graph · Card 191',
-		supervisorModel = 'Claude Opus 4 Supervisor',
-		description = 'Coordinates repository discovery, isolated worktree implementation, and referee verification as one accountable run.',
-		subAgents = defaultSubAgents,
-		communicationLog = defaultCommLog,
-		aggregatedResult = 'Discovery complete. Worktree Builder is validating idempotency replay semantics before Referee verification.',
-		isProcessing = true,
-		timestamp = 'Updated moments ago',
+		orchestratorName,
+		supervisorModel,
+		description,
+		subAgents = [],
+		communicationLog = [],
+		aggregatedResult,
+		isProcessing = false,
+		timestamp,
 		onStart,
 		onPauseAll,
 		onRedistribute,
@@ -264,11 +196,13 @@
 	>
 		<div>
 			<div class="flex flex-wrap items-center gap-2">
-				<span
-					class="rounded bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] font-medium text-fg-light"
-				>
-					{supervisorModel}
-				</span>
+				{#if supervisorModel}
+					<span
+						class="rounded bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] font-medium text-fg-light"
+					>
+						{supervisorModel}
+					</span>
+				{/if}
 				<span
 					class="inline-flex items-center gap-1 rounded-chip px-1.5 py-px text-[11px] font-medium {localProcessing
 						? 'bg-accent-subtle text-accent-primary'
@@ -278,7 +212,7 @@
 				</span>
 			</div>
 			<h2 class="mt-1.5 text-base font-semibold text-fg-main">{orchestratorName}</h2>
-			<p class="mt-0.5 max-w-2xl text-xs leading-relaxed text-fg-light">{description}</p>
+			{#if description}<p class="mt-0.5 max-w-2xl text-xs leading-relaxed text-fg-light">{description}</p>{/if}
 		</div>
 
 		<div class="flex flex-wrap items-center gap-2">
@@ -447,10 +381,12 @@
 	</div>
 
 	<div class="border-t border-canvas-border p-4">
-		<div class="rounded-control bg-canvas-secondary/70 p-3">
-			<p class="text-xs font-semibold text-fg-main">Supervisor Synthesis</p>
-			<p class="mt-1 text-xs leading-relaxed text-fg-light">{aggregatedResult}</p>
-		</div>
+		{#if aggregatedResult}
+			<div class="rounded-control bg-canvas-secondary/70 p-3">
+				<p class="text-xs font-semibold text-fg-main">Supervisor Synthesis</p>
+				<p class="mt-1 text-xs leading-relaxed text-fg-light">{aggregatedResult}</p>
+			</div>
+		{/if}
 
 		<div class="mt-3">
 			<button
@@ -484,7 +420,7 @@
 			class="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-canvas-border pt-3 text-xs text-fg-light"
 		>
 			<span>{localAgents.length} subagents · {totalTokens.toLocaleString()} total tokens</span>
-			<span>{timestamp}</span>
+			{#if timestamp}<span>{timestamp}</span>{/if}
 		</footer>
 	</div>
 </section>

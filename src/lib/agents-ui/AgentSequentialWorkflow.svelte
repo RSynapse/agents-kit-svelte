@@ -18,7 +18,7 @@
 	}
 
 	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'workflowName' | 'description' | 'steps' | 'currentStepId' | 'totalDuration' | 'totalTokens' | 'isRunning' | 'onStart' | 'onPause' | 'onRetryStep' | 'onSkipStep' | 'onReset'> {
-		workflowName?: string;
+		workflowName: string;
 		description?: string;
 		steps?: WorkflowStep[];
 		currentStepId?: string;
@@ -33,63 +33,14 @@
 		class?: string;
 	}
 
-	const defaultSteps: WorkflowStep[] = [
-		{
-			id: 'spec-align',
-			number: 1,
-			title: 'Spec & ADR Gate Check',
-			agentName: 'Claude Code Planner',
-			gateDependency: 'Requires approved spec in docs/superpowers/specs',
-			inputSummary: 'Card 191 requirements & ENG-0001 boundaries',
-			outputSummary: 'Verified zero forbidden runtime capabilities; test plan locked.',
-			status: 'completed',
-			duration: '48s',
-			tokens: 3820
-		},
-		{
-			id: 'red-green-tdd',
-			number: 2,
-			title: 'Red-Green Worktree Implementation',
-			agentName: 'Claude Code Builder',
-			gateDependency: 'Depends on Step 01 · Spec & ADR Gate Check',
-			inputSummary: 'Locked test plan and worktree branch',
-			outputSummary: 'All 12 unit tests passing in isolated worktree.',
-			status: 'completed',
-			duration: '2m 14s',
-			tokens: 9410
-		},
-		{
-			id: 'contract-export',
-			number: 3,
-			title: 'Contract Schema Export & Verification',
-			agentName: 'Companion Verifier',
-			gateDependency: 'Depends on Step 02 · Red-Green Worktree Implementation',
-			inputSummary: 'Updated domain and contract TypeScript definitions',
-			outputSummary: 'Running corepack pnpm contracts:export and schema checksum check…',
-			status: 'running',
-			duration: '34s',
-			tokens: 2150
-		},
-		{
-			id: 'referee-review',
-			number: 4,
-			title: 'Independent Referee Scorecard',
-			agentName: 'Codex Referee',
-			gateDependency: 'Depends on Step 03 · Contract Schema Export',
-			inputSummary: 'Worktree diff and verification evidence log',
-			outputSummary: '',
-			status: 'waiting'
-		}
-	];
-
 	let {
-		workflowName = 'Sequential Stage-Gate Pipeline',
-		description = 'Each stage validates its gate dependency before handing structured output to the next stage.',
-		steps = defaultSteps,
-		currentStepId = 'contract-export',
-		totalDuration = '3m 36s',
-		totalTokens = 15380,
-		isRunning = true,
+		workflowName,
+		description,
+		steps = [],
+		currentStepId,
+		totalDuration,
+		totalTokens,
+		isRunning = false,
 		onStart,
 		onPause,
 		onRetryStep,
@@ -100,12 +51,12 @@
 	}: Props = $props();
 
 	let localSteps = $state<WorkflowStep[]>([]);
-	let selectedStepId = $state('contract-export');
-	let localRunning = $state(true);
+	let selectedStepId = $state('');
+	let localRunning = $state(false);
 
 	$effect(() => {
 		localSteps = steps.map((step) => ({ ...step }));
-		selectedStepId = currentStepId;
+		selectedStepId = currentStepId ?? '';
 		localRunning = isRunning;
 	});
 
@@ -209,7 +160,7 @@
 		<div>
 			<p class="text-xs font-medium text-fg-light">Sequential Workflow</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">{workflowName}</h2>
-			<p class="mt-0.5 text-xs text-fg-light">{description}</p>
+			{#if description}<p class="mt-0.5 text-xs text-fg-light">{description}</p>{/if}
 		</div>
 
 		<div class="flex items-center gap-2">
@@ -330,6 +281,6 @@
 		<span>
 			{completedCount} of {localSteps.length} stages complete
 		</span>
-		<span>{totalDuration} · {totalTokens.toLocaleString()} tokens</span>
+		<span>{[totalDuration, totalTokens !== undefined ? `${totalTokens.toLocaleString()} tokens` : undefined].filter(Boolean).join(' · ')}</span>
 	</footer>
 </section>
