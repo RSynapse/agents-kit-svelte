@@ -468,15 +468,19 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Media generation surface stepping through queued, generating, refining, complete, and error states.',
 		usageSnippet: `<script lang="ts">
-  import { ImageGeneration } from 'agents-kit-svelte';
+  import { ImageGeneration, type ImageGenerationStatus } from 'agents-kit-svelte';
 
-  let stage = $state<'queued' | 'generating' | 'refining' | 'complete' | 'error'>('complete');
+  let status: ImageGenerationStatus = $state('generating');
+  let progress = $state(45);
 </script>
 
 <ImageGeneration
-  prompt="Architectural diagram of an isolated Git worktree pipeline in dark mode"
-  aspectRatio="16:9"
-  initialStage={stage}
+  {status}
+  {progress}
+  prompt="A lighthouse at dusk, watercolour"
+  resolution="1024 × 1024"
+  aspectRatio="1:1"
+  onRegenerate={() => ((status = 'queued'), (progress = 0))}
 />`
 	},
 	{
@@ -488,21 +492,28 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Collapsible workspace conversation sidebar with search filter, pinned threads, and inline rename.',
 		usageSnippet: `<script lang="ts">
-  import { AISidebar } from 'agents-kit-svelte';
+  import { AISidebar, type SidebarResource } from 'agents-kit-svelte';
 
-  let activeThreadId = $state('conv-1');
-
-  const threads = [
-    { id: 'conv-1', title: 'Card 2151 · Hydration readiness guard', updatedAt: '2m ago', pinned: true, unread: false },
-    { id: 'conv-2', title: 'Card 2148 · Ready for You empty state', updatedAt: '18m ago', pinned: true, unread: false },
-    { id: 'conv-3', title: 'GitHub Kanban Board & Bento layout', updatedAt: '1h ago', pinned: false, unread: true }
+  const items: SidebarResource[] = [
+    {
+      id: 'app',
+      label: 'my-app',
+      kind: 'project',
+      children: [
+        { id: 'src', label: 'src', kind: 'folder', children: [{ id: 'page', label: '+page.svelte', kind: 'file' }] },
+        { id: 'wt', label: 'fix/login', kind: 'worktree', badge: 'PR' }
+      ]
+    }
   ];
+  let activeId = $state<string | null>('page');
 </script>
 
 <AISidebar
-  {threads}
-  {activeThreadId}
-  onSelect={(id) => (activeThreadId = id)}
+  {items}
+  {activeId}
+  defaultExpandedIds={['app', 'src']}
+  searchable
+  onSelect={(id) => (activeId = id)}
 />`
 	},
 	{
@@ -550,14 +561,12 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		usageSnippet: `<script lang="ts">
   import { ReasoningText } from 'agents-kit-svelte';
 
-  const phrases = [
-    'Inspecting AST & component boundaries…',
-    'Verifying Svelte 5 Runes compliance…',
-    'Checking WCAG 2.2 AA contrast tokens…'
-  ];
+  const phrases = ['Reading files', 'Planning the change', 'Writing code', 'Running tests'];
 </script>
 
-<ReasoningText {phrases} intervalMs={2200} />`
+<p class="text-sm">
+  <ReasoningText {phrases} interval={1800} />
+</p>`
 	},
 
 	// 2. Beautiful UI (11 components)
@@ -570,16 +579,18 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Compact interactive status pills for parallel tool invocations with expandable output drawer.',
 		usageSnippet: `<script lang="ts">
-  import { ToolChips, type ToolChipItem } from 'agents-kit-svelte';
+  import { ToolChips, type ToolStep, type ToolDiff } from 'agents-kit-svelte';
 
-  const chips: ToolChipItem[] = [
-    { id: 'tc-1', tool: 'Read', target: 'src/lib/index.ts', duration: '12ms', status: 'success', output: 'Exported 76 Svelte 5 components.' },
-    { id: 'tc-2', tool: 'Bash', target: 'pnpm check', duration: '640ms', status: 'success', output: 'svelte-check found 0 errors and 0 warnings.' },
-    { id: 'tc-3', tool: 'Search', target: 'CatalogItemMeta', duration: '28ms', status: 'running', output: 'Matched 4 files in src/.' }
+  const steps: ToolStep[] = [
+    { id: 't-1', label: 'Read', chip: 'src/lib/auth.ts', status: 'complete' },
+    { id: 't-2', label: 'Edit', chip: 'src/lib/auth.ts', additions: 12, deletions: 3, status: 'complete' },
+    { id: 't-3', label: 'Bash', detail: 'pnpm test', status: 'running' }
   ];
+  const diffs: ToolDiff[] = [{ file: 'src/lib/auth.ts', additions: 12, deletions: 3, lines: ['+ if (!user) return null;'] }];
+  let expandedId = $state<string | undefined>(undefined);
 </script>
 
-<ToolChips {chips} />`
+<ToolChips {steps} {diffs} {expandedId} onToggle={(id) => (expandedId = expandedId === id ? undefined : id)} />`
 	},
 	{
 		slug: 'recommendation-card',
@@ -590,21 +601,23 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Confidence-scored agent recommendation card with reasoning bullets and alternative actions.',
 		usageSnippet: `<script lang="ts">
-  import { RecommendationCard } from 'agents-kit-svelte';
+  import { RecommendationCard, type RecommendationOption } from 'agents-kit-svelte';
 
-  let accepted = $state(false);
+  const alternatives: RecommendationOption[] = [
+    { id: 'redis', label: 'Redis', description: 'Faster, but another service to run' },
+    { id: 'memory', label: 'In-memory LRU', description: 'Simplest, lost on restart' }
+  ];
 </script>
 
 <RecommendationCard
-  title="Use Svelte 5 Spring + crossfade for reactive Kanban board transitions"
-  confidence={96}
-  summary="Eliminates layout thrashing when moving GitHub Issue cards across columns while respecting prefersReducedMotion."
-  reasons={[
-    'Zero external animation dependencies required',
-    'Automatic interruption & velocity preservation via svelte/motion Spring',
-    'WCAG 2.2 AA reduced-motion fallback built into motion.svelte.ts'
-  ]}
-  onAccept={() => (accepted = true)}
+  title="Cache with Postgres"
+  summary="Reuse the database you already run."
+  confidence={0.82}
+  reasoning={['No new infrastructure', 'Traffic is under 50 req/s']}
+  acceptLabel="Use Postgres"
+  {alternatives}
+  onAccept={() => console.log('accepted')}
+  onSelectAlternative={(id) => console.log('picked', id)}
 />`
 	},
 	{
@@ -616,16 +629,21 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Grid of attached context sources (files, URLs, commits, issues, schemas) with token counts.',
 		usageSnippet: `<script lang="ts">
-  import { ContextCards, type ContextCardItem } from 'agents-kit-svelte';
+  import { ContextCards, type ContextChunk } from 'agents-kit-svelte';
 
-  const items: ContextCardItem[] = [
-    { id: 'ctx-1', kind: 'file', title: 'src/lib/state/motion.svelte.ts', subtitle: 'Svelte 5 Spring & Tween helpers', tokens: 1420, pinned: true },
-    { id: 'ctx-2', kind: 'issue', title: 'Issue #2151 · CardRunDrawer hydration', subtitle: 'RSynapse/trailside · ready', tokens: 890, pinned: true },
-    { id: 'ctx-3', kind: 'commit', title: 'Commit 456f3b4 · 76-card catalogue', subtitle: 'main · verified', tokens: 640 }
-  ];
+  let chunks: ContextChunk[] = $state([
+    { id: 'c-1', title: 'auth.ts', source: 'src/lib/auth.ts', content: 'export function login() { … }', kind: 'file', tokens: 820 },
+    { id: 'c-2', title: 'Issue #12', source: 'github.com/acme/app/issues/12', content: 'Login fails on Safari', kind: 'issue', score: 0.88 }
+  ]);
+  let selectedId = $state('c-1');
 </script>
 
-<ContextCards {items} />`
+<ContextCards
+  {chunks}
+  {selectedId}
+  onSelect={(id) => (selectedId = id)}
+  onRemove={(id) => (chunks = chunks.filter((c) => c.id !== id))}
+/>`
 	},
 	{
 		slug: 'diff-table',
@@ -638,16 +656,21 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		usageSnippet: `<script lang="ts">
   import { DiffTable, type DiffTableRow } from 'agents-kit-svelte';
 
-  const rows: DiffTableRow[] = [
-    { field: 'framework', before: 'React 19 (useState / useMemo)', after: 'Svelte 5 ($state / $derived)', status: 'modified' },
-    { field: 'motion.engine', before: 'motion/react', after: 'svelte/motion (Spring, Tween, crossfade)', status: 'modified' },
-    { field: 'github.suite', before: 'none', after: '15 components (Kanban, Bento, PR, Issue, Checks, Triage, Merge queue, Deploys, Releases, Incidents)', status: 'added' }
-  ];
+  let rows: DiffTableRow[] = $state([
+    { id: 'd-1', field: 'Plan', before: 'Free', after: 'Pro', status: 'pending' },
+    { id: 'd-2', field: 'Seats', before: '3', after: '10', status: 'pending' }
+  ]);
+
+  const setStatus = (id: string, status: DiffTableRow['status']) =>
+    (rows = rows.map((row) => (row.id === id ? { ...row, status } : row)));
 </script>
 
 <DiffTable
-  title="Runtime & Architecture Delta"
+  title="Proposed account changes"
   {rows}
+  onAccept={(id) => setStatus(id, 'accepted')}
+  onReject={(id) => setStatus(id, 'rejected')}
+  onApplyAll={() => rows.forEach((row) => setStatus(row.id, 'accepted'))}
 />`
 	},
 	{
@@ -696,16 +719,17 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		upstreamSource: 'Beautiful UI · components/beautiful-ui/filter-table.tsx',
 		description: 'Faceted search and tag-filterable agent evaluation table.',
 		usageSnippet: `<script lang="ts">
-  import { FilterTable, type FilterTableRow } from 'agents-kit-svelte';
+  import { FilterTable, type FilterStatus, type FilterTableRow } from 'agents-kit-svelte';
 
   const rows: FilterTableRow[] = [
-    { id: 'f-1', name: 'Card 2151 · Overflow menu label', agent: 'AK-S Agent', status: 'passed', duration: '18s', tags: ['a11y', 'board'] },
-    { id: 'f-2', name: 'Card 2148 · Empty column note', agent: 'AK-S Agent', status: 'passed', duration: '14s', tags: ['copy', 'board'] },
-    { id: 'f-3', name: 'Card 2128 · Drawer focus restore', agent: 'Codex CLI', status: 'running', duration: '9s', tags: ['a11y', 'focus'] }
+    { id: 'r-1', task: 'Write the changelog', date: 'Oct 28', status: 'done', owner: 'Ana' },
+    { id: 'r-2', task: 'Review the adapter', date: 'Oct 30', status: 'progress', owner: 'Claude', tag: 'agent' },
+    { id: 'r-3', task: 'Publish 1.0', date: 'Nov 2', status: 'todo', owner: 'Ana' }
   ];
+  let filter: FilterStatus | 'all' = $state('all');
 </script>
 
-<FilterTable {rows} />`
+<FilterTable {rows} {filter} onFilterChange={(value) => (filter = value)} />`
 	},
 	{
 		slug: 'flowchart',
@@ -739,16 +763,15 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'KPI metric cards with sparkline trend bars, delta badges, and agent insight annotations.',
 		usageSnippet: `<script lang="ts">
-  import { InsightCards, type InsightCardItem } from 'agents-kit-svelte';
+  import { InsightCards, type InsightCard } from 'agents-kit-svelte';
 
-  const metrics: InsightCardItem[] = [
-    { id: 'm-1', label: 'First-Attempt Referee Pass', value: '94.2%', delta: '+6.4%', trend: 'up', sparkline: [68, 74, 81, 86, 91, 94], note: 'Improved after adding SSR readiness skill' },
-    { id: 'm-2', label: 'Median Worktree Run Time', value: '42s', delta: '-11s', trend: 'up', sparkline: [65, 58, 54, 49, 45, 42], note: 'Parallel svelte-check + targeted node --test' },
-    { id: 'm-3', label: 'Token Budget Utilization', value: '32%', delta: '-4.1%', trend: 'neutral', sparkline: [40, 38, 36, 35, 33, 32], note: 'Compact AST symbol slices' }
+  const insights: InsightCard[] = [
+    { id: 'i-1', kind: 'compare', title: 'Weekly runs', description: 'Up on last week', value: '1,284', delta: '+12%', series: [8, 9, 11, 10, 13, 14, 16] },
+    { id: 'i-2', kind: 'anomaly', title: 'Failed checks', description: 'Spike on Tuesday', value: '37', delta: '+210%' }
   ];
 </script>
 
-<InsightCards {metrics} />`
+<InsightCards {insights} onSelect={(id) => console.log(id)} />`
 	},
 	{
 		slug: 'fine-tune-card',
@@ -759,20 +782,20 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Interactive parameter tuning card for thinking budget, temperature, risk tier, and max turns.',
 		usageSnippet: `<script lang="ts">
-  import { FineTuneCard, type FineTuneConfig } from 'agents-kit-svelte';
+  import { FineTuneCard, type FineTuneField } from 'agents-kit-svelte';
 
-  let savedConfig = $state<FineTuneConfig | null>(null);
+  let fields: FineTuneField[] = $state([
+    { id: 'temperature', label: 'Temperature', value: 0.7, min: 0, max: 1, step: 0.1 },
+    { id: 'maxTokens', label: 'Max tokens', value: 1024, min: 256, max: 8192, step: 256 },
+    { id: 'tone', label: 'Tone', value: 'Friendly', options: ['Friendly', 'Formal', 'Terse'] }
+  ]);
 </script>
 
 <FineTuneCard
-  initialConfig={{
-    thinkingBudgetTokens: 16000,
-    temperature: 0.2,
-    maxTurns: 12,
-    riskTier: 'T2',
-    autoRunTests: true
-  }}
-  onApply={(cfg) => (savedConfig = cfg)}
+  title="Response settings"
+  {fields}
+  onChange={(id, value) => (fields = fields.map((f) => (f.id === id ? { ...f, value } : f)))}
+  onApply={() => console.log($state.snapshot(fields))}
 />`
 	},
 	{
@@ -786,13 +809,20 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
   import { SearchList, type SearchListItem } from 'agents-kit-svelte';
 
   const items: SearchListItem[] = [
-    { id: 's-1', category: 'file', title: 'src/lib/intelligent-ui/IntelligentUIRenderer.svelte', subtitle: 'Dynamic JSON schema renderer', badge: 'Svelte 5' },
-    { id: 's-2', category: 'issue', title: '#2151 · Board overflow menu accessible name', subtitle: 'RSynapse/trailside · area:app', badge: 'PR #2153' },
-    { id: 's-3', category: 'spec', title: '2026-10-02-g0-browser-read-contract-design.md', subtitle: 'Section 0 (Revision 3)', badge: 'Spec' }
+    { id: 's-1', label: 'Login fails on Safari', description: 'Issue #12', category: 'issue' },
+    { id: 's-2', label: 'src/lib/auth.ts', category: 'file' },
+    { id: 's-3', label: 'Nightly e2e run', description: 'Failed 2h ago', category: 'run' }
   ];
+  let value = $state('');
 </script>
 
-<SearchList {items} />`
+<SearchList
+  {items}
+  {value}
+  placeholder="Search issues, files and runs"
+  onValueChange={(next) => (value = next)}
+  onSelect={(id) => console.log('open', id)}
+/>`
 	},
 
 	// 3. GitHub Cards & Layouts (15 components)
@@ -1281,7 +1311,7 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 
 <IntelligentUIRenderer
   {nodes}
-  onIntent={(intent, payload) => console.log(intent, payload)}
+  onIntent={({ nodeId, action, detail }) => console.log(nodeId, action, detail)}
 />`
 	},
 
@@ -1295,18 +1325,21 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Supervisor-to-subagent delegation graph with live handoff status and token budgets.',
 		usageSnippet: `<script lang="ts">
-  import { AgentOrchestrator, type SubagentWorker } from 'agents-kit-svelte';
+  import { AgentOrchestrator, type SubAgent } from 'agents-kit-svelte';
 
-  const workers: SubagentWorker[] = [
-    { id: 'w-1', role: 'UI & Runes Porter', model: 'AK-S Agent', status: 'completed', task: 'Convert beUI & Beautiful UI to Svelte 5', tokensUsed: 18400 },
-    { id: 'w-2', role: 'GitHub Suite Builder', model: 'AK-S Agent', status: 'running', task: 'Verify Kanban crossfade & Bento layout', tokensUsed: 12100 },
-    { id: 'w-3', role: 'Playwright Verifier', model: 'Codex CLI', status: 'queued', task: 'Run 1440x900 & 390x844 browser checks', tokensUsed: 0 }
+  const subAgents: SubAgent[] = [
+    { id: 'a-1', name: 'Researcher', role: 'Reads the codebase', status: 'completed', task: 'Map the exports', progress: 100 },
+    { id: 'a-2', name: 'Implementer', role: 'Writes the change', status: 'running', task: 'Add the adapter', progress: 60 },
+    { id: 'a-3', name: 'Reviewer', role: 'Checks the diff', status: 'idle', task: 'Review the PR', progress: 0 }
   ];
 </script>
 
 <AgentOrchestrator
-  supervisorName="Factory 1.0 Orchestrator"
-  {workers}
+  orchestratorName="Release run"
+  description="Three agents working on one pull request."
+  {subAgents}
+  isProcessing
+  onRetryAgent={(id) => console.log('retry', id)}
 />`
 	},
 	{
@@ -1318,16 +1351,21 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Multi-lane parallel worker pool monitor for concurrent worktree, test, and search jobs.',
 		usageSnippet: `<script lang="ts">
-  import { AgentParallelProcessor, type ParallelJobLane } from 'agents-kit-svelte';
+  import { AgentParallelProcessor, type ParallelLane } from 'agents-kit-svelte';
 
-  const lanes: ParallelJobLane[] = [
-    { id: 'l-1', name: 'Lane A · svelte-check', progress: 100, status: 'completed', durationMs: 840, output: '0 errors, 0 warnings' },
-    { id: 'l-2', name: 'Lane B · Unit & Audit Suite', progress: 100, status: 'completed', durationMs: 105, output: '9/9 tests passed' },
-    { id: 'l-3', name: 'Lane C · Chromium Showcase', progress: 78, status: 'running', durationMs: 3200, output: 'Capturing 76 component cards…' }
+  const lanes: ParallelLane[] = [
+    { id: 'l-1', label: 'Docs', agentName: 'writer', status: 'done', progress: 100, tokens: 1840 },
+    { id: 'l-2', label: 'Tests', agentName: 'tester', status: 'processing', progress: 55 },
+    { id: 'l-3', label: 'Types', agentName: 'typist', status: 'waiting', progress: 0 }
   ];
 </script>
 
-<AgentParallelProcessor {lanes} />`
+<AgentParallelProcessor
+  taskDescription="Prepare the 1.0 release"
+  {lanes}
+  mergeStatus="idle"
+  onRetryLane={(id) => console.log('retry', id)}
+/>`
 	},
 	{
 		slug: 'agent-sequential-workflow',
@@ -1338,16 +1376,22 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Step-by-step pipeline planner with gate dependencies, retry actions, and stage durations.',
 		usageSnippet: `<script lang="ts">
-  import { AgentSequentialWorkflow, type SequentialStage } from 'agents-kit-svelte';
+  import { AgentSequentialWorkflow, type WorkflowStep } from 'agents-kit-svelte';
 
-  const stages: SequentialStage[] = [
-    { id: 'st-1', title: '1. Reproduce & Write Failing Test', description: 'Verify issue in Chromium and add regression test', status: 'completed', duration: '1m 12s' },
-    { id: 'st-2', title: '2. Implement Minimal Svelte 5 Fix', description: 'Apply semantic token & Runes patch', status: 'completed', duration: '2m 04s' },
-    { id: 'st-3', title: '3. Run Verification Gates', description: 'corepack pnpm check && corepack pnpm test', status: 'active', duration: '18s' }
+  const steps: WorkflowStep[] = [
+    { id: 's-1', number: 1, title: 'Plan', agentName: 'planner', inputSummary: 'Issue #42', outputSummary: '4 tasks', status: 'completed', duration: '12s' },
+    { id: 's-2', number: 2, title: 'Implement', agentName: 'coder', inputSummary: '4 tasks', outputSummary: 'Writing files', status: 'running' },
+    { id: 's-3', number: 3, title: 'Review', agentName: 'reviewer', gateDependency: 'Tests pass', inputSummary: 'Diff', outputSummary: '', status: 'waiting' }
   ];
 </script>
 
-<AgentSequentialWorkflow {stages} />`
+<AgentSequentialWorkflow
+  workflowName="Fix issue #42"
+  {steps}
+  currentStepId="s-2"
+  isRunning
+  onRetryStep={(id) => console.log('retry', id)}
+/>`
 	},
 	{
 		slug: 'agent-routing-hub',
@@ -1358,17 +1402,20 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Intent classifier & agent router showing confidence scores across AK-S Agent, Claude Code, Codex, and Gemini.',
 		usageSnippet: `<script lang="ts">
-  import { AgentRoutingHub, type RouteCandidate } from 'agents-kit-svelte';
+  import { AgentRoutingHub, type AgentRoute } from 'agents-kit-svelte';
 
-  const candidates: RouteCandidate[] = [
-    { id: 'r-1', agent: 'AK-S Agent (Svelte 5 Specialist)', confidence: 97, reason: 'Matches Svelte 5 Runes, OKLCH tokens, and UI component architecture', selected: true },
-    { id: 'r-2', agent: 'Codex CLI (Test Runner)', confidence: 84, reason: 'Strong fit for unit test generation and shell verification', selected: false }
+  const routes: AgentRoute[] = [
+    { id: 'r-1', agentName: 'Billing agent', specialty: 'Invoices and refunds', matchScore: 0.92, status: 'selected', description: 'Can issue refunds up to $500.' },
+    { id: 'r-2', agentName: 'Support agent', specialty: 'General questions', matchScore: 0.41, status: 'available', description: 'Answers from the help centre.' }
   ];
 </script>
 
 <AgentRoutingHub
-  prompt="Convert agents-kit catalogue to Svelte 5 with live Preview & Source tabs"
-  {candidates}
+  inputQuery="I was charged twice this month"
+  classification={{ intent: 'billing.refund', confidence: 0.92, reasoning: 'Mentions a duplicate charge.' }}
+  {routes}
+  selectedRouteId="r-1"
+  onOverrideRoute={(id) => console.log('route to', id)}
 />`
 	},
 	{
@@ -1379,18 +1426,41 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		upstreamSource: 'Agents Kit · components/agents-ui/agent-evaluator.tsx',
 		description: 'Rubric-based evaluation & red-team referee scorecard with weighted criteria.',
 		usageSnippet: `<script lang="ts">
-  import { AgentEvaluator, type EvaluationCriterion } from 'agents-kit-svelte';
+  import { AgentEvaluator, type EvalIteration } from 'agents-kit-svelte';
 
-  const criteria: EvaluationCriterion[] = [
-    { id: 'c-1', name: 'Svelte 5 Runes Compliance ($props, $state, $derived)', score: 100, weight: '35%', passed: true, note: 'Zero legacy export let or $: statements across 76 files' },
-    { id: 'c-2', name: 'Semantic Design System (Zero Hex Literals)', score: 100, weight: '35%', passed: true, note: 'All surfaces use bg-canvas-*, bg-card-*, text-fg-* tokens' },
-    { id: 'c-3', name: 'Interactive Usage & Source Code Tabs', score: 98, weight: '30%', passed: true, note: 'Every component showcases Preview, Usage Code, and Source' }
+  const iterations: EvalIteration[] = [
+    {
+      id: 'it-1',
+      number: 1,
+      output: 'Summary misses the breaking change.',
+      score: 64,
+      feedback: 'Mention the renamed tokens.',
+      status: 'failed',
+      criteria: [
+        { label: 'Accuracy', score: 6, maxScore: 10, status: 'warn' },
+        { label: 'Completeness', score: 5, maxScore: 10, status: 'fail', note: 'No migration notes' }
+      ]
+    },
+    {
+      id: 'it-2',
+      number: 2,
+      output: 'Summary covers the token rename and the alias period.',
+      score: 91,
+      feedback: 'Ready to ship.',
+      status: 'passed',
+      criteria: [
+        { label: 'Accuracy', score: 9, maxScore: 10, status: 'pass' },
+        { label: 'Completeness', score: 9, maxScore: 10, status: 'pass' }
+      ]
+    }
   ];
 </script>
 
 <AgentEvaluator
-  title="Referee Quality Gate Scorecard"
-  {criteria}
+  taskDescription="Write the release summary"
+  {iterations}
+  qualityThreshold={85}
+  onAccept={() => console.log('accepted')}
 />`
 	},
 	{
@@ -1402,14 +1472,25 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Live latency, token throughput, tool success rate, and Companion daemon health panel.',
 		usageSnippet: `<script lang="ts">
-  import { AgentOpsMonitor } from 'agents-kit-svelte';
+  import { AgentOpsMonitor, type OpsSignal, type OpsServiceMetric } from 'agents-kit-svelte';
+
+  const signals: OpsSignal[] = [
+    { id: 's-1', title: 'Queue latency', status: 'warning', detail: 'p95 above 4s for 10 minutes', owner: 'runner' },
+    { id: 's-2', title: 'Worker pool', status: 'healthy', detail: '6 of 6 workers online' }
+  ];
+  const metrics: OpsServiceMetric[] = [
+    { label: 'Success rate', value: '98.2%', threshold: '95%', trend: 'stable' },
+    { label: 'Cost / run', value: '$0.41', threshold: '$0.60', trend: 'down' }
+  ];
 </script>
 
 <AgentOpsMonitor
-  daemonName="studio-mac · Companion v0.3"
-  uptime="14d 06h 42m"
-  p95LatencyMs={184}
-  toolSuccessRate={99.4}
+  environment="production"
+  daemonStatus="Degraded"
+  uptime="14d 3h"
+  {signals}
+  {metrics}
+  onAcknowledge={(signal) => console.log('ack', signal.id)}
 />`
 	},
 	{
@@ -1420,16 +1501,21 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		upstreamSource: 'Agents Kit · components/agents-ui/agent-task-queue.tsx',
 		description: 'Prioritized agent run queue with pause, promote, and cancel controls.',
 		usageSnippet: `<script lang="ts">
-  import { AgentTaskQueue, type QueuedAgentTask } from 'agents-kit-svelte';
+  import { AgentTaskQueue, type AgentTask } from 'agents-kit-svelte';
 
-  const tasks: QueuedAgentTask[] = [
-    { id: 'q-1', title: 'Card #2151 · Board overflow menu label', priority: 'high', status: 'running', worktree: 'argon/2151-overflow-label' },
-    { id: 'q-2', title: 'Card #2148 · Ready for You empty state', priority: 'normal', status: 'queued', worktree: 'argon/2148-empty-note' },
-    { id: 'q-3', title: 'Card #2128 · Drawer focus restoration', priority: 'normal', status: 'completed', worktree: 'argon/2128-focus-restore' }
-  ];
+  let tasks: AgentTask[] = $state([
+    { id: 'q-1', title: 'Fix the overflow menu label', priority: 'high', status: 'running', progress: 40 },
+    { id: 'q-2', title: 'Add an empty state', priority: 'medium', status: 'queued' },
+    { id: 'q-3', title: 'Restore drawer focus', status: 'completed', progress: 100 }
+  ]);
 </script>
 
-<AgentTaskQueue {tasks} />`
+<AgentTaskQueue
+  {tasks}
+  activeTaskId="q-1"
+  onCancelTask={(id) => (tasks = tasks.filter((t) => t.id !== id))}
+  onReorder={(ids) => (tasks = ids.map((id) => tasks.find((t) => t.id === id)!))}
+/>`
 	},
 	{
 		slug: 'agent-artifact',
@@ -1440,20 +1526,24 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Rich artifact viewer/editor with tabs for Preview, Markdown Source, Schema, and History.',
 		usageSnippet: `<script lang="ts">
-  import { AgentArtifact } from 'agents-kit-svelte';
+  import { AgentArtifact, type ArtifactVersion } from 'agents-kit-svelte';
 
-  const markdown = [
-    '# Agents Kit Svelte v0.3',
-    '- 76 Svelte 5 Runes components',
-    '- GitHub Kanban & Bento suite',
-    '- Dynamic IntelligentUIRenderer'
-  ].join('\\n');
+  const versions: ArtifactVersion[] = [
+    { id: 'v1', label: 'v1', timestamp: '10:02', content: '# Release notes\\n\\n- First draft' },
+    { id: 'v2', label: 'v2', timestamp: '10:06', summary: 'Added the install step', content: '# Release notes\\n\\n- First draft\\n- Install with pnpm add agents-kit-svelte' }
+  ];
+  let currentVersion = $state('v2');
 </script>
 
 <AgentArtifact
-  title="walkthrough.md · Agents Kit Svelte v0.3"
-  version="v3 · Verified"
-  {markdown}
+  title="release-notes.md"
+  artifactType="document"
+  {versions}
+  {currentVersion}
+  content={versions.find((v) => v.id === currentVersion)?.content}
+  metadata={{ model: 'claude', tokens: 412 }}
+  onVersionChange={(id) => (currentVersion = id)}
+  onCopy={(text) => navigator.clipboard.writeText(text)}
 />`
 	},
 	{
@@ -1465,21 +1555,20 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Dynamic schema-to-form generator for structured agent tool inputs with live payload preview.',
 		usageSnippet: `<script lang="ts">
-  import { AgentFormGenerator, type GeneratedFormField } from 'agents-kit-svelte';
+  import { AgentFormGenerator, type FormField } from 'agents-kit-svelte';
 
-  let submittedPayload = $state<Record<string, unknown> | null>(null);
-
-  const fields: GeneratedFormField[] = [
-    { name: 'worktreeBranch', label: 'Worktree Branch', type: 'text', required: true, value: 'trailside/2151-drawer-hydration' },
-    { name: 'riskTier', label: 'Risk Tier', type: 'select', options: ['T1', 'T2', 'T3'], value: 'T2' },
-    { name: 'runPlaywright', label: 'Run Playwright Browser Suite', type: 'boolean', value: true }
+  const fields: FormField[] = [
+    { id: 'name', label: 'Project name', type: 'text', required: true, placeholder: 'my-app' },
+    { id: 'framework', label: 'Framework', type: 'select', options: ['SvelteKit', 'Vite'] },
+    { id: 'ssr', label: 'Server rendering', type: 'checkbox', defaultValue: true }
   ];
 </script>
 
 <AgentFormGenerator
-  title="Dispatch Card Run Configuration"
+  formTitle="New project"
+  formDescription="Generated from the agent's tool schema."
   {fields}
-  onSubmit={(payload) => (submittedPayload = payload)}
+  onSubmitPayload={(payload) => console.log(payload)}
 />`
 	},
 	{
@@ -1491,20 +1580,19 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Interactive command & MCP tool palette with category filter and parameter preview.',
 		usageSnippet: `<script lang="ts">
-  import { AgentToolPalette, type ToolPaletteEntry } from 'agents-kit-svelte';
+  import { AgentToolPalette, type AgentTool } from 'agents-kit-svelte';
 
-  let invokedTool = $state<string | null>(null);
-
-  const tools: ToolPaletteEntry[] = [
-    { id: 't-read', name: 'read_file', category: 'Filesystem', description: 'Read UTF-8 file slices with line bounds', riskTier: 'T1' },
-    { id: 't-bash', name: 'run_command', category: 'Worktree Shell', description: 'Run verification command in isolated git worktree', riskTier: 'T2' },
-    { id: 't-gh', name: 'gh_issue_view', category: 'GitHub MCP', description: 'Inspect issue labels, body, and active claims', riskTier: 'T1' }
-  ];
+  let tools: AgentTool[] = $state([
+    { id: 'read', name: 'Read', description: 'Read a file', category: 'files', enabled: true, parameters: [{ name: 'path', type: 'string', required: true }] },
+    { id: 'bash', name: 'Bash', description: 'Run a shell command', category: 'shell', enabled: false },
+    { id: 'fetch', name: 'WebFetch', description: 'Fetch a URL', category: 'web', enabled: true }
+  ]);
 </script>
 
 <AgentToolPalette
   {tools}
-  onInvoke={(toolName) => (invokedTool = toolName)}
+  categoryLabels={{ files: 'Files', shell: 'Shell', web: 'Web' }}
+  onToolToggle={(id, enabled) => (tools = tools.map((t) => (t.id === id ? { ...t, enabled } : t)))}
 />`
 	},
 	{
@@ -1516,14 +1604,17 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Multi-variant animated thinking indicator (wave, spin, stars, infinity, orbs).',
 		usageSnippet: `<script lang="ts">
-  import { AgentThinkingIndicator } from 'agents-kit-svelte';
+  import { AgentThinkingIndicator, type ThinkingVariant } from 'agents-kit-svelte';
 
-  let variant = $state<'wave' | 'spin' | 'stars' | 'infinity' | 'orbs'>('wave');
+  let variant: ThinkingVariant = $state('wave');
 </script>
 
 <AgentThinkingIndicator
-  initialVariant={variant}
-  label="Synthesizing Svelte 5 component tree…"
+  {variant}
+  state="searching"
+  label="Searching the docs"
+  showControls
+  onVariantChange={(next) => (variant = next)}
 />`
 	},
 
@@ -1586,19 +1677,16 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Multi-step collapsible chain-of-thought reasoning trace with step durations and confidence.',
 		usageSnippet: `<script lang="ts">
-  import { ChainOfThought, type ThoughtStep } from 'agents-kit-svelte';
+  import { ChainOfThought, type ChainOfThoughtStepItem } from 'agents-kit-svelte';
 
-  const steps: ThoughtStep[] = [
-    { id: 'th-1', title: 'Inspect upstream agents-kit catalogue layout', detail: 'Matched sticky left sidebar + dashed section dividers + Preview/Source tabs', durationMs: 420, status: 'complete' },
-    { id: 'th-2', title: 'Generate complete Svelte 5 usage snippets', detail: 'Included $state, typed sample data, and callbacks for all 76 components', durationMs: 680, status: 'complete' }
+  const steps: ChainOfThoughtStepItem[] = [
+    { id: 's-1', label: 'Read the failing test', status: 'complete', durationMs: 900, tools: ['Read'] },
+    { id: 's-2', label: 'Find where the date is parsed', status: 'active', sources: ['src/lib/date.ts'] },
+    { id: 's-3', label: 'Write the fix', status: 'pending' }
   ];
 </script>
 
-<ChainOfThought
-  summary="Reasoned across 2 architectural steps (1.1s)"
-  {steps}
-  defaultOpen={true}
-/>`
+<ChainOfThought title="Fixing the date bug" {steps} isStreaming defaultOpen />`
 	},
 	{
 		slug: 'stack-trace',
@@ -1611,17 +1699,19 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		usageSnippet: `<script lang="ts">
   import { StackTrace } from 'agents-kit-svelte';
 
-  let sentToAgent = $state(false);
+  const trace = [
+    "TypeError: Cannot read properties of undefined (reading 'id')",
+    '    at loadUser (src/lib/user.ts:14:22)',
+    '    at load (src/routes/+page.ts:6:10)',
+    '    at node_modules/@sveltejs/kit/src/runtime/client.js:410:9'
+  ].join('\\n');
 </script>
 
 <StackTrace
-  errorName="SvelteRunesStateMutationError"
-  errorMessage="state_unsafe_mutation: Updating state inside $derived.by(...) is forbidden"
-  frames={[
-    { file: 'src/routes/intelligent-ui/+page.svelte', line: 92, column: 5, fn: 'parsedSchema ($derived.by)', isInternal: false, snippet: 'const parsed = JSON.parse(schemaText); return { nodes: parsed, error: null };' },
-    { file: 'node_modules/svelte/src/internal/client/reactivity/deriveds.js', line: 114, column: 12, fn: 'update_derived', isInternal: true }
-  ]}
-  onSendToAgent={() => (sentToAgent = true)}
+  {trace}
+  defaultOpen
+  onFilePathClick={(path, line) => console.log('open', path, line)}
+  onSendToAgent={(text) => console.log('ask the agent about', text)}
 />`
 	},
 	{
@@ -1633,20 +1723,24 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Interactive HTTP/Tool schema inspector with expandable nested request/response properties.',
 		usageSnippet: `<script lang="ts">
-  import { SchemaDisplay, type SchemaFieldNode } from 'agents-kit-svelte';
+  import { SchemaDisplay, type SchemaParameterItem, type SchemaPropertyItem } from 'agents-kit-svelte';
 
-  const requestFields: SchemaFieldNode[] = [
-    { name: 'issueNumber', type: 'number', required: true, description: 'GitHub issue number to dispatch' },
-    { name: 'agentId', type: "'claude-code' | 'codex'", required: true, description: 'Supported Agent runtime identifier' },
-    { name: 'worktreeBranch', type: 'string', required: false, description: 'Optional isolated git branch override' }
+  const parameters: SchemaParameterItem[] = [
+    { name: 'owner', type: 'string', required: true, location: 'path' },
+    { name: 'state', type: "'open' | 'closed'", location: 'query' }
+  ];
+  const responseBody: SchemaPropertyItem[] = [
+    { name: 'number', type: 'integer', required: true },
+    { name: 'labels', type: 'array', items: { name: 'label', type: 'object', properties: [{ name: 'name', type: 'string' }] } }
   ];
 </script>
 
 <SchemaDisplay
-  method="POST"
-  endpoint="/api/runs/dispatch"
-  title="Dispatch Isolated Worktree Run"
-  {requestFields}
+  method="GET"
+  path={'/repos/{owner}/{repo}/issues'}
+  description="List issues in a repository."
+  {parameters}
+  {responseBody}
 />`
 	},
 	{
@@ -1658,16 +1752,16 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Masked .env and runtime configuration inspector with reveal toggles and scope badges.',
 		usageSnippet: `<script lang="ts">
-  import { EnvironmentVariables, type EnvVarEntry } from 'agents-kit-svelte';
+  import { EnvironmentVariables, type EnvVariableEntry } from 'agents-kit-svelte';
 
-  const variables: EnvVarEntry[] = [
-    { key: 'PUBLIC_APP_URL', value: 'http://127.0.0.1:5173', scope: 'public', secret: false },
-    { key: 'GITHUB_APP_ID', value: '984210', scope: 'runtime', secret: false },
-    { key: 'NEON_DATABASE_URL', value: 'postgres://user:pass@ep-cool-darkness.neon.tech/neondb', scope: 'worktree', secret: true }
+  const variables: EnvVariableEntry[] = [
+    { name: 'DATABASE_URL', value: 'postgres://localhost/app', required: true, scope: 'runtime' },
+    { name: 'ANTHROPIC_API_KEY', value: 'sk-ant-…', required: true, scope: 'secret' },
+    { name: 'PUBLIC_SITE_URL', value: 'https://example.com', scope: 'build' }
   ];
 </script>
 
-<EnvironmentVariables {variables} />`
+<EnvironmentVariables title=".env" {variables} />`
 	},
 	{
 		slug: 'package-info',
@@ -1678,14 +1772,24 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Package metadata card with version diff, dependencies, scripts, and verification status.',
 		usageSnippet: `<script lang="ts">
-  import { PackageInfo } from 'agents-kit-svelte';
+  import { PackageInfo, type PackageDependencyItem } from 'agents-kit-svelte';
+
+  const dependencies: PackageDependencyItem[] = [
+    { name: 'svelte', version: '^5.0.0' },
+    { name: 'tailwind-merge', version: '^3.0.0' },
+    { name: 'vitest', version: '^3.0.0', dev: true }
+  ];
 </script>
 
 <PackageInfo
   name="agents-kit-svelte"
-  previousVersion="0.2.0"
-  currentVersion="0.3.0"
+  currentVersion="0.9.0"
+  newVersion="1.0.0"
+  changeType="major"
   license="MIT"
+  verified
+  scripts={[{ name: 'build', command: 'svelte-package' }]}
+  {dependencies}
 />`
 	},
 	{
@@ -1697,19 +1801,17 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Live web preview frame with URL bar, 390px/768px/1440px viewport switcher, and console drawer.',
 		usageSnippet: `<script lang="ts">
-  import { WebPreview } from 'agents-kit-svelte';
+  import { WebPreview, type PreviewConsoleLog } from 'agents-kit-svelte';
 
-  const consoleLogs = [
-    '[vite] connected to http://127.0.0.1:5173',
-    '[ak-s] Hydrated 76 Svelte 5 components in 14ms'
+  const logs: PreviewConsoleLog[] = [
+    { id: 'l-1', level: 'log', message: 'App mounted', timestamp: '10:02:11' },
+    { id: 'l-2', level: 'warn', message: 'Image is missing alt text', timestamp: '10:02:12' }
   ];
 </script>
 
-<WebPreview
-  initialUrl="http://127.0.0.1:5173/github"
-  title="GitHub Reactive Board & Bento Preview"
-  {consoleLogs}
-/>`
+<WebPreview defaultUrl="http://localhost:5173" defaultViewport="768px" {logs} onUrlChange={(url) => console.log(url)}>
+  <iframe title="Preview" src="http://localhost:5173" class="h-full w-full"></iframe>
+</WebPreview>`
 	},
 	{
 		slug: 'plan-card',
@@ -1740,19 +1842,16 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		usageSnippet: `<script lang="ts">
   import { PromptSuggestions, type PromptSuggestionItem } from 'agents-kit-svelte';
 
-  let chosenPrompt = $state('');
-
   const suggestions: PromptSuggestionItem[] = [
-    { id: 'ps-1', category: 'Worktree', label: 'Run svelte-check and unit tests across changed files' },
-    { id: 'ps-2', category: 'GitHub', label: 'Inspect PR #2153 referee verdict and browser checks' },
-    { id: 'ps-3', category: 'Schema', label: 'Generate a comparison surface for Svelte 5 Runes vs React hooks' }
+    { id: 'p-1', category: 'inspect', label: 'Explain this repo', prompt: 'Give me a tour of this repository.' },
+    { id: 'p-2', category: 'implement', label: 'Add a test', prompt: 'Add a unit test for the date parser.' },
+    { id: 'p-3', category: 'review', label: 'Review my diff', prompt: 'Review the staged changes.' }
   ];
+  let draft = $state('');
 </script>
 
-<PromptSuggestions
-  {suggestions}
-  onSelect={(promptText) => (chosenPrompt = promptText)}
-/>`
+<PromptSuggestions {suggestions} onSelect={(item) => (draft = item.prompt)} />
+<textarea bind:value={draft}></textarea>`
 	},
 	{
 		slug: 'test-results',
@@ -2005,14 +2104,19 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Interactive voice session & 24-bar audio waveform visualizer with mic selector and live transcript.',
 		usageSnippet: `<script lang="ts">
-  import { VoiceWaveVisualizer } from 'agents-kit-svelte';
+  import { VoiceWaveVisualizer, type VoiceDeviceOption } from 'agents-kit-svelte';
 
-  let state = $state<'idle' | 'listening' | 'thinking' | 'speaking'>('speaking');
+  const devices: VoiceDeviceOption[] = [
+    { id: 'default', label: 'MacBook microphone' },
+    { id: 'usb', label: 'USB headset' }
+  ];
 </script>
 
 <VoiceWaveVisualizer
-  agentName="AK-S Voice Companion"
-  initialState={state}
+  defaultState="listening"
+  {devices}
+  transcript="Book a table for two at seven."
+  onStateChange={(state) => console.log(state)}
 />`
 	},
 	{
@@ -2023,16 +2127,16 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		upstreamSource: 'Effects · components/effects/border-beam.tsx',
 		description: 'Animated active-work border beam treatment for running agent cards and composers.',
 		usageSnippet: `<script lang="ts">
-  import { BorderBeam, PromptInput } from 'agents-kit-svelte';
+  import { BorderBeam } from 'agents-kit-svelte';
 
   let active = $state(true);
 </script>
 
-<BorderBeam
-  {active}
-  label="Active AK-S Worktree Run"
-  subtitle="Compositor-safe border beam with prefers-reduced-motion fallback"
-/>`
+<BorderBeam {active} tone="accent" size="md" label="Agent running">
+  <button class="rounded-control px-4 py-2" onclick={() => (active = !active)}>
+    {active ? 'Stop' : 'Start'} run
+  </button>
+</BorderBeam>`
 	},
 	{
 		slug: 'svelte5-motion-lab',
@@ -2043,20 +2147,14 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 		description:
 			'Interactive Svelte 5 physics & microanimation playground showcasing Spring, Tween, crossfade (send/receive), animate:flip, SvelteSet, SvelteMap, and {#snippet}.',
 		usageSnippet: `<script lang="ts">
-  import {
-    Svelte5MotionLab,
-    ReactiveSpringMetric,
-    ReactiveTweenProgress,
-    createBoardCrossfade,
-    pressScale,
-    magneticHover
-  } from 'agents-kit-svelte';
+  import { Svelte5MotionLab, ReactiveSpringMetric, ReactiveTweenProgress } from 'agents-kit-svelte';
 
-  const confidenceSpring = new ReactiveSpringMetric(92);
-  const progressTween = new ReactiveTweenProgress(75);
-  const [send, receive] = createBoardCrossfade();
+  // The lab demonstrates these helpers; use them in your own components too.
+  const confidence = new ReactiveSpringMetric(92);
+  const progress = new ReactiveTweenProgress(75);
 </script>
 
-<Svelte5MotionLab />`
+<Svelte5MotionLab initialTarget={80} />
+<button onclick={() => (confidence.set(60), progress.set(100))}>Animate</button>`
 	}
 ];

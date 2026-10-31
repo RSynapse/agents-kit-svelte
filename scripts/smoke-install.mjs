@@ -134,6 +134,13 @@ mount(App, { target: document.getElementById('app')! });
 	};
 	for (const [name, content] of Object.entries(files)) writeFileSync(join(app, name), content);
 
+	// Every catalogue usage snippet is a complete component: type-check each one against the
+	// packed package, so the docs can't drift from the real props.
+	const { CATALOG_ITEMS } = await import(join(root, 'src', 'site', 'catalog-registry.ts'));
+	mkdirSync(join(app, 'src', 'snippets'), { recursive: true });
+	for (const item of CATALOG_ITEMS) writeFileSync(join(app, 'src', 'snippets', `${item.slug}.svelte`), item.usageSnippet);
+	console.log(`Wrote ${CATALOG_ITEMS.length} catalogue snippets for type-checking.`);
+
 	run('npm install --no-audit --no-fund --loglevel=error', app);
 	run('npm run check', app);
 	run('npm run build', app);
@@ -143,7 +150,7 @@ mount(App, { target: document.getElementById('app')! });
 		.filter((f) => f.endsWith('.css'))
 		.map((f) => readFileSync(join(assets, f), 'utf8'))
 		.join('\n');
-	const expected = ['--color-canvas-primary-val', '.bg-card-bg', '.text-fg-main', '.ak-shimmer-text'];
+	const expected = ['--ak-color-surface', '.bg-card-bg', '.text-fg-main', '.ak-shimmer-text'];
 	const missing = expected.filter((needle) => !css.includes(needle));
 	if (missing.length) throw new Error(`Built CSS is missing: ${missing.join(', ')}`);
 

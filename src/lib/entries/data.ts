@@ -13,3 +13,16 @@ export { default as SelectionActions } from '../beautiful/SelectionActions.svelt
 export { default as ToolChips } from '../beautiful/ToolChips.svelte';
 
 export type * from '../types';
+
+// Types declared in the components themselves.
+export type { ContextCardKind, ContextChunk } from '../beautiful/ContextCards.svelte';
+export type { DiffTableRow } from '../beautiful/DiffTable.svelte';
+export type { FilterStatus, FilterTableRow } from '../beautiful/FilterTable.svelte';
+export type { FineTuneField } from '../beautiful/FineTuneCard.svelte';
+export type { FlowchartNode, FlowchartEdge } from '../beautiful/Flowchart.svelte';
+export type { InsightKind, InsightCard } from '../beautiful/InsightCards.svelte';
+export type { RecommendationOption } from '../beautiful/RecommendationCard.svelte';
+export type { RecordRow } from '../beautiful/RecordsTable.svelte';
+export type { SearchListItem } from '../beautiful/SearchList.svelte';
+export type { SelectionAction } from '../beautiful/SelectionActions.svelte';
+export type { ToolStep, ToolDiff } from '../beautiful/ToolChips.svelte';

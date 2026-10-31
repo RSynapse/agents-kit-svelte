@@ -38,3 +38,20 @@ export { default as TrailsideClaudeChat } from '../trailside/TrailsideClaudeChat
 export * from '../state/chat-helpers';
 export * from '../core/agent';
 export type * from '../types';
+
+// Types declared in the components themselves.
+export type { SidebarResourceKind, SidebarResource } from '../agents/AISidebar.svelte';
+export type { ImageGenerationStatus } from '../agents/ImageGeneration.svelte';
+export type { MessageBubbleVariant, MessageBubbleAlign } from '../agents/MessageBubble.svelte';
+export type { RailItem } from '../agents/MessageScroller.svelte';
+export type { ChainStepStatus, ChainOfThoughtStepItem } from '../ai-elements/ChainOfThought.svelte';
+export type { EnvVariableEntry } from '../ai-elements/EnvironmentVariables.svelte';
+export type { PackageChangeType, PackageDependencyItem, PackageScriptItem } from '../ai-elements/PackageInfo.svelte';
+export type { PlanMilestone } from '../ai-elements/PlanCard.svelte';
+export type { PromptSuggestionItem } from '../ai-elements/PromptSuggestions.svelte';
+export type { HttpMethod, SchemaParameterItem, SchemaPropertyItem } from '../ai-elements/SchemaDisplay.svelte';
+export type { StackFrameItem, ParsedStackTraceData } from '../ai-elements/StackTrace.svelte';
+export type { VoiceSessionState, VoiceDeviceOption, VoicePersonaOption } from '../ai-elements/VoiceWaveVisualizer.svelte';
+export type { PreviewViewport, PreviewConsoleLog } from '../ai-elements/WebPreview.svelte';
+export type { WorktreeFileNode } from '../runtime/FileTree.svelte';
+export type { SuiteTestItem, SuiteGroup } from '../runtime/TestResults.svelte';
