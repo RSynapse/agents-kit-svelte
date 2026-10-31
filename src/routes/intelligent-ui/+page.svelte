@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SAMPLE_CHECKS, SAMPLE_ISSUE, SAMPLE_PULL_REQUEST } from '$lib/fixtures/github';
 	import {
 		ArrowUp,
 		Braces,
@@ -222,9 +223,9 @@
 			keywords: ['triage', 'pull', 'pr', 'github', 'issue', 'review', 'checks', 'ci'],
 			reply: 'The issue, its candidate pull request and the failing checks, in one place.',
 			nodes: [
-				{ id: 'node-gh-1', component: 'github-issue-card', title: 'Claimed issue', props: {} },
-				{ id: 'node-gh-2', component: 'github-pr-card', title: 'Candidate pull request', props: {} },
-				{ id: 'node-gh-3', component: 'github-checks-panel', title: 'CI checks', props: {} }
+				{ id: 'node-gh-1', component: 'github-issue-card', title: 'Claimed issue', props: { issue: SAMPLE_ISSUE } },
+				{ id: 'node-gh-2', component: 'github-pr-card', title: 'Candidate pull request', props: { pr: SAMPLE_PULL_REQUEST } },
+				{ id: 'node-gh-3', component: 'github-checks-panel', title: 'CI checks', props: { checks: SAMPLE_CHECKS } }
 			]
 		},
 		{

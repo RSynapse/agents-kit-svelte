@@ -5,59 +5,15 @@
 	import type { GitHubPullRequestData } from '../types';
 
 	interface Props {
-		pr?: GitHubPullRequestData;
+		pr: GitHubPullRequestData;
 		defaultChecksOpen?: boolean;
 		onApproveMerge?: (prNumber: number) => void;
 		onRequestChanges?: (prNumber: number) => void;
 		class?: string;
 	}
 
-	const DEFAULT_PR: GitHubPullRequestData = {
-		number: 2153,
-		title: 'fix(home): raise contrast of unpicked agents, skipped gates and secondary captions',
-		repo: 'RSynapse/trailside',
-		state: 'open',
-		author: 'argon-agent',
-		headBranch: 'argon/2151-home-faint-captions-contrast',
-		baseBranch: 'main',
-		additions: 68,
-		deletions: 14,
-		changedFilesCount: 3,
-		riskTier: 'T1',
-		refereeStatus: 'pass',
-		refereeSummary: 'Referee review (T1, one lens): PASS. Verified 4.5:1 contrast across all 5 viewports. Queued to merge.',
-		updatedAt: '4m ago',
-		linkedIssueNumber: 2151,
-		checks: [
-			{
-				id: 'chk-1',
-				name: 'check-and-test (Node 24.11.1)',
-				workflow: 'CI',
-				status: 'passed',
-				duration: '1m 42s',
-				summary: 'svelte-check 0 errors · 39 affected suites passed'
-			},
-			{
-				id: 'chk-2',
-				name: 'Playwright 5-viewport contrast verification',
-				workflow: 'Browser Verification',
-				status: 'passed',
-				duration: '32.0s',
-				summary: '320px, 390px, 768px, 1024px, 1440px all >= 4.5:1'
-			},
-			{
-				id: 'chk-3',
-				name: 'check-boundaries & protected-paths guard',
-				workflow: 'Policy Gate',
-				status: 'passed',
-				duration: '4.1s',
-				summary: 'T1 UI paths only · css-ratchet within baseline'
-			}
-		]
-	};
-
 	let {
-		pr = DEFAULT_PR,
+		pr,
 		defaultChecksOpen = true,
 		onApproveMerge,
 		onRequestChanges,

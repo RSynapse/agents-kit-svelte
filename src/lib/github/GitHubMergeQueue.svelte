@@ -12,24 +12,17 @@
 		entries?: GitHubMergeQueueEntry[];
 		/** Ticks needed to finish one merge group's checks. */
 		ticksPerMerge?: number;
-		/** Plays entries running checks and merging in order, then loops. */
+		/** Demo mode: plays entries running checks and merging in order, then loops. Off by default. */
 		live?: boolean;
 		onRemove?: (prNumber: number) => void;
 		class?: string;
 	}
 
-	const DEFAULT_ENTRIES: GitHubMergeQueueEntry[] = [
-		{ number: 2210, title: 'fix(export): quote CSV fields per RFC 4180', author: 'argon-agent', checksTotal: 6 },
-		{ number: 2207, title: 'feat(settings): appearance row with system theme', author: 'mira-chen', checksTotal: 6 },
-		{ number: 2213, title: 'chore(deps): bump vite to 8.3.1', author: 'renovate', checksTotal: 6 },
-		{ number: 2215, title: 'docs: document the export column order', author: 'tomas-r', checksTotal: 4 }
-	];
-
 	let {
 		baseBranch = 'main',
-		entries = DEFAULT_ENTRIES,
+		entries = [],
 		ticksPerMerge = 3,
-		live = true,
+		live = false,
 		onRemove,
 		class: className = ''
 	}: Props = $props();

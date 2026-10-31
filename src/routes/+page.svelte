@@ -1,4 +1,21 @@
 <script lang="ts">
+	import {
+		SAMPLE_BENTO_STATS,
+		SAMPLE_BOARD_ISSUES,
+		SAMPLE_BRANCH,
+		SAMPLE_CHECKS,
+		SAMPLE_COMMIT,
+		SAMPLE_ENVIRONMENTS,
+		SAMPLE_INCIDENT,
+		SAMPLE_ISSUE,
+		SAMPLE_LIFECYCLE_STAGES,
+		SAMPLE_MERGE_QUEUE,
+		SAMPLE_PULL_REQUEST,
+		SAMPLE_RELEASE,
+		SAMPLE_REVIEW_FILES,
+		SAMPLE_REVIEW_THREAD,
+		SAMPLE_TRIAGE_ISSUE
+	} from '$lib/fixtures/github';
 	import HeroDemo from './HeroDemo.svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { SEGMENT_GROUP_CLASS, badgeClass, buttonClass, segmentClass } from '$lib/ui/styles';
@@ -1419,25 +1436,25 @@
 							{:else if item.slug === 'github-review-thread'}
 								<GitHubReviewThreadCard thread={sampleThread} />
 							{:else if item.slug === 'github-kanban-board'}
-								<GitHubKanbanBoard />
+								<GitHubKanbanBoard issues={SAMPLE_BOARD_ISSUES} />
 							{:else if item.slug === 'github-bento-layout'}
-								<GitHubBentoLayout />
+								<GitHubBentoLayout repoName="RSynapse/trailside" repoDetail="GitHub App installation active" branchDetail="Protected · Referee merge queue" stats={SAMPLE_BENTO_STATS} pullRequest={SAMPLE_PULL_REQUEST} checks={SAMPLE_CHECKS} issue={SAMPLE_ISSUE} commit={SAMPLE_COMMIT} thread={SAMPLE_REVIEW_THREAD} />
 							{:else if item.slug === 'github-lifecycle-timeline'}
-								<GitHubLifecycleTimeline live={visibleSlugs.has(item.slug)} />
+								<GitHubLifecycleTimeline stages={SAMPLE_LIFECYCLE_STAGES} live />
 							{:else if item.slug === 'github-issue-triage'}
-								<GitHubIssueTriage live={visibleSlugs.has(item.slug)} />
+								<GitHubIssueTriage issue={SAMPLE_TRIAGE_ISSUE} live />
 							{:else if item.slug === 'github-branch-card'}
-								<GitHubBranchCard live={visibleSlugs.has(item.slug)} />
+								<GitHubBranchCard branch={SAMPLE_BRANCH} live />
 							{:else if item.slug === 'github-pr-review'}
-								<GitHubPullRequestReview live={visibleSlugs.has(item.slug)} />
+								<GitHubPullRequestReview prNumber={2210} title="fix(export): quote CSV fields per RFC 4180" reviewer="mira-chen" files={SAMPLE_REVIEW_FILES} live />
 							{:else if item.slug === 'github-merge-queue'}
-								<GitHubMergeQueue live={visibleSlugs.has(item.slug)} />
+								<GitHubMergeQueue entries={SAMPLE_MERGE_QUEUE} live />
 							{:else if item.slug === 'github-deployment-pipeline'}
-								<GitHubDeploymentPipeline live={visibleSlugs.has(item.slug)} />
+								<GitHubDeploymentPipeline sha="9b07d3e" environments={SAMPLE_ENVIRONMENTS} live />
 							{:else if item.slug === 'github-release-card'}
-								<GitHubReleaseCard live={visibleSlugs.has(item.slug)} />
+								<GitHubReleaseCard release={SAMPLE_RELEASE} live />
 							{:else if item.slug === 'github-incident-card'}
-								<GitHubIncidentCard live={visibleSlugs.has(item.slug)} />
+								<GitHubIncidentCard incident={SAMPLE_INCIDENT} live />
 							{:else if item.slug === 'agent-generative-surface'}
 								<AgentGenerativeSurface content={sampleSurfaceContent} />
 							{:else if item.slug === 'result-actions'}

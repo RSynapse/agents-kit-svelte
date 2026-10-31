@@ -4,38 +4,14 @@
 	import type { GitHubReviewThreadData } from '../types';
 
 	interface Props {
-		thread?: GitHubReviewThreadData;
+		thread: GitHubReviewThreadData;
 		onApplySuggestion?: (threadId: string) => void;
 		onReply?: (threadId: string, body: string) => void;
 		class?: string;
 	}
 
-	const DEFAULT_THREAD: GitHubReviewThreadData = {
-		id: 'thread-2153-1',
-		filePath: 'apps/web/src/lib/home/trail.css',
-		lineRange: 'L187-L194',
-		diffHunk: [
-			'@@ -187,4 +187,4 @@',
-			' .pick-dim {',
-			'-  color: var(--faint);',
-			'+  color: var(--muted);',
-			' }'
-		].join('\n'),
-		resolved: false,
-		comments: [
-			{
-				id: 'c-1',
-				author: 'claude-referee',
-				role: 'Referee · T1 Lens',
-				timestamp: '6m ago',
-				body: 'Verified that switching `.pick-dim` and `.gate` from `--faint` to `--muted` brings the contrast ratio from 2.91:1 to 5.42:1 on warm paper.',
-				suggestedPatch: '.pick-dim, .gate {\n  color: var(--muted);\n}'
-			}
-		]
-	};
-
 	let {
-		thread = DEFAULT_THREAD,
+		thread,
 		onApplySuggestion,
 		onReply,
 		class: className = ''

@@ -28,6 +28,10 @@
 		ApprovalQuestion,
 		DynamicUINode,
 		GeneratedSurfaceContent,
+		GitHubCheckItem,
+		GitHubCommitData,
+		GitHubIssueData,
+		GitHubPullRequestData,
 		TodoItem,
 		ToolApprovalParam
 	} from '../types';
@@ -40,6 +44,12 @@
 
 	let { nodes, onIntent, class: className = '' }: Props = $props();
 </script>
+
+{#snippet missingProp(name: string)}
+	<p class="rounded-control border border-dashed border-card-border px-3 py-2 text-xs text-fg-light">
+		This node needs a <code class="font-mono">{name}</code> prop.
+	</p>
+{/snippet}
 
 <div class="space-y-4 {className}">
 	{#each nodes as node (node.id)}
@@ -126,19 +136,34 @@
 						onIntent?.({ nodeId: node.id, action: 'submit', detail: JSON.stringify(answers) })}
 				/>
 			{:else if node.component === 'github-issue-card'}
-				<GitHubIssueCard
-					onDispatchRun={(num) =>
-						onIntent?.({ nodeId: node.id, action: 'dispatch-issue', detail: String(num) })}
-				/>
+				{#if node.props.issue}
+					<GitHubIssueCard
+						issue={node.props.issue as GitHubIssueData}
+						onDispatchRun={(num) =>
+							onIntent?.({ nodeId: node.id, action: 'dispatch-issue', detail: String(num) })}
+					/>
+				{:else}
+					{@render missingProp('issue')}
+				{/if}
 			{:else if node.component === 'github-pr-card'}
-				<GitHubPullRequestCard
-					onApproveMerge={(num) =>
-						onIntent?.({ nodeId: node.id, action: 'approve-pr', detail: String(num) })}
-				/>
+				{#if node.props.pr}
+					<GitHubPullRequestCard
+						pr={node.props.pr as GitHubPullRequestData}
+						onApproveMerge={(num) =>
+							onIntent?.({ nodeId: node.id, action: 'approve-pr', detail: String(num) })}
+					/>
+				{:else}
+					{@render missingProp('pr')}
+				{/if}
 			{:else if node.component === 'github-commit-card'}
-				<GitHubCommitCard />
+				{#if node.props.commit}
+					<GitHubCommitCard commit={node.props.commit as GitHubCommitData} />
+				{:else}
+					{@render missingProp('commit')}
+				{/if}
 			{:else if node.component === 'github-checks-panel'}
 				<GitHubChecksPanel
+					checks={(node.props.checks as GitHubCheckItem[] | undefined) ?? []}
 					onFixWithAgent={(id) =>
 						onIntent?.({ nodeId: node.id, action: 'fix-check', detail: id })}
 				/>

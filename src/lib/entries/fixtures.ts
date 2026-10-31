@@ -4,3 +4,4 @@
  */
 
 export * from '../skills/fixtures';
+export * from '../fixtures/github';

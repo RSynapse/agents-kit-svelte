@@ -11,44 +11,9 @@
 		class?: string;
 	}
 
-	const DEFAULT_CHECKS: GitHubCheckItem[] = [
-		{
-			id: 'ci-1',
-			name: 'corepack pnpm check (svelte-check & tsc)',
-			workflow: 'check-and-test',
-			status: 'passed',
-			duration: '18.4s',
-			summary: '0 errors, 0 warnings across 6 packages'
-		},
-		{
-			id: 'ci-2',
-			name: 'node scripts/check-boundaries.ts',
-			workflow: 'check-and-test',
-			status: 'passed',
-			duration: '2.1s',
-			summary: 'All service, domain, and UI boundary rules satisfied'
-		},
-		{
-			id: 'ci-3',
-			name: 'Playwright mobile viewport tap-target gate (390x844)',
-			workflow: 'browser-parity',
-			status: 'failed',
-			duration: '14.2s',
-			summary: 'Expected action pill height >= 36px, measured 30px on /w/settings'
-		},
-		{
-			id: 'ci-4',
-			name: 'CSS growth ratchet & a11y baseline',
-			workflow: 'static-review',
-			status: 'passed',
-			duration: '3.6s',
-			summary: '32 static checks passed'
-		}
-	];
-
 	let {
 		title = 'GitHub Actions & Check Suites',
-		checks = DEFAULT_CHECKS,
+		checks = [],
 		onFixWithAgent,
 		onRerunCheck,
 		class: className = ''

@@ -1,4 +1,21 @@
 <script lang="ts">
+	import {
+		SAMPLE_BENTO_STATS,
+		SAMPLE_BOARD_ISSUES,
+		SAMPLE_BRANCH,
+		SAMPLE_CHECKS,
+		SAMPLE_COMMIT,
+		SAMPLE_ENVIRONMENTS,
+		SAMPLE_INCIDENT,
+		SAMPLE_ISSUE,
+		SAMPLE_LIFECYCLE_STAGES,
+		SAMPLE_MERGE_QUEUE,
+		SAMPLE_PULL_REQUEST,
+		SAMPLE_RELEASE,
+		SAMPLE_REVIEW_FILES,
+		SAMPLE_REVIEW_THREAD,
+		SAMPLE_TRIAGE_ISSUE
+	} from '$lib/fixtures/github';
 	import GitHubBentoLayout from '$lib/github/GitHubBentoLayout.svelte';
 	import GitHubChecksPanel from '$lib/github/GitHubChecksPanel.svelte';
 	import GitHubCommitCard from '$lib/github/GitHubCommitCard.svelte';
@@ -108,7 +125,7 @@
 		<div class="space-y-10">
 			<div class="relative">
 				{#key replays.timeline ?? 0}
-					<GitHubLifecycleTimeline onSelectStage={(stage) => recordEvent(`Inspected lifecycle stage: ${stage.label}`)} />
+					<GitHubLifecycleTimeline stages={SAMPLE_LIFECYCLE_STAGES} live onSelectStage={(stage) => recordEvent(`Inspected lifecycle stage: ${stage.label}`)} />
 				{/key}
 			</div>
 
@@ -128,32 +145,32 @@
 					{#key replays[phase.id] ?? 0}
 						{#if phase.id === 'plan'}
 							<div class="grid items-start gap-4 [&>*]:min-w-0 lg:grid-cols-2">
-								<GitHubIssueTriage
+								<GitHubIssueTriage issue={SAMPLE_TRIAGE_ISSUE} live
 									onApply={(n, applied) => recordEvent(`Applied triage to Issue ${n}: ${applied.join(', ')}`)}
 									onMarkDuplicate={(n, d) => recordEvent(`Linked Issue ${n} to Issue ${d}`)}
 								/>
-								<GitHubIssueCard
+								<GitHubIssueCard issue={SAMPLE_ISSUE}
 									onDispatchRun={(n) => recordEvent(`Dispatched Claude Code worktree run on Issue ${n}`)}
 									onClaimToggle={(n, c) => recordEvent(`${c ? 'Claimed' : 'Released'} Issue ${n}`)}
 								/>
 							</div>
 						{:else if phase.id === 'build'}
 							<div class="grid items-start gap-4 [&>*]:min-w-0 lg:grid-cols-2">
-								<GitHubBranchCard
+								<GitHubBranchCard branch={SAMPLE_BRANCH} live
 									onOpenWorktree={(b) => recordEvent(`Opened worktree for ${b}`)}
 									onCompare={(b, base) => recordEvent(`Comparing ${base}...${b}`)}
 								/>
-								<GitHubCommitCard onRestore={(sha) => recordEvent(`Restored worktree to commit ${sha}`)} />
+								<GitHubCommitCard commit={SAMPLE_COMMIT} onRestore={(sha) => recordEvent(`Restored worktree to commit ${sha}`)} />
 							</div>
 						{:else if phase.id === 'review'}
 							<div class="grid items-start gap-4 [&>*]:min-w-0 xl:grid-cols-[3fr_2fr]">
-								<GitHubPullRequestReview onSubmitReview={(n, v) => recordEvent(`Submitted review on PR ${n}: ${v}`)} />
+								<GitHubPullRequestReview prNumber={2210} title="fix(export): quote CSV fields per RFC 4180" reviewer="mira-chen" files={SAMPLE_REVIEW_FILES} live onSubmitReview={(n, v) => recordEvent(`Submitted review on PR ${n}: ${v}`)} />
 								<div class="space-y-4">
-									<GitHubPullRequestCard
+									<GitHubPullRequestCard pr={SAMPLE_PULL_REQUEST}
 										onApproveMerge={(n) => recordEvent(`Queued PR ${n} for referee merge`)}
 										onRequestChanges={(n) => recordEvent(`Sent back PR ${n} for agent revision`)}
 									/>
-									<GitHubReviewThreadCard
+									<GitHubReviewThreadCard thread={SAMPLE_REVIEW_THREAD}
 										onApplySuggestion={(id) => recordEvent(`Applied suggested patch on thread ${id}`)}
 										onReply={(id, text) => recordEvent(`Replied on ${id}: "${text}"`)}
 									/>
@@ -161,23 +178,23 @@
 							</div>
 						{:else if phase.id === 'verify'}
 							<div class="grid items-start gap-4 [&>*]:min-w-0 lg:grid-cols-2">
-								<GitHubChecksPanel
+								<GitHubChecksPanel checks={SAMPLE_CHECKS}
 									onFixWithAgent={(id) => recordEvent(`Launched Claude Code to fix check ${id}`)}
 									onRerunCheck={(id) => recordEvent(`Re-running check ${id}`)}
 								/>
-								<GitHubMergeQueue onRemove={(n) => recordEvent(`Removed PR ${n} from the merge queue`)} />
+								<GitHubMergeQueue entries={SAMPLE_MERGE_QUEUE} live onRemove={(n) => recordEvent(`Removed PR ${n} from the merge queue`)} />
 							</div>
 						{:else if phase.id === 'ship'}
 							<div class="grid items-start gap-4 [&>*]:min-w-0 lg:grid-cols-2">
-								<GitHubDeploymentPipeline
+								<GitHubDeploymentPipeline sha="9b07d3e" environments={SAMPLE_ENVIRONMENTS} live
 									onApprove={(env) => recordEvent(`Approved deployment to ${env}`)}
 									onRollback={(env) => recordEvent(`Rolled back ${env}`)}
 								/>
-								<GitHubReleaseCard onPublish={(tag, pre) => recordEvent(`Published ${tag}${pre ? ' as a pre-release' : ''}`)} />
+								<GitHubReleaseCard release={SAMPLE_RELEASE} live onPublish={(tag, pre) => recordEvent(`Published ${tag}${pre ? ' as a pre-release' : ''}`)} />
 							</div>
 						{:else}
 							<div class="grid items-start gap-4 [&>*]:min-w-0 lg:grid-cols-2">
-								<GitHubIncidentCard onRevert={(pr, sha) => recordEvent(`Opened revert of PR ${pr} (${sha})`)} />
+								<GitHubIncidentCard incident={SAMPLE_INCIDENT} live onRevert={(pr, sha) => recordEvent(`Opened revert of PR ${pr} (${sha})`)} />
 								<div class="rounded-card border border-dashed border-card-border p-5 text-[13px] leading-6 text-fg-light">
 									<p class="font-medium text-fg-main">Closing the loop</p>
 									<p class="mt-1">
@@ -195,22 +212,22 @@
 			{/each}
 		</div>
 	{:else if activeView === 'kanban'}
-		<GitHubKanbanBoard
+		<GitHubKanbanBoard issues={SAMPLE_BOARD_ISSUES}
 			onSelectIssue={(issue) => recordEvent(`Opened card inspector for Issue ${issue.number}`)}
 		/>
 	{:else if activeView === 'bento'}
-		<GitHubBentoLayout />
+		<GitHubBentoLayout repoName="RSynapse/trailside" repoDetail="GitHub App installation active" branchDetail="Protected · Referee merge queue" stats={SAMPLE_BENTO_STATS} pullRequest={SAMPLE_PULL_REQUEST} checks={SAMPLE_CHECKS} issue={SAMPLE_ISSUE} commit={SAMPLE_COMMIT} thread={SAMPLE_REVIEW_THREAD} />
 	{:else}
 		<div class="grid gap-6 lg:grid-cols-2">
 			<div class="space-y-4">
 				<h2 class="px-1 text-xs font-medium text-fg-light">
 					GitHubIssueCard & GitHubPullRequestCard
 				</h2>
-				<GitHubIssueCard
+				<GitHubIssueCard issue={SAMPLE_ISSUE}
 					onDispatchRun={(n) => recordEvent(`Dispatched Claude Code worktree run on Issue ${n}`)}
 					onClaimToggle={(n, c) => recordEvent(`${c ? 'Claimed' : 'Released'} Issue ${n}`)}
 				/>
-				<GitHubPullRequestCard
+				<GitHubPullRequestCard pr={SAMPLE_PULL_REQUEST}
 					onApproveMerge={(n) => recordEvent(`Queued PR ${n} for referee merge`)}
 					onRequestChanges={(n) => recordEvent(`Sent back PR ${n} for agent revision`)}
 				/>
@@ -219,14 +236,14 @@
 				<h2 class="px-1 text-xs font-medium text-fg-light">
 					GitHubChecksPanel, GitHubCommitCard & GitHubReviewThreadCard
 				</h2>
-				<GitHubChecksPanel
+				<GitHubChecksPanel checks={SAMPLE_CHECKS}
 					onFixWithAgent={(id) => recordEvent(`Launched Claude Code to fix check ${id}`)}
 					onRerunCheck={(id) => recordEvent(`Re-running check ${id}`)}
 				/>
-				<GitHubCommitCard
+				<GitHubCommitCard commit={SAMPLE_COMMIT}
 					onRestore={(sha) => recordEvent(`Restored worktree to commit ${sha}`)}
 				/>
-				<GitHubReviewThreadCard
+				<GitHubReviewThreadCard thread={SAMPLE_REVIEW_THREAD}
 					onApplySuggestion={(id) => recordEvent(`Applied suggested patch on thread ${id}`)}
 					onReply={(id, text) => recordEvent(`Replied on ${id}: "${text}"`)}
 				/>

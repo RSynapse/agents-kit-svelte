@@ -13,115 +13,6 @@
 		class?: string;
 	}
 
-	const DEFAULT_BOARD_ISSUES: GitHubIssueData[] = [
-		{
-			number: 2177,
-			title: 'Skills: filter pill bar overflows horizontally at 320px without scroll cue',
-			repo: 'RSynapse/trailside',
-			state: 'open',
-			author: 'grok-bot',
-			createdAt: '14m ago',
-			labels: [
-				{ name: 'triage', tone: 'warning' },
-				{ name: 'area:app', tone: 'accent' },
-				{ name: 'size:s', tone: 'neutral' }
-			],
-			riskTier: 'T1',
-			size: 'S',
-			criteriaCompleted: 0,
-			criteriaTotal: 3
-		},
-		{
-			number: 2152,
-			title: 'Landing: pricing comparison cards misalign CTA baseline at 768px tablet breakpoint',
-			repo: 'RSynapse/trailside',
-			state: 'open',
-			author: 'grok-bot',
-			createdAt: '41m ago',
-			labels: [
-				{ name: 'ready', tone: 'success' },
-				{ name: 'area:landing', tone: 'accent' },
-				{ name: 'tier:T1', tone: 'warning' }
-			],
-			riskTier: 'T1',
-			size: 'S',
-			criteriaCompleted: 1,
-			criteriaTotal: 4
-		},
-		{
-			number: 2151,
-			title: 'Home: the unpicked agents, skipped gates and other small captions are too faint to read',
-			repo: 'RSynapse/trailside',
-			state: 'in-progress',
-			author: 'grok-bot',
-			createdAt: '1h ago',
-			labels: [
-				{ name: 'in-progress', tone: 'success' },
-				{ name: 'area:landing', tone: 'accent' }
-			],
-			riskTier: 'T1',
-			size: 'S',
-			assignedAgent: 'AK-S Agent · Attempt 1',
-			worktreeBranch: 'argon/2151-home-faint-captions-contrast',
-			linkedPrNumber: 2153,
-			criteriaCompleted: 5,
-			criteriaTotal: 5
-		},
-		{
-			number: 2148,
-			title: 'Repositories dialog: Connected and Eligible status pills fall below 4.5:1 contrast',
-			repo: 'RSynapse/trailside',
-			state: 'ready-for-human',
-			author: 'grok-bot',
-			createdAt: '2h ago',
-			labels: [
-				{ name: 'ready-for-human', tone: 'warning' },
-				{ name: 'area:app', tone: 'accent' }
-			],
-			riskTier: 'T1',
-			size: 'S',
-			assignedAgent: 'AK-S Agent · Attempt 1',
-			worktreeBranch: 'argon/2148-repo-dialog-status-contrast',
-			linkedPrNumber: 2150,
-			criteriaCompleted: 4,
-			criteriaTotal: 4
-		},
-		{
-			number: 2128,
-			title: 'Board: Ready for you disclosure chevron lacks aria-expanded state',
-			repo: 'RSynapse/trailside',
-			state: 'ready-for-human',
-			author: 'grok-bot',
-			createdAt: '2h ago',
-			labels: [
-				{ name: 'ready-for-human', tone: 'warning' },
-				{ name: 'area:app', tone: 'accent' }
-			],
-			riskTier: 'T1',
-			size: 'S',
-			linkedPrNumber: 2136,
-			criteriaCompleted: 3,
-			criteriaTotal: 3
-		},
-		{
-			number: 2066,
-			title: 'Project Planning: clarify read-only notice when no computer is connected',
-			repo: 'RSynapse/trailside',
-			state: 'closed',
-			author: 'grok-bot',
-			createdAt: '3h ago',
-			labels: [
-				{ name: 'area:app', tone: 'accent' },
-				{ name: 'tier:T1', tone: 'neutral' }
-			],
-			riskTier: 'T1',
-			size: 'S',
-			linkedPrNumber: 2075,
-			criteriaCompleted: 3,
-			criteriaTotal: 3
-		}
-	];
-
 	const COLUMNS: { id: GitHubIssueState; label: string; description: string }[] = [
 		{ id: 'open', label: 'Triage & Ready', description: 'Eligible issues awaiting agent claim' },
 		{ id: 'in-progress', label: 'In Progress (Runs)', description: 'Active worktree agent runs' },
@@ -133,7 +24,7 @@
 		{ id: 'closed', label: 'Merged & Verified', description: 'Landed on main & verified live' }
 	];
 
-	let { issues = DEFAULT_BOARD_ISSUES, onSelectIssue, class: className = '' }: Props = $props();
+	let { issues = [], onSelectIssue, class: className = '' }: Props = $props();
 
 	const [send, receive] = createBoardCrossfade(260);
 

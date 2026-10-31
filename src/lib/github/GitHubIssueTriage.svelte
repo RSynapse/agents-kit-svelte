@@ -8,31 +8,15 @@
 	import { LiveLoop } from './live-loop.svelte';
 
 	interface Props {
-		issue?: GitHubTriageIssue;
-		/** Reveals the agent's suggestions one at a time, then loops. */
+		issue: GitHubTriageIssue;
+		/** Demo mode: reveals the agent's suggestions one at a time, then loops. Off by default. */
 		live?: boolean;
 		onApply?: (issueNumber: number, applied: string[]) => void;
 		onMarkDuplicate?: (issueNumber: number, duplicateOf: number) => void;
 		class?: string;
 	}
 
-	const DEFAULT_ISSUE: GitHubTriageIssue = {
-		number: 2204,
-		title: 'Export to CSV drops rows when notes contain commas',
-		author: 'mira-chen',
-		openedAt: 'just now',
-		body: 'Exporting the March report gives 212 rows instead of 230. Every missing row has a comma in the Notes column. Happens in Chrome and Safari.',
-		suggestions: [
-			{ id: 's-type', kind: 'type', label: 'Type', value: 'bug', confidence: 0.97, tone: 'danger' },
-			{ id: 's-pri', kind: 'priority', label: 'Priority', value: 'P1 · data loss', confidence: 0.88, tone: 'warning' },
-			{ id: 's-area', kind: 'area', label: 'Area', value: 'area/export', confidence: 0.93, tone: 'accent' },
-			{ id: 's-who', kind: 'assignee', label: 'Assignee', value: 'argon-agent', confidence: 0.81, tone: 'neutral' },
-			{ id: 's-ms', kind: 'milestone', label: 'Milestone', value: 'v2.8.1', confidence: 0.74, tone: 'success' }
-		],
-		duplicate: { number: 1987, title: 'CSV export breaks on quotes in titles', similarity: 0.62 }
-	};
-
-	let { issue = DEFAULT_ISSUE, live = true, onApply, onMarkDuplicate, class: className = '' }: Props = $props();
+	let { issue, live = false, onApply, onMarkDuplicate, class: className = '' }: Props = $props();
 
 	const loop = new LiveLoop(() => issue.suggestions.length + 2, 4);
 	const rejected = new SvelteSet<string>();

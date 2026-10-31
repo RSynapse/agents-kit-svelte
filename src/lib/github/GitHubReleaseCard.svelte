@@ -6,48 +6,14 @@
 	import { LiveLoop } from './live-loop.svelte';
 
 	interface Props {
-		release?: GitHubReleaseData;
-		/** Writes the release notes line by line, then loops. */
+		release: GitHubReleaseData;
+		/** Demo mode: writes the release notes line by line, then loops. Off by default. */
 		live?: boolean;
 		onPublish?: (tag: string, prerelease: boolean) => void;
 		class?: string;
 	}
 
-	const DEFAULT_RELEASE: GitHubReleaseData = {
-		tag: 'v2.8.1',
-		previousTag: 'v2.8.0',
-		name: 'v2.8.1 · Safer exports',
-		target: 'main @ 9b07d3e',
-		groups: [
-			{
-				id: 'fixes',
-				title: 'Bug fixes',
-				items: [
-					{ text: 'CSV export keeps rows whose notes contain commas, quotes or line breaks', pr: 2210, author: 'argon-agent' },
-					{ text: 'Date filters respect the workspace time zone', pr: 2198, author: 'tomas-r' }
-				]
-			},
-			{
-				id: 'features',
-				title: 'Features',
-				items: [{ text: 'Appearance setting with Light, Dark and System', pr: 2207, author: 'mira-chen' }]
-			},
-			{
-				id: 'chores',
-				title: 'Maintenance',
-				items: [
-					{ text: 'Bump vite to 8.3.1', pr: 2213, author: 'renovate' },
-					{ text: 'Document the export column order', pr: 2215, author: 'tomas-r' }
-				]
-			}
-		],
-		assets: [
-			{ name: 'app-2.8.1.tar.gz', size: '4.2 MB' },
-			{ name: 'checksums.txt', size: '312 B' }
-		]
-	};
-
-	let { release = DEFAULT_RELEASE, live = true, onPublish, class: className = '' }: Props = $props();
+	let { release, live = false, onPublish, class: className = '' }: Props = $props();
 
 	const flatCount = $derived(release.groups.reduce((n, g) => n + g.items.length, 0));
 	const contributors = $derived([...new Set(release.groups.flatMap((g) => g.items.map((i) => i.author)))]);

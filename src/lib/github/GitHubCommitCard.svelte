@@ -5,47 +5,16 @@
 	import type { GitHubCommitData } from '../types';
 
 	interface Props {
-		commit?: GitHubCommitData;
+		commit: GitHubCommitData;
 		defaultOpen?: boolean;
 		onRestore?: (sha: string) => void;
 		class?: string;
 	}
 
-	const DEFAULT_COMMIT: GitHubCommitData = {
-		sha: 'cdb5ea5',
-		message: 'fix(home): raise contrast of unpicked agents, skipped gates and secondary captions',
-		author: 'argon-agent',
-		timestamp: '12m ago',
-		branch: 'argon/2151-home-faint-captions-contrast',
-		verified: true,
-		additions: 68,
-		deletions: 14,
-		files: [
-			{
-				path: 'apps/web/src/lib/home/trail.css',
-				status: 'modified',
-				additions: 12,
-				deletions: 11
-			},
-			{
-				path: 'apps/web/src/lib/home/route-map.css',
-				status: 'modified',
-				additions: 2,
-				deletions: 3
-			},
-			{
-				path: 'tests/browser/home.spec.ts',
-				status: 'modified',
-				additions: 54,
-				deletions: 0
-			}
-		]
-	};
-
 	const COPY_FEEDBACK_MS = 1500;
 
 	let {
-		commit = DEFAULT_COMMIT,
+		commit,
 		defaultOpen = true,
 		onRestore,
 		class: className = ''

@@ -8,7 +8,7 @@
 	import type { GitHubIssueData } from '../types';
 
 	interface Props {
-		issue?: GitHubIssueData;
+		issue: GitHubIssueData;
 		compact?: boolean;
 		onDispatchRun?: (issueNumber: number) => void;
 		onOpenChat?: (issueNumber: number) => void;
@@ -17,34 +17,8 @@
 		class?: string;
 	}
 
-	const DEFAULT_ISSUE: GitHubIssueData = {
-		number: 2151,
-		title: 'Home: the unpicked agents, skipped gates and other small captions are too faint to read',
-		repo: 'RSynapse/trailside',
-		state: 'in-progress',
-		author: 'grok-bot',
-		createdAt: '28m ago',
-		labels: [
-			{ name: 'area:landing', tone: 'accent' },
-			{ name: 'type:polish', tone: 'neutral' },
-			{ name: 'size:s', tone: 'neutral' },
-			{ name: 'tier:T1', tone: 'warning' },
-			{ name: 'in-progress', tone: 'success' }
-		],
-		riskTier: 'T1',
-		size: 'S',
-		assignedAgent: 'AK-S Agent · Attempt 1',
-		attemptNumber: 1,
-		worktreeBranch: 'argon/2151-home-faint-captions-contrast',
-		linkedPrNumber: 2153,
-		criteriaCompleted: 5,
-		criteriaTotal: 5,
-		summary:
-			'Small secondary captions and unpicked agent rows on the home page fall below 4.5:1 WCAG AA contrast across 320px–1440px viewports.'
-	};
-
 	let {
-		issue = DEFAULT_ISSUE,
+		issue,
 		compact = false,
 		onDispatchRun,
 		onOpenChat,

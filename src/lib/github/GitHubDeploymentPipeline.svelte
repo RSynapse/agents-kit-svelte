@@ -10,18 +10,12 @@
 		sha?: string;
 		ref?: string;
 		environments?: GitHubDeploymentEnvironment[];
-		/** Plays the rollout through each environment, including the approval gate, then loops. */
+		/** Demo mode: plays the rollout through each environment, including the approval gate, then loops. Off by default. */
 		live?: boolean;
 		onApprove?: (environmentId: string) => void;
 		onRollback?: (environmentId: string) => void;
 		class?: string;
 	}
-
-	const DEFAULT_ENVIRONMENTS: GitHubDeploymentEnvironment[] = [
-		{ id: 'preview', name: 'Preview', url: 'pr-2210.preview.example.dev' },
-		{ id: 'staging', name: 'Staging', url: 'staging.example.dev' },
-		{ id: 'production', name: 'Production', url: 'app.example.com', requiresApproval: true, reviewers: ['mira-chen', 'ops-oncall'] }
-	];
 
 	// Each environment takes two ticks to deploy; gated ones wait two ticks for a reviewer,
 	// and the last environment rolls out in quarters.
@@ -30,10 +24,10 @@
 	const ROLLOUT_STEPS = [25, 50, 75, 100];
 
 	let {
-		sha = '9b07d3e',
+		sha,
 		ref = 'main',
-		environments = DEFAULT_ENVIRONMENTS,
-		live = true,
+		environments = [],
+		live = false,
 		onApprove,
 		onRollback,
 		class: className = ''
@@ -103,14 +97,14 @@
 	}
 </script>
 
-<section aria-label="Deployments for {sha}" class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
+<section aria-label={sha ? `Deployments for ${sha}` : 'Deployments'} class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex items-center gap-2">
 			<Rocket aria-hidden="true" class="size-4 text-fg-light" />
 			<div>
 				<h3 class="font-semibold text-fg-main">Deployments</h3>
 				<p class="text-xs text-fg-light">
-					<code class="font-mono">{ref}</code> @ <code class="font-mono">{sha}</code> · environments promote in order
+					<code class="font-mono">{ref}</code>{#if sha}{' @ '}<code class="font-mono">{sha}</code>{/if} · environments promote in order
 				</p>
 			</div>
 		</div>

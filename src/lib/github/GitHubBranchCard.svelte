@@ -7,34 +7,15 @@
 	import { LiveLoop } from './live-loop.svelte';
 
 	interface Props {
-		branch?: GitHubBranchData;
-		/** Plays branch creation and commits landing one by one, then loops. */
+		branch: GitHubBranchData;
+		/** Demo mode: plays branch creation and commits landing one by one, then loops. Off by default. */
 		live?: boolean;
 		onOpenWorktree?: (branch: string) => void;
 		onCompare?: (branch: string, base: string) => void;
 		class?: string;
 	}
 
-	const DEFAULT_BRANCH: GitHubBranchData = {
-		name: 'argon/2204-csv-quoting',
-		base: 'main',
-		baseSha: '4e1c9a2',
-		linkedIssueNumber: 2204,
-		behind: 0,
-		commits: [
-			{ sha: 'a71f0c4', message: 'test(export): reproduce dropped rows with commas in notes', author: 'argon-agent' },
-			{ sha: 'c3e9b18', message: 'fix(export): quote fields per RFC 4180', author: 'argon-agent' },
-			{ sha: 'f02d6a7', message: 'test(export): round-trip 10k random rows through the parser', author: 'argon-agent' }
-		],
-		protections: [
-			{ id: 'p-1', label: 'Linked to an issue', satisfied: true },
-			{ id: 'p-2', label: 'Signed commits', satisfied: true },
-			{ id: 'p-3', label: 'Up to date with main', satisfied: true },
-			{ id: 'p-4', label: 'Required checks passing', satisfied: false }
-		]
-	};
-
-	let { branch = DEFAULT_BRANCH, live = true, onOpenWorktree, onCompare, class: className = '' }: Props = $props();
+	let { branch, live = false, onOpenWorktree, onCompare, class: className = '' }: Props = $props();
 
 	const loop = new LiveLoop(() => branch.commits.length + 1, 4);
 	let worktreeOpen = $state(false);
