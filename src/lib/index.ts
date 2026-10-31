@@ -100,3 +100,6 @@ export * from './skills/types';
 export * from './skills/fixtures';
 export * from './skills/scope';
 export * from './ui/styles';
+
+// Agent events, session state and stream adapters
+export * from './core/agent';
