@@ -17,7 +17,8 @@
 		{ href: `${base}/`, match: `${base}/`, label: 'Components' },
 		{ href: `${base}/claude-code/`, match: `${base}/claude-code`, label: 'AK-S Chat' },
 		{ href: `${base}/github/`, match: `${base}/github`, label: 'GitHub Suite' },
-		{ href: `${base}/intelligent-ui/`, match: `${base}/intelligent-ui`, label: 'Playground' }
+		{ href: `${base}/intelligent-ui/`, match: `${base}/intelligent-ui`, label: 'Playground' },
+		{ href: `${base}/install/`, match: `${base}/install`, label: 'Install' }
 	];
 
 	$effect(() => {
