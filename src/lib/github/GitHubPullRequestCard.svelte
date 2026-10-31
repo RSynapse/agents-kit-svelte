@@ -70,9 +70,11 @@
 			<span class="font-medium text-diff-add-fg">+{pr.additions}</span>
 			<span class="font-medium text-diff-del-fg">−{pr.deletions}</span>
 			<span class="font-mono text-fg-light">({pr.changedFilesCount} files)</span>
-			<span class="rounded border border-card-border bg-canvas-secondary px-1.5 py-0.5 font-mono text-[11px] text-fg-main">
-				{pr.riskTier}
-			</span>
+			{#if pr.riskTier}
+				<span class="rounded border border-card-border bg-canvas-secondary px-1.5 py-0.5 font-mono text-[11px] text-fg-main">
+					{pr.riskTier}
+				</span>
+			{/if}
 		</div>
 	</div>
 

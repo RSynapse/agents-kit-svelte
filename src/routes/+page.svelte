@@ -1513,7 +1513,7 @@
 							{:else if item.slug === 'web-preview'}
 								<WebPreview logs={SAMPLE_PREVIEW_LOGS} defaultUrl="http://localhost:5173/w/board" />
 							{:else if item.slug === 'plan-card'}
-								<PlanCard milestones={SAMPLE_PLAN_MILESTONES} title="Implementation Plan: Svelte 5 Agent Kit Unification" description="Three-milestone execution plan scoped to isolated worktree with automated referee checks." />
+								<PlanCard milestones={SAMPLE_PLAN_MILESTONES} riskTier="T2" title="Implementation Plan: Svelte 5 Agent Kit Unification" description="Three-milestone execution plan scoped to isolated worktree with automated referee checks." />
 							{:else if item.slug === 'prompt-suggestions'}
 								<PromptSuggestions suggestions={SAMPLE_PROMPT_SUGGESTIONS} />
 							{:else if item.slug === 'test-results'}

@@ -148,6 +148,44 @@ Approvals come from the Agent SDK's `canUseTool` callback rather than its messag
 
 ---
 
+## Showing GitHub data
+
+The GitHub cards take plain objects. `fromGitHubRest` (from `agents-kit-svelte/core`) turns REST API responses into them, so you keep your own token and fetching:
+
+```ts
+import { fromGitHubRest } from 'agents-kit-svelte/core';
+
+const { data } = await octokit.rest.pulls.get({ owner, repo, pull_number });
+const runs = await octokit.rest.checks.listForRef({ owner, repo, ref: data.head.sha });
+const pr = fromGitHubRest.pullRequest(data, { checks: runs.data.check_runs });
+```
+
+There are mappers for `issue`, `pullRequest`, `checkRun` and `commit`. Times come out as `12m ago` by default; pass `formatTime` to change that, and `labelTone` to choose label colours.
+
+## Rendering model output with your own components
+
+`IntelligentUIRenderer` turns a list of `{ id, component, props }` nodes into components. Add your own node types, or replace ours, with a registry:
+
+```svelte
+<script lang="ts">
+	import { IntelligentUIRenderer, defineUIRegistry } from 'agents-kit-svelte/generative';
+	import WeatherCard from './WeatherCard.svelte';
+
+	const registry = defineUIRegistry({
+		'weather-card': {
+			component: WeatherCard,
+			required: ['city'],
+			// Optional: adapt props and wire callbacks to onIntent.
+			props: (props, emit) => ({ ...props, onRefresh: () => emit('refresh', String(props.city)) })
+		}
+	});
+</script>
+
+<IntelligentUIRenderer {nodes} {registry} onIntent={(intent) => console.log(intent)} />
+```
+
+A node that lacks a `required` prop, or names an unregistered type, renders a short note instead of breaking the list. `defaultUIRegistry` lists the built-in types.
+
 ## Local Development
 
 ```bash

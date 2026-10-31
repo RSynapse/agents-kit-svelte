@@ -186,7 +186,19 @@
 					id: 'node-arch-2',
 					component: 'approval-card',
 					title: 'Decision gate',
-					props: { title: 'Approve OAuth Return-Path Strategy' }
+					props: {
+						title: 'Approve OAuth Return-Path Strategy',
+						questions: [
+							{
+								id: 'q1',
+								question: 'Which layout should the agent render?',
+								options: [
+									{ id: 'o1', label: 'Interactive Kanban Board' },
+									{ id: 'o2', label: 'Side-by-side Diff Inspector' }
+								]
+							}
+						]
+					}
 				}
 			]
 		},
@@ -197,7 +209,23 @@
 			keywords: ['fix', 'bug', 'redirect', 'patch', 'loop', 'diff'],
 			reply: 'I traced it, patched the callback and need your OK to run the tests.',
 			nodes: [
-				{ id: 'node-1', component: 'agent-activity', title: 'Reasoning and tool trace', props: {} },
+				{
+					id: 'node-1',
+					component: 'agent-activity',
+					title: 'Reasoning and tool trace',
+					props: {
+						items: [
+							{ id: '1', type: 'text', label: 'Dynamic Intelligent UI activity node' },
+							{
+								id: '2',
+								type: 'tool',
+								label: 'Read',
+								target: 'src/lib/intelligent-ui/IntelligentUIRenderer.svelte',
+								status: 'complete'
+							}
+						]
+					}
+				},
 				{
 					id: 'node-2',
 					component: 'file-diff',
@@ -212,7 +240,11 @@
 					id: 'node-3',
 					component: 'tool-approval',
 					title: 'Command consent',
-					props: { tool: 'Bash', summary: 'corepack pnpm test:browser tests/browser/auth.spec.ts' }
+					props: {
+						tool: 'Bash',
+						summary: 'corepack pnpm test:browser tests/browser/auth.spec.ts',
+						params: [{ label: 'Command', value: 'corepack pnpm check', code: true }]
+					}
 				}
 			]
 		},
