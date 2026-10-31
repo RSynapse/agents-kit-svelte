@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ChevronRight, Play, RefreshCw, X } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type ParallelLaneStatus = 'waiting' | 'processing' | 'done' | 'error';
 
 	export interface ParallelLane {
@@ -194,13 +196,13 @@
 
 <section
 	aria-label="Parallel worker pool monitor"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
 	>
 		<div>
-			<p class="font-mono text-xs font-medium text-fg-light">Parallel Worker Pool</p>
+			<p class="text-xs font-medium text-fg-light">Parallel Worker Pool</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">Concurrent Worktree Lanes</h2>
 			<p class="mt-0.5 max-w-2xl text-xs text-fg-light">{taskDescription}</p>
 		</div>
@@ -209,24 +211,27 @@
 			<button
 				type="button"
 				onclick={handleStartAll}
-				class="rounded-lg bg-accent-primary px-3 py-1.5 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
+				class={buttonClass('primary', 'md')}
 			>
-				▶ Start all
+				<Play aria-hidden="true" />
+				Start all
 			</button>
 			<button
 				type="button"
 				onclick={handleCancelAll}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				✕ Cancel
+				<X aria-hidden="true" />
+				Cancel
 			</button>
 			{#if failedCount > 0}
 				<button
 					type="button"
 					onclick={handleRetryFailed}
-					class="rounded-lg bg-status-danger-subtle px-3 py-1.5 text-xs font-medium text-status-danger"
+					class={buttonClass('danger', 'md')}
 				>
-					↻ Retry failed ({failedCount})
+					<RefreshCw aria-hidden="true" />
+					Retry failed ({failedCount})
 				</button>
 			{/if}
 		</div>
@@ -253,7 +258,7 @@
 								</code>
 							{/if}
 							<span
-								class="rounded-full px-2 py-0.5 text-[11px] font-medium {getLaneBadgeClasses(
+								class="rounded-chip px-1.5 py-px text-[11px] font-medium {getLaneBadgeClasses(
 									lane.status
 								)}"
 							>
@@ -293,14 +298,14 @@
 									type="button"
 									aria-expanded={isOutputOpen}
 									onclick={() => toggleLaneOutput(lane.id)}
-									class="flex items-center gap-1 text-xs text-fg-light hover:text-fg-main"
+									class={buttonClass('ghost', 'sm')}
 								>
-									<span>{isOutputOpen ? '▾' : '▸'}</span>
+									<ChevronRight aria-hidden="true" class="size-3.5 transition-transform duration-200 {isOutputOpen ? 'rotate-90' : ''}" />
 									<span>Lane output</span>
 								</button>
 								{#if isOutputOpen}
 									<p
-										class="mt-1.5 rounded-lg border border-canvas-border bg-canvas-primary p-2.5 font-mono text-xs text-fg-light"
+										class="mt-1.5 rounded-control bg-canvas-secondary/70 p-2.5 font-mono text-xs text-fg-light"
 									>
 										{lane.output}
 									</p>
@@ -313,9 +318,10 @@
 						<button
 							type="button"
 							onclick={() => handleRetryLane(lane.id)}
-							class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+							class={buttonClass('secondary', 'sm')}
 						>
-							↻ Retry
+							<RefreshCw aria-hidden="true" />
+							Retry
 						</button>
 					{/if}
 				</div>
@@ -324,11 +330,11 @@
 	</ol>
 
 	<footer class="border-t border-canvas-border p-4">
-		<div class="rounded-lg border border-canvas-border bg-canvas-primary p-3">
+		<div class="rounded-control bg-canvas-secondary/70 p-3">
 			<div class="flex items-center justify-between gap-2 text-xs">
 				<span class="font-semibold text-fg-main">Fan-in Merge Collector</span>
 				<span
-					class="rounded-full px-2 py-0.5 text-[11px] font-medium {mergeStatus === 'complete'
+					class="rounded-chip px-1.5 py-px text-[11px] font-medium {mergeStatus === 'complete'
 						? 'bg-status-success-subtle text-status-success'
 						: mergeStatus === 'merging'
 							? 'bg-accent-subtle text-accent-primary'

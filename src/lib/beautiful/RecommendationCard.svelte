@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
+	import { Check, Sparkles } from '@lucide/svelte';
 	export interface RecommendationOption {
 		id: string;
 		label: string;
@@ -93,23 +95,12 @@
 </script>
 
 <section
-	class="overflow-hidden rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
+	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<div class="flex items-start justify-between gap-3 border-b border-canvas-border px-4 py-3">
 		<div class="space-y-1">
 			<span class="inline-flex items-center gap-1.5 text-[11px] font-medium text-accent-primary">
-				<svg
-					aria-hidden="true"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.8"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="size-3.5"
-				>
-					<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
-				</svg>
+				<Sparkles aria-hidden="true" class="size-3.5" />
 				Recommended Strategy
 			</span>
 			<h3 class="text-sm font-medium text-fg-main">{title}</h3>
@@ -159,20 +150,9 @@
 	</div>
 
 	<div class="flex items-center justify-between gap-3 border-t border-canvas-border bg-canvas-secondary/40 px-4 py-2.5">
-		<span class="inline-flex items-center gap-1.5 font-mono text-[11px] text-fg-light">
+		<span class="inline-flex items-center gap-1.5 text-xs text-fg-light">
 			{#if accepted}
-				<svg
-					aria-hidden="true"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="size-3.5 text-status-success"
-				>
-					<path d="M20 6 9 17l-5-5" />
-				</svg>
+				<Check aria-hidden="true" class="size-3.5 text-status-success" />
 				<span>Recommendation accepted</span>
 			{:else if selectedAlternativeId}
 				<span>Selected alternative: {selectedAlternativeId}</span>
@@ -184,7 +164,7 @@
 		<button
 			type="button"
 			onclick={handleAccept}
-			class="inline-flex h-8 items-center rounded-md bg-fg-main px-3 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
+			class={buttonClass('primary', 'md')}
 		>
 			{accepted ? 'Accepted' : acceptLabel}
 		</button>

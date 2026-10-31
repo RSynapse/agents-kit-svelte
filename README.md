@@ -56,5 +56,18 @@ corepack pnpm test:browser
 
 ## Credits & License
 
-- MIT Licensed — see [LICENSE](LICENSE).
-- Inspired by and ported from [`agents-ui/agents-kit`](https://github.com/agents-ui/agents-kit) (MIT License, Copyright (c) 2026 Emiliano).
+Agents Kit Svelte stands on other people's work, and we want that to stay visible.
+
+- **Agents Kit for React.** This library is a Svelte 5 port of, and is inspired by, [`agents-ui/agents-kit`](https://github.com/agents-ui/agents-kit) by Emiliano (MIT License). Its copyright and license notice is kept in [NOTICE](NOTICE).
+- **Claude Code.** The warm, soft visual style is inspired by the look and feel of Claude Code by Anthropic. This is an independent project, not affiliated with or endorsed by Anthropic.
+- **Lucide.** Icons come from [Lucide](https://lucide.dev) (ISC License).
+
+### License
+
+Licensed under the [Apache License 2.0](LICENSE). You can use, change and ship it, including commercially. If you redistribute the library or a work based on it, you must:
+
+1. include a copy of the license,
+2. keep the [NOTICE](NOTICE) file, which credits Agents Kit Svelte and the projects it builds on, and
+3. say that you changed files, if you did.
+
+A visible credit is appreciated too, for example: "UI components from [Agents Kit Svelte](https://github.com/rsynapse/agents-kit-svelte), a Svelte port of Agents Kit."

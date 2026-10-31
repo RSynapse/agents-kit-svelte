@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, Eye, EyeOff, Settings } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export interface EnvVariableEntry {
 		name: string;
 		value: string;
@@ -123,14 +125,14 @@
 	}
 </script>
 
-<div class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border px-4 py-3">
 		<div class="flex items-center gap-2">
 			<span
 				aria-hidden="true"
 				class="inline-flex size-5 items-center justify-center rounded bg-canvas-secondary font-mono text-xs text-fg-light"
 			>
-				⚙
+				<Settings aria-hidden="true" />
 			</span>
 			<h3 class="font-medium text-fg-main">{title}</h3>
 			<span class="rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-xs text-fg-light">
@@ -142,9 +144,9 @@
 			type="button"
 			aria-pressed={showAllValues}
 			onclick={toggleAllValues}
-			class="inline-flex items-center gap-1.5 rounded-md border border-card-border bg-canvas-primary px-2.5 py-1 font-mono text-xs text-fg-main transition-colors hover:bg-canvas-secondary"
+			class={buttonClass('secondary', 'sm')}
 		>
-			<span>{showAllValues ? '🙈 Hide values' : '👁 Reveal values'}</span>
+			{#if showAllValues}<EyeOff aria-hidden="true" />Hide values{:else}<Eye aria-hidden="true" />Reveal values{/if}
 		</button>
 	</div>
 
@@ -193,7 +195,7 @@
 						type="button"
 						aria-label={visible ? `Hide ${item.name}` : `Reveal ${item.name}`}
 						onclick={() => toggleSingleValue(item.name)}
-						class="rounded border border-card-border bg-canvas-primary px-2 py-1 font-mono text-xs text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+						class={buttonClass('secondary', 'sm')}
 					>
 						{visible ? 'Hide' : 'Show'}
 					</button>
@@ -202,9 +204,9 @@
 						type="button"
 						aria-label={`Copy ${item.name}`}
 						onclick={() => copyEnvEntry(item)}
-						class="rounded border border-card-border bg-canvas-primary px-2 py-1 font-mono text-xs text-fg-main transition-colors hover:bg-canvas-secondary"
+						class={buttonClass('secondary', 'sm')}
 					>
-						{copiedName === item.name ? '✓ Copied' : 'Copy'}
+						{#if copiedName === item.name}<Check aria-hidden="true" />Copied{:else}Copy{/if}
 					</button>
 				</div>
 			</div>

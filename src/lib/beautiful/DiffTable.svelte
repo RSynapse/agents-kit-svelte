@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, X } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export interface DiffTableRow {
 		id: string;
 		field: string;
@@ -86,7 +88,7 @@
 </script>
 
 <section
-	class="overflow-hidden rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
+	class="overflow-hidden rounded-card border border-card-border bg-card-bg text-fg-main {className}"
 >
 	<header
 		class="flex min-h-12 flex-wrap items-center justify-between gap-3 border-b border-canvas-border px-4 py-2.5"
@@ -146,23 +148,23 @@
 									type="button"
 									aria-pressed={row.status === 'rejected'}
 									onclick={() => setDecision(row.id, 'rejected')}
-									class="rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors {row.status ===
-									'rejected'
-										? 'border-status-danger bg-status-danger-subtle text-status-danger'
-										: 'border-card-border bg-canvas-primary text-fg-light hover:text-fg-main'}"
+									class={row.status === 'rejected'
+										? 'inline-flex h-7 items-center gap-1.5 rounded-control border border-status-danger/40 bg-status-danger-subtle px-2.5 text-xs font-medium text-status-danger [&_svg]:size-3.5'
+										: buttonClass('secondary', 'sm')}
 								>
-									✕ Reject
+									<X aria-hidden="true" />
+									Reject
 								</button>
 								<button
 									type="button"
 									aria-pressed={row.status === 'accepted'}
 									onclick={() => setDecision(row.id, 'accepted')}
-									class="rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors {row.status ===
-									'accepted'
-										? 'border-status-success bg-status-success-subtle text-status-success'
-										: 'border-card-border bg-canvas-primary text-fg-light hover:text-fg-main'}"
+									class={row.status === 'accepted'
+										? 'inline-flex h-7 items-center gap-1.5 rounded-control border border-status-success/40 bg-status-success-subtle px-2.5 text-xs font-medium text-status-success [&_svg]:size-3.5'
+										: buttonClass('secondary', 'sm')}
 								>
-									✓ Accept
+									<Check aria-hidden="true" />
+									Accept
 								</button>
 							</div>
 						</td>
@@ -179,7 +181,7 @@
 		<button
 			type="button"
 			onclick={handleApplyAll}
-			class="rounded-lg bg-accent-primary px-3 py-1.5 text-xs font-semibold text-fg-inverse transition-opacity hover:opacity-90"
+			class={buttonClass('primary', 'md')}
 		>
 			Apply all {internalRows.length} changes
 		</button>

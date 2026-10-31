@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Bookmark, Check, Columns2, Copy, Download, Maximize2, Minimize2, Pencil } from '@lucide/svelte';
+	import { buttonClass, toggleButtonClass } from '../ui/styles';
 	import type { ResultActionState } from '../types';
 
 	interface Props {
@@ -42,67 +44,72 @@
 <div
 	role="toolbar"
 	aria-label="Generated result actions"
-	class="inline-flex flex-wrap items-center gap-1 rounded-xl border border-card-border bg-canvas-secondary p-1 text-xs {className}"
+	class="inline-flex flex-wrap items-center gap-0.5 rounded-control border border-card-border bg-card-bg p-0.5 ak-shadow-btn {className}"
 >
 	<button
 		type="button"
 		aria-pressed={actionState === 'expanded'}
 		onclick={onExpand}
-		class="rounded-lg px-2.5 py-1 font-medium transition-colors {actionState === 'expanded'
-			? 'bg-card-bg text-fg-main shadow-xs'
-			: 'text-fg-light hover:text-fg-main'}"
+		class={toggleButtonClass(actionState === 'expanded')}
 	>
-		{actionState === 'expanded' ? '↙ Collapse' : '↗ Expand'}
+		{#if actionState === 'expanded'}
+			<Minimize2 aria-hidden="true" />
+			Collapse
+		{:else}
+			<Maximize2 aria-hidden="true" />
+			Expand
+		{/if}
 	</button>
 
 	<button
 		type="button"
 		aria-pressed={actionState === 'editing'}
 		onclick={onEdit}
-		class="rounded-lg px-2.5 py-1 font-medium transition-colors {actionState === 'editing'
-			? 'bg-card-bg text-fg-main shadow-xs'
-			: 'text-fg-light hover:text-fg-main'}"
+		class={toggleButtonClass(actionState === 'editing')}
 	>
-		✎ Edit
+		<Pencil aria-hidden="true" />
+		Edit
 	</button>
 
 	<button
 		type="button"
 		aria-pressed={actionState === 'comparing'}
 		onclick={onCompare}
-		class="rounded-lg px-2.5 py-1 font-medium transition-colors {actionState === 'comparing'
-			? 'bg-card-bg text-fg-main shadow-xs'
-			: 'text-fg-light hover:text-fg-main'}"
+		class={toggleButtonClass(actionState === 'comparing')}
 	>
-		⇄ Compare
+		<Columns2 aria-hidden="true" />
+		Compare
 	</button>
+
+	<span aria-hidden="true" class="mx-0.5 h-4 w-px bg-canvas-border"></span>
 
 	<button
 		type="button"
 		aria-pressed={saved}
+		aria-label={saved ? 'Remove from saved' : 'Save result'}
 		onclick={onSave}
-		class="rounded-lg px-2.5 py-1 font-medium transition-colors {saved
-			? 'bg-accent-subtle text-accent-primary'
-			: 'text-fg-light hover:text-fg-main'}"
+		class={toggleButtonClass(saved, 'icon-sm')}
 	>
-		{saved ? '★ Saved' : '☆ Save'}
+		<Bookmark aria-hidden="true" class={saved ? 'fill-current' : ''} />
 	</button>
 
 	<button
 		type="button"
+		aria-label={copied ? 'Copied' : 'Copy result'}
 		onclick={handleCopy}
-		class="rounded-lg px-2.5 py-1 font-medium text-fg-light transition-colors hover:text-fg-main"
+		class={buttonClass('ghost', 'icon-sm')}
 	>
-		{copied ? '✓ Copied' : 'Copy'}
+		{#if copied}<Check aria-hidden="true" class="text-status-success" />{:else}<Copy aria-hidden="true" />{/if}
 	</button>
 
 	{#if onDownload}
 		<button
 			type="button"
+			aria-label="Download as Markdown"
 			onclick={onDownload}
-			class="rounded-lg px-2.5 py-1 font-medium text-fg-light transition-colors hover:text-fg-main"
+			class={buttonClass('ghost', 'icon-sm')}
 		>
-			↓ .md
+			<Download aria-hidden="true" />
 		</button>
 	{/if}
 </div>

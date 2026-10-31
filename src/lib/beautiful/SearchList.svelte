@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Search } from '@lucide/svelte';
+	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	export interface SearchListItem {
 		id: string;
 		label: string;
@@ -103,10 +105,10 @@
 </script>
 
 <section
-	class="w-full max-w-xl rounded-xl border border-card-border bg-card-bg p-3 text-fg-main {className}"
+	class="w-full max-w-xl rounded-card border border-card-border bg-card-bg p-3 text-fg-main {className}"
 >
 	<div class="flex items-center gap-2 border-b border-canvas-border pb-2.5">
-		<span aria-hidden="true" class="pl-1.5 font-mono text-xs text-fg-light">⌕</span>
+		<Search aria-hidden="true" class="ml-1.5 size-3.5 text-fg-light" />
 		<input
 			type="search"
 			value={internalQuery}
@@ -121,7 +123,7 @@
 		</span>
 	</div>
 
-	<div class="mt-2 flex flex-wrap gap-1 border-b border-canvas-border pb-2">
+	<div class="{SEGMENT_GROUP_CLASS} mt-2 flex-wrap">
 		{#each ['all', 'issue', 'file', 'run', 'doc'] as const as cat (cat)}
 			<button
 				type="button"
@@ -129,10 +131,7 @@
 					activeCategory = cat;
 					activeIndex = 0;
 				}}
-				class="rounded-md px-2 py-0.5 font-mono text-[10px] uppercase transition-colors {activeCategory ===
-				cat
-					? 'bg-accent-subtle font-semibold text-accent-primary'
-					: 'text-fg-light hover:bg-canvas-secondary hover:text-fg-main'}"
+				class="{segmentClass(activeCategory === cat)} capitalize"
 			>
 				{cat}
 			</button>
@@ -160,7 +159,7 @@
 				</div>
 				{#if item.category}
 					<span
-						class="shrink-0 rounded bg-card-bg px-1.5 py-0.5 font-mono text-[10px] uppercase text-fg-light"
+						class="shrink-0 rounded bg-card-bg px-1.5 py-0.5 text-[11px] capitalize text-fg-light font-medium"
 					>
 						{item.category}
 					</span>

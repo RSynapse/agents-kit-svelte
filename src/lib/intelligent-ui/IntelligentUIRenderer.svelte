@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { flip } from 'svelte/animate';
 	import { cubicOut } from 'svelte/easing';
-	import { fade, fly } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import AgentActivity from '../agents/AgentActivity.svelte';
 	import ApprovalCard from '../agents/ApprovalCard.svelte';
 	import CodeBlock from '../agents/CodeBlock.svelte';
@@ -21,7 +21,7 @@
 	import GitHubCommitCard from '../github/GitHubCommitCard.svelte';
 	import GitHubIssueCard from '../github/GitHubIssueCard.svelte';
 	import GitHubPullRequestCard from '../github/GitHubPullRequestCard.svelte';
-	import { motionDuration } from '../state/motion.svelte';
+	import { motionDuration, rise } from '../state/motion.svelte';
 	import AgentGenerativeSurface from './AgentGenerativeSurface.svelte';
 	import type {
 		ActivityItem,
@@ -45,7 +45,7 @@
 	{#each nodes as node (node.id)}
 		<div
 			animate:flip={{ duration: motionDuration(240), easing: cubicOut }}
-			in:fly={{ y: 12, duration: motionDuration(210), easing: cubicOut }}
+			in:rise={{ y: 6, duration: 200 }}
 			out:fade={{ duration: motionDuration(140) }}
 			data-node-id={node.id}
 			data-component={node.component}

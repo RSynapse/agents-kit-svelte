@@ -1,15 +1,15 @@
 <script lang="ts">
+	import { ArrowRight, Check, Plus } from '@lucide/svelte';
+	import { SEGMENT_GROUP_CLASS, segmentClass } from '../ui/styles';
 	import { flip } from 'svelte/animate';
-	import { backOut, cubicOut } from 'svelte/easing';
+	import { cubicOut } from 'svelte/easing';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
-	import { fly, scale } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 	import {
 		ReactiveSpringMetric,
 		createBoardCrossfade,
-		magneticHover,
-		motionDuration,
-		pressScale
+		motionDuration
 	} from '../state/motion.svelte';
 
 	export interface MotionCardItem {
@@ -104,7 +104,7 @@
 
 {#snippet laneBadge(lane: MotionCardItem['lane'])}
 	<span
-		class="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase {lane ===
+		class="rounded-chip px-1.5 py-px text-[11px] font-medium capitalize {lane ===
 		'verified'
 			? 'bg-status-success-subtle text-status-success'
 			: lane === 'running'
@@ -117,7 +117,7 @@
 
 <section
 	aria-label="Svelte 5 Motion, Spring Physics, Crossfade & Reactivity Lab"
-	class="space-y-5 rounded-2xl border border-card-border bg-card-bg p-5 text-sm shadow-xs {className}"
+	class="space-y-5 rounded-window border border-card-border bg-card-bg p-5 text-sm shadow-xs {className}"
 >
 	<header class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border pb-3.5">
 		<div>
@@ -129,24 +129,22 @@
 					Reduced motion: {prefersReducedMotion.current ? 'ON' : 'OFF'}
 				</span>
 			</div>
-			<h3 class="mt-1 text-base font-bold text-fg-main">
+			<h3 class="mt-1 text-base font-semibold text-fg-main">
 				Svelte 5 Microanimations, Spring Physics &amp; Crossfade Lab
 			</h3>
 		</div>
 
-		<div class="flex flex-wrap items-center gap-1.5">
+		<div class="{SEGMENT_GROUP_CLASS} flex-wrap">
 			{#each [24, 52, 76, 98] as preset (preset)}
 				<button
 					type="button"
-					use:pressScale
 					disabled={!ready}
+					aria-label="Spring to {preset}%"
+					aria-pressed={springMetric.targetValue === preset}
 					onclick={() => springMetric.set(preset)}
-					class="rounded-lg border px-2.5 py-1 font-mono text-xs font-medium transition-colors {springMetric.targetValue ===
-					preset
-						? 'border-accent-primary bg-accent-subtle text-accent-primary'
-						: 'border-card-border bg-canvas-secondary text-fg-main hover:bg-canvas-primary'}"
+					class={segmentClass(springMetric.targetValue === preset)}
 				>
-					Spring → {preset}%
+					{preset}%
 				</button>
 			{/each}
 		</div>
@@ -174,7 +172,7 @@
 
 			<div class="grid grid-cols-2 gap-3 pt-1 text-xs">
 				<label class="space-y-1">
-					<span class="flex justify-between font-mono text-[11px] text-fg-light">
+					<span class="flex justify-between text-xs text-fg-light">
 						<span>Stiffness</span>
 						<span class="tabular-nums text-fg-main">{springMetric.stiffness.toFixed(2)}</span>
 					</span>
@@ -190,7 +188,7 @@
 				</label>
 
 				<label class="space-y-1">
-					<span class="flex justify-between font-mono text-[11px] text-fg-light">
+					<span class="flex justify-between text-xs text-fg-light">
 						<span>Damping</span>
 						<span class="tabular-nums text-fg-main">{springMetric.damping.toFixed(2)}</span>
 					</span>
@@ -222,17 +220,16 @@
 						{@const clicks = tagClickCounts.get(tag) ?? 0}
 						<button
 							type="button"
-							use:pressScale
 							disabled={!ready}
 							aria-pressed={isSelected}
 							onclick={() => toggleReactiveTag(tag)}
-							class="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 font-mono text-[11px] transition-colors {isSelected
-								? 'border-accent-primary bg-accent-subtle font-semibold text-accent-primary'
-								: 'border-card-border bg-canvas-secondary text-fg-light hover:text-fg-main'}"
+							class="inline-flex h-6 items-center gap-1 rounded-chip border px-2 font-mono text-[11px] transition-colors {isSelected
+								? 'border-fg-main/20 bg-fg-main text-fg-inverse'
+								: 'border-card-border bg-card-bg text-fg-light hover:text-fg-main'}"
 						>
 							{#key isSelected}
-								<span in:scale={{ start: 0.75, duration: motionDuration(150), easing: backOut }}>
-									{isSelected ? '●' : '○'}
+								<span in:fade={{ duration: motionDuration(120) }} class="inline-flex">
+									{#if isSelected}<Check aria-hidden="true" class="size-3" />{:else}<Plus aria-hidden="true" class="size-3" />{/if}
 								</span>
 							{/key}
 							<span>{tag}</span>
@@ -261,7 +258,7 @@
 					{@const laneCards = cards.filter((c) => c.lane === lane.id)}
 					<div class="rounded-xl border border-card-border bg-canvas-secondary p-2.5">
 						<div class="mb-2 flex items-center justify-between px-1">
-							<span class="font-mono text-[11px] font-bold uppercase text-fg-main">
+							<span class="text-[11px] font-medium capitalize text-fg-main">
 								{lane.label}
 							</span>
 							<span class="rounded-full bg-card-bg px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-fg-light">
@@ -273,25 +270,23 @@
 							{#each laneCards as card (card.id)}
 								<button
 									type="button"
-									use:pressScale
-									use:magneticHover={2}
 									disabled={!ready}
 									in:receive={{ key: card.id }}
 									out:send={{ key: card.id }}
 									animate:flip={{ duration: motionDuration(240), easing: cubicOut }}
 									onclick={() => cycleCardLane(card.id)}
-									class="flex w-full flex-col items-start gap-1.5 rounded-lg border border-card-border bg-card-bg p-2.5 text-left shadow-xs transition-colors hover:border-accent-primary"
+									class="flex w-full flex-col items-start gap-1.5 rounded-control border border-card-border bg-card-bg p-2.5 text-left transition-colors hover:border-fg-light/40"
 								>
 									<div class="flex w-full items-center justify-between gap-1">
 										{@render laneBadge(card.lane)}
-										<span class="font-mono text-[10px] text-fg-light">Advance →</span>
+										<ArrowRight aria-label="Advance" class="size-3.5 text-fg-light" />
 									</div>
 									<span class="text-xs font-semibold text-fg-main">{card.title}</span>
 								</button>
 							{:else}
 								<div
 									in:fly={{ y: 4, duration: motionDuration(150) }}
-									class="rounded-lg border border-dashed border-card-border py-4 text-center font-mono text-[11px] text-fg-light"
+									class="rounded-control border border-dashed border-card-border py-4 text-center text-xs text-fg-light"
 								>
 									Empty lane
 								</div>

@@ -1,6 +1,6 @@
 import { cubicOut, quintOut } from 'svelte/easing';
 import { Spring, Tween, prefersReducedMotion } from 'svelte/motion';
-import { crossfade, scale } from 'svelte/transition';
+import { crossfade, fade } from 'svelte/transition';
 import type { TransitionConfig } from 'svelte/transition';
 
 /**
@@ -26,11 +26,7 @@ export function createBoardCrossfade(durationMs = 260) {
 		duration: (d) => (prefersReducedMotion.current ? 0 : Math.min(420, Math.max(durationMs, Math.sqrt(d * durationMs)))),
 		easing: quintOut,
 		fallback(node): TransitionConfig {
-			return scale(node, {
-				duration: motionDuration(180),
-				start: 0.95,
-				easing: cubicOut
-			});
+			return fade(node, { duration: motionDuration(140), easing: cubicOut });
 		}
 	});
 }
@@ -107,83 +103,24 @@ export class ReactiveTweenProgress {
 }
 
 /**
- * Svelte 5 action that applies a compositor-safe tactile scale microanimation on pointer press,
- * respecting `prefers-reduced-motion`.
+ * Subtle entrance transition: a short fade with a whole-pixel vertical offset.
  *
- * @param node - Target HTML element.
- * @param activeScale - Scale factor while pressed (default `0.97`).
- * @returns Svelte action lifecycle object.
- */
-export function pressScale(node: HTMLElement, activeScale = 0.97) {
-	let scaleFactor = activeScale;
-
-	function onPointerDown(): void {
-		if (prefersReducedMotion.current || (node as HTMLButtonElement).disabled) return;
-		node.style.transition = 'scale 130ms cubic-bezier(0.22, 1, 0.36, 1)';
-		node.style.scale = String(scaleFactor);
-	}
-
-	function onPointerUpOrLeave(): void {
-		if (prefersReducedMotion.current) return;
-		node.style.transition = 'scale 180ms cubic-bezier(0.34, 1.56, 0.64, 1)';
-		node.style.scale = '1';
-	}
-
-	node.addEventListener('pointerdown', onPointerDown);
-	node.addEventListener('pointerup', onPointerUpOrLeave);
-	node.addEventListener('pointerleave', onPointerUpOrLeave);
-	node.addEventListener('pointercancel', onPointerUpOrLeave);
-
-	return {
-		update(nextScale = 0.97) {
-			scaleFactor = nextScale;
-		},
-		destroy() {
-			node.removeEventListener('pointerdown', onPointerDown);
-			node.removeEventListener('pointerup', onPointerUpOrLeave);
-			node.removeEventListener('pointerleave', onPointerUpOrLeave);
-			node.removeEventListener('pointercancel', onPointerUpOrLeave);
-		}
-	};
-}
-
-/**
- * Svelte 5 action that applies a subtle compositor-only `translate` magnetic hover effect
- * to interactive cards or buttons, respecting `prefers-reduced-motion`.
+ * Unlike `scale` or fractional `fly` offsets, every intermediate frame lands on an
+ * integer pixel, so text never renders soft or blurry while it moves.
  *
- * @param node - Target HTML element.
- * @param maxOffsetPx - Maximum translation offset in pixels (default `3`).
- * @returns Svelte action lifecycle object.
+ * @param node - Element being transitioned.
+ * @param options - Offset in pixels (default `4`), duration and delay in milliseconds.
+ * @returns Svelte transition config.
  */
-export function magneticHover(node: HTMLElement, maxOffsetPx = 3) {
-	let strength = maxOffsetPx;
-
-	function onPointerMove(e: PointerEvent): void {
-		if (prefersReducedMotion.current) return;
-		const rect = node.getBoundingClientRect();
-		const relX = (e.clientX - rect.left) / Math.max(1, rect.width) - 0.5;
-		const relY = (e.clientY - rect.top) / Math.max(1, rect.height) - 0.5;
-		const dx = (relX * strength * 2).toFixed(2);
-		const dy = (relY * strength * 2).toFixed(2);
-		node.style.transition = 'translate 90ms ease-out';
-		node.style.translate = `${dx}px ${dy}px`;
-	}
-
-	function onPointerLeave(): void {
-		node.style.transition = 'translate 220ms cubic-bezier(0.22, 1, 0.36, 1)';
-		node.style.translate = '0px 0px';
-	}
-
-	node.addEventListener('pointermove', onPointerMove);
-	node.addEventListener('pointerleave', onPointerLeave);
-
+export function rise(
+	node: Element,
+	{ y = 4, duration = 160, delay = 0 }: { y?: number; duration?: number; delay?: number } = {}
+): TransitionConfig {
+	const opacity = Number(getComputedStyle(node).opacity) || 1;
 	return {
-		update(nextStrength = 3) {
-			strength = nextStrength;
-		},
-		destroy() {
-			node.removeEventListener('pointermove', onPointerMove);
-			node.removeEventListener('pointerleave', onPointerLeave);
-		}
+		delay,
+		duration: motionDuration(duration),
+		easing: cubicOut,
+		css: (t, u) => `opacity: ${t * opacity}; transform: translateY(${Math.round(u * y)}px);`
 	};
 }

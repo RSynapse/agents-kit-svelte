@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, ChevronDown, Sparkles } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 
 	export interface StackFrameItem {
@@ -241,25 +243,25 @@
 			<button
 				type="button"
 				onclick={handleCopy}
-				class="rounded-md border border-card-border bg-card-bg px-2.5 py-1 font-mono text-xs text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'sm')}
 			>
-				{copied ? '✓ Copied' : 'Copy trace'}
+				{#if copied}<Check aria-hidden="true" />Copied{:else}Copy trace{/if}
 			</button>
 			<button
 				type="button"
 				onclick={handleSendToAgent}
-				class="rounded-md bg-accent-primary px-2.5 py-1 font-mono text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
+				class={buttonClass('primary', 'sm')}
 			>
-				{sentToAgent ? '✓ Sent to Agent' : '✦ Send to Agent'}
+				{#if sentToAgent}<Check aria-hidden="true" />Sent to Agent{:else}<Sparkles aria-hidden="true" />Send to Agent{/if}
 			</button>
 			<button
 				type="button"
 				aria-label="Toggle stack trace frames"
 				aria-expanded={isOpen}
 				onclick={() => (isOpen = !isOpen)}
-				class="inline-flex size-7 items-center justify-center rounded-md text-xs text-fg-light hover:bg-card-bg"
+				class={buttonClass('ghost', 'icon-sm')}
 			>
-				<span class="transition-transform duration-150 {isOpen ? 'rotate-180' : ''}">▾</span>
+				<ChevronDown aria-hidden="true" class="transition-transform duration-200 {isOpen ? 'rotate-180' : ''}" />
 			</button>
 		</div>
 	</div>
@@ -292,7 +294,7 @@
 
 		<div class="border-t border-canvas-border p-3 font-mono text-xs">
 			<div class="mb-2 flex items-center justify-between px-1">
-				<span class="text-[11px] uppercase tracking-wider text-fg-light">
+				<span class="text-[11px] capitalize text-fg-light font-medium">
 					Stack Frames ({visibleFrames.length} shown)
 				</span>
 				{#if internalCount > 0}

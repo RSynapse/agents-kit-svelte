@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check, RefreshCw, X, Zap } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import type { GitHubCheckItem } from '../types';
 
 	interface Props {
@@ -78,7 +80,7 @@
 
 <section
 	aria-label={title}
-	class="rounded-xl border border-card-border bg-card-bg p-4 text-sm {className}"
+	class="rounded-card border border-card-border bg-card-bg p-4 text-sm {className}"
 >
 	<header class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border pb-3">
 		<div>
@@ -100,7 +102,7 @@
 				<div class="min-w-0 flex-1">
 					<div class="flex flex-wrap items-center gap-2">
 						<span
-							class="inline-flex size-4 shrink-0 items-center justify-center rounded-full font-mono text-[10px] font-bold {isFixing ||
+							class="inline-flex size-4 shrink-0 items-center justify-center rounded-full {isFixing ||
 							isRerunning
 								? 'bg-accent-subtle text-accent-primary'
 								: check.status === 'passed'
@@ -109,7 +111,13 @@
 										? 'bg-status-danger-subtle text-status-danger'
 										: 'bg-canvas-secondary text-fg-light'}"
 						>
-							{isFixing || isRerunning ? '↻' : check.status === 'passed' ? '✓' : '✕'}
+							{#if isFixing || isRerunning}
+								<RefreshCw class="size-2.5 animate-spin" />
+							{:else if check.status === 'passed'}
+								<Check class="size-2.5" strokeWidth={3} />
+							{:else}
+								<X class="size-2.5" strokeWidth={3} />
+							{/if}
 						</span>
 						<span class="font-medium text-fg-main">{check.name}</span>
 						<span class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] text-fg-light">
@@ -127,17 +135,17 @@
 						<button
 							type="button"
 							onclick={() => triggerAgentFix(check.id)}
-							class="rounded-md bg-fg-main px-2.5 py-1 font-medium text-fg-inverse transition-opacity hover:opacity-90"
+							class={buttonClass('primary', 'sm')}
 						>
-							{isFixing ? '↻ Claude Code Fixing…' : '⚡ Fix with Claude Code'}
+							{#if isFixing}<RefreshCw aria-hidden="true" />Claude Code Fixing…{:else}<Zap aria-hidden="true" />Fix with Claude Code{/if}
 						</button>
 					{/if}
 					<button
 						type="button"
 						onclick={() => triggerRerun(check.id)}
-						class="rounded-md border border-card-border bg-canvas-secondary px-2 py-1 font-mono text-[11px] text-fg-main hover:bg-canvas-primary"
+						class={buttonClass('secondary', 'sm')}
 					>
-						{isRerunning ? 'Re-running…' : '↻ Re-run'}
+						{#if isRerunning}Re-running…{:else}<RefreshCw aria-hidden="true" />Re-run{/if}
 					</button>
 				</div>
 			</li>

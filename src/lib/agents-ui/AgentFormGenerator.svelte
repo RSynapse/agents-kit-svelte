@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ArrowDown, ArrowUp, Check, LoaderCircle, RefreshCw, X } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	export type FormFieldType = 'text' | 'email' | 'select' | 'textarea' | 'number' | 'checkbox';
 
 	export interface FormFieldValidation {
@@ -239,13 +241,13 @@
 
 <section
 	aria-label="Dynamic schema-to-form generator"
-	class="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}"
+	class="w-full overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}"
 >
 	<header
 		class="flex flex-col gap-3 border-b border-canvas-border p-4 sm:flex-row sm:items-start sm:justify-between"
 	>
 		<div>
-			<p class="font-mono text-xs font-medium text-fg-light">Structured Tool Input Builder</p>
+			<p class="text-xs font-medium text-fg-light">Structured Tool Input Builder</p>
 			<h2 class="mt-0.5 text-base font-semibold text-fg-main">{formTitle}</h2>
 			<p class="mt-0.5 text-xs text-fg-light">{formDescription}</p>
 		</div>
@@ -254,14 +256,15 @@
 			<button
 				type="button"
 				onclick={() => onRegenerate?.()}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
-				↻ Regenerate
+				<RefreshCw aria-hidden="true" />
+				Regenerate
 			</button>
 			<button
 				type="button"
 				onclick={() => onExportSchema?.(jsonPayloadPreview)}
-				class="rounded-lg border border-card-border bg-canvas-primary px-3 py-1.5 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+				class={buttonClass('secondary', 'md')}
 			>
 				{`{}`} Export JSON
 			</button>
@@ -272,7 +275,8 @@
 		<div
 			class="border-b border-canvas-border bg-accent-subtle px-4 py-2 font-mono text-xs text-accent-primary"
 		>
-			◎ Inferring tool input schema from contract definition…
+			<LoaderCircle aria-hidden="true" class="animate-spin" />
+			Inferring tool input schema from contract definition…
 		</div>
 	{/if}
 
@@ -286,7 +290,7 @@
 				<button
 					type="button"
 					onclick={() => onAddField?.()}
-					class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+					class={buttonClass('secondary', 'sm')}
 				>
 					+ Add Field
 				</button>
@@ -319,26 +323,23 @@
 								disabled={index === 0}
 								aria-label="Move {field.label} up"
 								onclick={() => moveField(index, -1)}
-								class="rounded border border-card-border bg-canvas-primary px-1.5 py-0.5 text-xs text-fg-light hover:bg-canvas-secondary disabled:opacity-30"
-							>
-								↑
+								class={buttonClass('ghost', 'icon-sm')}
+							><ArrowUp aria-hidden="true" />
 							</button>
 							<button
 								type="button"
 								disabled={index === localFields.length - 1}
 								aria-label="Move {field.label} down"
 								onclick={() => moveField(index, 1)}
-								class="rounded border border-card-border bg-canvas-primary px-1.5 py-0.5 text-xs text-fg-light hover:bg-canvas-secondary disabled:opacity-30"
-							>
-								↓
+								class={buttonClass('ghost', 'icon-sm')}
+							><ArrowDown aria-hidden="true" />
 							</button>
 							<button
 								type="button"
 								aria-label="Remove {field.label}"
 								onclick={() => handleRemoveField(field.id)}
-								class="rounded border border-card-border bg-canvas-primary px-1.5 py-0.5 text-xs text-fg-light hover:bg-status-danger-subtle hover:text-status-danger"
-							>
-								✕
+								class={buttonClass('ghost', 'icon-sm')}
+							><X aria-hidden="true" />
 							</button>
 						</div>
 					</div>
@@ -349,20 +350,20 @@
 				<div class="flex items-center justify-between text-xs">
 					<span class="font-semibold text-fg-main">Live JSON Payload Preview</span>
 					<span
-						class="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold {isFormValid
+						class="rounded-chip px-1.5 py-px font-mono text-[10px] font-semibold {isFormValid
 							? 'bg-status-success-subtle text-status-success'
 							: 'bg-status-danger-subtle text-status-danger'}"
 					>
-						{isFormValid ? '✓ Schema Valid' : '✕ Validation Error'}
+						{#if isFormValid}<Check aria-hidden="true" />Schema Valid{:else}<X aria-hidden="true" />Validation Error{/if}
 					</span>
 				</div>
 				<pre
-					class="mt-1.5 max-h-48 overflow-auto rounded-lg border border-canvas-border bg-canvas-primary p-3 font-mono text-xs leading-5 text-fg-main"><code>{jsonPayloadPreview}</code></pre>
+					class="mt-1.5 max-h-48 overflow-auto rounded-control bg-canvas-secondary/70 p-3 font-mono text-xs leading-5 text-fg-main"><code>{jsonPayloadPreview}</code></pre>
 			</div>
 		</div>
 
 		{#if showPreview}
-			<aside class="border-t border-canvas-border bg-canvas-primary p-4 lg:border-t-0 lg:border-l">
+			<aside class="border-t border-canvas-border p-4 lg:border-t-0 lg:border-l">
 				<h3 class="text-xs font-semibold text-fg-main">Interactive Tool Form</h3>
 				<p class="mt-0.5 text-[11px] text-fg-light">
 					Edit values below to test validation and update the JSON payload
@@ -441,12 +442,12 @@
 
 					<div class="flex items-center justify-between border-t border-canvas-border pt-3">
 						<span class="font-mono text-[11px] text-fg-light">
-							{submitted ? '✓ Payload dispatched' : 'Ready to invoke'}
+							{#if submitted}<Check aria-hidden="true" />Payload dispatched{:else}Ready to invoke{/if}
 						</span>
 						<button
 							type="submit"
 							disabled={!isFormValid}
-							class="rounded-lg bg-accent-primary px-3.5 py-1.5 text-xs font-medium text-fg-inverse hover:opacity-90 disabled:opacity-40"
+							class={buttonClass('primary', 'md')}
 						>
 							Invoke Tool with Payload
 						</button>

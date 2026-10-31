@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { cubicOut } from 'svelte/easing';
+	import { pillClass } from '../ui/styles';
 	import { Spring, prefersReducedMotion } from 'svelte/motion';
-	import { fly } from 'svelte/transition';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import { computeContextMeter, formatCompactTokens } from '../state/chat-helpers';
-	import { motionDuration, pressScale } from '../state/motion.svelte';
+	import { rise } from '../state/motion.svelte';
 	import type { ContextSourceItem } from '../types';
 
 	interface Props {
@@ -41,15 +40,14 @@
 <div class="relative inline-block text-xs {className}">
 	<button
 		type="button"
-		use:pressScale
 		aria-label="Context window {meter.formattedUsed} of {meter.formattedMax} tokens ({meter.percent}%)"
 		aria-expanded={isOpen}
 		aria-controls="agent-context-meter-panel"
 		onclick={() => (isOpen = !isOpen)}
-		class="inline-flex items-center gap-2 rounded-lg border border-card-border bg-canvas-secondary px-2.5 py-1 font-mono text-xs text-fg-main transition-colors hover:bg-card-bg"
+		class={pillClass('secondary', 'sm')}
 	>
 		<span class="text-fg-light">Context</span>
-		<span class="h-1.5 w-14 overflow-hidden rounded-full bg-card-bg">
+		<span class="h-1.5 w-14 overflow-hidden rounded-full bg-chat-user">
 			<span
 				class="block h-full rounded-full transition-colors {meter.tone === 'danger'
 					? 'bg-status-danger'
@@ -68,8 +66,8 @@
 	{#if sources.length > 0 && isOpen}
 		<div
 			id="agent-context-meter-panel"
-			transition:fly={{ y: -6, duration: motionDuration(180), easing: cubicOut }}
-			class="absolute right-0 top-9 z-30 w-72 rounded-xl border border-card-border bg-card-bg p-3 shadow-lg"
+			transition:rise={{ y: -4 }}
+			class="absolute right-0 top-9 z-30 w-72 rounded-soft border border-chat-border bg-card-bg p-3.5 ak-shadow-soft"
 		>
 			<div class="flex items-center justify-between border-b border-canvas-border pb-2">
 				<span class="font-semibold text-fg-main">Context Window Breakdown</span>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { SEGMENT_GROUP_CLASS, pillClass, segmentClass } from '../ui/styles';
+	import { Check, FileCode, LayoutGrid, MessageCircle, Moon, Sparkle, SquareTerminal, Sun } from '@lucide/svelte';
 	import AgentActivity from '../agents/AgentActivity.svelte';
 	import AgentProgress from '../agents/AgentProgress.svelte';
 	import ApprovalCard from '../agents/ApprovalCard.svelte';
@@ -449,41 +451,41 @@
 <div
 	class="flex {embedded
 		? 'h-[720px]'
-		: 'h-[calc(100vh-3.5rem)] min-h-[560px]'} flex-col overflow-hidden bg-canvas-primary text-fg-main {className}"
+		: 'h-[calc(100vh-3.5rem)] min-h-[560px]'} flex-col overflow-hidden bg-chat-surface text-fg-main {className}"
 >
 	<!-- Top Application Bar -->
 	<header
-		class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border bg-card-bg px-4 py-3 sm:px-6"
+		class="flex flex-wrap items-center justify-between gap-3 border-b border-chat-border/70 bg-chat-surface px-4 py-3 sm:px-6"
 	>
 		<div class="flex min-w-0 items-center gap-3">
 			<span
-				class="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-fg-main font-mono text-xs font-bold text-fg-inverse"
+				class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-chat-accent-subtle text-chat-accent"
 			>
-				AK
+				<Sparkle class="size-4 fill-current" />
 			</span>
 			<div class="min-w-0">
 				<div class="flex flex-wrap items-center gap-2">
-					<span class="font-mono text-xs font-semibold text-accent-primary">AK-S Chat · Card 1210</span>
-					<h1 class="truncate text-sm font-bold text-fg-main sm:text-base">
+					<span class="text-xs text-fg-light">Card 1210</span>
+					<h1 class="truncate text-sm font-semibold text-fg-main sm:text-[15px]">
 						Fix OAuth callback redirect loop on deep links
 					</h1>
 					<span
-						class="rounded-full bg-status-success-subtle px-2 py-0.5 font-mono text-[11px] font-medium text-status-success"
+						class="rounded-full bg-status-success-subtle px-2.5 py-0.5 text-[11px] font-medium text-status-success"
 					>
 						Attempt #2 · Active
 					</span>
 				</div>
-				<div class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-fg-light">
+				<div class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-fg-light">
 					<span class="inline-flex items-center gap-1">
-						<span class="inline-block size-2 rounded-full bg-status-success"></span>
+						<span class="inline-block size-1.5 rounded-full bg-status-success"></span>
 						<strong class="font-medium text-fg-main">studio-mac</strong> · Connected
 					</span>
 					<span>·</span>
-					<code class="rounded bg-canvas-secondary px-1.5 py-0.5 text-[11px] text-fg-main">
+					<code class="rounded-full bg-chat-user px-2 py-px font-mono text-[11px] text-fg-main">
 						trailside/1210-auth-redirect
 					</code>
 					<span>·</span>
-					<span class="rounded bg-status-warning-subtle px-1.5 py-0.5 text-[10px] font-semibold text-status-warning">
+					<span class="rounded-full bg-status-warning-subtle px-2 py-px text-[11px] font-medium text-status-warning">
 						Risk Tier T2
 					</span>
 				</div>
@@ -497,36 +499,13 @@
 				type="button"
 				aria-label="Toggle color theme"
 				onclick={() => (isDark = !isDark)}
-				class="inline-flex h-7 items-center gap-1.5 rounded-lg border border-card-border bg-card-bg px-2.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
+				class={pillClass('secondary', 'sm')}
 			>
 				{#if isDark}
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.75"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3.5 text-fg-light"
-					>
-						<circle cx="12" cy="12" r="4" />
-						<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-					</svg>
+					<Sun aria-hidden="true" class="size-3.5 text-fg-light" />
 					<span>Light</span>
 				{:else}
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.75"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3.5 text-fg-light"
-					>
-						<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-					</svg>
+					<Moon aria-hidden="true" class="size-3.5 text-fg-light" />
 					<span>Dark</span>
 				{/if}
 			</button>
@@ -537,30 +516,16 @@
 	<div
 		role="tablist"
 		aria-label="Trailside workspace views"
-		class="flex flex-wrap items-center gap-1 border-b border-canvas-border bg-canvas-secondary/60 px-4 py-1.5 sm:px-6"
+		class="{SEGMENT_GROUP_CLASS} mx-4 my-2 flex-wrap sm:mx-6"
 	>
 		<button
 			type="button"
 			role="tab"
 			aria-selected={activeTab === 'chat'}
 			onclick={() => (activeTab = 'chat')}
-			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
-			'chat'
-				? 'border border-card-border bg-card-bg text-fg-main'
-				: 'text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'chat')}"
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="1.75"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-3.5"
-			>
-				<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-			</svg>
+			<MessageCircle aria-hidden="true" class="size-3.5" />
 			<span>AK-S Chat</span>
 		</button>
 		<button
@@ -568,26 +533,9 @@
 			role="tab"
 			aria-selected={activeTab === 'changes'}
 			onclick={() => (activeTab = 'changes')}
-			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
-			'changes'
-				? 'border border-card-border bg-card-bg text-fg-main'
-				: 'text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'changes')}"
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="1.75"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-3.5"
-			>
-				<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-				<path d="M14 2v4a2 2 0 0 0 2 2h4" />
-				<path d="m10 13-2 2 2 2" />
-				<path d="m14 17 2-2-2-2" />
-			</svg>
+			<FileCode aria-hidden="true" class="size-3.5" />
 			<span>Changes (2)</span>
 		</button>
 		<button
@@ -595,25 +543,9 @@
 			role="tab"
 			aria-selected={activeTab === 'checks'}
 			onclick={() => (activeTab = 'checks')}
-			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
-			'checks'
-				? 'border border-card-border bg-card-bg text-fg-main'
-				: 'text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'checks')}"
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="1.75"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-3.5"
-			>
-				<path d="m7 11 2-2-2-2" />
-				<path d="M11 13h4" />
-				<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-			</svg>
+			<SquareTerminal aria-hidden="true" class="size-3.5" />
 			<span>Checks & Terminal</span>
 		</button>
 		<button
@@ -621,26 +553,9 @@
 			role="tab"
 			aria-selected={activeTab === 'catalog'}
 			onclick={() => (activeTab = 'catalog')}
-			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
-			'catalog'
-				? 'border border-card-border bg-card-bg text-fg-main'
-				: 'text-fg-light hover:text-fg-main'}"
+			class="{segmentClass(activeTab === 'catalog')}"
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="1.75"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-3.5"
-			>
-				<rect width="7" height="7" x="3" y="3" rx="1" />
-				<rect width="7" height="7" x="14" y="3" rx="1" />
-				<rect width="7" height="7" x="14" y="14" rx="1" />
-				<rect width="7" height="7" x="3" y="14" rx="1" />
-			</svg>
+			<LayoutGrid aria-hidden="true" class="size-3.5" />
 			<span>Component Catalog & Evaluation</span>
 		</button>
 	</div>
@@ -650,11 +565,11 @@
 		<!-- Left Sidebar (Card Runs & Worktree Files) -->
 		<aside
 			aria-label="Worktree and Run sidebar"
-			class="hidden min-h-0 w-64 shrink-0 flex-col justify-between gap-4 overflow-y-auto border-r border-canvas-border bg-canvas-secondary p-3.5 md:flex"
+			class="hidden min-h-0 w-64 shrink-0 flex-col justify-between gap-4 overflow-y-auto border-r border-chat-border/70 bg-chat-user/35 p-3.5 md:flex"
 		>
 			<div class="space-y-4">
 				<div>
-					<h2 class="px-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-fg-light">
+					<h2 class="px-1 text-[11px] font-medium capitalize text-fg-light">
 						Active Card Runs
 					</h2>
 					<ul class="mt-1.5 space-y-1 text-xs">
@@ -662,37 +577,37 @@
 							<button
 								type="button"
 								onclick={() => (activeTab = 'chat')}
-								class="flex w-full items-center justify-between rounded-lg border border-card-border bg-card-bg px-2.5 py-2 text-left font-medium text-fg-main"
+								class="flex w-full items-center justify-between gap-2 rounded-xl bg-card-bg px-3 py-2 text-left font-medium text-fg-main ak-shadow-soft-sm"
 							>
 								<span class="truncate">Card 1210 · OAuth redirect loop</span>
-								<span class="font-mono text-[10px] text-status-success">● Live</span>
+								<span class="inline-flex items-center gap-1 text-[11px] text-status-success"><span aria-hidden="true" class="ak-breathe size-1.5 rounded-full bg-current"></span>Live</span>
 							</button>
 						</li>
 						<li>
 							<button
 								type="button"
 								onclick={() => (activeTab = 'chat')}
-								class="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-fg-light hover:bg-card-bg hover:text-fg-main"
+								class="flex w-full items-center justify-between gap-2 rounded-[10px] px-2.5 py-1.5 text-left text-fg-light transition-colors hover:bg-card-bg hover:text-fg-main"
 							>
 								<span class="truncate">Card 1198 · Pairing token expiry</span>
-								<span class="font-mono text-[10px]">Merged</span>
+								<span class="text-[11px]">Merged</span>
 							</button>
 						</li>
 						<li>
 							<button
 								type="button"
 								onclick={() => (activeTab = 'chat')}
-								class="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-fg-light hover:bg-card-bg hover:text-fg-main"
+								class="flex w-full items-center justify-between gap-2 rounded-[10px] px-2.5 py-1.5 text-left text-fg-light transition-colors hover:bg-card-bg hover:text-fg-main"
 							>
 								<span class="truncate">Card 1204 · Board column focus</span>
-								<span class="font-mono text-[10px]">Pass</span>
+								<span class="text-[11px]">Pass</span>
 							</button>
 						</li>
 					</ul>
 				</div>
 
 				<div>
-					<h2 class="px-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-fg-light">
+					<h2 class="px-1 text-[11px] font-medium capitalize text-fg-light">
 						Worktree Files (2)
 					</h2>
 					<FileTree
@@ -707,10 +622,10 @@
 				</div>
 			</div>
 
-			<div class="rounded-xl border border-card-border bg-card-bg p-3 text-xs">
-				<div class="flex items-center justify-between font-mono text-[11px] text-fg-light">
+			<div class="rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm p-3 text-xs">
+				<div class="flex items-center justify-between text-xs text-fg-light">
 					<span>Companion Runtime</span>
-					<span class="text-status-success">● Ready</span>
+					<span class="inline-flex items-center gap-1 text-status-success"><span aria-hidden="true" class="size-1.5 rounded-full bg-current"></span>Ready</span>
 				</div>
 				<p class="mt-1 font-medium text-fg-main">{activeAgent.label} ({activeAgent.version})</p>
 				<p class="mt-0.5 text-[11px] text-fg-light">
@@ -720,7 +635,7 @@
 		</aside>
 
 		<!-- Main Active Tab Panel -->
-		<main class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+		<main class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-chat-surface">
 			{#if activeTab === 'chat'}
 				<MessageScroller items={railItems} streaming={isAgentWorking}>
 					<!-- User Initial Prompt -->
@@ -808,7 +723,8 @@
 							</p>
 							{#if decisionSummary}
 								<p class="font-medium text-status-success">
-									✓ Applied policy: {decisionSummary}
+									<Check aria-hidden="true" />
+									Applied policy: {decisionSummary}
 								</p>
 							{/if}
 						</StreamingResponse>
@@ -832,8 +748,10 @@
 				</MessageScroller>
 
 				<!-- Bottom Composer -->
-				<div class="border-t border-canvas-border bg-canvas-secondary p-3 sm:px-6">
+				<div class="relative px-4 pt-1 pb-4 sm:px-8">
+					<div aria-hidden="true" class="pointer-events-none absolute inset-x-0 -top-6 h-6 bg-gradient-to-t from-chat-surface to-transparent"></div>
 					<PromptInput
+						class="mx-auto max-w-3xl"
 						bind:value={promptText}
 						busy={isAgentWorking}
 						agents={SUPPORTED_AGENTS}
@@ -899,21 +817,21 @@
 					</div>
 
 					<!-- Live Loading & Shimmer Primitives Showcase -->
-					<div class="grid gap-3 rounded-xl border border-card-border bg-card-bg p-4 sm:grid-cols-3">
+					<div class="grid gap-3 rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm p-4 sm:grid-cols-3">
 						<div>
-							<p class="font-mono text-[11px] uppercase text-fg-light">ThinkingShimmer</p>
+							<p class="text-[11px] capitalize text-fg-light font-medium">ThinkingShimmer</p>
 							<div class="mt-2">
-								<ThinkingShimmer label="Analyzing worktree diff…" />
+								<ThinkingShimmer label="Analyzing worktree diff…" spark />
 							</div>
 						</div>
 						<div>
-							<p class="font-mono text-[11px] uppercase text-fg-light">AgentProgress</p>
+							<p class="text-[11px] capitalize text-fg-light font-medium">AgentProgress</p>
 							<div class="mt-2">
 								<AgentProgress label="Running checks" initialSeconds={4.2} />
 							</div>
 						</div>
 						<div>
-							<p class="font-mono text-[11px] uppercase text-fg-light">ReasoningText</p>
+							<p class="text-[11px] capitalize text-fg-light font-medium">ReasoningText</p>
 							<div class="mt-2">
 								<ReasoningText />
 							</div>
@@ -921,17 +839,17 @@
 					</div>
 
 					<!-- Evaluation Table -->
-					<div class="overflow-x-auto rounded-xl border border-card-border bg-card-bg">
+					<div class="overflow-x-auto rounded-soft border border-chat-border bg-card-bg ak-shadow-soft-sm">
 						<table class="w-full border-collapse text-left text-xs">
 							<thead>
-								<tr class="border-b border-canvas-border bg-canvas-secondary text-fg-light">
+								<tr class="border-b border-chat-border/70 bg-chat-surface text-fg-light">
 									<th class="px-3 py-2.5 font-semibold">Primitive Family</th>
 									<th class="px-3 py-2.5 font-semibold">Upstream React Source</th>
 									<th class="px-3 py-2.5 font-semibold">Svelte 5 Port</th>
 									<th class="px-3 py-2.5 font-semibold">Trailside Integration Fit</th>
 								</tr>
 							</thead>
-							<tbody class="divide-y divide-canvas-border">
+							<tbody class="divide-y divide-chat-border/70">
 								{#each EVALUATION_MATRIX as row (row.family)}
 									<tr>
 										<td class="px-3 py-2.5 font-semibold text-fg-main">{row.family}</td>

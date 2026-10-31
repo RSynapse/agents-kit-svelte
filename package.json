@@ -2,7 +2,7 @@
   "name": "agents-kit-svelte",
   "version": "0.1.0",
   "description": "Svelte 5 Runes port of agents-ui/agents-kit & Trailside Dynamic Claude Code Chat Component",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "private": false,
   "type": "module",
   "packageManager": "pnpm@10.34.5",
@@ -31,5 +31,11 @@
   "sideEffects": [
     "**/*.css",
     "**/*.svelte"
-  ]
+  ],
+  "dependencies": {
+    "@lucide/svelte": "^1.66.0"
+  },
+  "peerDependencies": {
+    "svelte": "^5.0.0"
+  }
 }

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Check } from '@lucide/svelte';
+	import { buttonClass } from '../ui/styles';
 	import type { GitHubReviewThreadData } from '../types';
 
 	interface Props {
@@ -63,7 +65,7 @@
 	}
 </script>
 
-<div class="overflow-hidden rounded-xl border border-card-border bg-card-bg text-sm {className}">
+<div class="overflow-hidden rounded-card border border-card-border bg-card-bg text-sm {className}">
 	<div class="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-border bg-canvas-secondary px-3.5 py-2 text-xs">
 		<div class="flex items-center gap-2 font-mono">
 			<code class="font-semibold text-fg-main">{thread.filePath}</code>
@@ -76,7 +78,7 @@
 				? 'bg-status-success-subtle text-status-success'
 				: 'border border-card-border bg-card-bg text-fg-main hover:bg-canvas-primary'}"
 		>
-			{isResolved ? '✓ Resolved' : 'Resolve thread'}
+			{#if isResolved}<Check aria-hidden="true" />Resolved{:else}Resolve thread{/if}
 		</button>
 	</div>
 
@@ -106,9 +108,9 @@
 									suggestionApplied = true;
 									onApplySuggestion?.(thread.id);
 								}}
-								class="rounded bg-fg-main px-2 py-0.5 font-medium text-fg-inverse hover:opacity-90"
+								class={buttonClass('primary', 'sm')}
 							>
-								{suggestionApplied ? '✓ Committed to worktree' : 'Apply suggestion'}
+								{#if suggestionApplied}<Check aria-hidden="true" />Committed to worktree{:else}Apply suggestion{/if}
 							</button>
 						</div>
 						<pre class="mt-1.5 overflow-x-auto font-mono text-[11px] text-fg-main">{comment.suggestedPatch}</pre>
@@ -141,7 +143,7 @@
 			<button
 				type="submit"
 				disabled={!replyText.trim()}
-				class="rounded-md bg-fg-main px-3 py-1.5 text-xs font-medium text-fg-inverse disabled:opacity-40"
+				class={buttonClass('primary', 'md')}
 			>
 				Reply
 			</button>

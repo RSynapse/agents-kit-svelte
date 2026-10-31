@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { buttonClass } from '../ui/styles';
+	import { ArrowRight, Check, ChevronDown, GitPullRequest, ShieldCheck } from '@lucide/svelte';
 	import AgentDisclosure from '../agents/AgentDisclosure.svelte';
 	import type { GitHubPullRequestData } from '../types';
 
@@ -81,34 +83,20 @@
 
 <article
 	aria-label="GitHub Pull Request {pr.number}: {pr.title}"
-	class="rounded-xl border border-card-border bg-card-bg p-4 text-sm {className}"
+	class="rounded-card border border-card-border bg-card-bg p-4 text-sm {className}"
 >
 	<!-- Header Row -->
 	<div class="flex flex-wrap items-center justify-between gap-2 text-xs">
 		<div class="flex flex-wrap items-center gap-2">
 			<span
-				class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium {pr.state ===
+				class="inline-flex items-center gap-1.5 rounded-chip px-1.5 py-px text-[11px] font-medium {pr.state ===
 				'merged'
 					? 'bg-accent-subtle text-accent-primary'
 					: pr.state === 'draft'
 						? 'bg-canvas-secondary text-fg-light'
 						: 'bg-status-success-subtle text-status-success'}"
 			>
-				<svg
-					aria-hidden="true"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="size-3"
-				>
-					<circle cx="18" cy="18" r="3" />
-					<circle cx="6" cy="6" r="3" />
-					<path d="M13 6h3a2 2 0 0 1 2 2v7" />
-					<line x1="6" x2="6" y1="9" y2="21" />
-				</svg>
+				<GitPullRequest aria-hidden="true" class="size-3" />
 				<span>{pr.state === 'merged' ? 'Merged' : pr.state === 'draft' ? 'Draft' : 'Open PR'}</span>
 			</span>
 			<span class="font-mono font-medium text-fg-main">PR #{pr.number}</span>
@@ -136,7 +124,7 @@
 		<code class="rounded bg-canvas-secondary px-2 py-0.5 text-[11px] text-fg-main">
 			{pr.headBranch}
 		</code>
-		<span>→</span>
+		<ArrowRight aria-hidden="true" class="size-3" />
 		<code class="rounded bg-canvas-secondary px-2 py-0.5 text-[11px] text-fg-main">
 			{pr.baseBranch}
 		</code>
@@ -153,19 +141,7 @@
 					? 'bg-status-danger-subtle text-status-danger'
 					: 'bg-status-warning-subtle text-status-warning'}"
 		>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="mt-0.5 size-3.5 shrink-0"
-			>
-				<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-				<path d="m9 12 2 2 4-4" />
-			</svg>
+			<ShieldCheck aria-hidden="true" class="mt-0.5 size-3.5 shrink-0" />
 			<p class="leading-relaxed font-medium">{pr.refereeSummary}</p>
 		</div>
 	{/if}
@@ -180,34 +156,12 @@
 			class="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
 		>
 			<span class="flex items-center gap-2">
-				<svg
-					aria-hidden="true"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="size-3.5 text-status-success"
-				>
-					<path d="M20 6 9 17l-5-5" />
-				</svg>
+				<Check aria-hidden="true" class="size-3.5 text-status-success" />
 				<span>CI Checks & Verification Gates ({passedCount}/{pr.checks.length} passed)</span>
 			</span>
-			<svg
-				aria-hidden="true"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="1.8"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="size-3.5 text-fg-light transition-transform duration-150 {checksOpen
+			<ChevronDown aria-hidden="true" class="size-3.5 text-fg-light transition-transform duration-150 {checksOpen
 					? 'rotate-180'
-					: ''}"
-			>
-				<path d="m6 9 6 6 6-6" />
-			</svg>
+					: ''}" />
 		</button>
 
 		<AgentDisclosure id={panelId} open={checksOpen}>
@@ -224,18 +178,7 @@
 											: 'text-accent-primary'}"
 								>
 									{#if check.status === 'passed'}
-										<svg
-											aria-hidden="true"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2.2"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											class="size-3.5"
-										>
-											<path d="M20 6 9 17l-5-5" />
-										</svg>
+										<Check aria-hidden="true" class="size-3.5" />
 									{:else}
 										<span class="size-2 rounded-full bg-current"></span>
 									{/if}
@@ -275,7 +218,7 @@
 					mergeQueued = false;
 					onRequestChanges?.(pr.number);
 				}}
-				class="inline-flex h-7 items-center rounded-md border border-card-border bg-card-bg px-2.5 font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
+				class={buttonClass('secondary', 'sm')}
 			>
 				Send back
 			</button>
@@ -287,7 +230,7 @@
 					changesRequested = false;
 					onApproveMerge?.(pr.number);
 				}}
-				class="inline-flex h-7 items-center rounded-md bg-fg-main px-3 font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
+				class={buttonClass('primary', 'sm')}
 			>
 				{mergeQueued ? 'Merge Queued' : 'Approve & Queue Merge'}
 			</button>

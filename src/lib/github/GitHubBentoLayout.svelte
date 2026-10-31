@@ -21,23 +21,23 @@
 <section aria-label="GitHub Repository Bento Dashboard" class="@container space-y-4 {className}">
 	<!-- Top Repository Status Strip -->
 	<div class="grid gap-3 @sm:grid-cols-2 @3xl:grid-cols-4">
-		<div class="rounded-xl border border-card-border bg-card-bg p-3.5">
-			<span class="font-mono text-[11px] uppercase text-fg-light">Linked Repository</span>
+		<div class="rounded-card border border-card-border bg-card-bg p-3.5">
+			<span class="text-[11px] capitalize text-fg-light font-medium">Linked Repository</span>
 			<p class="mt-1 truncate font-mono text-sm font-bold text-fg-main">{repoName}</p>
-			<p class="mt-0.5 text-xs text-status-success">● GitHub App Installation Active</p>
+			<p class="mt-0.5 inline-flex items-center gap-1.5 text-xs text-fg-light"><span aria-hidden="true" class="size-1.5 rounded-full bg-status-success"></span>GitHub App installation active</p>
 		</div>
-		<div class="rounded-xl border border-card-border bg-card-bg p-3.5">
-			<span class="font-mono text-[11px] uppercase text-fg-light">Open Agent PRs</span>
+		<div class="rounded-card border border-card-border bg-card-bg p-3.5">
+			<span class="text-[11px] capitalize text-fg-light font-medium">Open Agent PRs</span>
 			<p class="mt-1 font-mono text-lg font-bold tabular-nums text-fg-main">3 / 3</p>
 			<p class="mt-0.5 text-xs text-fg-light">PR 2136, PR 2150, PR 2153 (All PASS)</p>
 		</div>
-		<div class="rounded-xl border border-card-border bg-card-bg p-3.5">
-			<span class="font-mono text-[11px] uppercase text-fg-light">Check Gates</span>
+		<div class="rounded-card border border-card-border bg-card-bg p-3.5">
+			<span class="text-[11px] capitalize text-fg-light font-medium">Check Gates</span>
 			<p class="mt-1 font-mono text-lg font-bold tabular-nums text-status-success">98.4%</p>
 			<p class="mt-0.5 text-xs text-fg-light">427 unit assertions · 5 viewports</p>
 		</div>
-		<div class="rounded-xl border border-card-border bg-card-bg p-3.5">
-			<span class="font-mono text-[11px] uppercase text-fg-light">Default Branch</span>
+		<div class="rounded-card border border-card-border bg-card-bg p-3.5">
+			<span class="text-[11px] capitalize text-fg-light font-medium">Default Branch</span>
 			<p class="mt-1 font-mono text-sm font-bold text-fg-main">{defaultBranch}</p>
 			<p class="mt-0.5 text-xs text-fg-light">Protected · Referee merge queue</p>
 		</div>
