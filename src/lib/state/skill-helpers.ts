@@ -4,7 +4,7 @@ import type {
 	SkillManifest,
 	SkillManifestIssue,
 	SkillMatch
-} from '../skills/types.ts';
+} from '../skills/types';
 
 /** Frontmatter `name` limit and the kebab-case shape skill names use. */
 export const SKILL_NAME_MAX_LENGTH = 64;

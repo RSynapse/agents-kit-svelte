@@ -101,8 +101,9 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		});
 
 		// Verify ToolApproval interactive approval
+		// The scripted session plays on its own and pauses at the approval gate
 		const allowOnceBtn = page.getByRole('button', { name: 'Allow once' });
-		await expect(allowOnceBtn).toBeVisible();
+		await expect(allowOnceBtn).toBeVisible({ timeout: 15_000 });
 		await allowOnceBtn.click();
 		await expect(page.getByText('Approved').first()).toBeVisible();
 
@@ -110,7 +111,7 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		const optionBtn = page.getByRole('radio', {
 			name: /Preserve original path and query string/i
 		});
-		await expect(optionBtn).toBeVisible();
+		await expect(optionBtn).toBeVisible({ timeout: 15_000 });
 		await optionBtn.click();
 		await page.getByRole('button', { name: /Submit decision/i }).click();
 		await expect(page.getByText(/Decision recorded:/i)).toBeVisible();

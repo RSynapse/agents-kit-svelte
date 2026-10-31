@@ -1,4 +1,4 @@
-import type { AgentSkill, SkillInvocationStep, SkillProposal } from './types.ts';
+import type { AgentSkill, SkillInvocationStep, SkillProposal } from './types';
 
 /** Sample installed skills used as component defaults and in the showcase. */
 export const SAMPLE_SKILLS: AgentSkill[] = [

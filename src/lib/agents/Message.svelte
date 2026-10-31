@@ -32,17 +32,22 @@
 	class="group/message flex w-full gap-3 {role === 'user' ? 'justify-end' : 'justify-start'} {className}"
 >
 	{#if role !== 'user'}
-		<div aria-hidden="true" class="{SOFT.avatar} mt-0.5">
+		<div aria-hidden="true" class="{SOFT.avatar} mt-0.5 max-sm:hidden">
 			<Sparkle class="fill-current" />
 		</div>
 	{/if}
 
-	<div class="min-w-0 {role === 'user' ? 'flex max-w-[80%] flex-col items-end' : 'flex-1'} space-y-1.5">
+	<div class="min-w-0 {role === 'user' ? 'flex max-w-[88%] flex-col items-end sm:max-w-[80%]' : 'flex-1'} space-y-1.5">
 		<header
 			class="flex items-center gap-2 text-xs text-fg-light {role === 'user'
 				? 'justify-end opacity-0 transition-opacity group-hover/message:opacity-100 focus-within:opacity-100'
 				: 'h-7 justify-start'}"
 		>
+			{#if role !== 'user'}
+				<span aria-hidden="true" class="{SOFT.avatar} size-6 sm:hidden [&_svg]:size-3">
+					<Sparkle class="fill-current" />
+				</span>
+			{/if}
 			<span class="font-medium {role === 'user' ? '' : 'text-fg-main'}">{author}</span>
 			{#if badge}
 				<span class="rounded-full bg-chat-user px-2 py-px text-[11px] text-fg-light">
