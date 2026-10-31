@@ -30,20 +30,20 @@
 	{#if role !== 'user'}
 		<div
 			aria-hidden="true"
-			class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg border border-card-border bg-accent-subtle font-mono text-xs font-bold text-accent-primary"
+			class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg border border-card-border bg-card-bg font-mono text-[11px] font-semibold text-fg-main"
 		>
 			{author.slice(0, 2).toUpperCase()}
 		</div>
 	{/if}
 
-	<div class="min-w-0 {role === 'user' ? 'max-w-[82%]' : 'flex-1'} space-y-2">
+	<div class="min-w-0 {role === 'user' ? 'max-w-[82%]' : 'flex-1'} space-y-2.5">
 		<header
 			class="flex items-center gap-2 text-xs {role === 'user' ? 'justify-end' : 'justify-start'}"
 		>
-			<span class="font-semibold text-fg-main">{author}</span>
+			<span class="font-medium text-fg-main">{author}</span>
 			{#if badge}
 				<span
-					class="rounded-full border border-card-border bg-canvas-secondary px-2 py-0.5 font-mono text-[10px] text-fg-light"
+					class="rounded-md bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] text-fg-light"
 				>
 					{badge}
 				</span>
@@ -60,7 +60,7 @@
 				{@render children()}
 			</div>
 		{:else}
-			<div class="space-y-3">
+			<div class="space-y-3.5">
 				{@render children()}
 			</div>
 		{/if}

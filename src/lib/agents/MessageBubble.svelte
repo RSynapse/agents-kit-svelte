@@ -26,8 +26,8 @@
 		'Completed verification on the isolated worktree branch. All 19 unit and contract suites pass with zero regressions. Expanded logs include full unified diff hunks, schema validation traces, and referee sign-off details.';
 
 	let {
-		author = 'Claude Code',
-		avatar = 'CC',
+		author = 'AK-S Agent',
+		avatar = 'AK',
 		timestamp = '14:32 UTC',
 		status = 'delivered',
 		variant = 'soft',
@@ -58,7 +58,7 @@
 	function getVariantClasses(currentVariant: MessageBubbleVariant): string {
 		switch (currentVariant) {
 			case 'solid':
-				return 'bg-accent-primary text-fg-inverse border-transparent';
+				return 'bg-fg-main text-fg-inverse border-transparent';
 			case 'tint':
 				return 'bg-accent-subtle text-fg-main border-card-border';
 			case 'outline':
@@ -108,14 +108,14 @@
 >
 	<div
 		aria-hidden="true"
-		class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg border border-card-border bg-accent-subtle font-mono text-xs font-bold text-accent-primary"
+		class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg border border-card-border bg-card-bg font-mono text-[11px] font-semibold text-fg-main"
 	>
 		{avatar}
 	</div>
 
 	<div class="flex min-w-0 max-w-[84%] flex-col {align === 'end' ? 'items-end' : 'items-start'}">
 		<div class="mb-1 flex items-center gap-2 text-xs text-fg-light">
-			<span class="font-semibold text-fg-main">{author}</span>
+			<span class="font-medium text-fg-main">{author}</span>
 			{#if timestamp}
 				<span class="font-mono text-[11px]">{timestamp}</span>
 			{/if}
@@ -147,12 +147,21 @@
 					type="button"
 					aria-expanded={isExpanded}
 					onclick={toggleCollapsible}
-					class="mt-1.5 inline-flex items-center gap-1 rounded-full bg-card-bg px-2.5 py-0.5 font-mono text-[11px] font-medium text-fg-light transition-colors hover:text-fg-main"
+					class="mt-1.5 inline-flex items-center gap-1 rounded-full border border-card-border bg-card-bg px-2.5 py-0.5 text-[11px] font-medium text-fg-light transition-colors hover:text-fg-main"
 				>
 					<span>{isExpanded ? lessLabel : moreLabel}</span>
-					<span aria-hidden="true" class="transition-transform {isExpanded ? 'rotate-180' : ''}">
-						▾
-					</span>
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-3 transition-transform {isExpanded ? 'rotate-180' : ''}"
+					>
+						<path d="m6 9 6 6 6-6" />
+					</svg>
 				</button>
 			{/if}
 		</div>

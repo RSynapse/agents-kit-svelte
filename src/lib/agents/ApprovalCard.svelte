@@ -89,13 +89,13 @@
 <div
 	role="region"
 	aria-label={title}
-	class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg p-3.5 text-sm {className}"
+	class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg p-4 text-sm {className}"
 >
 	<div class="flex items-start justify-between gap-2">
 		<div>
 			<div class="flex items-center gap-2">
 				<span
-					class="inline-flex items-center rounded-full bg-accent-subtle px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-accent-primary"
+					class="inline-flex items-center gap-1 rounded-full bg-accent-subtle px-2 py-0.5 text-[11px] font-medium text-accent-primary"
 				>
 					Decision needed
 				</span>
@@ -105,9 +105,9 @@
 					</span>
 				{/if}
 			</div>
-			<h4 class="mt-1.5 font-semibold text-fg-main">{title}</h4>
+			<h4 class="mt-1.5 font-medium text-fg-main">{title}</h4>
 			{#if description}
-				<p class="mt-0.5 text-xs text-fg-light">{description}</p>
+				<p class="mt-0.5 text-xs leading-5 text-fg-light">{description}</p>
 			{/if}
 		</div>
 	</div>
@@ -116,16 +116,28 @@
 		<div
 			role="status"
 			aria-live="polite"
-			class="mt-3 rounded-md border border-card-border bg-status-success-subtle px-3 py-2 text-xs text-status-success"
+			class="mt-3 flex items-center gap-2 rounded-md border border-card-border bg-status-success-subtle px-3 py-2 text-xs text-status-success"
 		>
-			<p class="font-semibold">
+			<svg
+				aria-hidden="true"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="size-4 shrink-0"
+			>
+				<path d="M20 6 9 17l-5-5" />
+			</svg>
+			<p class="font-medium">
 				Decision recorded: {Object.values(answers)
 					.flat()
 					.join(' · ')}
 			</p>
 		</div>
 	{:else if activeQuestion}
-		<div class="mt-3 space-y-2">
+		<div class="mt-3 space-y-2.5">
 			<p class="text-xs font-medium text-fg-main">{activeQuestion.question}</p>
 
 			<div
@@ -141,9 +153,9 @@
 						aria-checked={isSelected}
 						disabled={!ready}
 						onclick={() => selectOption(option.label)}
-						class="flex w-full items-start gap-2.5 rounded-md border px-3 py-2 text-left text-xs transition-colors {isSelected
-							? 'border-accent-primary bg-accent-subtle text-fg-main'
-							: 'border-card-border bg-canvas-primary text-fg-main hover:bg-canvas-secondary'}"
+						class="flex w-full items-start gap-2.5 rounded-lg border px-3 py-2 text-left text-xs transition-colors {isSelected
+							? 'border-accent-primary bg-accent-subtle/60 text-fg-main'
+							: 'border-card-border bg-canvas-secondary/40 text-fg-main hover:bg-canvas-secondary'}"
 					>
 						<span
 							aria-hidden="true"
@@ -151,12 +163,26 @@
 								? 'border-accent-primary bg-accent-primary text-fg-inverse'
 								: 'border-card-border bg-card-bg text-fg-light'}"
 						>
-							{isSelected ? '✓' : idx + 1}
+							{#if isSelected}
+								<svg
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="size-2.5"
+								>
+									<path d="M20 6 9 17l-5-5" />
+								</svg>
+							{:else}
+								{idx + 1}
+							{/if}
 						</span>
 						<span class="min-w-0 flex-1">
 							<span class="block font-medium text-fg-main">{option.label}</span>
 							{#if option.description}
-								<span class="mt-0.5 block text-fg-light">{option.description}</span>
+								<span class="mt-0.5 block leading-relaxed text-fg-light">{option.description}</span>
 							{/if}
 						</span>
 					</button>
@@ -164,7 +190,7 @@
 			</div>
 
 			{#if activeQuestion.allowCustom}
-				<div class="pt-1">
+				<div class="pt-0.5">
 					<label class="block text-xs text-fg-light">
 						<span class="sr-only">Custom response</span>
 						<input
@@ -175,7 +201,7 @@
 								const target = e.currentTarget as HTMLInputElement;
 								customText = { ...customText, [activeQuestion.id]: target.value };
 							}}
-							class="w-full rounded-md border border-card-border bg-canvas-primary px-2.5 py-1.5 text-xs text-fg-main placeholder:text-fg-light focus:border-accent-primary focus:outline-none"
+							class="h-8 w-full rounded-lg border border-card-border bg-canvas-secondary/40 px-2.5 text-xs text-fg-main placeholder:text-fg-light focus:border-accent-primary focus:outline-none"
 						/>
 					</label>
 				</div>
@@ -187,7 +213,7 @@
 						<button
 							type="button"
 							onclick={() => (currentStep -= 1)}
-							class="rounded-md border border-card-border bg-canvas-secondary px-2.5 py-1 text-xs font-medium text-fg-main hover:bg-canvas-primary"
+							class="inline-flex h-8 items-center rounded-md border border-card-border bg-card-bg px-2.5 text-xs font-medium text-fg-main hover:bg-canvas-secondary"
 						>
 							Back
 						</button>
@@ -196,7 +222,7 @@
 						<button
 							type="button"
 							onclick={onCancel}
-							class="rounded-md px-2 py-1 text-xs font-medium text-fg-light hover:text-fg-main"
+							class="inline-flex h-8 items-center rounded-md px-2 text-xs font-medium text-fg-light hover:text-fg-main"
 						>
 							Skip
 						</button>
@@ -207,7 +233,7 @@
 					type="button"
 					disabled={!canAdvance}
 					onclick={handleNextOrSubmit}
-					class="rounded-md bg-fg-main px-3 py-1.5 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-40"
+					class="inline-flex h-8 items-center rounded-md bg-fg-main px-3 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-40"
 				>
 					{currentStep < questions.length - 1 ? 'Next question' : submitLabel}
 				</button>

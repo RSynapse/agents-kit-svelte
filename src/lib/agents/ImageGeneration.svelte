@@ -93,21 +93,26 @@
 		role="img"
 		aria-label={resolvedLabel}
 		style="aspect-ratio: {aspectRatio}"
-		class="relative isolate flex w-full flex-col justify-between overflow-hidden rounded-lg border border-canvas-border bg-canvas-secondary p-3"
+		class="relative isolate flex w-full flex-col justify-between overflow-hidden rounded-lg border border-canvas-border bg-canvas-secondary p-3.5"
 	>
 		<div class="relative z-10 flex items-center justify-between gap-2">
 			<span
-				class="inline-flex items-center gap-1.5 rounded-full border border-card-border bg-card-bg px-2.5 py-0.5 font-mono text-[11px] font-medium {currentStatus ===
+				class="inline-flex items-center gap-1.5 rounded-full border border-card-border bg-card-bg px-2.5 py-0.5 text-[11px] font-medium {currentStatus ===
 				'error'
 					? 'text-status-danger'
 					: currentStatus === 'complete'
 						? 'text-status-success'
-						: 'text-accent-primary'}"
+						: 'text-fg-main'}"
 			>
-				<span aria-hidden="true">
-					{currentStatus === 'complete' ? '✓' : currentStatus === 'error' ? '!' : '◎'}
-				</span>
-				<span>{currentStatus.toUpperCase()}</span>
+				<span
+					aria-hidden="true"
+					class="size-1.5 rounded-full {currentStatus === 'error'
+						? 'bg-status-danger'
+						: currentStatus === 'complete'
+							? 'bg-status-success'
+							: 'animate-pulse bg-accent-primary'}"
+				></span>
+				<span class="capitalize">{currentStatus}</span>
 			</span>
 
 			{#if resolution}
@@ -126,31 +131,62 @@
 				</div>
 			{:else if currentStatus === 'complete'}
 				<div
-					class="flex size-12 items-center justify-center rounded-xl border border-card-border bg-status-success-subtle font-mono text-lg text-status-success"
+					class="flex size-10 items-center justify-center rounded-lg border border-card-border bg-card-bg text-status-success"
 				>
-					✦
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-5"
+					>
+						<path d="M20 6 9 17l-5-5" />
+					</svg>
 				</div>
-				<p class="mt-2 font-mono text-xs font-medium text-fg-main">Render pass verified</p>
+				<p class="mt-2 text-xs font-medium text-fg-main">Render pass verified</p>
 			{:else if currentStatus === 'error'}
 				<div
-					class="flex size-12 items-center justify-center rounded-xl border border-card-border bg-status-danger-subtle font-mono text-lg text-status-danger"
+					class="flex size-10 items-center justify-center rounded-lg border border-card-border bg-card-bg text-status-danger"
 				>
-					✕
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-5"
+					>
+						<circle cx="12" cy="12" r="10" />
+						<line x1="12" x2="12" y1="8" y2="12" />
+						<line x1="12" x2="12.01" y1="16" y2="16" />
+					</svg>
 				</div>
-				<p class="mt-2 font-mono text-xs text-status-danger">Sampler timeout exceeded</p>
+				<p class="mt-2 text-xs text-status-danger">Sampler timeout exceeded</p>
 			{:else}
-				<div class="grid grid-cols-6 gap-1.5 py-2" aria-hidden="true">
-					{#each Array.from({ length: 18 }) as _, idx (idx)}
-						<span
-							class="size-2 rounded-xs {idx % 3 === 0
-								? 'bg-accent-primary'
-								: idx % 2 === 0
-									? 'bg-accent-subtle'
-									: 'bg-canvas-border'}"
-						></span>
-					{/each}
+				<div
+					class="flex size-10 items-center justify-center rounded-lg border border-card-border bg-card-bg text-fg-light"
+				>
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.75"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-5 animate-pulse"
+					>
+						<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+						<circle cx="9" cy="9" r="2" />
+						<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+					</svg>
 				</div>
-				<p class="mt-2 font-mono text-xs text-fg-light">{resolvedStatusText}…</p>
+				<p class="mt-2 text-xs text-fg-light">{resolvedStatusText}…</p>
 			{/if}
 		</div>
 
@@ -159,7 +195,7 @@
 				<span>Pass progress</span>
 				<span>{resolvedProgress}%</span>
 			</div>
-			<div class="h-1.5 w-full overflow-hidden rounded-full bg-canvas-primary">
+			<div class="h-1 w-full overflow-hidden rounded-full bg-canvas-primary">
 				<div
 					class="h-full rounded-full transition-all duration-300 {currentStatus === 'error'
 						? 'bg-status-danger'
@@ -176,7 +212,7 @@
 		<div class="mt-3 flex items-start justify-between gap-3">
 			<div class="min-w-0 flex-1">
 				{#if showStatus}
-					<div aria-live="polite" class="text-xs font-semibold text-fg-main">
+					<div aria-live="polite" class="text-xs font-medium text-fg-main">
 						{resolvedStatusText}
 					</div>
 				{/if}
@@ -188,7 +224,7 @@
 			<button
 				type="button"
 				onclick={handleRegenerate}
-				class="shrink-0 rounded-lg border border-card-border bg-canvas-secondary px-2.5 py-1.5 font-mono text-xs font-medium text-fg-main transition-colors hover:bg-accent-subtle hover:text-accent-primary"
+				class="shrink-0 rounded-md border border-card-border bg-card-bg px-2.5 py-1 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
 			>
 				{currentStatus === 'error' ? 'Retry' : 'Cycle state'}
 			</button>

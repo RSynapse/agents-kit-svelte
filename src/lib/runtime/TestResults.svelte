@@ -69,22 +69,47 @@
 	<div class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border px-4 py-3">
 		<div class="flex flex-wrap items-center gap-2">
 			<span
-				class="inline-flex items-center gap-1 rounded-full bg-status-success-subtle px-2.5 py-0.5 text-xs font-semibold text-status-success"
+				class="inline-flex items-center gap-1.5 rounded-full bg-status-success-subtle px-2.5 py-0.5 text-xs font-medium text-status-success"
 			>
-				✓ {counts.passed} passed
+				<svg
+					aria-hidden="true"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="size-3.5"
+				>
+					<path d="M20 6 9 17l-5-5" />
+				</svg>
+				{counts.passed} passed
 			</span>
 			{#if counts.failed > 0}
 				<span
-					class="inline-flex items-center gap-1 rounded-full bg-status-danger-subtle px-2.5 py-0.5 text-xs font-semibold text-status-danger"
+					class="inline-flex items-center gap-1.5 rounded-full bg-status-danger-subtle px-2.5 py-0.5 text-xs font-medium text-status-danger"
 				>
-					✕ {counts.failed} failed
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-3.5"
+					>
+						<path d="M18 6 6 18" />
+						<path d="m6 6 12 12" />
+					</svg>
+					{counts.failed} failed
 				</span>
 			{/if}
 			{#if counts.skipped > 0}
 				<span
-					class="inline-flex items-center gap-1 rounded-full bg-status-warning-subtle px-2.5 py-0.5 text-xs font-semibold text-status-warning"
+					class="inline-flex items-center gap-1 rounded-full bg-status-warning-subtle px-2.5 py-0.5 text-xs font-medium text-status-warning"
 				>
-					○ {counts.skipped} skipped
+					{counts.skipped} skipped
 				</span>
 			{/if}
 		</div>
@@ -97,40 +122,107 @@
 	<div class="space-y-2 p-4">
 		{#each suites as suite (suite.id)}
 			{@const open = isSuiteOpen(suite.id)}
-			<div class="overflow-hidden rounded-lg border border-card-border bg-canvas-primary">
+			<div class="overflow-hidden rounded-lg border border-card-border bg-canvas-secondary/30">
 				<button
 					type="button"
 					aria-expanded={open}
 					onclick={() => toggleSuite(suite.id)}
-					class="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+					class="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
 				>
 					<span class="flex items-center gap-2 font-mono">
 						<span
-							class={suite.status === 'failed'
+							class="inline-flex size-4 items-center justify-center {suite.status === 'failed'
 								? 'text-status-danger'
-								: 'text-status-success'}
+								: 'text-status-success'}"
 						>
-							{suite.status === 'failed' ? '✕' : '✓'}
+							{#if suite.status === 'failed'}
+								<svg
+									aria-hidden="true"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="size-3.5"
+								>
+									<path d="M18 6 6 18" />
+									<path d="m6 6 12 12" />
+								</svg>
+							{:else}
+								<svg
+									aria-hidden="true"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="size-3.5"
+								>
+									<path d="M20 6 9 17l-5-5" />
+								</svg>
+							{/if}
 						</span>
 						<span>{suite.name}</span>
 					</span>
-					<span class="font-mono text-[11px] text-fg-light">
-						{suite.tests.length} {suite.tests.length === 1 ? 'test' : 'tests'} ▾
+					<span class="inline-flex items-center gap-1.5 font-mono text-[11px] text-fg-light">
+						<span>{suite.tests.length} {suite.tests.length === 1 ? 'test' : 'tests'}</span>
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.8"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="size-3.5 transition-transform duration-150 {open ? 'rotate-180' : ''}"
+						>
+							<path d="m6 9 6 6 6-6" />
+						</svg>
 					</span>
 				</button>
 
 				<AgentDisclosure open={open}>
-					<ul class="divide-y divide-canvas-border border-t border-canvas-border">
+					<ul class="divide-y divide-canvas-border border-t border-canvas-border bg-card-bg">
 						{#each suite.tests as testItem (testItem.id)}
 							<li class="px-3 py-2 text-xs">
 								<div class="flex items-center justify-between gap-2">
 									<span class="flex items-center gap-2 text-fg-main">
 										<span
-											class="font-mono {testItem.status === 'failed'
+											class="inline-flex size-4 items-center justify-center {testItem.status ===
+											'failed'
 												? 'text-status-danger'
 												: 'text-status-success'}"
 										>
-											{testItem.status === 'failed' ? '✕' : '✓'}
+											{#if testItem.status === 'failed'}
+												<svg
+													aria-hidden="true"
+													viewBox="0 0 24 24"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="2"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													class="size-3.5"
+												>
+													<path d="M18 6 6 18" />
+													<path d="m6 6 12 12" />
+												</svg>
+											{:else}
+												<svg
+													aria-hidden="true"
+													viewBox="0 0 24 24"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="2"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													class="size-3.5"
+												>
+													<path d="M20 6 9 17l-5-5" />
+												</svg>
+											{/if}
 										</span>
 										<span>{testItem.name}</span>
 									</span>

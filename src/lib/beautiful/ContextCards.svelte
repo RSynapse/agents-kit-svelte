@@ -83,14 +83,14 @@
 			case 'url':
 				return 'URL';
 			case 'commit':
-				return 'COMMIT';
+				return 'GIT';
 			case 'issue':
-				return 'ISSUE';
+				return 'ISS';
 			case 'schema':
-				return 'SCHEMA';
+				return 'JSON';
 			case 'file':
 			default:
-				return 'FILE';
+				return 'MD';
 		}
 	}
 
@@ -119,13 +119,18 @@
 	);
 </script>
 
-<div
-	class="divide-y divide-canvas-border rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
->
-	<header class="flex items-center justify-between gap-2 px-4 py-2.5 text-xs">
-		<span class="font-semibold text-fg-main">Attached Context ({internalChunks.length})</span>
+<div class="flex w-full flex-col gap-2.5 text-fg-main {className}">
+	<header class="flex items-center justify-between gap-2 px-0.5 text-xs">
+		<div class="flex items-center gap-2">
+			<span class="text-[13px] font-semibold text-fg-main">Retrieved chunks</span>
+			<span
+				class="inline-flex h-5 items-center rounded-md border border-card-border bg-canvas-secondary px-1.5 font-mono text-[11px] font-medium tabular-nums text-fg-light"
+			>
+				{internalChunks.length}
+			</span>
+		</div>
 		{#if totalTokens > 0}
-			<span class="font-mono text-fg-light tabular-nums">
+			<span class="font-mono text-xs text-fg-light tabular-nums">
 				{formatCompactTokens(totalTokens)} tokens
 			</span>
 		{/if}
@@ -134,49 +139,102 @@
 	{#each internalChunks as chunk (chunk.id)}
 		{@const isSelected = activeId === chunk.id}
 		<div
-			class="flex items-start justify-between gap-3 p-3.5 transition-colors {isSelected
-				? 'bg-accent-subtle'
-				: 'hover:bg-canvas-secondary'}"
+			class="overflow-hidden rounded-xl border bg-card-bg transition-colors {isSelected
+				? 'border-accent-primary'
+				: 'border-card-border'}"
 		>
-			<button
-				type="button"
-				onclick={() => handleSelect(chunk.id)}
-				class="min-w-0 flex-1 text-left"
-			>
-				<div class="flex flex-wrap items-center gap-2">
+			<div class="flex items-center justify-between gap-2 border-b border-canvas-border px-3.5 py-2">
+				<button
+					type="button"
+					onclick={() => handleSelect(chunk.id)}
+					class="flex min-w-0 flex-1 items-center gap-2 text-left text-[13px] font-medium text-fg-main"
+				>
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						class="size-3.5 shrink-0 text-fg-light"
+					>
+						<path d="M4 6h16M4 12h16M4 18h10" />
+					</svg>
+					<span class="truncate">{chunk.title}</span>
+				</button>
+
+				<div class="flex shrink-0 items-center gap-2">
+					{#if chunk.tokens !== undefined}
+						<span class="font-mono text-xs text-fg-light tabular-nums">
+							{formatCompactTokens(chunk.tokens)} tok
+						</span>
+					{/if}
+					<button
+						type="button"
+						aria-label="Remove {chunk.title}"
+						onclick={() => handleRemove(chunk.id)}
+						class="inline-flex size-6 items-center justify-center rounded-md text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+					>
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="size-3.5"
+						>
+							<path d="M18 6 6 18" />
+							<path d="m6 6 12 12" />
+						</svg>
+					</button>
+				</div>
+			</div>
+
+			<p class="px-3.5 pt-2.5 pb-2 text-xs leading-relaxed text-fg-light">
+				{chunk.content}
+			</p>
+
+			<div class="flex items-center justify-between gap-2 px-3.5 pb-3">
+				<span
+					class="inline-flex h-6 items-center gap-1.5 rounded-full border border-card-border bg-canvas-secondary px-2.5 text-xs font-medium text-fg-main"
+				>
 					<span
-						class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] font-semibold text-fg-light"
+						class="inline-flex h-4 items-center justify-center rounded px-1 font-mono text-[9px] font-bold {chunk.kind ===
+						'issue'
+							? 'bg-status-success text-fg-inverse'
+							: chunk.kind === 'schema'
+								? 'bg-status-warning text-fg-inverse'
+								: 'bg-accent-primary text-fg-inverse'}"
 					>
 						{getKindBadge(chunk.kind)}
 					</span>
-					<strong class="truncate text-xs font-semibold text-fg-main">{chunk.title}</strong>
-				</div>
+					<span class="truncate font-mono text-[11px]">{chunk.source}</span>
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-2.5 text-fg-light"
+					>
+						<path d="M7 17L17 7M7 7h10v10" />
+					</svg>
+				</span>
 
-				<p class="mt-1 line-clamp-2 text-xs leading-5 text-fg-light">
-					{chunk.content}
-				</p>
-
-				<div class="mt-1.5 flex flex-wrap items-center gap-2 font-mono text-[11px] text-fg-light">
-					<span>{chunk.source}</span>
-					{#if chunk.tokens !== undefined}
-						<span>· {formatCompactTokens(chunk.tokens)} tok</span>
-					{/if}
-					{#if chunk.score !== undefined}
-						<span class="text-status-success">· {Math.round(chunk.score * 100)}% match</span>
-					{/if}
-				</div>
-			</button>
-
-			<button
-				type="button"
-				aria-label="Remove {chunk.title}"
-				onclick={() => handleRemove(chunk.id)}
-				class="shrink-0 rounded-md px-2 py-1 font-mono text-xs text-fg-light transition-colors hover:bg-status-danger-subtle hover:text-status-danger"
-			>
-				✕
-			</button>
+				{#if chunk.score !== undefined}
+					<span class="font-mono text-[11px] font-medium text-status-success tabular-nums">
+						{Math.round(chunk.score * 100)}% match
+					</span>
+				{/if}
+			</div>
 		</div>
 	{:else}
-		<p class="p-6 text-center text-xs text-fg-light">No context items attached</p>
+		<p class="rounded-xl border border-card-border bg-card-bg p-6 text-center text-xs text-fg-light">
+			No context items attached
+		</p>
 	{/each}
 </div>

@@ -52,42 +52,63 @@
 	aria-busy={status === 'running'}
 	class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg text-sm {className}"
 >
-	<div class="flex items-center gap-2 px-3 py-2">
+	<div class="flex h-10 items-center gap-2 px-3">
 		<button
 			type="button"
 			aria-expanded={isOpen}
 			aria-controls={panelId}
 			onclick={() => (isOpen = !isOpen)}
-			class="flex min-w-0 flex-1 items-center gap-2 text-left outline-none"
+			class="group flex min-w-0 flex-1 items-center gap-2 text-left outline-none"
 		>
 			<span
 				aria-hidden="true"
-				class="inline-flex size-4 shrink-0 items-center justify-center rounded font-mono text-[10px] {status ===
-				'error'
-					? 'bg-status-danger-subtle text-status-danger'
+				class="inline-flex size-4 shrink-0 items-center justify-center {status === 'error'
+					? 'text-status-danger'
 					: status === 'running'
-						? 'bg-accent-subtle text-accent-primary'
-						: 'bg-status-success-subtle text-status-success'}"
+						? 'text-accent-primary'
+						: 'text-fg-light'}"
 			>
-				{status === 'error' ? '!' : status === 'running' ? '↻' : '$'}
+				<svg
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.75"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="size-4"
+				>
+					<path d="m7 11 2-2-2-2" />
+					<path d="M11 13h4" />
+					<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+				</svg>
 			</span>
 
-			<span class="font-mono text-xs font-semibold text-fg-main">{tool}</span>
+			<span class="font-medium text-fg-main">{tool}</span>
 
 			{#if summary}
-				<code class="min-w-0 truncate font-mono text-xs text-fg-light">{summary}</code>
+				<code class="min-w-0 truncate rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-xs text-fg-light">
+					{summary}
+				</code>
 			{/if}
 
 			{#if meta}
 				<span class="ml-auto shrink-0 font-mono text-xs tabular-nums text-fg-light">{meta}</span>
 			{/if}
 
-			<span
+			<svg
 				aria-hidden="true"
-				class="text-xs text-fg-light transition-transform duration-150 {isOpen ? 'rotate-180' : ''}"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.8"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="size-4 shrink-0 text-fg-light transition-transform duration-150 group-hover:text-fg-main {isOpen
+					? 'rotate-180'
+					: ''}"
 			>
-				▾
-			</span>
+				<path d="m6 9 6 6 6-6" />
+			</svg>
 		</button>
 
 		<div class="flex items-center gap-1">
@@ -95,7 +116,7 @@
 				<button
 					type="button"
 					onclick={onRetry}
-					class="rounded px-2 py-0.5 text-xs font-medium text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+					class="rounded-md px-2 py-0.5 text-xs font-medium text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
 				>
 					Retry
 				</button>
@@ -104,9 +125,36 @@
 				type="button"
 				aria-label={copied ? 'Copied output' : 'Copy output'}
 				onclick={handleCopy}
-				class="rounded px-2 py-0.5 font-mono text-[11px] text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+				class="inline-flex size-7 items-center justify-center rounded-md text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
 			>
-				{copied ? 'Copied' : 'Copy'}
+				{#if copied}
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-3.5 text-status-success"
+					>
+						<path d="M20 6 9 17l-5-5" />
+					</svg>
+				{:else}
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.75"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-3.5"
+					>
+						<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+						<path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+					</svg>
+				{/if}
 			</button>
 		</div>
 	</div>
@@ -115,7 +163,7 @@
 		<div
 			role={status === 'running' ? 'log' : undefined}
 			aria-live={status === 'running' ? 'polite' : undefined}
-			class="max-h-56 overflow-auto border-t border-canvas-border bg-terminal-bg px-3 py-2.5 font-mono text-xs leading-5 text-terminal-fg"
+			class="max-h-56 overflow-auto border-t border-canvas-border bg-terminal-bg px-3.5 py-2.5 font-mono text-xs leading-5 text-terminal-fg"
 		>
 			<pre class="m-0 whitespace-pre-wrap break-words">{output}</pre>
 		</div>

@@ -119,7 +119,7 @@
 <div
 	class="overflow-hidden rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
 >
-	<div class="overflow-x-auto bg-canvas-secondary p-4">
+	<div class="overflow-x-auto bg-canvas-secondary/60 p-4">
 		<div class="relative h-48 min-w-[640px]">
 			<svg class="pointer-events-none absolute inset-0 h-full w-full text-fg-light" aria-hidden="true">
 				{#each resolvedEdges as edge (`${edge.from}-${edge.to}`)}
@@ -135,8 +135,9 @@
 							fill="none"
 							stroke="currentColor"
 							stroke-opacity="0.35"
-							stroke-width="2"
+							stroke-width="1.75"
 						/>
+						<circle cx={x2} cy={y2} r="2.5" fill="currentColor" fill-opacity="0.45" />
 					{/if}
 				{/each}
 			</svg>
@@ -146,7 +147,7 @@
 				{@const isSelected = activeNodeId === node.id}
 				<article
 					style="transform: translate({pos.x}px, {pos.y}px)"
-					class="absolute w-[180px] rounded-xl border bg-card-bg shadow-xs transition-colors {isSelected
+					class="absolute w-[180px] rounded-xl border bg-card-bg transition-colors {isSelected
 						? 'border-accent-primary'
 						: 'border-card-border'}"
 				>
@@ -155,24 +156,40 @@
 						onclick={() => handleSelectNode(node.id)}
 						class="flex min-h-8 w-full items-center justify-between gap-2 border-b border-canvas-border px-3 py-1.5 text-left"
 					>
-						<span class="font-mono text-[10px] font-semibold tracking-wider text-fg-light uppercase">
+						<span class="font-mono text-[10px] font-medium tracking-wider text-fg-light uppercase">
 							{node.kind ?? 'Step'}
 						</span>
 						<span
 							aria-hidden="true"
-							class="inline-flex size-4 items-center justify-center rounded-full font-mono text-[10px] {node.status ===
+							class="inline-flex size-4 items-center justify-center rounded-full {node.status ===
 							'complete'
 								? 'bg-status-success-subtle text-status-success'
 								: node.status === 'running'
 									? 'bg-accent-subtle text-accent-primary'
 									: 'bg-canvas-secondary text-fg-light'}"
 						>
-							{node.status === 'complete' ? '✓' : node.status === 'running' ? '↻' : '○'}
+							{#if node.status === 'complete'}
+								<svg
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="size-2.5"
+								>
+									<path d="M20 6 9 17l-5-5" />
+								</svg>
+							{:else if node.status === 'running'}
+								<span class="size-1.5 animate-pulse rounded-full bg-accent-primary"></span>
+							{:else}
+								<span class="size-1.5 rounded-full bg-fg-light"></span>
+							{/if}
 						</span>
 					</button>
 
 					<div class="p-2.5">
-						<h3 class="text-xs font-semibold text-fg-main">{node.label}</h3>
+						<h3 class="text-xs font-medium text-fg-main">{node.label}</h3>
 						{#if node.detail}
 							<p class="mt-1 line-clamp-2 text-[11px] leading-4 text-fg-light">{node.detail}</p>
 						{/if}
@@ -183,7 +200,7 @@
 									type="text"
 									aria-label="Condition field"
 									value={node.condition.field}
-									 oninput={(e) =>
+									oninput={(e) =>
 										onConditionChange?.(node.id, {
 											...node.condition!,
 											field: e.currentTarget.value
@@ -213,12 +230,14 @@
 	{#if activeNode}
 		<footer class="flex items-center justify-between gap-3 border-t border-canvas-border px-4 py-2.5 text-xs">
 			<div>
-				<span class="font-semibold text-fg-main">{activeNode.label}</span>
+				<span class="font-medium text-fg-main">{activeNode.label}</span>
 				{#if activeNode.detail}
 					<span class="ml-2 text-fg-light">— {activeNode.detail}</span>
 				{/if}
 			</div>
-			<span class="font-mono text-[11px] text-accent-primary uppercase">{activeNode.status}</span>
+			<span class="rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-[10px] font-medium text-fg-main uppercase">
+				{activeNode.status}
+			</span>
 		</footer>
 	{/if}
 </div>

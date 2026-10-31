@@ -34,10 +34,23 @@
 <div
 	class="flex flex-col overflow-hidden rounded-xl border border-card-border bg-terminal-bg text-terminal-fg {className}"
 >
-	<div class="flex items-center justify-between border-b border-canvas-border px-4 py-2 text-xs">
+	<div class="flex h-10 items-center justify-between border-b border-canvas-border px-3.5 text-xs">
 		<div class="flex items-center gap-2 font-mono text-terminal-muted">
-			<span aria-hidden="true">$_</span>
-			<span>{title}</span>
+			<svg
+				aria-hidden="true"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.75"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="size-4 shrink-0"
+			>
+				<path d="m7 11 2-2-2-2" />
+				<path d="M11 13h4" />
+				<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+			</svg>
+			<span class="truncate">{title}</span>
 			{#if streaming}
 				<span class="rounded-full bg-accent-subtle px-2 py-0.5 text-[10px] text-accent-primary">
 					Running
@@ -49,7 +62,7 @@
 			<button
 				type="button"
 				onclick={handleCopy}
-				class="rounded px-2 py-0.5 font-mono text-[11px] text-terminal-muted transition-colors hover:text-terminal-fg"
+				class="rounded-md px-2 py-0.5 font-mono text-[11px] text-terminal-muted transition-colors hover:text-terminal-fg"
 			>
 				{copied ? 'Copied' : 'Copy'}
 			</button>
@@ -57,7 +70,7 @@
 				<button
 					type="button"
 					onclick={onClear}
-					class="rounded px-2 py-0.5 font-mono text-[11px] text-terminal-muted transition-colors hover:text-terminal-fg"
+					class="rounded-md px-2 py-0.5 font-mono text-[11px] text-terminal-muted transition-colors hover:text-terminal-fg"
 				>
 					Clear
 				</button>

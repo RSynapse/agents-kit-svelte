@@ -62,37 +62,96 @@
 			aria-expanded={isOpen}
 			aria-controls={panelId}
 			onclick={() => (isOpen = !isOpen)}
-			class="flex min-w-0 flex-1 items-center gap-2 text-left outline-none"
+			class="group flex min-w-0 flex-1 items-center gap-2 text-left text-fg-light outline-none transition-colors hover:text-fg-main"
 		>
-			<span
+			<svg
 				aria-hidden="true"
-				class="inline-flex size-4 shrink-0 items-center justify-center rounded bg-canvas-secondary font-mono text-[10px] text-fg-light"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.75"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="size-4 shrink-0 text-fg-light"
 			>
-				±
-			</span>
+				<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+				<path d="M14 2v4a2 2 0 0 0 2 2h4" />
+				<path d="m10 13-2 2 2 2" />
+				<path d="m14 17 2-2-2-2" />
+			</svg>
 
 			<code class="min-w-0 truncate font-mono text-xs text-fg-main">{filename}</code>
 
-			<span class="ml-auto inline-flex shrink-0 items-center gap-1.5 font-mono text-xs tabular-nums">
-				<span class="font-medium text-diff-add-fg">+{addedCount}</span>
-				<span class="font-medium text-diff-del-fg">-{deletedCount}</span>
+			<span class="ml-auto inline-flex shrink-0 items-center gap-1.5 font-sans text-xs font-medium tabular-nums">
+				<span class="text-diff-add-fg">+{addedCount}</span>
+				<span class="text-diff-del-fg">−{deletedCount}</span>
 			</span>
 
-			<span
+			{#if status === 'complete'}
+				<svg
+					aria-hidden="true"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="size-3.5 shrink-0 text-fg-light"
+				>
+					<path d="M20 6 9 17l-5-5" />
+				</svg>
+			{/if}
+
+			<svg
 				aria-hidden="true"
-				class="text-xs text-fg-light transition-transform duration-150 {isOpen ? 'rotate-180' : ''}"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.8"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="size-4 shrink-0 text-fg-light transition-transform duration-150 group-hover:text-fg-main {isOpen
+					? 'rotate-180'
+					: ''}"
 			>
-				▾
-			</span>
+				<path d="m6 9 6 6 6-6" />
+			</svg>
 		</button>
 
 		<button
 			type="button"
 			aria-label={copied ? 'Copied diff' : 'Copy diff'}
 			onclick={handleCopy}
-			class="rounded px-2 py-0.5 font-mono text-[11px] text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
+			class="inline-flex size-7 items-center justify-center rounded-md text-fg-light transition-colors hover:bg-canvas-secondary hover:text-fg-main"
 		>
-			{copied ? 'Copied' : 'Copy'}
+			{#if copied}
+				<svg
+					aria-hidden="true"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="size-3.5 text-status-success"
+				>
+					<path d="M20 6 9 17l-5-5" />
+				</svg>
+			{:else}
+				<svg
+					aria-hidden="true"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.75"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="size-3.5"
+				>
+					<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+					<path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+				</svg>
+			{/if}
 		</button>
 	</div>
 
@@ -100,7 +159,7 @@
 		<div
 			role={status === 'streaming' ? 'log' : undefined}
 			aria-live={status === 'streaming' ? 'polite' : undefined}
-			class="overflow-auto border-t border-canvas-border py-1.5 font-mono text-xs leading-5"
+			class="overflow-auto border-t border-canvas-border bg-canvas-secondary/60 py-1.5 font-mono text-xs leading-5"
 			style="max-height: {maxHeight}px;"
 		>
 			<div class="min-w-max">
@@ -115,14 +174,14 @@
 									? 'bg-canvas-secondary text-fg-light'
 									: 'text-fg-main'}"
 					>
-						<span class="select-none pr-1.5 text-right tabular-nums text-fg-light">
+						<span class="select-none pr-1.5 text-right tabular-nums text-fg-light/60">
 							{line.oldNumber ?? ''}
 						</span>
-						<span class="select-none pr-1.5 text-right tabular-nums text-fg-light">
+						<span class="select-none pr-1.5 text-right tabular-nums text-fg-light/60">
 							{line.newNumber ?? ''}
 						</span>
-						<span class="select-none text-center font-semibold">
-							{line.kind === 'add' ? '+' : line.kind === 'delete' ? '-' : ''}
+						<span class="select-none text-center font-medium">
+							{line.kind === 'add' ? '+' : line.kind === 'delete' ? '−' : ''}
 						</span>
 						<span class="whitespace-pre pr-4">{line.content}</span>
 					</div>

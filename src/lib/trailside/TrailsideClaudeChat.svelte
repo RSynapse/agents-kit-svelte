@@ -445,7 +445,7 @@
 	}
 </script>
 
-<div class="flex h-screen flex-col overflow-hidden bg-canvas-primary text-fg-main {className}">
+<div class="flex h-[calc(100vh-3.5rem)] min-h-[560px] flex-col overflow-hidden bg-canvas-primary text-fg-main {className}">
 	<!-- Top Application Bar -->
 	<header
 		class="flex flex-wrap items-center justify-between gap-3 border-b border-canvas-border bg-card-bg px-4 py-3 sm:px-6"
@@ -492,9 +492,38 @@
 				type="button"
 				aria-label="Toggle color theme"
 				onclick={() => (isDark = !isDark)}
-				class="rounded-lg border border-card-border bg-canvas-secondary px-2.5 py-1 font-mono text-xs font-medium text-fg-main transition-colors hover:bg-canvas-primary"
+				class="inline-flex h-7 items-center gap-1.5 rounded-lg border border-card-border bg-card-bg px-2.5 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
 			>
-				{isDark ? '☀ Light' : '☾ Dark'}
+				{#if isDark}
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.75"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-3.5 text-fg-light"
+					>
+						<circle cx="12" cy="12" r="4" />
+						<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+					</svg>
+					<span>Light</span>
+				{:else}
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.75"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-3.5 text-fg-light"
+					>
+						<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+					</svg>
+					<span>Dark</span>
+				{/if}
 			</button>
 		</div>
 	</header>
@@ -503,51 +532,111 @@
 	<div
 		role="tablist"
 		aria-label="Trailside workspace views"
-		class="flex flex-wrap items-center gap-1 border-b border-canvas-border bg-canvas-secondary px-4 py-1.5 sm:px-6"
+		class="flex flex-wrap items-center gap-1 border-b border-canvas-border bg-canvas-secondary/60 px-4 py-1.5 sm:px-6"
 	>
 		<button
 			type="button"
 			role="tab"
 			aria-selected={activeTab === 'chat'}
 			onclick={() => (activeTab = 'chat')}
-			class="rounded-md px-3 py-1 text-xs font-semibold transition-colors {activeTab === 'chat'
-				? 'bg-card-bg text-fg-main shadow-xs'
+			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
+			'chat'
+				? 'border border-card-border bg-card-bg text-fg-main'
 				: 'text-fg-light hover:text-fg-main'}"
 		>
-			💬 AK-S Chat
+			<svg
+				aria-hidden="true"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.75"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="size-3.5"
+			>
+				<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+			</svg>
+			<span>AK-S Chat</span>
 		</button>
 		<button
 			type="button"
 			role="tab"
 			aria-selected={activeTab === 'changes'}
 			onclick={() => (activeTab = 'changes')}
-			class="rounded-md px-3 py-1 text-xs font-semibold transition-colors {activeTab === 'changes'
-				? 'bg-card-bg text-fg-main shadow-xs'
+			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
+			'changes'
+				? 'border border-card-border bg-card-bg text-fg-main'
 				: 'text-fg-light hover:text-fg-main'}"
 		>
-			± Changes (2)
+			<svg
+				aria-hidden="true"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.75"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="size-3.5"
+			>
+				<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+				<path d="M14 2v4a2 2 0 0 0 2 2h4" />
+				<path d="m10 13-2 2 2 2" />
+				<path d="m14 17 2-2-2-2" />
+			</svg>
+			<span>Changes (2)</span>
 		</button>
 		<button
 			type="button"
 			role="tab"
 			aria-selected={activeTab === 'checks'}
 			onclick={() => (activeTab = 'checks')}
-			class="rounded-md px-3 py-1 text-xs font-semibold transition-colors {activeTab === 'checks'
-				? 'bg-card-bg text-fg-main shadow-xs'
+			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
+			'checks'
+				? 'border border-card-border bg-card-bg text-fg-main'
 				: 'text-fg-light hover:text-fg-main'}"
 		>
-			✓ Checks & Terminal
+			<svg
+				aria-hidden="true"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.75"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="size-3.5"
+			>
+				<path d="m7 11 2-2-2-2" />
+				<path d="M11 13h4" />
+				<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+			</svg>
+			<span>Checks & Terminal</span>
 		</button>
 		<button
 			type="button"
 			role="tab"
 			aria-selected={activeTab === 'catalog'}
 			onclick={() => (activeTab = 'catalog')}
-			class="rounded-md px-3 py-1 text-xs font-semibold transition-colors {activeTab === 'catalog'
-				? 'bg-card-bg text-fg-main shadow-xs'
+			class="inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors {activeTab ===
+			'catalog'
+				? 'border border-card-border bg-card-bg text-fg-main'
 				: 'text-fg-light hover:text-fg-main'}"
 		>
-			📦 Component Catalog & Evaluation
+			<svg
+				aria-hidden="true"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.75"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="size-3.5"
+			>
+				<rect width="7" height="7" x="3" y="3" rx="1" />
+				<rect width="7" height="7" x="14" y="3" rx="1" />
+				<rect width="7" height="7" x="14" y="14" rx="1" />
+				<rect width="7" height="7" x="3" y="14" rx="1" />
+			</svg>
+			<span>Component Catalog & Evaluation</span>
 		</button>
 	</div>
 

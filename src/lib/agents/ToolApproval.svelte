@@ -98,118 +98,172 @@
 	aria-busy={isBusy}
 	class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg text-sm {className}"
 >
-	<div class="flex flex-wrap items-center gap-2 px-3 py-2.5">
-		<button
-			type="button"
-			aria-expanded={params.length > 0 ? isOpen : undefined}
-			aria-controls={params.length > 0 ? panelId : undefined}
-			onclick={() => {
-				if (params.length > 0) isOpen = !isOpen;
-			}}
-			class="flex min-w-0 flex-1 items-center gap-2 text-left outline-none"
-		>
-			{#key activeStatus}
+	<div class="flex items-start gap-3 p-4">
+		{#key activeStatus}
+			<span
+				in:scale={{ start: 0.85, duration: motionDuration(180), easing: backOut }}
+				aria-hidden="true"
+				class="flex size-8 shrink-0 items-center justify-center rounded-md border border-card-border bg-card-bg {activeStatus ===
+					'approved' || activeStatus === 'complete'
+					? 'text-status-success'
+					: activeStatus === 'denied' || activeStatus === 'error'
+						? 'text-status-danger'
+						: 'text-fg-light'}"
+			>
+				{#if activeStatus === 'approved' || activeStatus === 'complete'}
+					<svg
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-4"
+					>
+						<path d="M20 6 9 17l-5-5" />
+					</svg>
+				{:else if activeStatus === 'denied' || activeStatus === 'error'}
+					<svg
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-4"
+					>
+						<path d="M18 6 6 18" />
+						<path d="m6 6 12 12" />
+					</svg>
+				{:else}
+					<svg
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.75"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-4"
+					>
+						<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+						<path d="m9 12 2 2 4-4" />
+					</svg>
+				{/if}
+			</span>
+		{/key}
+
+		<div class="min-w-0 flex-1">
+			<div class="flex flex-wrap items-center justify-between gap-2">
+				<div class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+					<span class="font-medium text-fg-main">Allow {tool} execution?</span>
+					<span class="font-mono text-xs text-fg-light">{tool}</span>
+				</div>
+
 				<span
-					in:scale={{ start: 0.82, duration: motionDuration(180), easing: backOut }}
-					aria-hidden="true"
-					class="inline-flex size-5 shrink-0 items-center justify-center rounded font-mono text-xs {activeStatus ===
+					role="status"
+					aria-live="polite"
+					class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium {activeStatus ===
 						'approved' || activeStatus === 'complete'
 						? 'bg-status-success-subtle text-status-success'
 						: activeStatus === 'denied' || activeStatus === 'error'
 							? 'bg-status-danger-subtle text-status-danger'
-							: 'bg-status-warning-subtle text-status-warning'}"
+							: 'bg-canvas-secondary text-fg-light'}"
 				>
-					{activeStatus === 'approved' || activeStatus === 'complete'
-						? '✓'
-						: activeStatus === 'denied' || activeStatus === 'error'
-							? '✕'
-							: '⚡'}
+					<span
+						aria-hidden="true"
+						class="size-1.5 rounded-full {activeStatus === 'approved' || activeStatus === 'complete'
+							? 'bg-status-success'
+							: activeStatus === 'denied' || activeStatus === 'error'
+								? 'bg-status-danger'
+								: 'bg-status-warning'}"
+					></span>
+					{STATUS_LABELS[activeStatus]}
 				</span>
-			{/key}
-
-			<span class="font-mono text-xs font-semibold text-fg-main">{tool}</span>
+			</div>
 
 			{#if summary}
-				<code
-					class="min-w-0 truncate rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-xs text-fg-light"
-				>
-					{summary}
-				</code>
+				<p class="mt-1 leading-relaxed text-fg-light">
+					<code class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-xs text-fg-main">
+						{summary}
+					</code>
+				</p>
 			{/if}
-		</button>
 
-		{#if isWaiting}
-			<div
-				in:fly={{ x: 8, duration: motionDuration(160), easing: cubicOut }}
-				class="flex flex-wrap items-center gap-1.5"
-			>
-				<button
-					type="button"
-					use:pressScale
-					disabled={!ready || activeStatus === 'approving'}
-					onclick={handleApprove}
-					class="rounded-md bg-fg-main px-2.5 py-1 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
-				>
-					{approveLabel}
-				</button>
-				<button
-					type="button"
-					use:pressScale
-					disabled={!ready || activeStatus === 'approving'}
-					onclick={handleAlwaysApprove}
-					class="rounded-md border border-card-border bg-canvas-secondary px-2.5 py-1 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-primary disabled:opacity-50"
-				>
-					{alwaysApproveLabel}
-				</button>
-				<button
-					type="button"
-					use:pressScale
-					disabled={!ready || activeStatus === 'approving'}
-					onclick={handleDeny}
-					class="rounded-md px-2 py-1 text-xs font-medium text-status-danger transition-colors hover:bg-status-danger-subtle disabled:opacity-50"
-				>
-					{denyLabel}
-				</button>
-			</div>
-		{:else}
-			<span
-				in:scale={{ start: 0.9, duration: motionDuration(180), easing: backOut }}
-				role="status"
-				aria-live="polite"
-				class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium {activeStatus ===
-					'approved' || activeStatus === 'complete'
-					? 'bg-status-success-subtle text-status-success'
-					: activeStatus === 'denied' || activeStatus === 'error'
-						? 'bg-status-danger-subtle text-status-danger'
-						: 'bg-accent-subtle text-accent-primary'}"
-			>
-				{STATUS_LABELS[activeStatus]}
-			</span>
-		{/if}
-	</div>
+			{#if params.length > 0}
+				<div class="mt-2.5">
+					<button
+						type="button"
+						aria-expanded={isOpen}
+						aria-controls={panelId}
+						onclick={() => (isOpen = !isOpen)}
+						class="group inline-flex items-center gap-1 text-xs font-medium text-fg-light outline-none transition-colors hover:text-fg-main"
+					>
+						<span>{isOpen ? 'Hide details' : 'View details'}</span>
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.8"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="size-3.5 transition-transform duration-150 {isOpen ? 'rotate-180' : ''}"
+						>
+							<path d="m6 9 6 6 6-6" />
+						</svg>
+					</button>
 
-	{#if params.length > 0}
-		<AgentDisclosure id={panelId} open={isOpen}>
-			<dl
-				class="grid gap-1.5 border-t border-canvas-border bg-canvas-secondary px-3 py-2.5 text-xs"
-			>
-				{#each params as param (param.label)}
-					<div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-2">
-						<dt class="font-medium text-fg-light">{param.label}</dt>
-						<dd class="min-w-0 text-fg-main">
-							{#if param.code}
-								<code
-									class="block overflow-x-auto rounded bg-card-bg px-2 py-1 font-mono text-[11px] text-fg-main"
+					<AgentDisclosure id={panelId} open={isOpen}>
+						<dl
+							class="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-md border border-card-border bg-canvas-secondary/60 px-3 py-2 text-xs"
+						>
+							{#each params as param (param.label)}
+								<dt class="font-medium text-fg-light">{param.label}</dt>
+								<dd
+									class="min-w-0 break-all text-fg-main {param.code ? 'font-mono' : ''}"
 								>
 									{param.value}
-								</code>
-							{:else}
-								<span class="break-words">{param.value}</span>
-							{/if}
-						</dd>
-					</div>
-				{/each}
-			</dl>
-		</AgentDisclosure>
+								</dd>
+							{/each}
+						</dl>
+					</AgentDisclosure>
+				</div>
+			{/if}
+		</div>
+	</div>
+
+	{#if isWaiting}
+		<div
+			in:fly={{ y: 4, duration: motionDuration(160), easing: cubicOut }}
+			class="flex flex-wrap items-center justify-end gap-2 border-t border-canvas-border bg-canvas-secondary/40 px-4 py-2.5"
+		>
+			<button
+				type="button"
+				use:pressScale
+				disabled={!ready || activeStatus === 'approving'}
+				onclick={handleDeny}
+				class="inline-flex h-8 items-center justify-center rounded-md border border-card-border bg-card-bg px-3 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
+			>
+				{denyLabel}
+			</button>
+			<button
+				type="button"
+				use:pressScale
+				disabled={!ready || activeStatus === 'approving'}
+				onclick={handleAlwaysApprove}
+				class="inline-flex h-8 items-center justify-center rounded-md border border-card-border bg-card-bg px-3 text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
+			>
+				{alwaysApproveLabel}
+			</button>
+			<button
+				type="button"
+				use:pressScale
+				disabled={!ready || activeStatus === 'approving'}
+				onclick={handleApprove}
+				class="inline-flex h-8 items-center justify-center rounded-md bg-fg-main px-3 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
+			>
+				{approveLabel}
+			</button>
+		</div>
 	{/if}
 </div>

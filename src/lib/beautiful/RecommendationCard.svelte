@@ -93,14 +93,26 @@
 </script>
 
 <section
-	class="rounded-xl border border-card-border bg-card-bg p-4 text-fg-main {className}"
+	class="overflow-hidden rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
 >
-	<div class="flex items-start justify-between gap-3">
+	<div class="flex items-start justify-between gap-3 border-b border-canvas-border px-4 py-3">
 		<div class="space-y-1">
-			<span class="font-mono text-[10px] font-semibold tracking-wider text-accent-primary uppercase">
+			<span class="inline-flex items-center gap-1.5 text-[11px] font-medium text-accent-primary">
+				<svg
+					aria-hidden="true"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.8"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="size-3.5"
+				>
+					<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+				</svg>
 				Recommended Strategy
 			</span>
-			<h3 class="text-sm font-semibold text-fg-main">{title}</h3>
+			<h3 class="text-sm font-medium text-fg-main">{title}</h3>
 		</div>
 
 		{#if confidencePercent !== undefined}
@@ -112,53 +124,67 @@
 		{/if}
 	</div>
 
-	{#if resolvedBody}
-		<p class="mt-2 text-xs leading-5 text-fg-light">{resolvedBody}</p>
-	{/if}
+	<div class="p-4">
+		{#if resolvedBody}
+			<p class="text-xs leading-relaxed text-fg-light">{resolvedBody}</p>
+		{/if}
 
-	{#if reasoning.length > 0}
-		<ul class="mt-3 space-y-1.5 border-l-2 border-accent-primary pl-3 text-xs text-fg-main">
-			{#each reasoning as point (point)}
-				<li class="leading-5">{point}</li>
-			{/each}
-		</ul>
-	{/if}
+		{#if reasoning.length > 0}
+			<ul class="mt-3 space-y-1.5 border-l-2 border-accent-primary/60 pl-3 text-xs text-fg-main">
+				{#each reasoning as point (point)}
+					<li class="leading-relaxed">{point}</li>
+				{/each}
+			</ul>
+		{/if}
 
-	{#if alternatives.length > 0}
-		<div class="mt-4 divide-y divide-canvas-border border-y border-canvas-border">
-			{#each alternatives as option (option.id)}
-				{@const isSelected = selectedAlternativeId === option.id}
-				<button
-					type="button"
-					onclick={() => handleSelectAlternative(option.id)}
-					class="flex min-h-10 w-full flex-col items-start justify-center px-2 py-2 text-left transition-colors {isSelected
-						? 'bg-accent-subtle text-accent-primary'
-						: 'hover:bg-canvas-secondary'}"
-				>
-					<span class="text-xs font-medium text-fg-main">{option.label}</span>
-					{#if option.description}
-						<span class="mt-0.5 block text-[11px] text-fg-light">{option.description}</span>
-					{/if}
-				</button>
-			{/each}
-		</div>
-	{/if}
+		{#if alternatives.length > 0}
+			<div class="mt-4 divide-y divide-canvas-border overflow-hidden rounded-lg border border-card-border">
+				{#each alternatives as option (option.id)}
+					{@const isSelected = selectedAlternativeId === option.id}
+					<button
+						type="button"
+						onclick={() => handleSelectAlternative(option.id)}
+						class="flex min-h-10 w-full flex-col items-start justify-center px-3 py-2 text-left transition-colors {isSelected
+							? 'bg-accent-subtle/60 text-accent-primary'
+							: 'bg-canvas-secondary/30 hover:bg-canvas-secondary'}"
+					>
+						<span class="text-xs font-medium text-fg-main">{option.label}</span>
+						{#if option.description}
+							<span class="mt-0.5 block text-[11px] text-fg-light">{option.description}</span>
+						{/if}
+					</button>
+				{/each}
+			</div>
+		{/if}
+	</div>
 
-	<div class="mt-4 flex items-center justify-between gap-3">
-		<span class="font-mono text-[11px] text-fg-light">
+	<div class="flex items-center justify-between gap-3 border-t border-canvas-border bg-canvas-secondary/40 px-4 py-2.5">
+		<span class="inline-flex items-center gap-1.5 font-mono text-[11px] text-fg-light">
 			{#if accepted}
-				✓ Recommendation accepted
+				<svg
+					aria-hidden="true"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="size-3.5 text-status-success"
+				>
+					<path d="M20 6 9 17l-5-5" />
+				</svg>
+				<span>Recommendation accepted</span>
 			{:else if selectedAlternativeId}
-				Selected alternative: {selectedAlternativeId}
+				<span>Selected alternative: {selectedAlternativeId}</span>
 			{:else}
-				Ready to apply
+				<span>Ready to apply</span>
 			{/if}
 		</span>
 
 		<button
 			type="button"
 			onclick={handleAccept}
-			class="rounded-lg bg-accent-primary px-3.5 py-1.5 text-xs font-semibold text-fg-inverse transition-opacity hover:opacity-90"
+			class="inline-flex h-8 items-center rounded-md bg-fg-main px-3 text-xs font-medium text-fg-inverse transition-opacity hover:opacity-90"
 		>
 			{accepted ? 'Accepted' : acceptLabel}
 		</button>

@@ -81,41 +81,56 @@
 
 <article
 	aria-label="GitHub Pull Request {pr.number}: {pr.title}"
-	class="rounded-xl border border-card-border bg-card-bg p-4 text-sm shadow-xs {className}"
+	class="rounded-xl border border-card-border bg-card-bg p-4 text-sm {className}"
 >
 	<!-- Header Row -->
 	<div class="flex flex-wrap items-center justify-between gap-2 text-xs">
 		<div class="flex flex-wrap items-center gap-2">
 			<span
-				class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-mono text-[11px] font-semibold {pr.state ===
+				class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium {pr.state ===
 				'merged'
 					? 'bg-accent-subtle text-accent-primary'
 					: pr.state === 'draft'
 						? 'bg-canvas-secondary text-fg-light'
 						: 'bg-status-success-subtle text-status-success'}"
 			>
-				{pr.state === 'merged' ? '⛙ Merged' : pr.state === 'draft' ? '◌ Draft' : '⑂ Open PR'}
+				<svg
+					aria-hidden="true"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="size-3"
+				>
+					<circle cx="18" cy="18" r="3" />
+					<circle cx="6" cy="6" r="3" />
+					<path d="M13 6h3a2 2 0 0 1 2 2v7" />
+					<line x1="6" x2="6" y1="9" y2="21" />
+				</svg>
+				<span>{pr.state === 'merged' ? 'Merged' : pr.state === 'draft' ? 'Draft' : 'Open PR'}</span>
 			</span>
-			<span class="font-mono font-semibold text-fg-main">PR {pr.number}</span>
+			<span class="font-mono font-medium text-fg-main">PR #{pr.number}</span>
 			{#if pr.linkedIssueNumber}
 				<span class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[11px] text-fg-light">
-					Fixes Issue {pr.linkedIssueNumber}
+					Fixes #{pr.linkedIssueNumber}
 				</span>
 			{/if}
 		</div>
 
-		<div class="flex items-center gap-2 font-mono text-xs tabular-nums">
-			<span class="font-semibold text-diff-add-fg">+{pr.additions}</span>
-			<span class="font-semibold text-diff-del-fg">-{pr.deletions}</span>
-			<span class="text-fg-light">({pr.changedFilesCount} files)</span>
-			<span class="rounded border border-card-border bg-canvas-secondary px-1.5 py-0.5 text-[11px] text-fg-main">
+		<div class="flex items-center gap-2 text-xs tabular-nums">
+			<span class="font-medium text-diff-add-fg">+{pr.additions}</span>
+			<span class="font-medium text-diff-del-fg">−{pr.deletions}</span>
+			<span class="font-mono text-fg-light">({pr.changedFilesCount} files)</span>
+			<span class="rounded border border-card-border bg-canvas-secondary px-1.5 py-0.5 font-mono text-[11px] text-fg-main">
 				{pr.riskTier}
 			</span>
 		</div>
 	</div>
 
 	<!-- Title & Branch Pill -->
-	<h3 class="mt-2 font-semibold leading-snug text-fg-main">{pr.title}</h3>
+	<h3 class="mt-2 font-medium leading-snug text-fg-main">{pr.title}</h3>
 
 	<div class="mt-2 flex flex-wrap items-center gap-1.5 font-mono text-xs text-fg-light">
 		<code class="rounded bg-canvas-secondary px-2 py-0.5 text-[11px] text-fg-main">
@@ -138,43 +153,92 @@
 					? 'bg-status-danger-subtle text-status-danger'
 					: 'bg-status-warning-subtle text-status-warning'}"
 		>
-			<span aria-hidden="true" class="font-mono font-bold">
-				{pr.refereeStatus === 'pass' ? '✓' : pr.refereeStatus === 'send-back' ? '!' : '⋯'}
-			</span>
+			<svg
+				aria-hidden="true"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="mt-0.5 size-3.5 shrink-0"
+			>
+				<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+				<path d="m9 12 2 2 4-4" />
+			</svg>
 			<p class="leading-relaxed font-medium">{pr.refereeSummary}</p>
 		</div>
 	{/if}
 
 	<!-- Collapsible CI Checks Rollup -->
-	<div class="mt-3 rounded-lg border border-card-border bg-canvas-primary">
+	<div class="mt-3 overflow-hidden rounded-lg border border-card-border bg-canvas-secondary/30">
 		<button
 			type="button"
 			aria-expanded={checksOpen}
 			aria-controls={panelId}
 			onclick={() => (checksOpen = !checksOpen)}
-			class="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-xs font-medium text-fg-main hover:bg-canvas-secondary"
+			class="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-xs font-medium text-fg-main transition-colors hover:bg-canvas-secondary"
 		>
 			<span class="flex items-center gap-2">
-				<span class="text-status-success">✓</span>
+				<svg
+					aria-hidden="true"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="size-3.5 text-status-success"
+				>
+					<path d="M20 6 9 17l-5-5" />
+				</svg>
 				<span>CI Checks & Verification Gates ({passedCount}/{pr.checks.length} passed)</span>
 			</span>
-			<span class="font-mono text-[11px] text-fg-light">{checksOpen ? 'Hide ▴' : 'Show ▾'}</span>
+			<svg
+				aria-hidden="true"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.8"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="size-3.5 text-fg-light transition-transform duration-150 {checksOpen
+					? 'rotate-180'
+					: ''}"
+			>
+				<path d="m6 9 6 6 6-6" />
+			</svg>
 		</button>
 
 		<AgentDisclosure id={panelId} open={checksOpen}>
-			<ul class="divide-y divide-canvas-border border-t border-canvas-border text-xs">
+			<ul class="divide-y divide-canvas-border border-t border-canvas-border bg-card-bg text-xs">
 				{#each pr.checks as check (check.id)}
 					<li class="flex flex-wrap items-center justify-between gap-2 px-3 py-2">
 						<div class="min-w-0">
 							<div class="flex items-center gap-2">
 								<span
-									class="font-mono {check.status === 'passed'
+									class="inline-flex size-3.5 items-center justify-center {check.status === 'passed'
 										? 'text-status-success'
 										: check.status === 'failed'
 											? 'text-status-danger'
 											: 'text-accent-primary'}"
 								>
-									{check.status === 'passed' ? '✓' : check.status === 'failed' ? '✕' : '↻'}
+									{#if check.status === 'passed'}
+										<svg
+											aria-hidden="true"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2.2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											class="size-3.5"
+										>
+											<path d="M20 6 9 17l-5-5" />
+										</svg>
+									{:else}
+										<span class="size-2 rounded-full bg-current"></span>
+									{/if}
 								</span>
 								<span class="font-medium text-fg-main">{check.name}</span>
 								<span class="rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[10px] text-fg-light">
@@ -182,7 +246,7 @@
 								</span>
 							</div>
 							{#if check.summary}
-								<p class="mt-0.5 pl-5 text-[11px] text-fg-light">{check.summary}</p>
+								<p class="mt-0.5 pl-5.5 text-[11px] text-fg-light">{check.summary}</p>
 							{/if}
 						</div>
 						<span class="font-mono text-[11px] tabular-nums text-fg-light">{check.duration}</span>
@@ -196,9 +260,9 @@
 	<div class="mt-3.5 flex flex-wrap items-center justify-between gap-2 border-t border-canvas-border pt-2.5 text-xs">
 		<span class="font-mono text-[11px] text-fg-light">
 			{mergeQueued
-				? '✓ Queued in referee merge train'
+				? 'Queued in referee merge train'
 				: changesRequested
-					? '⚑ Send-back recorded for agent revision'
+					? 'Send-back recorded for agent revision'
 					: 'Ready for referee merge'}
 		</span>
 
@@ -211,7 +275,7 @@
 					mergeQueued = false;
 					onRequestChanges?.(pr.number);
 				}}
-				class="rounded-md border border-card-border bg-canvas-secondary px-2.5 py-1 font-medium text-fg-main transition-colors hover:bg-canvas-primary disabled:opacity-50"
+				class="inline-flex h-7 items-center rounded-md border border-card-border bg-card-bg px-2.5 font-medium text-fg-main transition-colors hover:bg-canvas-secondary disabled:opacity-50"
 			>
 				Send back
 			</button>
@@ -223,9 +287,9 @@
 					changesRequested = false;
 					onApproveMerge?.(pr.number);
 				}}
-				class="rounded-md bg-fg-main px-3 py-1 font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
+				class="inline-flex h-7 items-center rounded-md bg-fg-main px-3 font-medium text-fg-inverse transition-opacity hover:opacity-90 disabled:opacity-50"
 			>
-				{mergeQueued ? '✓ Merge Queued' : 'Approve & Queue Merge'}
+				{mergeQueued ? 'Merge Queued' : 'Approve & Queue Merge'}
 			</button>
 		</div>
 	</div>

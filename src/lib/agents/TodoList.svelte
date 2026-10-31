@@ -4,6 +4,7 @@
 	import { Tween, prefersReducedMotion } from 'svelte/motion';
 	import { fly, scale } from 'svelte/transition';
 	import AgentDisclosure from './AgentDisclosure.svelte';
+	import ThinkingShimmer from './ThinkingShimmer.svelte';
 	import { summarizeTodos } from '../state/chat-helpers';
 	import { motionDuration, pressScale } from '../state/motion.svelte';
 	import type { TodoItem } from '../types';
@@ -43,24 +44,53 @@
 	});
 </script>
 
-<div class="w-full rounded-lg border border-card-border bg-card-bg px-3 py-2.5 text-sm {className}">
+<div class="w-full overflow-hidden rounded-lg border border-card-border bg-card-bg text-sm {className}">
 	<button
 		type="button"
-		use:pressScale={0.99}
+		use:pressScale={0.995}
 		aria-expanded={isOpen}
 		aria-controls={panelId}
 		onclick={() => (isOpen = !isOpen)}
-		class="flex w-full items-center gap-2 text-left text-fg-light outline-none transition-colors hover:text-fg-main"
+		class="group flex h-11 w-full items-center gap-2.5 px-3.5 text-left text-fg-light outline-none transition-colors hover:text-fg-main"
 	>
 		{#key summary.allCompleted}
 			<span
 				in:scale={{ start: 0.85, duration: motionDuration(180), easing: backOut }}
 				aria-hidden="true"
-				class="inline-flex size-4 shrink-0 items-center justify-center rounded text-xs font-mono {summary.allCompleted
-					? 'bg-status-success-subtle text-status-success'
-					: 'bg-accent-subtle text-accent-primary'}"
+				class="inline-flex size-4 shrink-0 items-center justify-center {summary.allCompleted
+					? 'text-status-success'
+					: 'text-fg-light group-hover:text-fg-main'}"
 			>
-				{summary.allCompleted ? '✓' : '☰'}
+				{#if summary.allCompleted}
+					<svg
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-4"
+					>
+						<circle cx="12" cy="12" r="10" />
+						<path d="m9 12 2 2 4-4" />
+					</svg>
+				{:else}
+					<svg
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-4"
+					>
+						<rect x="3" y="5" width="6" height="6" rx="1" />
+						<path d="m3 17 2 2 4-4" />
+						<path d="M13 6h8" />
+						<path d="M13 12h8" />
+						<path d="M13 18h8" />
+					</svg>
+				{/if}
 			</span>
 		{/key}
 
@@ -69,30 +99,36 @@
 		{#if summary.inProgressItem && !isOpen}
 			<span
 				in:fly={{ x: -6, duration: motionDuration(160), easing: cubicOut }}
-				class="truncate text-xs text-fg-light"
+				class="min-w-0 flex-1 truncate text-xs text-fg-light"
 			>
 				· {summary.inProgressItem.label}
 			</span>
 		{/if}
 
-		<span
-			class="ml-auto rounded-full bg-canvas-secondary px-2 py-0.5 font-mono text-xs tabular-nums text-fg-light"
-		>
+		<span class="ml-auto font-mono text-xs tabular-nums text-fg-light">
 			{summary.completedCount}/{summary.totalCount}
 		</span>
 
-		<span
+		<svg
 			aria-hidden="true"
-			class="text-xs text-fg-light transition-transform duration-200 {isOpen ? 'rotate-180' : ''}"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="1.8"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			class="size-4 shrink-0 text-fg-light transition-transform duration-150 group-hover:text-fg-main {isOpen
+				? 'rotate-180'
+				: ''}"
 		>
-			▾
-		</span>
+			<path d="m6 9 6 6 6-6" />
+		</svg>
 	</button>
 
 	<!-- Svelte 5 Tween progress bar -->
-	<div class="mt-2 h-1 w-full overflow-hidden rounded-full bg-canvas-secondary">
+	<div class="h-0.5 w-full overflow-hidden bg-canvas-secondary">
 		<div
-			class="h-full rounded-full transition-colors {summary.allCompleted
+			class="h-full transition-colors {summary.allCompleted
 				? 'bg-status-success'
 				: 'bg-accent-primary'}"
 			style="width: {progressTween.current}%;"
@@ -100,39 +136,84 @@
 	</div>
 
 	<AgentDisclosure id={panelId} open={isOpen}>
-		<ol class="mt-2.5 space-y-1.5">
+		<ol class="space-y-0.5 border-t border-canvas-border px-2 py-2">
 			{#each items as item (item.id)}
 				<li
 					animate:flip={{ duration: motionDuration(220), easing: cubicOut }}
 					in:fly={{ y: 6, duration: motionDuration(180), easing: cubicOut }}
-					class="flex items-start gap-2.5 rounded-md px-2 py-1 text-xs leading-5 transition-colors {item.status ===
+					class="flex min-h-9 items-start gap-2.5 rounded-md px-1.5 py-1 text-sm leading-5 transition-colors {item.status ===
 					'in-progress'
-						? 'bg-accent-subtle'
+						? 'bg-canvas-secondary/60'
 						: ''}"
 				>
 					{#key item.status}
-						<span
-							in:scale={{ start: 0.8, duration: motionDuration(160), easing: backOut }}
+						<svg
+							in:scale={{ start: 0.85, duration: motionDuration(160), easing: backOut }}
 							aria-hidden="true"
-							class="mt-0.5 inline-flex size-4 shrink-0 items-center justify-center rounded-full font-mono text-[10px] {item.status ===
-							'completed'
-								? 'bg-status-success-subtle text-status-success'
-								: item.status === 'in-progress'
-									? 'bg-accent-primary text-fg-inverse'
-									: item.status === 'cancelled'
-										? 'bg-canvas-secondary text-fg-light'
-										: 'border border-card-border text-fg-light'}"
+							viewBox="0 0 20 20"
+							fill="none"
+							class="size-5 shrink-0"
 						>
-							{#if item.status === 'completed'}
-								✓
+							{#if item.status === 'pending'}
+								<circle
+									cx="10"
+									cy="10"
+									r="7"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-dasharray="2 3"
+									stroke-linecap="round"
+									class="text-fg-light/60"
+								/>
 							{:else if item.status === 'in-progress'}
-								↻
-							{:else if item.status === 'cancelled'}
-								✕
+								<circle
+									cx="10"
+									cy="10"
+									r="7"
+									stroke="currentColor"
+									stroke-width="1.5"
+									class="text-accent-primary/25"
+								/>
+								<circle
+									cx="10"
+									cy="10"
+									r="7"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-dasharray="12 32"
+									class="origin-center animate-spin text-accent-primary"
+								/>
+							{:else if item.status === 'completed'}
+								<circle cx="10" cy="10" r="7" class="fill-fg-main" />
+								<path
+									d="M7 10.25L9 12.25L13.25 7.75"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="text-fg-inverse"
+								/>
 							{:else}
-								·
+								<circle
+									cx="10"
+									cy="10"
+									r="7"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-dasharray="2 3"
+									stroke-linecap="round"
+									class="text-fg-light/50"
+								/>
+								<path
+									d="M7.5 12.5L12.5 7.5"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									class="text-fg-light"
+								/>
 							{/if}
-						</span>
+						</svg>
 					{/key}
 
 					<div class="min-w-0 flex-1">
@@ -140,12 +221,16 @@
 							class="block transition-colors {item.status === 'completed' ||
 							item.status === 'cancelled'
 								? 'line-through text-fg-light'
-								: 'font-medium text-fg-main'}"
+								: 'text-fg-main'}"
 						>
-							{item.label}
+							{#if item.status === 'in-progress'}
+								<ThinkingShimmer label={item.label} />
+							{:else}
+								{item.label}
+							{/if}
 						</span>
 						{#if item.detail}
-							<span class="block text-fg-light">{item.detail}</span>
+							<span class="mt-0.5 block text-xs text-fg-light">{item.detail}</span>
 						{/if}
 					</div>
 				</li>

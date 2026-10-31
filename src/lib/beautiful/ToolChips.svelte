@@ -123,8 +123,13 @@
 </script>
 
 <div
-	class="divide-y divide-canvas-border rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
+	class="divide-y divide-canvas-border overflow-hidden rounded-xl border border-card-border bg-card-bg text-fg-main {className}"
 >
+	<div class="flex items-center justify-between bg-canvas-secondary/40 px-3.5 py-2 text-xs">
+		<span class="font-medium text-fg-main">{steps.length} tool calls · {diffs.length} files modified</span>
+		<span class="font-mono text-[11px] text-fg-light">Click row to inspect</span>
+	</div>
+
 	{#each visibleSteps as step (step.id)}
 		{@const isOpen = step.id === selectedStepId}
 		<div>
@@ -132,49 +137,95 @@
 				type="button"
 				aria-expanded={isOpen}
 				onclick={() => handleStepToggle(step.id)}
-				class="flex min-h-9 w-full items-center gap-2.5 px-3 py-2 text-left transition-colors hover:bg-canvas-secondary"
+				class="group flex min-h-10 w-full items-center gap-2.5 px-3.5 py-2 text-left transition-colors hover:bg-canvas-secondary/60"
 			>
 				<span
 					aria-hidden="true"
-					class="inline-flex size-4 shrink-0 items-center justify-center rounded font-mono text-[11px] {step.status ===
-					'error'
-						? 'bg-status-danger-subtle text-status-danger'
+					class="inline-flex size-4 shrink-0 items-center justify-center {step.status === 'error'
+						? 'text-status-danger'
 						: step.status === 'running'
-							? 'bg-accent-subtle text-accent-primary'
-							: 'bg-status-success-subtle text-status-success'}"
+							? 'text-accent-primary'
+							: 'text-fg-light'}"
 				>
-					{step.status === 'error' ? '!' : step.status === 'running' ? '↻' : '✓'}
+					{#if step.label.toLowerCase().includes('read')}
+						<svg
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.75"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="size-4"
+						>
+							<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+							<path d="M14 2v4a2 2 0 0 0 2 2h4" />
+						</svg>
+					{:else if step.label.toLowerCase().includes('patch') || step.label.toLowerCase().includes('write')}
+						<svg
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.75"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="size-4"
+						>
+							<path d="M12 20h9" />
+							<path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z" />
+						</svg>
+					{:else}
+						<svg
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.75"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="size-4"
+						>
+							<path d="m4 17 6-5-6-5" />
+							<path d="M12 19h8" />
+						</svg>
+					{/if}
 				</span>
 
 				<span class="text-xs font-medium text-fg-main">{step.label}</span>
 
 				{#if step.chip}
 					<code
-						class="min-w-0 flex-1 truncate rounded bg-canvas-secondary px-1.5 py-0.5 font-mono text-[11px] text-fg-light"
+						class="min-w-0 truncate rounded-md border border-card-border bg-canvas-secondary px-2 py-0.5 font-mono text-[11px] text-fg-main"
 					>
 						{step.chip}
 					</code>
-				{:else}
-					<span class="flex-1"></span>
 				{/if}
 
-				{#if step.additions !== undefined || step.deletions !== undefined}
-					<span class="font-mono text-xs tabular-nums">
-						<span class="text-diff-add-fg">+{step.additions ?? 0}</span>
-						<span class="ml-1 text-diff-del-fg">-{step.deletions ?? 0}</span>
-					</span>
-				{/if}
+				<span class="ml-auto flex shrink-0 items-center gap-2">
+					{#if step.additions !== undefined || step.deletions !== undefined}
+						<span class="font-sans text-xs font-medium tabular-nums">
+							<span class="text-diff-add-fg">+{step.additions ?? 0}</span>
+							<span class="ml-1 text-diff-del-fg">−{step.deletions ?? 0}</span>
+						</span>
+					{/if}
 
-				<span
-					aria-hidden="true"
-					class="text-xs text-fg-light transition-transform {isOpen ? 'rotate-180' : ''}"
-				>
-					▾
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-3.5 text-fg-light transition-transform duration-150 {isOpen
+							? 'rotate-180'
+							: ''}"
+					>
+						<path d="m6 9 6 6 6-6" />
+					</svg>
 				</span>
 			</button>
 
 			{#if isOpen && step.detail}
-				<div class="border-t border-canvas-border bg-canvas-secondary px-3 py-2.5">
+				<div class="border-t border-canvas-border bg-canvas-secondary/60 px-3.5 py-2.5">
 					<pre class="overflow-x-auto font-mono text-xs leading-5 text-fg-light">{step.detail}</pre>
 				</div>
 			{/if}
@@ -182,19 +233,32 @@
 	{/each}
 
 	{#if diffs.length > 0}
-		<div class="flex flex-wrap gap-2 p-3">
+		<div class="flex flex-wrap gap-2 bg-canvas-secondary/30 p-3">
 			{#each diffs as diff (diff.file)}
 				{@const isDiffOpen = openDiff === diff.file}
-				<div class="rounded-lg border border-card-border bg-canvas-primary px-2.5 py-1.5 text-xs">
+				<div class="rounded-lg border border-card-border bg-card-bg px-2.5 py-1.5 text-xs">
 					<button
 						type="button"
 						aria-expanded={isDiffOpen}
 						onclick={() => handleDiffChipToggle(diff.file)}
 						class="flex items-center gap-1.5 font-mono text-xs text-fg-main"
 					>
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.75"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="size-3.5 text-fg-light"
+						>
+							<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+							<path d="M14 2v4a2 2 0 0 0 2 2h4" />
+						</svg>
 						<span>{diff.file}</span>
-						<span class="text-diff-add-fg">+{diff.additions}</span>
-						<span class="text-diff-del-fg">-{diff.deletions}</span>
+						<span class="font-sans font-medium text-diff-add-fg">+{diff.additions}</span>
+						<span class="font-sans font-medium text-diff-del-fg">−{diff.deletions}</span>
 					</button>
 
 					{#if isDiffOpen && diff.lines?.length}

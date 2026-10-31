@@ -56,17 +56,41 @@
 	let selectedId = $state<string | null>(null);
 
 	/**
-	 * Converts a numeric series into normalized bar height percentages (15%..100%).
+	 * Builds an SVG polyline and area polygon coordinate string from a numeric series.
 	 *
 	 * @param series - Raw numeric values.
-	 * @returns Array of normalized percentages.
+	 * @returns SVG polyline points, area points, and peak point coordinates.
 	 */
-	function normalizeBars(series: number[] = []): number[] {
-		if (series.length === 0) return [];
+	function buildSparkline(series: number[] = []): {
+		linePoints: string;
+		areaPoints: string;
+		peakX: number;
+		peakY: number;
+	} {
+		if (series.length === 0) {
+			return { linePoints: '', areaPoints: '', peakX: 0, peakY: 0 };
+		}
+		const width = 220;
+		const height = 44;
 		const max = Math.max(...series);
 		const min = Math.min(...series);
 		const range = max - min || 1;
-		return series.map((val) => Math.round(18 + ((val - min) / range) * 82));
+		let peakX = 0;
+		let peakY = height;
+
+		const coords = series.map((val, idx) => {
+			const x = series.length === 1 ? width / 2 : (idx / (series.length - 1)) * (width - 8) + 4;
+			const y = height - 6 - ((val - min) / range) * (height - 14);
+			if (val === max) {
+				peakX = x;
+				peakY = y;
+			}
+			return `${x.toFixed(1)},${y.toFixed(1)}`;
+		});
+
+		const linePoints = coords.join(' ');
+		const areaPoints = `4,${height} ${linePoints} ${width - 4},${height}`;
+		return { linePoints, areaPoints, peakX, peakY };
 	}
 
 	/**
@@ -94,24 +118,23 @@
 <div class="grid gap-3 md:grid-cols-3 {className}">
 	{#each insights as item (item.id)}
 		{@const isSelected = selectedId === item.id}
-		{@const bars = normalizeBars(item.series)}
+		{@const spark = buildSparkline(item.series)}
 		{@const allocations = normalizeAllocation(item.series)}
-		{@const maxIndex = item.series ? item.series.indexOf(Math.max(...item.series)) : -1}
 		<button
 			type="button"
 			onclick={() => handleSelect(item.id)}
-			class="flex flex-col justify-between rounded-xl border p-4 text-left transition-colors {isSelected
-				? 'border-accent-primary bg-accent-subtle'
-				: 'border-card-border bg-card-bg hover:bg-canvas-secondary'}"
+			class="flex flex-col justify-between overflow-hidden rounded-xl border bg-card-bg p-4 text-left transition-colors {isSelected
+				? 'border-accent-primary'
+				: 'border-card-border hover:bg-canvas-secondary/40'}"
 		>
 			<div>
 				<div class="flex items-center justify-between gap-2">
-					<span class="font-mono text-[10px] font-semibold tracking-wider text-fg-light uppercase">
+					<span class="font-mono text-[10px] font-medium tracking-wider text-fg-light uppercase">
 						{item.kind}
 					</span>
 					{#if item.delta}
 						<span
-							class="rounded-full px-2 py-0.5 font-mono text-[10px] font-medium {item.kind ===
+							class="rounded-full px-2 py-0.5 font-mono text-[11px] font-medium tabular-nums {item.kind ===
 							'anomaly'
 								? 'bg-status-danger-subtle text-status-danger'
 								: 'bg-status-success-subtle text-status-success'}"
@@ -121,40 +144,71 @@
 					{/if}
 				</div>
 
-				<h3 class="mt-1.5 text-xs font-semibold text-fg-main">{item.title}</h3>
+				<h3 class="mt-1.5 text-[13px] font-medium text-fg-main">{item.title}</h3>
 
 				{#if item.value}
-					<p class="mt-2 font-mono text-2xl font-bold text-fg-main tabular-nums">
+					<p class="mt-1.5 text-2xl font-semibold tracking-tight text-fg-main tabular-nums">
 						{item.value}
 					</p>
 				{/if}
 
-				<p class="mt-1.5 text-xs leading-5 text-fg-light">{item.description}</p>
+				<p class="mt-1 text-xs leading-relaxed text-fg-light">{item.description}</p>
 			</div>
 
 			{#if item.kind === 'allocation' && allocations.length > 0}
-				<div class="mt-4 flex h-2.5 w-full overflow-hidden rounded-full bg-canvas-secondary">
-					{#each allocations as widthPct, idx (idx)}
-						<span
-							style="width: {widthPct}%"
-							class="h-full {idx === 0
-								? 'bg-accent-primary'
-								: idx === 1
-									? 'bg-status-success'
-									: 'bg-status-warning'}"
-						></span>
-					{/each}
+				<div class="mt-4 space-y-2">
+					<div class="flex h-2 w-full gap-0.5 overflow-hidden rounded-full bg-canvas-secondary">
+						{#each allocations as widthPct, idx (idx)}
+							<span
+								style="width: {widthPct}%"
+								class="h-full first:rounded-l-full last:rounded-r-full {idx === 0
+									? 'bg-accent-primary'
+									: idx === 1
+										? 'bg-status-success'
+										: 'bg-status-warning'}"
+							></span>
+						{/each}
+					</div>
+					<div class="flex items-center justify-between font-mono text-[10px] text-fg-light tabular-nums">
+						<span class="inline-flex items-center gap-1">
+							<span class="size-1.5 rounded-full bg-accent-primary"></span>
+							System {allocations[0] ?? 0}%
+						</span>
+						<span class="inline-flex items-center gap-1">
+							<span class="size-1.5 rounded-full bg-status-success"></span>
+							Diff {allocations[1] ?? 0}%
+						</span>
+						<span class="inline-flex items-center gap-1">
+							<span class="size-1.5 rounded-full bg-status-warning"></span>
+							Tools {allocations[2] ?? 0}%
+						</span>
+					</div>
 				</div>
-			{:else if bars.length > 0}
-				<div class="mt-4 flex h-10 items-end gap-1.5 pt-2" aria-hidden="true">
-					{#each bars as heightPct, idx (idx)}
-						<span
-							style="height: {heightPct}%"
-							class="flex-1 rounded-t-xs transition-all {item.kind === 'anomaly' && idx === maxIndex
-								? 'bg-status-danger'
-								: 'bg-accent-primary opacity-75'}"
-						></span>
-					{/each}
+			{:else if spark.linePoints}
+				<div class="mt-4 rounded-lg bg-canvas-secondary/60 px-2 pt-2 pb-1" aria-hidden="true">
+					<svg viewBox="0 0 220 44" class="h-11 w-full overflow-visible">
+						<polygon
+							points={spark.areaPoints}
+							class={item.kind === 'anomaly'
+								? 'fill-status-danger/12'
+								: 'fill-accent-primary/12'}
+						/>
+						<polyline
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							points={spark.linePoints}
+							class={item.kind === 'anomaly' ? 'text-status-danger' : 'text-accent-primary'}
+						/>
+						<circle
+							cx={spark.peakX}
+							cy={spark.peakY}
+							r="3.2"
+							class={item.kind === 'anomaly' ? 'fill-status-danger' : 'fill-accent-primary'}
+						/>
+					</svg>
 				</div>
 			{/if}
 		</button>
