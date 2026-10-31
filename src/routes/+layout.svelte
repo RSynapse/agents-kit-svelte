@@ -5,6 +5,7 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import '../app.css';
+	import SiteMeta from './SiteMeta.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -31,6 +32,8 @@
 		}
 	});
 </script>
+
+<SiteMeta />
 
 <div class="min-h-screen bg-canvas-primary text-fg-main">
 	<header class="sticky top-0 z-40 border-b border-canvas-border/70 bg-canvas-primary">

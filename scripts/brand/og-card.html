@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=block" rel="stylesheet" />
+<style>
+	* { box-sizing: border-box; margin: 0; }
+	html, body { width: 1200px; height: 630px; }
+	body {
+		font-family: Inter, sans-serif; color: #251f1b; overflow: hidden; position: relative;
+		background:
+			radial-gradient(620px 420px at 96% 8%, rgba(190, 85, 46, 0.16), transparent 70%),
+			radial-gradient(520px 380px at 70% 110%, rgba(234, 140, 96, 0.13), transparent 70%),
+			#faf9f6;
+	}
+	.grain { position: absolute; inset: 0; background-image: radial-gradient(rgba(37,31,27,.05) 1px, transparent 1px); background-size: 22px 22px; mask-image: linear-gradient(90deg, transparent 0%, #000 55%); }
+	.left { position: absolute; left: 72px; top: 64px; bottom: 60px; width: 590px; display: flex; flex-direction: column; }
+	.brand { display: flex; align-items: center; gap: 14px; }
+	.brand svg { width: 48px; height: 48px; }
+	.brand .name { font-family: 'Source Serif 4', serif; font-size: 30px; letter-spacing: -0.01em; }
+	.brand .tag { font-size: 17px; font-weight: 500; color: #69625c; margin-left: 2px; }
+	h1 { font-family: 'Source Serif 4', serif; font-weight: 400; font-size: 66px; line-height: 1.04; letter-spacing: -0.025em; margin-top: 58px; }
+	h1 em { font-style: italic; color: #be552e; }
+	p.sub { margin-top: 24px; font-size: 23px; line-height: 1.45; color: #69625c; max-width: 540px; }
+	.foot { margin-top: auto; display: flex; align-items: center; gap: 12px; font-size: 18px; color: #69625c; }
+	.foot .url { font-family: 'JetBrains Mono', monospace; font-weight: 500; color: #251f1b; font-size: 17px; }
+	.dot { width: 5px; height: 5px; border-radius: 50%; background: #c9c2bb; }
+
+	.stage { position: absolute; right: -36px; top: 70px; width: 470px; }
+	.card { background: #fffefd; border: 1px solid #e1ddd8; border-radius: 22px; box-shadow: 0 1px 2px rgba(37,31,27,.05), 0 18px 40px -12px rgba(37,31,27,.16); }
+	.chat { padding: 22px 24px; }
+	.bubble { margin-left: auto; width: fit-content; max-width: 330px; background: #f3f0eb; border-radius: 18px 18px 6px 18px; padding: 12px 16px; font-size: 16px; line-height: 1.4; }
+	.reply { display: flex; gap: 12px; margin-top: 18px; }
+	.av { flex: none; width: 28px; height: 28px; }
+	.reply .txt { font-size: 16px; line-height: 1.5; color: #251f1b; }
+	.todo { margin-top: 14px; display: grid; gap: 9px; font-size: 15px; }
+	.todo div { display: flex; align-items: center; gap: 10px; color: #69625c; }
+	.ck { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #c9c2bb; flex: none; display: grid; place-items: center; }
+	.ck.done { background: #be552e; border-color: #be552e; }
+	.ck.done::after { content: ''; width: 7px; height: 4px; border: 2px solid #fff; border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px,-1px); }
+	.ck.run { border-color: #be552e; border-top-color: transparent; }
+	.todo .s { text-decoration: line-through; text-decoration-color: #c9c2bb; }
+	.todo .a { color: #251f1b; font-weight: 500; }
+
+	.approve { position: absolute; left: -64px; top: 318px; width: 400px; padding: 18px 20px; }
+	.approve .hd { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; }
+	.pill { font-size: 12px; font-weight: 600; color: #be552e; background: #fdeae0; border-radius: 99px; padding: 3px 9px; margin-left: auto; }
+	.cmd { margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 14px; background: #251f1b; color: #f0ece6; border-radius: 12px; padding: 11px 14px; }
+	.cmd span { color: #ea8c60; }
+	.btns { display: flex; gap: 10px; margin-top: 14px; }
+	.btn { font-size: 14px; font-weight: 500; border-radius: 99px; padding: 8px 18px; border: 1px solid #e1ddd8; color: #251f1b; }
+	.btn.p { background: #be552e; color: #fff; border-color: #be552e; }
+</style>
+</head>
+<body>
+	<div class="grain"></div>
+	<div class="left">
+		<div class="brand">
+			<svg viewBox="0 0 32 32"><use href="#mark" /></svg>
+			<span class="name">Agents Kit</span><span class="tag">Svelte</span>
+		</div>
+		<h1>Interface pieces for <em>AI&nbsp;agents</em>, made for Svelte&nbsp;5.</h1>
+		<p class="sub">Chat, approvals, plans, GitHub cards, skills and generative UI. Copy a component and ship.</p>
+		<div class="foot"><span class="url">rsynapse.github.io/agents-kit-svelte</span><span class="dot"></span><span>Open source</span></div>
+	</div>
+
+	<div class="stage">
+		<div class="card chat">
+			<div class="bubble">Add dark mode to the settings page and run the tests.</div>
+			<div class="reply">
+				<svg class="av" viewBox="0 0 32 32"><use href="#mark" /></svg>
+				<div style="flex:1">
+					<div class="txt">On it. Here is the plan:</div>
+					<div class="todo">
+						<div><span class="ck done"></span><span class="s">Add theme tokens</span></div>
+						<div><span class="ck done"></span><span class="s">Wire the toggle</span></div>
+						<div><span class="ck run"></span><span class="a">Run the test suite</span></div>
+						<div><span class="ck"></span><span>Open a pull request</span></div>
+					</div>
+				</div>
+			</div>
+			<div style="height:150px"></div>
+		</div>
+		<div class="card approve">
+			<div class="hd">Run a command?<span class="pill">Needs approval</span></div>
+			<div class="cmd"><span>$</span> pnpm test --run</div>
+			<div class="btns"><span class="btn p">Approve</span><span class="btn">Deny</span></div>
+		</div>
+	</div>
+
+	<svg width="0" height="0" style="position:absolute">
+		<defs>
+			<g id="mark">
+				<circle cx="16" cy="16" r="16" fill="#be552e" />
+				<path transform="translate(16 16) scale(0.86) translate(-12 -12)" fill="#fffefd" stroke="#fffefd" stroke-width="1.6" stroke-linejoin="round" d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
+			</g>
+		</defs>
+	</svg>
+</body>
+</html>
