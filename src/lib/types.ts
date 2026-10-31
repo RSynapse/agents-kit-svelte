@@ -123,7 +123,8 @@ export interface CheckpointEntry {
 	restorable?: boolean;
 }
 
-export type SupportedAgentId = 'claude-code' | 'codex' | 'gemini';
+/** An agent id. The built-in names are suggestions; any string works. */
+export type SupportedAgentId = 'claude-code' | 'codex' | 'gemini' | (string & {});
 
 export interface SupportedAgentOption {
 	id: SupportedAgentId;
@@ -206,8 +207,9 @@ export interface GitHubPullRequestData {
 	additions: number;
 	deletions: number;
 	changedFilesCount: number;
-	riskTier: RiskTier;
-	refereeStatus: 'pass' | 'send-back' | 'pending';
+	/** Optional review-gate fields. The card shows them only when present. */
+	riskTier?: RiskTier;
+	refereeStatus?: 'pass' | 'send-back' | 'pending';
 	refereeSummary?: string;
 	checks: GitHubCheckItem[];
 	updatedAt: string;
@@ -502,7 +504,8 @@ export type DynamicUINodeType =
 
 export interface DynamicUINode {
 	id: string;
-	component: DynamicUINodeType;
+	/** A built-in node type, or any key you add through the renderer's `registry`. */
+	component: DynamicUINodeType | (string & {});
 	title?: string;
 	props: Record<string, unknown>;
 }

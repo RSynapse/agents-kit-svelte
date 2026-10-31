@@ -30,7 +30,7 @@
 	let {
 		title = 'Plan',
 		description,
-		riskTier = 'T2',
+		riskTier,
 		isStreaming = false,
 		milestones = [],
 		defaultOpen = true,
@@ -92,11 +92,13 @@
 	<div class="flex flex-wrap items-start justify-between gap-3 border-b border-canvas-border px-4 py-3.5">
 		<div class="min-w-0 flex-1 space-y-1">
 			<div class="flex flex-wrap items-center gap-2">
-				<span
-					class="rounded-md px-2 py-0.5 font-mono text-xs font-bold {getRiskBadgeStyle(riskTier)}"
-				>
-					Risk {riskTier}
-				</span>
+				{#if riskTier}
+					<span
+						class="rounded-md px-2 py-0.5 font-mono text-xs font-bold {getRiskBadgeStyle(riskTier)}"
+					>
+						Risk {riskTier}
+					</span>
+				{/if}
 				<h3 class="font-semibold text-fg-main">
 					{#if isStreaming}
 						<ThinkingShimmer label={title} />
