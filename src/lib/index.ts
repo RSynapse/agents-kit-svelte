@@ -79,6 +79,14 @@ export { default as TestResults } from './runtime/TestResults.svelte';
 export { default as BorderBeam } from './effects/BorderBeam.svelte';
 export { default as Svelte5MotionLab } from './effects/Svelte5MotionLab.svelte';
 
+// Agentic Skills
+export { default as SkillCard } from './skills/SkillCard.svelte';
+export { default as SkillEditor } from './skills/SkillEditor.svelte';
+export { default as SkillInvocation } from './skills/SkillInvocation.svelte';
+export { default as SkillLibrary } from './skills/SkillLibrary.svelte';
+export { default as SkillProposalCard } from './skills/SkillProposalCard.svelte';
+export { default as SkillRouter } from './skills/SkillRouter.svelte';
+
 // Trailside Workbench
 export { default as TrailsideClaudeChat } from './trailside/TrailsideClaudeChat.svelte';
 
@@ -87,4 +95,8 @@ export * from './types';
 export * from './state/chat-helpers';
 export * from './state/motion.svelte';
 export * from './state/catalog-registry';
+export * from './state/skill-helpers';
+export * from './skills/types';
+export * from './skills/fixtures';
+export * from './skills/scope';
 export * from './ui/styles';
