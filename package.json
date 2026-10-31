@@ -2,26 +2,77 @@
   "name": "agents-kit-svelte",
   "version": "0.1.0",
   "description": "Svelte 5 Runes port of agents-ui/agents-kit & Trailside Dynamic Claude Code Chat Component",
+  "keywords": [
+    "svelte",
+    "svelte5",
+    "runes",
+    "ai",
+    "agents",
+    "chat",
+    "components",
+    "tailwindcss",
+    "ui"
+  ],
+  "homepage": "https://rsynapse.github.io/agents-kit-svelte/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RSynapse/agents-kit-svelte.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RSynapse/agents-kit-svelte/issues"
+  },
   "license": "Apache-2.0",
   "private": false,
   "type": "module",
   "packageManager": "pnpm@10.34.5",
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./theme.css": {
+      "style": "./dist/theme.css",
+      "default": "./dist/theme.css"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "NOTICE",
+    "!dist/**/*.test.*",
+    "!dist/**/*.spec.*"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "scripts": {
     "dev": "vite dev --host 127.0.0.1 --port 5188",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4188",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
     "test": "node --test tests/*.test.ts",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "package": "svelte-kit sync && svelte-package && node scripts/build-theme.mjs && publint",
+    "test:install": "node scripts/smoke-install.mjs",
+    "changeset": "changeset",
+    "release": "pnpm package && changeset publish",
+    "prepublishOnly": "pnpm package"
   },
   "devDependencies": {
+    "@changesets/cli": "^3.0.3",
     "@playwright/test": "1.63.0",
     "@sveltejs/adapter-node": "5.5.7",
     "@sveltejs/adapter-static": "^3.0.10",
     "@sveltejs/kit": "2.70.3",
+    "@sveltejs/package": "^3.0.2",
     "@sveltejs/vite-plugin-svelte": "7.3.0",
     "@tailwindcss/vite": "^4.1.7",
     "@types/node": "24.13.6",
+    "publint": "^0.3.25",
     "svelte": "5.57.1",
     "svelte-check": "4.7.6",
     "tailwindcss": "^4.1.7",
@@ -36,6 +87,7 @@
     "@lucide/svelte": "^1.66.0"
   },
   "peerDependencies": {
-    "svelte": "^5.0.0"
+    "svelte": "^5.0.0",
+    "tailwindcss": "^4.0.0"
   }
 }

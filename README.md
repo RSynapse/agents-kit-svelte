@@ -6,16 +6,51 @@ A **Svelte 5 Runes** component collection for AI agent interfaces—porting [`ag
 
 ## Highlights
 
-- **76 Svelte 5 Runes Components** (`$props()`, `$state()`, `$derived()`, `$effect()`, `Spring`, `Tween`, `crossfade`, `flip`, `SvelteSet`, `SvelteMap`) across 7 collections:
+- **82 Svelte 5 Runes Components** (`$props()`, `$state()`, `$derived()`, `$effect()`, `Spring`, `Tween`, `crossfade`, `flip`, `SvelteSet`, `SvelteMap`) across 8 collections:
   1. **beUI Agents (20)**: `TrailsideClaudeChat` (`AK-S Chat`), `AgentActivity`, `TodoList`, `ToolApproval`, `ToolResult`, `FileDiff`, `CodeBlock`, `ApprovalCard`, `PromptInput`, `Message`, `MessageBubble`, `MessageScroller`, `StreamingResponse`, `Citations`, `ImageGeneration`, `AISidebar`, `ThinkingShimmer`, `AgentProgress`, `ReasoningText`, `AgentDisclosure`.
   2. **Beautiful UI (11)**: `ToolChips`, `RecommendationCard`, `InsightCards`, `ContextCards`, `Flowchart`, `FineTuneCard`, `SearchList`, `FilterTable`, `SelectionActions`, `RecordsTable`, `DiffTable`.
   3. **GitHub Cards & Layouts (15)**: `GitHubIssueCard`, `GitHubPullRequestCard`, `GitHubCommitCard`, `GitHubChecksPanel`, `GitHubReviewThreadCard`, `GitHubBentoLayout`, `GitHubKanbanBoard`, plus the dev lifecycle set: `GitHubLifecycleTimeline`, `GitHubIssueTriage`, `GitHubBranchCard`, `GitHubPullRequestReview`, `GitHubMergeQueue`, `GitHubDeploymentPipeline`, `GitHubReleaseCard`, `GitHubIncidentCard`.
   4. **Intelligent UI & Generative (3)**: `IntelligentUIRenderer`, `AgentGenerativeSurface`, `ResultActions`.
   5. **Agents UI Orchestration (11)**: `AgentContextMeter`, `AgentThinkingIndicator`, `AgentTaskQueue`, `AgentCheckpoint`, `AgentToolPalette`, `AgentArtifact`, `AgentFormGenerator`, `AgentOrchestrator`, `AgentRoutingHub`, `AgentEvaluator`, `AgentSequentialWorkflow`, `AgentParallelProcessor`, `AgentOpsMonitor`.
   6. **AI Elements & Coding (13)**: `ChainOfThought`, `PlanCard`, `PromptSuggestions`, `WebPreview`, `FileTree`, `Terminal`, `TestResults`, `StackTrace`, `SchemaDisplay`, `EnvironmentVariables`, `PackageInfo`.
-  7. **Voice & Effects (3)**: `Svelte5MotionLab`, `VoiceWaveVisualizer`, `BorderBeam`.
+  7. **Agentic Skills (6)**: `SkillLibrary`, `SkillCard`, `SkillRouter`, `SkillInvocation`, `SkillEditor`, `SkillProposalCard`, plus `rankSkills`, `validateSkillManifest`, `serializeSkillManifest`, `parseSkillManifest` and `diffSkillLines` helpers. Try them together on the `/skills` studio page.
+  8. **Voice & Effects (3)**: `Svelte5MotionLab`, `VoiceWaveVisualizer`, `BorderBeam`.
 - **OKLCH Semantic Design Tokens**: Automatic Light & Dark theming via CSS custom properties (`bg-canvas-primary`, `bg-card-bg`, `text-fg-main`, `border-card-border`) with layered hairline elevation (`--shadow-card`, `--shadow-btn`).
 - **Static GitHub Pages Ready**: Pre-configured with `@sveltejs/adapter-static`, `BASE_PATH` support, and `.github/workflows/deploy-pages.yml`.
+
+---
+
+## Install
+
+```bash
+pnpm add agents-kit-svelte   # or: npm install / yarn add / bun add
+```
+
+Requires **Svelte 5** and **Tailwind CSS v4** (SvelteKit or any Vite + Svelte app). In your main CSS file:
+
+```css
+@import "tailwindcss";
+@import "agents-kit-svelte/theme.css";
+@source "../node_modules/agents-kit-svelte/dist";
+```
+
+The theme provides the design tokens and light/dark palettes (toggle dark mode with a `dark` class or `data-theme="dark"` on `<html>`). The `@source` line lets Tailwind generate the utility classes the components use; adjust the relative path if your CSS file is not in `src/`.
+
+```svelte
+<script lang="ts">
+	import { ThinkingShimmer, TodoList, type TodoItem } from 'agents-kit-svelte';
+
+	const items: TodoItem[] = [
+		{ id: '1', label: 'Install agents-kit-svelte', status: 'completed' },
+		{ id: '2', label: 'Ship your agent UI', status: 'in-progress' }
+	];
+</script>
+
+<ThinkingShimmer label="Planning the next step…" />
+<TodoList title="Getting started" {items} />
+```
+
+A step-by-step guide with live output is on the showcase site under **Install**.
 
 ---
 
@@ -36,7 +71,15 @@ corepack pnpm test
 
 # Run Playwright browser E2E suite
 corepack pnpm test:browser
+
+# Build the npm package into ./dist (svelte-package + publint)
+corepack pnpm package
+
+# Pack the library, install it into a fresh Svelte + Tailwind app, type-check and build it
+corepack pnpm test:install
 ```
+
+Releases are managed with Changesets; see [RELEASING.md](RELEASING.md).
 
 ---
 

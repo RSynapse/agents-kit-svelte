@@ -28,8 +28,8 @@ test.describe('agents-kit-svelte: 67-Component Catalogue, Claude Code Workbench,
 		await expect(page.getByRole('tab', { name: /AI Elements & Coding/i })).toBeVisible();
 		await expect(page.getByRole('tab', { name: /Voice & Effects/i })).toBeVisible();
 
-		// Verify all 76 individual component showcase cards are rendered on /
-		await expect(page.locator('article[data-component-slug]')).toHaveCount(76);
+		// Verify all 82 individual component showcase cards are rendered on /
+		await expect(page.locator('article[data-component-slug]')).toHaveCount(82);
 
 		// Toggle the Usage code view on the first component card
 		const firstUsageToggle = page.getByRole('button', { name: /^Usage$/ }).first();

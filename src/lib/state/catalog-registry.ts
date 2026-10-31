@@ -5,6 +5,7 @@ export type CatalogCategory =
 	| 'Intelligent UI & Generative'
 	| 'Agents UI Orchestration'
 	| 'AI Elements & Coding'
+	| 'Agentic Skills'
 	| 'Voice & Effects';
 
 export interface CatalogItemMeta {
@@ -1813,7 +1814,158 @@ export const CATALOG_ITEMS: CatalogItemMeta[] = [
 />`
 	},
 
-	// 7. Voice & Effects (3 components)
+	// 7. Agentic Skills (6 components)
+	{
+		slug: 'skill-library',
+		name: 'SkillLibrary',
+		category: 'Agentic Skills',
+		sveltePath: 'src/lib/skills/SkillLibrary.svelte',
+		upstreamSource: 'Agents Kit Svelte · Agentic Skills',
+		description:
+			'Searchable library of installed skills with Personal, Project, Plugin and Built-in scopes, enable switches and flip-animated filtering.',
+		usageSnippet: `<script lang="ts">
+  import { SkillLibrary, SAMPLE_SKILLS, type AgentSkill } from 'agents-kit-svelte';
+
+  let skills = $state<AgentSkill[]>(SAMPLE_SKILLS);
+  let lastRun = $state<string | null>(null);
+</script>
+
+<SkillLibrary
+  {skills}
+  onToggle={(id, enabled) =>
+    (skills = skills.map((s) => (s.id === id ? { ...s, enabled } : s)))}
+  onInvoke={(skill) => (lastRun = skill.name)}
+  onCreate={() => console.log('open the skill editor')}
+/>`
+	},
+	{
+		slug: 'skill-card',
+		name: 'SkillCard',
+		category: 'Agentic Skills',
+		sveltePath: 'src/lib/skills/SkillCard.svelte',
+		upstreamSource: 'Agents Kit Svelte · Agentic Skills',
+		description:
+			'One skill at a glance: description, trigger phrases, allowed tools, bundled files, run count and an enable switch.',
+		usageSnippet: `<script lang="ts">
+  import { SkillCard, type AgentSkill } from 'agents-kit-svelte';
+
+  const skill: AgentSkill = {
+    id: 'release-notes',
+    name: 'release-notes',
+    description: 'Drafts release notes from merged PRs. Use when asked for a changelog.',
+    scope: 'project',
+    version: '1.2.0',
+    triggers: ['write the release notes', 'what shipped this week'],
+    allowedTools: ['Bash(git log:*)', 'Read', 'Write'],
+    files: [
+      { path: 'SKILL.md', kind: 'skill', size: '2.1 KB' },
+      { path: 'scripts/collect_prs.sh', kind: 'script', size: '840 B' }
+    ],
+    invocations: 37,
+    lastUsedLabel: '2h ago'
+  };
+</script>
+
+<SkillCard
+  {skill}
+  defaultFilesOpen={true}
+  onToggle={(id, enabled) => console.log(id, enabled)}
+  onInvoke={(s) => console.log('run', s.name)}
+/>`
+	},
+	{
+		slug: 'skill-router',
+		name: 'SkillRouter',
+		category: 'Agentic Skills',
+		sveltePath: 'src/lib/skills/SkillRouter.svelte',
+		upstreamSource: 'Agents Kit Svelte · Agentic Skills',
+		description:
+			'Shows which skill a request would load: ranked candidates, matched terms, a threshold marker and a tweened confidence readout.',
+		usageSnippet: `<script lang="ts">
+  import { SkillRouter, SAMPLE_SKILLS, type SkillMatch } from 'agents-kit-svelte';
+
+  let routed = $state<SkillMatch | null>(null);
+</script>
+
+<SkillRouter
+  skills={SAMPLE_SKILLS}
+  prompt="Chart weekly signups by region"
+  threshold={0.45}
+  onRoute={(prompt, match) => (routed = match)}
+/>`
+	},
+	{
+		slug: 'skill-invocation',
+		name: 'SkillInvocation',
+		category: 'Agentic Skills',
+		sveltePath: 'src/lib/skills/SkillInvocation.svelte',
+		upstreamSource: 'Agents Kit Svelte · Agentic Skills',
+		description:
+			'Inline “Using skill” trace for a chat transcript, with step statuses, a tweened progress bar and an optional result snippet.',
+		usageSnippet: `<script lang="ts">
+  import { SkillInvocation, SAMPLE_SKILLS, type SkillInvocationStep } from 'agents-kit-svelte';
+
+  let steps = $state<SkillInvocationStep[]>([
+    { id: 's-1', label: 'Read SKILL.md', detail: 'release-notes · 2.1 KB', status: 'complete' },
+    { id: 's-2', label: 'Run scripts/collect_prs.sh', detail: '14 PRs merged', status: 'running' },
+    { id: 's-3', label: 'Write RELEASE_NOTES.md', status: 'pending' }
+  ]);
+</script>
+
+<SkillInvocation skill={SAMPLE_SKILLS[0]} {steps} status="running">
+  {#snippet result()}
+    <p class="text-xs text-fg-light">RELEASE_NOTES.md · 42 lines</p>
+  {/snippet}
+</SkillInvocation>`
+	},
+	{
+		slug: 'skill-editor',
+		name: 'SkillEditor',
+		category: 'Agentic Skills',
+		sveltePath: 'src/lib/skills/SkillEditor.svelte',
+		upstreamSource: 'Agents Kit Svelte · Agentic Skills',
+		description:
+			'Author a SKILL.md: name, description, allowed tools and instructions, with a live file preview and frontmatter checks.',
+		usageSnippet: `<script lang="ts">
+  import { SkillEditor, type SkillManifest } from 'agents-kit-svelte';
+
+  const manifest: SkillManifest = {
+    name: 'incident-review',
+    description: 'Builds a blameless incident timeline. Use after an outage.',
+    allowedTools: ['Read', 'Grep'],
+    body: '# Incident review\\n\\n1. Collect logs and chat.\\n2. Build the timeline.'
+  };
+</script>
+
+<SkillEditor
+  {manifest}
+  title="New skill"
+  onSave={(next, skillMd) => console.log(skillMd)}
+/>`
+	},
+	{
+		slug: 'skill-proposal-card',
+		name: 'SkillProposalCard',
+		category: 'Agentic Skills',
+		sveltePath: 'src/lib/skills/SkillProposalCard.svelte',
+		upstreamSource: 'Agents Kit Svelte · Agentic Skills',
+		description:
+			'Review card for a skill the agent suggests saving, or an update to one, with the evidence, a line diff of SKILL.md and Save or Not now.',
+		usageSnippet: `<script lang="ts">
+  import { SkillProposalCard, SAMPLE_SKILL_PROPOSAL, type SkillProposal } from 'agents-kit-svelte';
+
+  const proposal: SkillProposal = SAMPLE_SKILL_PROPOSAL;
+  let saved = $state(false);
+</script>
+
+<SkillProposalCard
+  {proposal}
+  onSave={() => (saved = true)}
+  onDismiss={() => (saved = false)}
+/>`
+	},
+
+	// 8. Voice & Effects (3 components)
 	{
 		slug: 'voice-wave-visualizer',
 		name: 'VoiceWaveVisualizer',

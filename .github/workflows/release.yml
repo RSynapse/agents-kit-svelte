@@ -1,0 +1,55 @@
+name: Release
+
+# Uses Changesets. On every push to main:
+#   - if there are pending changesets, opens/updates a "Version Packages" PR;
+#   - when that PR is merged, publishes the new version to npm,
+#     but ONLY if the repository variable NPM_PUBLISH is set to "true".
+# Until then this workflow never touches npm. See RELEASING.md.
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency: release-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write # npm trusted publishing (OIDC) + provenance
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          corepack pnpm install --frozen-lockfile
+
+      - name: Verify before release
+        run: |
+          corepack pnpm check
+          corepack pnpm test
+          corepack pnpm test:install
+
+      - name: Version PR or publish
+        uses: changesets/action@v1
+        with:
+          version: corepack pnpm changeset version
+          publish: ${{ vars.NPM_PUBLISH == 'true' && 'corepack pnpm release' || '' }}
+          title: 'chore(release): version packages'
+          commit: 'chore(release): version packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Optional once npm trusted publishing is configured; required for the very first publish.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'
